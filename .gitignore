@@ -2,6 +2,7 @@
 *.tar.gz
 .idea/
 .htaccess
+.git-credentials
 backup/
 wp-config.php
 wp-snapshots/
