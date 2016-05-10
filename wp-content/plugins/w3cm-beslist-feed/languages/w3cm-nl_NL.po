@@ -1,0 +1,28 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: W3CM - Products feed for BESLIST.NL\n"
+"POT-Creation-Date: 2015-09-11 11:12+0300\n"
+"PO-Revision-Date: 2015-09-11 11:36+0300\n"
+"Last-Translator: Alexandr Levashov <me@w3cm.ru>\n"
+"Language-Team: w3cm.ru <me@w3cm.ru>\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.5\n"
+"X-Poedit-Basepath: /home/w3craftsman/www/steigerhouttrendnl.ngrok.io/"
+"httpdocs/wp-content/plugins/\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: w3cm-beslist-feed\n"
+
+#: w3cm-beslist-feed/w3cm-beslist-feed.php:26
+msgid "Donate!"
+msgstr "Doneren!"
+
+msgid "W3CM - Products feed for BESLIST.NL"
+msgstr "W3CM - Producten feed voor BESLIST.NL"
+
+msgid "Generate products feed for BESLIST.NL"
+msgstr "Genereren producten feed voor BESLIST.NL"

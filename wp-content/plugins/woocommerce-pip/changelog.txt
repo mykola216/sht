@@ -1,0 +1,16 @@
+*** WooCommerce Print Invoice/Packaging List ***
+
+2012.03.14 - version 1.1
+ * Added contiguous invoice numbering
+ * Added invoice numbering reset functionality
+ * Added prefix and suffix for invoice numbering
+ * Added custom logo functionality
+ * Added support for custom template
+ * Fixed textdomain issues
+ * Improved the built-in template
+
+2012.03.08 - version 1.0.1
+ * Fixed issue where same order was showing up in print
+
+2012.02.28 - version 1.0
+ * First release

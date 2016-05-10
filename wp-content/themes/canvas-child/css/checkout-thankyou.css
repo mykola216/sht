@@ -1,0 +1,29 @@
+@media print {
+	h3.nav-toggle.icon,
+	#header,
+	#navigation,
+	#nav_after_module,
+	#main div.breadcrumb,
+	#main article header,
+	/*#main article section > div > div,*/
+	#main article section > div > p,
+	/*#main article section > div > ul,*/
+	#main article section > div > h2,
+	#main article section > div > h3,
+	#main article section > div > table.order_details .product-total,
+	/*#main article section > div > table.customer_details,*/
+	#main article section > div thead,
+	#main article section > div tfoot,
+	#social-media-footer,
+	#footer-widgets,
+	#footer {
+		display: none;
+	}
+	#main article section > div > table.order_details dt,
+	#main article section > div > table.order_details dd {
+		float: left;
+	}
+	#main article section > div > table.order_details dd {
+		margin-right: 10px;
+	}
+}

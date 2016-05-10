@@ -1,0 +1,79 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: canvas-child\n"
+"POT-Creation-Date: 2015-04-22 16:35+0300\n"
+"PO-Revision-Date: 2015-05-25 09:38+0200\n"
+"Last-Translator: Aleksandr Levashov <w3craftsman@gmail.com>\n"
+"Language-Team: w3craftsman.com <w3craftsman@gmail.com>\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.5\n"
+"X-Poedit-KeywordsList: __;_e;_;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: /home/awoo/www/steigerhouttrend.nl/httpdocs/wp-"
+"content/themes/canvas-child\n"
+
+msgid "New scaffold wood furniture"
+msgstr "Nieuwe steigerhouten meubelen"
+
+msgid "Best-selling scaffold wood furniture"
+msgstr "Best verkochte steigerhouten meubelen"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Scaffold wood furniture"
+msgstr "Steigerhouten meubelen"
+
+msgid "All scaffold wood articles"
+msgstr "Alle steigerhouten produkten"
+
+msgid "Order now"
+msgstr "Direct bestellen"
+
+msgid "Quotation for a customised article"
+msgstr "Offerte voor maatwerk"
+
+msgid "You are here:"
+msgstr "U bent hier:"
+
+msgid "All Rights Reserved."
+msgstr "Alle rechten voorbehouden."
+
+msgid "Can't find the size what you need?"
+msgstr "Staat jouw gewenste maat er niet bij?"
+
+msgid ""
+"This is not a problem. At Steigerhouttrend we can produse any furnuture "
+"according your request. We can easily adjust any model or size."
+msgstr ""
+"Geen probleem! Bij Steigerhouttrend maken we alle meubels op bestelling. We "
+"kunnen dus makkelijk een aanpassing in het model of de maten uitvoeren."
+
+msgid ""
+"Describe in the form below how the furniture should look like, within one "
+"day we will send a no-obligation quote."
+msgstr ""
+"Omschrijf in onderstaand formulier hoe het meubel eruit moet zien, dan "
+"sturen we binnen een dag een geheel vrijblijvende offerte op maat."
+
+msgid "&larr; Previous"
+msgstr "&larr; Vorige"
+
+msgid "Next &rarr;"
+msgstr "Volgende &rarr;"
+
+msgid "%s removed. %sUndo?%s"
+msgstr "%s verwijderd. %sOngedaan maken?%s"
+
+msgid "Apply Coupon"
+msgstr "Kortingsbon invullen"
+
+msgid "Navigation"
+msgstr "Navigatie"
+
+msgid "Quick order"
+msgstr "Interne bestelling"

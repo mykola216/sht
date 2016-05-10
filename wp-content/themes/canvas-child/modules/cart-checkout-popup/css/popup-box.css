@@ -1,0 +1,27 @@
+#popup-box-content-wrapper {
+    display: none;
+    background-color: white;
+    border: 2px solid #428bca;
+    box-sizing: border-box;
+    padding: 25px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 50%;
+    z-index: 999999;
+}
+#popup-box-content {
+    width: 100%;
+}
+#popup-box-send-email {
+    margin-top: 20px;
+}
+#popup-box-cross {
+    cursor: pointer;
+    font-size: 24px;
+    height: 24px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    width: 24px;
+}

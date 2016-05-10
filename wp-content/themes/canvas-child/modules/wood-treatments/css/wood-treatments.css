@@ -1,0 +1,207 @@
+#wood-treatments {
+    margin-top: 10px;
+}
+#wood-treatments h3 {
+    font: normal normal bold 14px Verdana, sans-serif;
+    margin-bottom: 10px;
+}
+
+/* значек выпадающего списка в select */
+.ui-icon-triangle-1-s {
+    background: url('../images/ui-icons.png') -64px -16px no-repeat;
+    height: 16px;
+    width: 16px;
+}
+/* значек выпадающего списка в select - конец */
+
+
+
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl {
+    border-top-left-radius: 3px;
+}
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr {
+    border-top-right-radius: 3px;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl {
+    border-bottom-left-radius: 3px;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br {
+    border-bottom-right-radius: 3px;
+}
+
+
+/* select button */
+.ui-selectmenu-button {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* select button icon */
+.ui-selectmenu-button span.ui-icon {
+    right: 0.5em;
+    left: auto;
+    margin-top: -8px;
+    position: absolute;
+    top: 50%;
+}
+/* section button text */
+.ui-selectmenu-button span.ui-selectmenu-text {
+    text-align: left;
+    padding: 0.4em 2.1em 0.4em 1em;
+    display: block;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+
+
+
+
+.ui-selectmenu-menu {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+.ui-selectmenu-menu .ui-menu {
+    overflow: auto;
+    /* Support: IE7 */
+    overflow-x: hidden;
+    padding-bottom: 1px;
+}
+.ui-front {
+    z-index: 100;
+}
+.ui-selectmenu-open {
+    display: block;
+}
+
+
+
+.ui-menu .ui-menu-item {
+    position: relative;
+    margin: 0;
+    padding: 3px 1em 3px .4em;
+    cursor: pointer;
+    min-height: 0; /* support: IE7 */
+    /* support: IE10, see #8844 */
+    list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+    white-space: nowrap;
+    width: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*.ui-icon,*/
+/*.ui-widget-content .ui-icon {*/
+    /*background-image: url("images/ui-icons_222222_256x240.png");*/
+/*}*/
+.ui-widget-content {
+    border: 1px solid #aaaaaa;
+    background: white;
+    /*background: #ffffff url("images/ui-bg_flat_75_ffffff_40x100.png") 50% 50% repeat-x;*/
+    /*color: #222222;*/
+}
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    border: 1px solid #d3d3d3;
+    background: #e6e6e6;
+    /*background: #e6e6e6 url("images/ui-bg_glass_75_e6e6e6_1x400.png") 50% 50% repeat-x;*/
+    /*font-weight: normal;*/
+    /*color: #555555;*/
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    /*border: 1px solid #999999;*/
+    background: #dadada;
+    /*background: #dadada url("images/ui-bg_glass_75_dadada_1x400.png") 50% 50% repeat-x;*/
+    font-weight: normal;
+    color: #212121;
+    cursor: pointer;
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+    background-image: url('../images/ui-icons-hover.png');
+}
+
+
+
+ul.behandeling {
+    height: 250px;
+}
+ul.behandeling li {
+    background-image: url('../images/wood-treatments.png');
+    background-repeat: no-repeat;
+    background-position-x: -3px;
+    box-sizing: border-box;
+    height: 50px !important;
+    line-height: 50px;
+    vertical-align: middle;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+}
+ul.behandeling li:hover {
+    text-shadow: none;
+    /*background-color: rgba(0,0,0,0.9) !important;*/
+    /*border: 1px solid;*/
+}
+ul.behandeling li:nth-child(1) {
+    background-position: 0 100px;
+    height: auto !important;
+    line-height: inherit;
+    color: inherit;
+    text-shadow: none;
+}
+ul.behandeling li:nth-child(2) {
+    background-position: 0 0;
+}
+ul.behandeling li:nth-child(3) {
+    background-position: 0 -113px;
+}
+ul.behandeling li:nth-child(4) {
+    background-position: 0 -220px;
+}
+ul.behandeling li:nth-child(5) {
+    background-position: 0 -327px;
+}
+ul.behandeling li:nth-child(6) {
+    background-position: 0 -434px;
+}
+ul.behandeling li:nth-child(7) {
+    background-position: 0 -541px;
+}

@@ -1,0 +1,620 @@
+/*
+The styles in this stylesheet only apply to resolutions 768px and up
+
+CALCULATING DIMENSIONS:
+----------------------
+The layout is fluid. The sote wrapper (.col-full) has a fixed pixel max-width.
+All subsequent dimensions are calculated based on that fixed pixel width, using the formula: target / context = result
+Credit - http://www.alistapart.com/articles/fluidgrids/
+
+-----
+INDEX
+-----
+
+1. Top Navigation
+2. Main navigation dropdown menus
+3. Containers & Columns
+4. Header
+5. Footer
+6. Widgets
+
+*/
+
+
+// Imports
+@import url(mixins.less);
+	
+/* 1. TOP NAVIGATION */
+#top {
+	background: #000;
+	font-size:0.8751em;
+	
+	#top-nav {
+		display: block;
+	}
+	
+	.nav {
+		a {
+			padding:8px 10px; 
+			text-decoration:none;
+			text-shadow:none;
+			color:@color2 + #222;
+			
+			&:hover {
+				background: #222;
+			}
+			
+			&.sf-with-ul {
+				padding-right:35px;
+			}
+		}
+		
+		li {
+			position: relative;
+			
+			&.current_page_item, &.current_page_parent, &.current-menu-ancestor, &.current-cat, &.li.current-menu-item, &.sfHover {
+				a {
+					background: #222;
+				}
+			}
+			
+			ul {
+				background: #222; 
+				margin:0; 
+				padding:0px; 
+				width: 180px; 
+				border: none; 
+				z-index:9999999;
+				.box_shadow(0,2px,2px,0,rgba(0,0,0,0.1));
+				.border_radius_bottom(4px);
+				position: absolute;
+				
+				&:last-child {
+					a {
+						.border_radius_bottom(4px);
+					}
+				}
+				
+				li {
+					a {
+						padding:8px 10px; 
+						width:160px; 
+						color:#ddd; 
+						background: none; 
+						font-size:0.9em;
+						
+						&:hover {
+							background: black;
+						}
+						
+						&.sf-with-ul {
+							padding-right:10px;
+						}
+					}
+					
+					ul {
+						margin: -34px 0 0 180px;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+/* 2. MAIN NAVIGATION DROPDOWN MENUS */
+#navigation  {
+	margin-bottom:0;
+	
+	.nav li {
+		
+		a {
+			border-right:1px solid @color2 - #555;
+		}
+		
+		&:first-child {
+			a {
+				border-left:none;
+			}
+		}
+		
+   		 ul {
+   		 	background: @color2 - #666;
+   		 	margin:0 0 0 -1px; 
+   		 	padding:10px 15px; 
+   		 	position: absolute; 
+   		 	width: 180px; 
+   		 	z-index:9999999;
+   		 	.border_radius_bottom(3px);
+   		 	
+   		 	.sf-sub-indicator {
+   		 		background:url(../images/arrow-superfish-right.png) no-repeat; top:38%;
+   		 	}
+   		 	
+   		 	li {
+   		 		a {
+   		 			padding:8px 0px; 
+   		 			width:180px; 
+   		 			color:@color2 + #222; 
+   		 			background: none; 
+   		 			font-size:0.9em;
+   		 			border: none;
+   		 			
+   		 			&:hover {
+   		 				text-decoration: underline;
+   		 				background: none;
+   		 			}
+   		 			
+   		 			&.sf-with-ul {
+   		 				padding-right:0;
+   		 			}
+   		 		}
+   		 		
+   		 		ul {
+   		 			.border_radius(3px);
+   		 			background: @color2 - #555;
+   		 			
+   		 			li {
+   		 				ul {
+   		 					background: @color2 - #444;
+   		 				}
+   		 			}
+   		 		}	
+   		 		
+   		 		&.current_page_item, &.current_page_parent, &.current-menu-ancestor, &.current-cat, &.li.current-menu-item, &.sfHover {
+   		 			a {
+   		 				background: none;
+   		 			}
+   		 		}
+   		 	}
+   		 	
+   		 	ul {
+   		 		margin: -37px 0 0 140px;
+   		 	}
+   		 }
+	}
+}
+
+
+/* 3. CONTAINERS & COLUMNS */
+#main.fullwidth, .layout-full #main, .col-full {
+	width:960px;
+	margin:0 auto;
+}
+
+#main{
+	width:760px;
+	float: right;
+	padding-top:3em;
+}
+
+#sidebar{
+	margin-top: 0;
+	width:170px;
+	float: left;
+	padding-top:3em;
+	
+	.widget:first-child {
+		h3 {
+			padding-top:0;
+		}
+	}
+	
+	//arrow links
+	.widget_product_categories, .widget_layered_nav {
+		ul {
+			li {
+				list-style: none;
+				line-height: 2em;
+				margin-bottom:.25em;
+				
+				a {
+					display: block;
+					.border_radius(2px);
+					.transition(padding,ease-in-out,.2s);
+					.text_shadow(0,1px,0,#fff);
+					
+					&:hover {
+						.vertical_gradient(@color2 + #666, @color2 + #626262);
+						-webkit-box-shadow:
+							0 0 0 1px @rule,
+							inset 0 1px 0 0 #fff;
+						-moz-box-shadow:
+							0 0 0 1px @rule,
+							inset 0 1px 0 0 #fff;
+						box-shadow:
+							0 0 0 1px @rule,
+							inset 0 1px 0 0 #fff;
+					}
+				}
+				
+				&.chosen {
+					a {
+						.vertical_gradient(@color2 + #666, @color2 + #626262);
+						-webkit-box-shadow:
+							0 0 0 1px @rule,
+							inset 0 1px 0 0 #fff;
+						-moz-box-shadow:
+							0 0 0 1px @rule,
+							inset 0 1px 0 0 #fff;
+						box-shadow:
+							0 0 0 1px @rule,
+							inset 0 1px 0 0 #fff;
+					}
+				}
+			}
+			
+			ul.children {
+				margin-bottom:0;
+			}
+		}
+	}
+}
+
+.entry {
+	img {
+		max-width:100%;
+	}
+}
+
+.layout-full {
+	.entry {
+		img {
+			max-width:100%;
+		}
+	}
+}
+
+.layout-right-content {
+	#main  { 
+		float: right;
+	}
+	
+	#sidebar  { 
+		float: left; 
+		background: url(../images/layout-sidebar-left.png) top right no-repeat; 
+		border-right:1px solid @rule;
+		
+		.widget {
+			width:150px;
+			padding-right:20px;
+		}
+		
+		//wootabs
+		#tabs {		
+			ul.wooTabs {
+				margin-right:-20px;
+			}
+		}
+		
+		//arrow links 
+		.widget_product_categories, .widget_layered_nav {
+			ul {
+				li {
+					width:180px;
+					
+					a {
+						.border_radius_right(1em);
+						
+						&:hover {
+							padding-left:.5em;
+						}
+					}
+					
+					&.chosen {
+						a {
+							padding-left:.5em;
+						}
+					}
+					
+					ul.children {
+						li, .chosen {
+							a {
+								padding-left:1em;
+								
+								&:hover {
+									padding-left:1.5em;
+								}
+							}
+							
+							ul.children {
+								li, .chosen {
+									a {
+										padding-left:1.5em;
+										
+										&:hover {
+											padding-left:2em;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.layout-left-content {
+	#main  { 
+		float: left; 
+	}
+	
+	#sidebar  { 
+		float: right; 
+		background: url(../images/layout-sidebar-right.png) top left no-repeat; 
+		border-left:1px solid @rule;
+		
+		.widget {
+			float: right;
+			clear: right;
+			padding-left:20px;
+			width:150px;
+		}
+		
+		#tabs {		
+			ul.wooTabs {
+				margin-left:-20px;
+				padding-left:20px;
+			}
+		}
+		
+		//arrow links 
+		.widget_product_categories, .widget_layered_nav {
+			ul {
+				li {
+					margin-left:-30px;
+					
+					a {
+						padding-left:30px;
+						.border_radius_left(1em);
+						
+						&:hover {
+						}
+					}
+					
+					ul.children {
+						margin-left:30px;
+						
+						li {
+							a {
+								padding-left:40px;
+							}
+							
+							ul.children {
+								li {
+									a {
+										padding-left:50px;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.layout-full #main  { width: 100%; }
+
+.col-left { float: left; }
+.col-right { float: right; }
+
+.col2-set {
+	.clearfix();
+	clear: both;
+	
+	.col-1 {
+		width:49%;
+		float: left;
+	}
+	
+	.col-2 {
+		width:49%;
+		float: right;
+	}
+}
+
+.form-row {
+	width:49%;
+	float: left;
+	margin-bottom:1.618em;
+	
+	label {
+		display: block;
+	}
+	
+	.input-text, select {
+		width:100%;
+		*width:90%;
+		.borderbox();
+	}
+	
+	input[type=checkbox] {
+		float: left;
+	}
+	
+	&.notes {
+		width:100%;
+		float: none;
+		
+		textarea {
+			width:100%;
+			*width:90%;
+		}
+	}
+	
+	&.notes + h3 {
+		clear: both;
+	}
+}
+	
+.form-row-first {
+	clear: left;
+}
+
+.form-row-last {
+	float: right;
+}
+
+.form-row-wide {
+	float: left;
+	width:100%;
+	clear: both;
+}
+
+header.title {
+	overflow: hidden;
+	zoom:1;
+	
+	h1, h2, h3, h4, h5 {
+		float: left;
+	}
+	
+	a.edit {
+		float: right;
+		font-size:0.9em;
+		padding:0 .6em;
+		display: inline-block;
+		margin-top:1.142em;
+		background: @rule + #111;
+		.border_radius(3px);
+		font-weight: bold;
+	}
+}
+
+/* 4. HEADER */
+#header {
+	hgroup {
+		width:48%;
+		float: left;
+		
+		h1.site-title {
+			padding:0;
+		}
+	}
+	
+	#logo {
+		padding-top:1em;
+	}
+	
+	.woocommerce-nav, #search-top {
+		width:48%;
+		float: right;
+		clear: right;
+	}
+	
+	.woocommerce-nav {
+		margin-bottom:1em;
+		
+		ul {
+			float: right;
+			margin-bottom:0;
+		}
+	}
+	
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+}
+
+/* 5. FOOTER */
+
+#footer-widgets {
+	
+	.block {
+		float: left;
+		margin-right:3.8%;
+		
+		ul.product_list_widget {
+			img {
+				.box_shadow(0,0,0,0,rgba(0,0,0,0));
+				padding:0;
+			}
+		}
+		
+		ul.product_list_widget.cart_list {
+			margin-top:0;
+		}
+	}
+	
+	
+	&.col-1 {
+		.block {
+			width: 100%;
+			float: none;
+		}
+		
+		.footer-widget-1 {
+			margin-right:0;
+		}
+	}
+	
+	&.col-2 {
+		.block {
+			width: 48%;
+		}
+		
+		.footer-widget-2 {
+			margin-right:0;
+		}
+	}
+	
+	&.col-3 {
+		.block {
+			width: 30.75%;
+		}
+		
+		.footer-widget-3 {
+			margin-right:0;
+		}
+	}
+	
+	&.col-4 {
+		.block {
+			width: 22.05%;
+		}
+		
+		.footer-widget-4 {
+			margin-right:0;
+		}
+	}
+}
+
+/* 6. Widgets */
+.widget {
+	ul.product_list_widget, ul.cart_list {
+		li {
+			img {
+				width:1.618em;
+			}
+		}
+	}
+}
+
+/* 7. Checkout */
+#customer_details {
+	padding:0;
+	.border_radius(3px);
+	
+	.col-1, .col-2 {
+		width:46%;
+		padding:2%;
+		
+		h3 {
+			padding-top:0;
+		}
+	}
+	
+	.col-1 {
+		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAAEUlEQVQIHWNgYGCQ/P///2YACjADympEt28AAAAASUVORK5CYII=) right repeat-y;
+	}
+	
+	#shiptobilling {
+		float: right;
+	}
+}

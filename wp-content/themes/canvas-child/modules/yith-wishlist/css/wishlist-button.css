@@ -1,0 +1,34 @@
+#tab-1 div.yith-wcwl-add-to-wishlist {
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    margin: 0;
+    width: 185px;
+}
+#tab-1 div.yith-wcwl-add-to-wishlist span.feedback {
+    display: block;
+    font-size: 9px;
+    width: 100%;
+}
+#tab-1 div.yith-wcwl-add-to-wishlist a {
+    border-radius: 3px;
+    border: 1px solid #ff7700;
+    background: white;
+    color: #ff7700 !important;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin: 0px;
+    padding: 5px;
+    text-decoration: none;
+}
+#tab-1 div.yith-wcwl-add-to-wishlist a:hover {
+    background: #ff7700;
+    color: white !important;
+}
+#tab-1 div.yith-wcwl-add-to-wishlist a.add_to_wishlist:before {
+    content: "\f487";
+    font-family: 'dashicons';
+    font-size: 18px;
+    vertical-align: middle;
+}

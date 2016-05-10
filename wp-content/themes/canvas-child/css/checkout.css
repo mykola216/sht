@@ -1,0 +1,49 @@
+.payment_box {
+	margin-left: 25px;
+}
+.payment_box p {
+	margin: 0;
+}
+
+
+table, tr, th, td {
+	border: 1px solid #cfcfcf !important;
+}
+td.product-name a,
+td.product-name dt {
+	font-weight: bold;
+}
+tr.shipping td {
+	color: black;
+	background-color: #72afb8;
+	padding: 10px;
+}
+tr.shipping td span.amount{
+	font-weight: bold;
+}
+
+
+#shipping_method {
+	padding: 0;
+}
+#shipping_method li {
+	list-style: none !important;
+}
+
+
+@media only screen and (min-width: 768px) {
+    #customer_details {
+        float: left;
+        width: 39%;
+    }
+    #customer_details .col-1,
+    #customer_details .col-2 {
+        float: left;
+        width: 100%;
+    }
+    #order_review_heading,
+    #order_review {
+        float: right;
+        width: 59%;
+    }
+}

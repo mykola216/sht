@@ -1,0 +1,11 @@
+*.sql
+*.tar.gz
+.idea/
+.htaccess
+backup/
+wp-config.php
+wp-snapshots/
+wp-content/uploads/
+wp-content/cache/
+wp-content/w3tc-config/
+wp-content/w3-total-cache-config-preview.php

@@ -1,0 +1,41 @@
+#cart-widget-wishlist-link {
+    margin-right: 20px;
+}
+
+
+ul.products li.product.status-private .yith-wcwl-add-to-wishlist-loop {
+    display: none;
+}
+.yith-wcwl-add-to-wishlist-loop {
+    left: 0;
+    margin: 0;
+    position: relative;
+    bottom: 23px;
+}
+.yith-wcwl-add-to-wishlist-loop div a {
+    float: left;
+    height: 0;
+}
+.yith-wcwl-add-to-wishlist-loop div a:before {
+    color: #f70;
+    content: "\f487";
+    font-family: 'dashicons';
+    font-size: 16px;
+    text-shadow: #f70 1px 1px 0, #f70 -1px -1px 0, #f70 -1px 1px 0, #f70 1px -1px 0;
+}
+.yith-wcwl-add-to-wishlist-loop .yith-wcwl-add-button a:before {
+    color: white;
+}
+
+body.woocommerce-cart table.shop_table.cart tbody tr.cart_item td.product-remove {
+    padding: 1em;
+}
+body.woocommerce-cart .yith-wcwl-add-to-wishlist-loop {
+    float: right;
+    position: static;
+}
+body.woocommerce-cart .yith-wcwl-add-to-wishlist-loop a {
+    float: left;
+    height: auto;
+    text-decoration: none;
+}

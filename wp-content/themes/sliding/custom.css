@@ -1,0 +1,89 @@
+/* 
+WOO CUSTOM STYLESHEET
+---------------------
+
+Instructions:
+
+Add your custom styles in this file instead of style.css so it 
+is easier to update the theme. Simply copy an existing style 
+from style.css to this file, and modify it to your liking. */
+
+
+.cta {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ff6600), color-stop(1, #ee6700) );
+	background:-moz-linear-gradient( center top, #ff6600 5%, #ee6700 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff6600', endColorstr='#ee6700');
+	background-color:#ff6600;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	border:1px solid #b36835;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #8a4903;
+}.cta:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ee6700), color-stop(1, #ff6600) );
+	background:-moz-linear-gradient( center top, #ee6700 5%, #ff6600 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee6700', endColorstr='#ff6600');
+	background-color:#ee6700;
+	color: #fff;
+}.cta:active {
+	position:relative;
+	top:1px;
+}
+.pronamic_ideal_issuer {
+	height: 51px;
+}
+.after-cartform {
+	font-size: 12px;
+	border-top: 1px dashed #DDD;
+	border-bottom: 1px dashed #DDD;
+	margin: -18px 0 26px;
+	padding: 4px 0;
+	background: url(images/2weeks.png) no-repeat 0 10px;
+	line-height: 16px;
+	text-align: center;
+}
+.after-cartform strong {
+	font-weight: bold;
+	clear: right;
+	display: block;
+}
+.woocommerce .woocommerce_tabs ul.tabs li a {
+	text-transform: uppercase;
+	font-size: .8em;
+}
+ul.products li.product .onsale {
+	background: url(images/salelabel.png) no-repeat;
+	position: absolute;
+	top: -13px;
+	left: -13px;
+	width: 147px;
+	height: 74px;
+	padding: 15px 0 0 29px;
+}
+ul.products li.product .onsale:last-child {
+	display: none;
+}
+.woocommerce .type-product .onsale {
+	background: url(images/salelabel.png) no-repeat;
+	position: absolute;
+	top: -13px;
+	left: -13px;
+	width: 147px;
+	height: 74px;
+	padding: 15px 0 0 29px;
+}
+.carousel ul.carousel-products li {
+	width: 192px;
+	float: left;
+	margin-bottom: 1.618em;
+}
+ul.carousel-products {
+	width:100%!important;
+}

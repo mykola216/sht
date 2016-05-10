@@ -1,0 +1,156 @@
+.caption {
+	border-bottom: 1px solid #ddd;
+	display: inline-block;
+	margin-bottom: 20px;
+	padding: 10px 0;
+	position: relative;
+	width: 100%;
+}
+.caption > h2 {
+	color: #343434;
+	float: left;
+	font: normal normal bold 18px Verdana, sans-serif;
+}
+.caption > a {
+	float: right;
+}
+
+
+/* Slider module */
+#slider ul {
+	display: block;
+	margin: 10px 0;
+	text-align: center;
+}
+#slider ul a {
+	color: #555;
+}
+#slider ul li {
+	display: inline-block;
+	font-family: Verdana, sans-serif;
+	font-weight: bold;
+	line-height: 14px;
+	max-width: 24%;
+	text-align: left;
+	text-transform: uppercase;
+	vertical-align: top;
+}
+#slider ul div {
+	background-image: url(../images/sprite-img.png);
+	float: left;
+	width: 40px;
+	height: 34px;
+	margin-left: 20px;
+}
+#slider ul .custom1 {
+	margin-left: 0px;
+	background-position: -25px -3px;
+}
+#slider ul .custom2 {
+	background-position: -65px -3px;
+}
+#slider ul .custom3 {
+	width: 47px;
+	background-position: -105px -3px;
+}
+#slider ul .custom4 {
+	width: 45px;
+	background-position: -150px -3px;
+}
+/* Slider module - end */
+
+
+/* Recent products */
+/* Best selling products */
+.recent.products ul.products li.product,
+.bestselling.products ul.products li.product {
+	width: 49%;
+}
+/* Recent products - end */
+/* Best selling products - end */
+
+
+/* Band module */
+#band-module {
+	border: 1px solid rgb(0, 0, 0);
+	box-sizing: border-box;
+	color: black;
+	font: normal normal bold 18px helvetica, arial, sans-serif;
+	height: auto;
+	margin-bottom: 20px;
+	text-align: center;
+	text-transform: uppercase;
+	width: 100%;
+}
+#band-module img {
+	display: block;
+	float: none;
+	margin: 0 auto;
+}
+/* Band module - end */
+
+
+/* Furniture production module */
+#production {
+	position: relative;
+	margin-bottom: 20px;
+}
+#production h2 {
+	border-bottom: 1px solid #ddd;
+	color: #343434;
+	font: normal normal bold 18px Verdana, sans-serif;
+	margin-bottom: 20px;
+	padding: 10px 0;
+}
+#production img {
+	width: 100%;
+}
+#production a {
+	bottom: 2%;
+	position: absolute;
+	right: 5%;
+}
+/* Furniture production module - end */
+
+
+@media only screen and (min-width: 768px) {
+	.caption {
+		height: 32px;
+	}
+	.caption > h2 {
+		bottom: 10px;
+		position: absolute;
+	}
+
+
+	/* Recent products */
+	/* Best selling products */
+	.recent.products ul.products li.product,
+	.bestselling.products ul.products li.product {
+		width: 33.333% !important;
+        clear: none !important;
+    }
+    .recent.products ul.products li.product.first,
+    .bestselling.products ul.products li.product.first {
+        clear: left !important;
+    }
+
+
+
+	/* Recent products - end */
+	/* Best selling products - end */
+
+
+	/* Band module */
+	#band-module {
+		height: 84px;
+		line-height: 84px;
+	}
+	#band-module img {
+		display: inline;
+		margin-right: 20px;
+		max-height: 80px;
+		vertical-align: middle;
+	}
+	/* Band module - end */
+}

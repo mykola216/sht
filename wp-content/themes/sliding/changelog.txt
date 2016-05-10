@@ -1,0 +1,7 @@
+*** Sliding Changelog ***
+	
+2011.12.14 - version 1.0.1
+ * functions.php - Integrate PressTrends key.
+	
+2011.12.08 - version 1.0
+ * First release!

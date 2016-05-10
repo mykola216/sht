@@ -1,0 +1,390 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: woo-includes/class-woothemes-plugin-updater.php:147
+#@ woothemes
+msgid "WooThemes Updates"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:167
+#@ woothemes
+msgid "WooThemes Plugin Updater"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:174
+#@ woothemes
+msgid "WooThemes Username"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:178
+#@ woothemes
+msgid "WooThemes Password"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:187
+#@ woothemes
+msgid "Login"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:238
+#@ woothemes
+msgid "Switch WooThemes Account"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:240
+#, php-format
+#@ woothemes
+msgid "You are currently logged in as %1$s. To switch to a different WooThemes account, please fill in the login details below."
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:243
+#@ woothemes
+msgid "Update your Plugins"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:250
+#@ woothemes
+msgid "Login Error"
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:252
+#@ woothemes
+msgid "The login details supplied are invalid. Please try again."
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:262
+#@ woothemes
+msgid "Enable WooThemes Plugin Updates."
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:264
+#, php-format
+#@ woothemes
+msgid "Please <a href=\"%1$s\">login</a> to enable automatic plugin updates."
+msgstr ""
+
+#: woo-includes/class-woothemes-plugin-updater.php:277
+#@ woothemes
+msgid "Hide This Message"
+msgstr ""
+
+#: woocommerce-pip-template/template.php:5
+#@ woocommerce-pip
+msgid "Print order details"
+msgstr "Order details afdrukken"
+
+#: woocommerce-pip-template/template.php:12
+#@ woocommerce-pip
+msgid "Print"
+msgstr "Afdrukken"
+
+#: woocommerce-pip-template/template.php:16
+#@ woocommerce-pip
+msgid "Invoice"
+msgstr "Factuur"
+
+#: woocommerce-pip-template/template.php:18
+#@ woocommerce-pip
+msgid "Packing list"
+msgstr "Paklijst"
+
+#: woocommerce-pip-template/template.php:20
+#@ woocommerce-pip
+msgid "Order"
+msgstr "Bestelling"
+
+#: woocommerce-pip-template/template.php:35
+#@ woocommerce-pip
+msgid "Billing address"
+msgstr "Factuuradres"
+
+#: woocommerce-pip-template/template.php:41
+#@ woocommerce-pip
+msgid "Email:"
+msgstr "Email:"
+
+#: woocommerce-pip-template/template.php:44
+#@ woocommerce-pip
+msgid "Tel:"
+msgstr "Tel:"
+
+#: woocommerce-pip-template/template.php:51
+#@ woocommerce-pip
+msgid "Shipping address"
+msgstr "Bezorgadres"
+
+#: woocommerce-pip-template/template.php:66
+#: woocommerce-pip-template/template.php:108
+#@ woocommerce-pip
+msgid "SKU"
+msgstr "Artikelnummer"
+
+#: woocommerce-pip-template/template.php:67
+#: woocommerce-pip-template/template.php:109
+#@ woocommerce-pip
+msgid "Product"
+msgstr "Artikel"
+
+#: woocommerce-pip-template/template.php:68
+#: woocommerce-pip-template/template.php:110
+#@ woocommerce-pip
+msgid "Quantity"
+msgstr "Aantal"
+
+#: woocommerce-pip-template/template.php:69
+#@ woocommerce-pip
+msgid "Price"
+msgstr "Prijs"
+
+#: woocommerce-pip-template/template.php:75
+#@ woocommerce-pip
+msgid "Subtotal:"
+msgstr "Subtotaal:"
+
+#: woocommerce-pip-template/template.php:80
+#@ woocommerce-pip
+msgid "Shipping:"
+msgstr "Bezorgkosten"
+
+#: woocommerce-pip-template/template.php:85
+#@ woocommerce-pip
+msgid "Discount:"
+msgstr "Korting:"
+
+#: woocommerce-pip-template/template.php:90
+#@ woocommerce-pip
+msgid "Tax:"
+msgstr "BTW:"
+
+#: woocommerce-pip-template/template.php:95
+#@ woocommerce-pip
+msgid "Total:"
+msgstr "Totaal:"
+
+#: woocommerce-pip-template/template.php:96
+#@ woocommerce-pip
+msgid "- via"
+msgstr " "
+
+#: woocommerce-pip.php:92
+#@ woocommerce-pip
+msgid "PIP settings"
+msgstr "PIP instellingen"
+
+#: woocommerce-pip.php:102
+#@ woocommerce-pip
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: woocommerce-pip.php:144
+#@ woocommerce-pip
+msgid "WooCommerce - Print invoice/packing list settings"
+msgstr ""
+
+#: woocommerce-pip.php:146
+#@ woocommerce-pip
+msgid "Your settings have been saved."
+msgstr ""
+
+#: woocommerce-pip.php:148
+#@ woocommerce-pip
+msgid "Change settings for print invoice/packing list."
+msgstr ""
+
+#: woocommerce-pip.php:154
+#@ woocommerce-pip
+msgid "Settings"
+msgstr ""
+
+#: woocommerce-pip.php:159
+#@ woocommerce-pip
+msgid "Company name:"
+msgstr ""
+
+#: woocommerce-pip.php:164
+#@ woocommerce-pip
+msgid "Your custom company name for the print."
+msgstr ""
+
+#: woocommerce-pip.php:165
+#: woocommerce-pip.php:180
+#: woocommerce-pip.php:193
+#: woocommerce-pip.php:206
+#: woocommerce-pip.php:219
+#: woocommerce-pip.php:233
+#@ woocommerce-pip
+msgid "Note:"
+msgstr ""
+
+#: woocommerce-pip.php:166
+#@ woocommerce-pip
+msgid "Leave blank to not to print a company name."
+msgstr ""
+
+#: woocommerce-pip.php:172
+#@ woocommerce-pip
+msgid "Custom logo:"
+msgstr ""
+
+#: woocommerce-pip.php:176
+#@ woocommerce-pip
+msgid "Upload Image"
+msgstr ""
+
+#: woocommerce-pip.php:179
+#@ woocommerce-pip
+msgid "Your custom logo for the print."
+msgstr ""
+
+#: woocommerce-pip.php:181
+#@ woocommerce-pip
+msgid "Leave blank to not to use a custom logo."
+msgstr ""
+
+#: woocommerce-pip.php:187
+#@ woocommerce-pip
+msgid "Company extra info:"
+msgstr ""
+
+#: woocommerce-pip.php:192
+#@ woocommerce-pip
+msgid "Some extra info that is displayed under company name."
+msgstr ""
+
+#: woocommerce-pip.php:194
+#@ woocommerce-pip
+msgid "Leave blank to not to print the info."
+msgstr ""
+
+#: woocommerce-pip.php:200
+#@ woocommerce-pip
+msgid "Returns Policy, Conditions, etc.:"
+msgstr ""
+
+#: woocommerce-pip.php:205
+#@ woocommerce-pip
+msgid "Here you can add some policies, conditions etc. For example add a returns policy in case the client would like to send back some goods."
+msgstr ""
+
+#: woocommerce-pip.php:207
+#@ woocommerce-pip
+msgid "Leave blank to not to print any policy."
+msgstr ""
+
+#: woocommerce-pip.php:213
+#@ woocommerce-pip
+msgid "Custom footer:"
+msgstr ""
+
+#: woocommerce-pip.php:218
+#@ woocommerce-pip
+msgid "Your custom footer for the print."
+msgstr ""
+
+#: woocommerce-pip.php:220
+#@ woocommerce-pip
+msgid "Leave blank to not to print a footer."
+msgstr ""
+
+#: woocommerce-pip.php:226
+#@ woocommerce-pip
+msgid "Invoice counter start:"
+msgstr ""
+
+#: woocommerce-pip.php:229
+#@ woocommerce-pip
+msgid "Reset invoice numbering"
+msgstr ""
+
+#: woocommerce-pip.php:232
+#@ woocommerce-pip
+msgid "Reset the invoice counter to start your custom position for example 103. Leading zeros will be trimmed. Use prefix instead."
+msgstr ""
+
+#: woocommerce-pip.php:234
+#@ woocommerce-pip
+msgid "You need to check the checkbox to actually reset the value."
+msgstr ""
+
+#: woocommerce-pip.php:240
+#@ woocommerce-pip
+msgid "Invoice numbering prefix:"
+msgstr ""
+
+#: woocommerce-pip.php:245
+#@ woocommerce-pip
+msgid "Set your custom prefix for the invoice numbering."
+msgstr ""
+
+#: woocommerce-pip.php:251
+#@ woocommerce-pip
+msgid "Invoice numbering suffix:"
+msgstr ""
+
+#: woocommerce-pip.php:256
+#@ woocommerce-pip
+msgid "Set your custom suffix for the invoice numbering."
+msgstr ""
+
+#: woocommerce-pip.php:262
+#@ woocommerce-pip
+msgid "Preview before printing:"
+msgstr ""
+
+#: woocommerce-pip.php:267
+#: woocommerce-pip.php:272
+#@ woocommerce-pip
+msgid "Enabled"
+msgstr ""
+
+#: woocommerce-pip.php:269
+#: woocommerce-pip.php:274
+#@ woocommerce-pip
+msgid "Disabled"
+msgstr ""
+
+#: woocommerce-pip.php:283
+#@ woocommerce-pip
+msgid "Save Changes"
+msgstr ""
+
+#: woocommerce-pip.php:295
+#@ woocommerce-pip
+msgid "Print invoice/packing list"
+msgstr ""
+
+#: woocommerce-pip.php:308
+#@ default
+msgid "Invoice: #"
+msgstr ""
+
+#: woocommerce-pip.php:312
+#: woocommerce-pip.php:330
+#@ woocommerce-pip
+msgid "Print invoice"
+msgstr ""
+
+#: woocommerce-pip.php:313
+#: woocommerce-pip.php:331
+#@ woocommerce-pip
+msgid "Print packing list"
+msgstr ""
+

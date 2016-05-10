@@ -1,0 +1,4 @@
+*** WooCommerce - Watermark ***
+
+2012.05.10 - version 1.0
+ * First Release
