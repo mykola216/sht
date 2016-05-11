@@ -318,7 +318,7 @@ $options[] = array( "name" => __( 'Site Width', 'woothemes' ),
 							"increment" => "10",
 							"type" => 'slider' );
 
-$images_dir =  get_template_directory_uri() . '/functions/images/';
+$images_dir =  get_template_directory_uri() . '/function/images/';
 
 $options[] = array( "name" => __( 'Main Layout', 'woothemes' ),
 						"desc" => __( 'Select main content and sidebar alignment. Choose between 1, 2 or 3 column layout.', 'woothemes' ),
@@ -335,7 +335,7 @@ $options[] = array( "name" => __( 'Main Layout', 'woothemes' ),
 						);
 
 
-$url =  get_template_directory_uri() . '/functions/images/';
+$url =  get_template_directory_uri() . '/function/images/';
 $options[] = array( "name" => __( 'Footer Widget Areas', 'woothemes' ),
 					"desc" => __( 'Select how many footer widget areas you want to display.', 'woothemes' ),
 					"id" => $shortname."_footer_sidebars",
@@ -1907,7 +1907,7 @@ if( get_post_type() == 'post' || !get_post_type() ){
 														'r' => 'Right'));
 	}
 
-	$url =  get_template_directory_uri() . '/functions/images/';
+	$url =  get_template_directory_uri() . '/function/images/';
 	$woo_metaboxes[] = array (	"name" => "layout",
 								"label" => __( 'Layout', 'woothemes' ),
 								"type" => "images",
@@ -2069,7 +2069,7 @@ if( get_post_type() == 'page' || ! get_post_type() ) {
 // Show layout option on all pages
 if ( get_post_type() != 'post' && get_post_type() != 'slide' ) {
 
-	$url =  get_template_directory_uri() . '/functions/images/';
+	$url =  get_template_directory_uri() . '/function/images/';
 	$woo_metaboxes[] = array (	"name" => "layout",
 								"label" => __( 'Layout', 'woothemes' ),
 								"type" => "images",

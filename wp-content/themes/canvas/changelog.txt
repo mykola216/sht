@@ -1676,7 +1676,7 @@
  * includes/theme-functions.php - fixed bug with saving custom field images
 
 2010.11.10 - version 3.2
- * /functions/ - Framework update to 3.2.01
+ * /function/ - Framework update to 3.2.01
  * includes/theme-options.php - updates to styling of options
 
 2010.11.08 - version 3.1.4
@@ -1688,7 +1688,7 @@
  * includes/widgets/widget-woo-tabs.php - Added sort options to WooTabs
 
 2010.11.08 - version 3.1.2
- * /functions/ - Framework update to 3.1.10
+ * /function/ - Framework update to 3.1.10
  * includes/theme-options.php - added option to dynamically resize WP post thumbnails (Dynamic Images)
 
 2010.11.03 - version 3.1.1
@@ -1735,7 +1735,7 @@
  * header.php - removed load of swfobject.js (loaded in theme-tumblog.php)
 
 2010.10.27 - version 3.0.2
- * /functions/ - Framework update to 3.1.2
+ * /function/ - Framework update to 3.1.2
  * includes/theme-options.php - Added/improved options.
  * includes/theme-actions.php - Added optional parameters to biz slider query.
  * includes/theme-functions.php - Added optional post meta to woo_post_meta()
@@ -1750,7 +1750,7 @@
  * /includes/theme-options.php - added tumblog metaboxes to add post UI
 
 2010.10.22 - version 3.0
- * /functions/ - Framework update to 3.1.0
+ * /function/ - Framework update to 3.1.0
  * includes/theme-options.php - Added icons to option headings
  * TUMBLOG FUNCTIONALITY
  * archive.php - added tumblog output functions
@@ -1774,7 +1774,7 @@
  * includes/theme-options.php - fix bug with missing Custom Settings panel on pages (layout option)
 
 2010.10.20 - version 2.9
- * /functions/ - FRAMEWORK UPDATE NEEDED -> 3.0.12
+ * /function/ - FRAMEWORK UPDATE NEEDED -> 3.0.12
  * includes/theme-options.php - added unit selection (px/em) to typography options
  * includes/theme-actions.php - fixed options output to support em
 
@@ -1843,10 +1843,10 @@
 
 2010.08.02 - version 2.5.1
  * includes/theme-actions.php - Added loading of Google Fonts (add_action('wp_head', 'woo_google_webfonts');)
- * /functions/ - Update to 2.8.09 - removed loading of Google Fonts from framework
+ * /function/ - Update to 2.8.09 - removed loading of Google Fonts from framework
 
 2010.08.01 - version 2.5
- * /functions/ - Framework Update - Added support for Google Fonts. Use "Update Framework" in your dashboard or update this folder.
+ * /function/ - Framework Update - Added support for Google Fonts. Use "Update Framework" in your dashboard or update this folder.
 
 2010.07.21 - version 2.4
  * style.css - Added 1200px width (section #7)
@@ -1910,7 +1910,7 @@
  * template-imagegallery.php - Removed post-more
 
 2010.04.07 - version 2.0.4
- * /functions/* - MAJOR UPDATE - Framework V.2.7.0
+ * /function/* - MAJOR UPDATE - Framework V.2.7.0
  * header.php - Added SEO tags, woo_title(); & woo_meta();
  * functions.php - Changed layout for loading required files.
  * includes/theme-actions.php - Fix JS error if using page template with slider disabled
@@ -1928,7 +1928,7 @@
 2010.04.04 - version 2.0
  * includes/* - Major update to files/structure
  * functions.php - updated Framework init include
- * /functions/* - Updated WooFramework
+ * /function/* - Updated WooFramework
  * template-magazine.php - Magazine page template
  * template-biz.php - Business page template
  * style.css - New section 8 templates/slider styling
@@ -1946,10 +1946,10 @@
  * style.css - added section 4.2 Blog author widget
 
 2010.02.25 - version 1.0.5
- * /functions/ - Updated WooFramework v2.3.8 to fix save bug with checkboxes
+ * /function/ - Updated WooFramework v2.3.8 to fix save bug with checkboxes
 
 2010.02.16 - version 1.0.4
- * /functions/ - Updated WooFramework v2.3.7
+ * /function/ - Updated WooFramework v2.3.7
 
 2010.02.15 - version 1.0.3
  * functions.php - Added new line for Beta version of framework updater.
