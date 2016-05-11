@@ -5,7 +5,6 @@
 .git-credentials
 backup/
 wp-config.php
-wp-snapshots/
 wp-content/uploads/
 wp-content/cache/
 wp-content/w3tc-config/
