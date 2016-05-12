@@ -287,10 +287,10 @@ ul.products li.product a span.price {
 
 
     /* Widgets */
-    #widget_sp_image-2,
-    #text-12 {
+    #main.col-left .widget_sp_image,
+    #main.col-left .widget_text {
         float: left;
-        margin: 0 1%;
+        /* margin: 0 1%; */
         width: 48%;
     }
     /* Widgets - end */
