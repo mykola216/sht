@@ -17,7 +17,9 @@ add_filter( 'woocommerce_cart_item_remove_link', 'cart_item_remove_link_AT1XTF',
 
 
 function wp_enqueue_scripts_5TET59() {
-	$url = str_replace( array(ABSPATH, '\\'), '/', __DIR__);
+	//$url = str_replace( array(ABSPATH, '\\'), '/', __DIR__);
+	$url = str_replace( get_stylesheet_directory(), '', __DIR__ );
+	$url = get_stylesheet_directory_uri() . $url;
 
 	wp_enqueue_style( 'wishlist', $url . '/css/wishlist.css' );
 	if ( is_single() ) {
