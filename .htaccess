@@ -1,3 +1,22 @@
+# BEGIN REMOVE SLUG CUSTOM POST TYPE RULES
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^product/(.+)/$ /$1 [R=301,L]
+RewriteRule ^product_variation/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^shop_order_refund/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^/(.+)/$ /$1 [R=301,L]
+RewriteRule ^slide/(.+)/$ /$1 [R=301,L]
+RewriteRule ^follow_up_email/(.+)/$ /$1 [R=301,L]
+# END REMOVE SLUG CUSTOM POST TYPE RULES
+
 # BEGIN Watermark
 <IfModule mod_rewrite.c>
 	RewriteCond %{REQUEST_URI} ^/wp-content/uploads/(\d{4}/\d{2}/.+\.jpg)$
