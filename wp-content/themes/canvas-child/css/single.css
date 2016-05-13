@@ -120,10 +120,12 @@ img.attachment-shop_thumbnail {
     width: 50%;
 }
 #tab-1 label.gfield_label {
-    display: inline;
+    display: block;
     font-size: 14px;
     line-height: 29px;
     margin: 0 !important;
+	width: 50%;
+	float: left;
 }
 #product-summary-tabs > div.panel select.gfield_select,
 .woocommerce-tabs .panel select.gfield_select {
@@ -131,7 +133,7 @@ img.attachment-shop_thumbnail {
 }
 #tab-1 div.ginput_container {
     width: 50%;
-    float: left;
+    float: right;
 }
 #tab-1 div.ginput_container > *{
     width: 100% !important;
