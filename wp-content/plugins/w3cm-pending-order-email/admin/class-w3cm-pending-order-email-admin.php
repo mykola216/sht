@@ -120,7 +120,7 @@ class W3CM_Pending_Order_Email_Admin {
 				$email_content
 			);
 			wc_mail(
-				array('zsanting@gmail.com', 'test@w3cm.ru'),
+				array('zsanting@gmail.com'/*, 'test@w3cm.ru'*/),
 				__( 'Payment by Ideal is not finished.', 'w3cm-pending-order-email' ),
 				$email_content
 			);

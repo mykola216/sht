@@ -126,7 +126,8 @@ class W3CM_Coupon_Code_For_Review_Admin {
 		error_log($message);
 
 		wp_mail(
-			WP_DEBUG ? 'test@w3cm.ru' : array( $order->billing_email, 'zsanting@gmail.com' ),
+			//WP_DEBUG ? 'test@w3cm.ru' : array( $order->billing_email, 'zsanting@gmail.com' ),
+			array( $order->billing_email, 'zsanting@gmail.com' ),
 			$template_post->post_title,
 			$message,
 			'Content-Type: text/html'
