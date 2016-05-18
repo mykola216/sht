@@ -77,8 +77,13 @@ if( isset( $_POST['submitted'] ) ) {
 			wp_mail( $emailTo, $subject, $body, $headers );
 
 			if ( $sendCopy == true ) {
+				$nameTo = get_option( 'woo_contact_title' );
+				if ( '' == trim( $nameTo ) ) {
+					$nameTo = get_bloginfo( 'name' );
+				}
+				$nameTo = strip_tags( trim( $nameTo ) );
 				$subject = __( 'You emailed ', 'woothemes' ) . get_bloginfo( 'title' );
-				$headers = __( 'From: ', 'woothemes' ) . "$name <$emailTo>";
+				$headers = __( 'From: ', 'woothemes' ) . "$nameTo <$emailTo>";
 				wp_mail( $email, $subject, $body, $headers );
 			}
 

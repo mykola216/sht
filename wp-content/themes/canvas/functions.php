@@ -5,7 +5,7 @@
 /*-----------------------------------------------------------------------------------*/
 
 // Set path to WooFramework and theme specific functions
-$functions_path = get_template_directory() . '/function/';
+$functions_path = get_template_directory() . '/functions/';
 $includes_path = get_template_directory() . '/includes/';
 
 // Don't load alt stylesheet from WooFramework

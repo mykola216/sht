@@ -18,19 +18,6 @@ if (!function_exists('woo_wc_related_products')) {
 	}
 }
 
-/**
- * Upsells
- * Replace the default upsell function with our own which displays the correct number product columns
- * @since   5.7.0
- * @return  void
- * @uses    woocommerce_upsell_display()
- */
-if (!function_exists('woo_wc_upsell_display')) {
-	function woo_wc_upsell_display() {
-	    woocommerce_upsell_display( -1, 3 );
-	}
-}
-
 if ( ! function_exists( 'loop_columns' ) ) {
 	// Change columns in product loop to 4
 	function loop_columns() {

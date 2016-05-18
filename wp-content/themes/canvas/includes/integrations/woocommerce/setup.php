@@ -33,13 +33,6 @@ add_action( 'woocommerce_before_main_content', 'woocommerce_canvas_before_conten
 add_action( 'woocommerce_after_main_content', 'woocommerce_canvas_after_content', 20 );
 
 /**
- * Upsells
- * Replace WooCommerce upsells with our own function which adjusts display
- */
-remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
-add_action( 'woocommerce_after_single_product_summary', 'woo_wc_upsell_display', 15 );
-
-/**
  * Related Products
  * Filters related products to adjust display
  */
