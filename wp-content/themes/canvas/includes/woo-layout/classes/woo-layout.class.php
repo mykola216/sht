@@ -199,7 +199,7 @@ class Woo_Layout {
 		$stored = array(
 						'layout-width' => get_option( 'woo_layout_width', '940px' ),
 						'layout-type' => get_option( 'woo_layout', 'two-col-left' ),
-						'images-dir' => get_template_directory_uri() . '/function/images/'
+						'images-dir' => get_template_directory_uri() . '/functions/images/'
 					);
 
 			$html = '<div id="layout-width-notice">' . "\n";

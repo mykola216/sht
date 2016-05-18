@@ -170,7 +170,7 @@ $options[] = array( "name" => __( 'Disable ALL Custom Styling', 'woothemes' ),
 $options[] = array( "name" => __( 'Background Options', 'woothemes' ),
 					"desc" => "",
 					"id" => $shortname."_background_notice",
-					"std" => sprintf( __( 'Background options can also be set in <a href="%s">Appearance > Customize</a>. The options on that page <strong>override</strong> the background options bellow.', 'woothemes' ), admin_url( 'customize.php' ) ),
+					"std" => sprintf( __( 'Background options can also be set in <a href="%s">Appearance > Customize</a>. The options on that page <strong>override</strong> the background options below.', 'woothemes' ), admin_url( 'customize.php' ) ),
 					"type" => "info");
 
 $options[] = array( "name" =>  __( 'Background Color', 'woothemes' ),
@@ -318,7 +318,7 @@ $options[] = array( "name" => __( 'Site Width', 'woothemes' ),
 							"increment" => "10",
 							"type" => 'slider' );
 
-$images_dir =  get_template_directory_uri() . '/function/images/';
+$images_dir =  get_template_directory_uri() . '/functions/images/';
 
 $options[] = array( "name" => __( 'Main Layout', 'woothemes' ),
 						"desc" => __( 'Select main content and sidebar alignment. Choose between 1, 2 or 3 column layout.', 'woothemes' ),
@@ -335,7 +335,7 @@ $options[] = array( "name" => __( 'Main Layout', 'woothemes' ),
 						);
 
 
-$url =  get_template_directory_uri() . '/function/images/';
+$url =  get_template_directory_uri() . '/functions/images/';
 $options[] = array( "name" => __( 'Footer Widget Areas', 'woothemes' ),
 					"desc" => __( 'Select how many footer widget areas you want to display.', 'woothemes' ),
 					"id" => $shortname."_footer_sidebars",
@@ -1907,7 +1907,7 @@ if( get_post_type() == 'post' || !get_post_type() ){
 														'r' => 'Right'));
 	}
 
-	$url =  get_template_directory_uri() . '/function/images/';
+	$url =  get_template_directory_uri() . '/functions/images/';
 	$woo_metaboxes[] = array (	"name" => "layout",
 								"label" => __( 'Layout', 'woothemes' ),
 								"type" => "images",
@@ -2069,7 +2069,7 @@ if( get_post_type() == 'page' || ! get_post_type() ) {
 // Show layout option on all pages
 if ( get_post_type() != 'post' && get_post_type() != 'slide' ) {
 
-	$url =  get_template_directory_uri() . '/function/images/';
+	$url =  get_template_directory_uri() . '/functions/images/';
 	$woo_metaboxes[] = array (	"name" => "layout",
 								"label" => __( 'Layout', 'woothemes' ),
 								"type" => "images",

@@ -302,6 +302,10 @@ if ( ! function_exists( 'woo_widget_tabs_popular' ) ) {
 		<div class="fix"></div>
 	</li>
 	<?php endforeach;
+		if ( $days ) {
+			// Register the filtering function
+			remove_filter( 'posts_where', 'woo_filter_where' );
+		}
 	}
 }
 

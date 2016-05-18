@@ -1,5 +1,34 @@
 *** Canvas Changelog ***
 
+2016.04.29 - version 5.9.22
+ * Fix - Removes custom function for related products output in WooCommerce.
+   includes/integrations/woocommerce/setup.php,
+   includes/integrations/woocommerce/template.php
+
+2016.04.28 - version 5.9.21
+ * Fix - Fixes typo in options page.
+   theme-options.php
+ * Fix - Fixes WC quantity increment on single product page when ordering more than 9 items.
+   includes/integrations/woocommerce/css/woocommerce.css
+ * Fix - Update FlexSlider to v2.6.0.
+   includes/js/jquery.flexslider.js
+   includes/js/jquery.flexslider.min.js
+ * Fix - Fixes post_where filter interferring with other queries outside of the Woo Tabs widget "popular" tab
+   includes/widgets/widget-woo-tabs.php
+ * Update - Updates the font awesome library to the latest version.
+   css/vendor/fontawesome/*,
+   includes/fonts/FontAwesome.otf,
+   includes/fonts/fontawesome-webfont.eot,
+   includes/fonts/fontawesome-webfont.svg,
+   includes/fonts/fontawesome-webfont.ttf,
+   includes/fonts/fontawesome-webfont.woff,
+   includes/fonts/fontawesome-webfont.woff2,
+   style.css
+
+2016.04.15 - version 5.9.20
+ * Fix - Fixes email copy From header.
+   template-contact.php
+
 2016.03.08 - version 5.9.19
  * Fix - fixes woo hooks issue where post hooks would output on pages.
    content-page.php
@@ -1676,7 +1705,7 @@
  * includes/theme-functions.php - fixed bug with saving custom field images
 
 2010.11.10 - version 3.2
- * /function/ - Framework update to 3.2.01
+ * /functions/ - Framework update to 3.2.01
  * includes/theme-options.php - updates to styling of options
 
 2010.11.08 - version 3.1.4
@@ -1688,7 +1717,7 @@
  * includes/widgets/widget-woo-tabs.php - Added sort options to WooTabs
 
 2010.11.08 - version 3.1.2
- * /function/ - Framework update to 3.1.10
+ * /functions/ - Framework update to 3.1.10
  * includes/theme-options.php - added option to dynamically resize WP post thumbnails (Dynamic Images)
 
 2010.11.03 - version 3.1.1
@@ -1735,7 +1764,7 @@
  * header.php - removed load of swfobject.js (loaded in theme-tumblog.php)
 
 2010.10.27 - version 3.0.2
- * /function/ - Framework update to 3.1.2
+ * /functions/ - Framework update to 3.1.2
  * includes/theme-options.php - Added/improved options.
  * includes/theme-actions.php - Added optional parameters to biz slider query.
  * includes/theme-functions.php - Added optional post meta to woo_post_meta()
@@ -1750,7 +1779,7 @@
  * /includes/theme-options.php - added tumblog metaboxes to add post UI
 
 2010.10.22 - version 3.0
- * /function/ - Framework update to 3.1.0
+ * /functions/ - Framework update to 3.1.0
  * includes/theme-options.php - Added icons to option headings
  * TUMBLOG FUNCTIONALITY
  * archive.php - added tumblog output functions
@@ -1774,7 +1803,7 @@
  * includes/theme-options.php - fix bug with missing Custom Settings panel on pages (layout option)
 
 2010.10.20 - version 2.9
- * /function/ - FRAMEWORK UPDATE NEEDED -> 3.0.12
+ * /functions/ - FRAMEWORK UPDATE NEEDED -> 3.0.12
  * includes/theme-options.php - added unit selection (px/em) to typography options
  * includes/theme-actions.php - fixed options output to support em
 
@@ -1843,10 +1872,10 @@
 
 2010.08.02 - version 2.5.1
  * includes/theme-actions.php - Added loading of Google Fonts (add_action('wp_head', 'woo_google_webfonts');)
- * /function/ - Update to 2.8.09 - removed loading of Google Fonts from framework
+ * /functions/ - Update to 2.8.09 - removed loading of Google Fonts from framework
 
 2010.08.01 - version 2.5
- * /function/ - Framework Update - Added support for Google Fonts. Use "Update Framework" in your dashboard or update this folder.
+ * /functions/ - Framework Update - Added support for Google Fonts. Use "Update Framework" in your dashboard or update this folder.
 
 2010.07.21 - version 2.4
  * style.css - Added 1200px width (section #7)
@@ -1910,7 +1939,7 @@
  * template-imagegallery.php - Removed post-more
 
 2010.04.07 - version 2.0.4
- * /function/* - MAJOR UPDATE - Framework V.2.7.0
+ * /functions/* - MAJOR UPDATE - Framework V.2.7.0
  * header.php - Added SEO tags, woo_title(); & woo_meta();
  * functions.php - Changed layout for loading required files.
  * includes/theme-actions.php - Fix JS error if using page template with slider disabled
@@ -1928,7 +1957,7 @@
 2010.04.04 - version 2.0
  * includes/* - Major update to files/structure
  * functions.php - updated Framework init include
- * /function/* - Updated WooFramework
+ * /functions/* - Updated WooFramework
  * template-magazine.php - Magazine page template
  * template-biz.php - Business page template
  * style.css - New section 8 templates/slider styling
@@ -1946,10 +1975,10 @@
  * style.css - added section 4.2 Blog author widget
 
 2010.02.25 - version 1.0.5
- * /function/ - Updated WooFramework v2.3.8 to fix save bug with checkboxes
+ * /functions/ - Updated WooFramework v2.3.8 to fix save bug with checkboxes
 
 2010.02.16 - version 1.0.4
- * /function/ - Updated WooFramework v2.3.7
+ * /functions/ - Updated WooFramework v2.3.7
 
 2010.02.15 - version 1.0.3
  * functions.php - Added new line for Beta version of framework updater.
