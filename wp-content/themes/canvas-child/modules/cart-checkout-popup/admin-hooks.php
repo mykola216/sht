@@ -23,7 +23,7 @@ add_action( 'wp_ajax_' . ( is_user_logged_in() ? '' : 'nopriv_' ) . 'send_me_car
 		}
 		$subject = 'Artikelen geselecteerd op SteigerhoutTREND.nl op ' . date_i18n( get_option('date_format') );
 		WC()->mailer()->send($email, $subject, $content);
-		wp_send_json_success();
+		wp_send_json_success('De lijst met geselecteerde items is succesvol verzonden.');
 	} else {
 		wp_send_json_error( 'This email address is invalid.' );
 		wp_die();

@@ -2,11 +2,19 @@
     'use strict';
 
     $(function() {
-        $('#popup-box-cross').click(function () {
+        $('#popup-box-send-email-cart-items-btn').click(function () {
+            $("#popup-box-content-wrapper").show();
+        });
+
+        $('#popup-box-cross, #popup-box-send-email .cancel').click(function () {
             $("#popup-box-content-wrapper").hide();
         });
 
-        $('a', '#popup-box-send-email').click(function(e) {
+        $('a.send', '#popup-box-send-email').click(function(e) {
+            var sendBtn = $(this);
+            var sendingOverlay = $('#sending-overlay');
+            sendBtn.addClass('sending');
+            sendingOverlay.show();
             $.post(
                 ajax_object.ajax_url,
                 {
@@ -14,21 +22,26 @@
                     'email': $('input', '#popup-box-send-email').val()
                 },
                 function(response) {
+                    //console.log(response);
                     if(response.success) {
-                        $('#popup-box-send-email').hide();
+                        alert(response.data);
+                        $('#popup-box-content-wrapper').hide();
                     } else {
                         alert(response.data);
                     }
+                    sendBtn.removeClass('sending');
+                    sendingOverlay.hide();
                 }
             );
         });
+
     });
 
     $(document).mouseleave(function() {
         $(document).unbind('mouseleave');
         //if(undefined === Cookies.get('popup-box')) {
         //    Cookies.set('popup-box', true);
-            $('#popup-box-content-wrapper').show();
+            //$('#popup-box-content-wrapper').show();
         //}
     });
 
