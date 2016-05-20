@@ -91,7 +91,7 @@ add_filter( 'gform_product_field_types', 'canvas_child_field_types' );
 
 
 // Cart page
-add_action( 'woocommerce_before_cart', 'canvas_child_woocommerce_before_cart' );
+//add_action( 'woocommerce_before_cart', 'canvas_child_woocommerce_before_cart' );
 add_action( 'woo_top_singular-page-' . wc_get_page_id( 'cart' ), 'canvas_child_cart_woo_top' );
 add_filter( 'woocommerce_get_cart_tax', 'canvas_child_get_cart_tax' );
 add_action( 'woocommerce_after_cart_totals', 'canvas_child_after_cart_totals' );
