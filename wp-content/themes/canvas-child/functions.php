@@ -87,6 +87,10 @@ add_action( 'gform_post_submission_4', 'canvas_child_gform_post_submission_4' );
 
 add_filter( 'woocommerce_product_tabs', 'canvas_child_product_tabs', 90 );
 add_filter( 'gform_product_field_types', 'canvas_child_field_types' );
+
+add_action( 'template_redirect', 'canvas_child_track_product_view', 30 );
+remove_action("woocommerce_after_single_product", "zwt_woocommerce_customer_also_viewed");
+add_action("woocommerce_after_single_product", "canvas_child_woocommerce_customer_also_viewed");
 // Single page - end
 
 
@@ -417,6 +421,125 @@ function canvas_child_field_types( $field_types ) {
 	$field_types[] = 'select';
 
 	return $field_types;
+}
+
+
+function canvas_child_track_product_view () {
+	if ( ! is_singular( 'product' ) ) {
+		return;
+	}
+
+	global $post;
+
+	if ( empty( $_COOKIE['woocommerce_recently_viewed'] ) )
+		$viewed_products = array();
+	else
+		$viewed_products = (array) explode( '|', $_COOKIE['woocommerce_recently_viewed'] );
+
+	if ( ! in_array( $post->ID, $viewed_products ) ) {
+		$viewed_products[] = $post->ID;
+	}
+
+	if ( sizeof( $viewed_products ) > 15 ) {
+		array_shift( $viewed_products );
+	}
+
+	// Store for session only
+	wc_setcookie( 'woocommerce_recently_viewed', implode( '|', $viewed_products ) );
+}
+
+
+function canvas_child_woocommerce_customer_also_viewed ( $atts, $content = null ) {
+		$per_page = get_option( 'total_items_display' );
+		$plugin_title = get_option( 'customer_who_viewed_title' );
+		$category_filter = get_option( 'category_filter' );
+		$show_image_filter = get_option( 'show_image_filter' );
+		$show_price_filter = get_option( 'show_price_filter' );
+		$show_addtocart_filter = get_option( 'show_addtocart_filter' );
+		$product_order = get_option( 'product_order' );
+		// Get WooCommerce Global
+		global $woocommerce;
+		global $post;
+		// Get recently viewed product data using get_option
+
+		$customer_also_viewed = get_option('customer_also_viewed_'.$post->ID);
+		if (!empty($customer_also_viewed))
+		{
+			$customer_also_viewed = explode(',',$customer_also_viewed);
+			$customer_also_viewed = array_reverse($customer_also_viewed);
+
+			//Skip same product on product page from the list
+			if(($key = array_search($post->ID, $customer_also_viewed)) !== false) { unset($customer_also_viewed[$key] ); }
+
+			$per_page = ($per_page == "")? $per_page = 5 : $per_page;
+			$plugin_title = ($plugin_title == "")? $plugin_title = 'Customer Who Viewed This Item Also Viewed' : $plugin_title;
+
+			// Create the object
+			ob_start();
+
+			$categories = get_the_terms( $post->ID, 'product_cat' );
+
+			// Create query arguments array
+			$query_args = array(
+									'posts_per_page' => $per_page,
+									'no_found_rows'  => 1,
+									'post_status'    => 'publish',
+									'post_type'      => 'product',
+									'post__in'       => $customer_also_viewed
+									);
+
+			$query_args['orderby'] = ($product_order == '') ? 'ID(ID, explode('.$customer_also_viewed.'))' : $product_order;
+
+
+			//Executes if category filter applied on product page
+			if($category_filter == 1 && !empty($categories))
+			{
+				foreach ($categories as $category) {
+				if($category->parent == 0){
+					   $category_slug = $category->slug;
+					}
+				}
+				$query_args['product_cat'] = $category_slug;
+			}
+
+			// Add meta_query to query args
+			$query_args['meta_query'] = array();
+
+			// Check products stock status
+			$query_args['meta_query'][] = $woocommerce->query->stock_status_meta_query();
+
+			// Create a new query
+			$products = new WP_Query($query_args);
+
+			// If query return results
+			if ( !$products->have_posts() ) {
+				// If no data, quit
+				exit;
+			}
+			else { //Displays title ?>
+				<div class="clear"></div>
+				<div class="woocommerce customer_also_viewed">
+					<h2><?php _e( $plugin_title, 'woocommerce' ) ?></h2>
+					<?php // Start the loop
+					$count = 1;
+					 woocommerce_product_loop_start();
+					 while ( $products->have_posts() ) : $products->the_post(); ?>
+						 <li class="product">
+							 <?php do_action( 'woocommerce_before_shop_loop_item' );?>
+								 <a href="<?php the_permalink(); ?>">
+									 <?php if($show_image_filter == 1) { do_action( 'woocommerce_before_shop_loop_item_title' ); } ?>
+										 <h3><?php the_title(); ?></h3>
+									 <?php if($show_price_filter == 1){ do_action( 'woocommerce_after_shop_loop_item_title' ); } ?>
+								 </a>
+							 <?php if($show_addtocart_filter == 1) { do_action( 'woocommerce_after_shop_loop_item' ); } ?>
+						 </li>
+					 <?php endwhile; ?>
+					 <?php woocommerce_product_loop_end(); ?>
+				</div>
+				<div class="clear"></div>
+		<?php }
+			wp_reset_postdata();
+		}
 }
 
 /******************************************************************************/

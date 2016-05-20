@@ -238,7 +238,8 @@ img.attachment-shop_thumbnail {
 
 
 /* Related products */
-.related.products h2 {
+.related.products h2,
+.customer_also_viewed h2{
 	color: #343434;
 	font-family: Verdana, sans-serif;
 	font-size: 18px;
