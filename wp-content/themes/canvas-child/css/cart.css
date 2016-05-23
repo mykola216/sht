@@ -65,16 +65,28 @@ a.checkout-button {
 
 .coupon span:before {
     color: #9aa789;
-    content: "\f05d";
     font-family: FontAwesome;
     margin-right: 7px;
+}
+.coupon span.message:before{
+    content: "\f05d";
+	color: green;
+}
+.coupon span.error:before{
+	content: "\f05c";
+	color: red;
 }
 div.woocommerce-message,
 .coupon span {
     color: green;
     font-weight: bold;
 }
-
+.coupon span.message{
+	color:green;
+}
+.coupon span.error{
+	color:red;
+}
 div.cross-sells > h2 {
     font-size: 18px;
 }
