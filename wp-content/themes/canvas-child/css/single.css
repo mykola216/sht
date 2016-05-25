@@ -240,9 +240,17 @@ img.attachment-shop_thumbnail {
 .yith-wfbt-section {
 	margin-bottom:20px;
 }
+.yith-wfbt-section > h3 {
+	color: #343434;
+	font-family: Verdana, sans-serif;
+	font-size: 18px;
+	margin: 0 !important;
+	padding: 0;
+}
 .yith-wfbt-section table tr td img.attachment-shop_single,
 .yith-wfbt-section table tr td img.attachment-shop_thumbnail{
-	width: auto !important;
+	width: 200px !important;
+	height:auto;
 }
 
 
