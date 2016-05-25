@@ -6,6 +6,8 @@
 
         $(document.body).on('updated_checkout', function() {
             canvas_child_tooltip();
+        }).on('updated_shipping_method', function() {
+            canvas_child_tooltip();
         });
     });
 
