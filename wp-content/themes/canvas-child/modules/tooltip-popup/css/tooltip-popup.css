@@ -1,8 +1,9 @@
 .canvas-child-tooltip {
     border: 2px solid #f70;
     border-radius: 11px;
+    box-sizing: content-box !important;
     color: #f70;
-    cursor: default;
+    cursor: pointer;
     display: inline-block;
     font-size: 10px;
     font-weight: bold;
@@ -15,7 +16,7 @@
 }
 .ui-tooltip {
     background-color: white;
-    border: 1px solid #f70;
+    border: 1px solid #f70 !important;
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-box-shadow: 0 8px 6px -6px rgba(0,0,0,0.3);

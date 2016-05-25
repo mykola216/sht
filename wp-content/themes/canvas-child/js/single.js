@@ -52,4 +52,19 @@ jQuery(document).ready(function ($) {
         }
     });
     /* Request for a custom product was sent successfully - end */
+
+    jQuery(".gfield_description").each(function () {
+        jQuery(this).hide()
+            .siblings('label')
+            .append('<sup class="canvas-child-tooltip" title="%s">i</sup>')
+            .children('.canvas-child-tooltip')
+            .attr('title', jQuery(this).html());
+    });
+    jQuery(".canvas-child-tooltip").tooltip({
+        show: 500,
+        hide: 1000,
+        content: function () {
+            return jQuery(this).attr('title');
+        }
+    });
 });
