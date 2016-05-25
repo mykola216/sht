@@ -236,6 +236,15 @@ img.attachment-shop_thumbnail {
 	display: none;
 }
 
+/* Frequently Bought Together */
+.yith-wfbt-section {
+	margin-bottom:20px;
+}
+.yith-wfbt-section table tr td img.attachment-shop_single,
+.yith-wfbt-section table tr td img.attachment-shop_thumbnail{
+	width: auto !important;
+}
+
 
 /* Related products */
 .related.products h2,
