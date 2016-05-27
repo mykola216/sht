@@ -249,7 +249,7 @@ img.attachment-shop_thumbnail {
 }
 .yith-wfbt-section table tr td img.attachment-shop_single,
 .yith-wfbt-section table tr td img.attachment-shop_thumbnail{
-	/*width: 200px !important;*/
+	width: 90px !important;
 	height:auto;
 }
 
