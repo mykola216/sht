@@ -57,6 +57,27 @@ Version:        0.1.0
 #nav_after_module .search_main {
     /*display: none;*/
 }
+.searchform button.submit{
+    background: #f70;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    border: none;
+    margin: 0;
+    padding: 0 5px;
+    border-radius: 0;
+    height: 35px;
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    -o-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+}
+.searchform button.submit::before{
+    color:#fff;
+}
+.searchform button.submit:hover{
+    background: #ffab23;
+}
 /* nav_after module - end */
 
 
@@ -278,10 +299,12 @@ ul.products li.product a span.price {
         width: 120px;
     }
     #nav_after_module .search_main form.searchform button {
-        border-left: solid 1px #999;
+        /*border-left: solid 1px #999;*/
         font-size: 12px;
-        position: static;
+        /*position: static;*/
         width: 26px;
+        height: 24px;
+        padding: 0;
     }
     /* nav_after module - end */
 
