@@ -392,7 +392,6 @@ ul.products li.product:nth-child(2n) > a >img {
     position: relative;
     cursor: pointer;
     margin: 20px 0;
-    width: 10em;
     display: block !important;
 }
 #product-description .more::before{
