@@ -69,9 +69,9 @@ jQuery(document).ready(function ($) {
     });
 
     /* Single product description */
-    $('#product-description').on('click', '.more', function () {
-        $(this).siblings('.product-excerpt').toggleClass('closed');
-        $(this).siblings('.product-full-content').toggleClass('opened');
+    var $productDescription = $('#product-description');
+    $productDescription.on('click', '.more', function () {
+        $(this).siblings('.full-content').toggleClass('opened').toggleClass('closed');
 
         $(this).toggleClass('read-more').toggleClass('hide-more');
         if ($(this).hasClass('read-more')) {
@@ -83,7 +83,13 @@ jQuery(document).ready(function ($) {
 
         $(this).closest("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").toggleClass("float");
     });
-    $("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").addClass("float");
+    $productDescription.closest("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").addClass("float");
+    $productDescription.find(".full-content.closed").each(function () {
+        var newHieght = 100 + $(this).children().first().height();
+        $(this).css({
+            'height': newHieght + 'px'
+        });
+    });
 
 
 
