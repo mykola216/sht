@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div id="product-description">
-	<div class="product-excerpt opened">
-		<?php the_excerpt(); ?>
-	</div>
-	<button class="button more read-more" data-label-read-more="<?php _e('Read more', 'woocommerce'); ?>" data-label-hide-more="<?php _e('Hide', 'woocommerce'); ?>" >
-		<?php _e('Read more', 'woocommerce'); ?>
+	<button
+			class="button more read-more"
+			data-label-read-more="<?php _e('Read more', 'woocommerce'); ?>"
+			data-label-hide-more="<?php _e('Verbergen', 'woocommerce'); ?>" >
+			<?php _e('Read more', 'woocommerce'); ?>
 	</button>
-	<div class="product-full-content closed">
+	<div class="full-content closed">
 		<?php the_content(); ?>
 	</div>
 </div>

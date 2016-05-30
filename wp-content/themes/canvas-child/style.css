@@ -355,17 +355,17 @@ ul.products li.product:nth-child(2n) > a >img {
     ul.products li.product:nth-child(2n) > a >img {
         padding-right:4px;
     }
-    ul.products li.product:nth-child(4n+1),
+    .single-product ul.products li.product:nth-child(4n+1),
+    .single-product ul.products li.product:nth-child(4n+1) > a >img,
     .tax-product_cat ul.products li.product:nth-child(4n+1),
-    ul.products li.product:nth-child(4n+1) > a >img,
     .tax-product_cat ul.products li.product:nth-child(4n+1) > a >img,
     .recent.products ul.products li.product:nth-child(3n+1),
     .recent.products ul.products li.product:nth-child(3n+1) > a >img {
         padding-left:0;
     }
-    ul.products li.product:nth-child(4n),
+    .single-product ul.products li.product:nth-child(4n),
+    .single-product ul.products li.product:nth-child(4n) > a >img,
     .tax-product_cat ul.products li.product:nth-child(4n),
-    ul.products li.product:nth-child(4n) > a >img,
     .tax-product_cat ul.products li.product:nth-child(4n) > a >img,
     .recent.products ul.products li.product:nth-child(3n),
     .recent.products ul.products li.product:nth-child(3n) > a >img {
@@ -391,7 +391,7 @@ ul.products li.product:nth-child(2n) > a >img {
 #product-description .more{
     position: relative;
     cursor: pointer;
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     display: block !important;
 }
 #product-description .more::before{
@@ -414,16 +414,27 @@ ul.products li.product:nth-child(2n) > a >img {
 #product-description .hide-more{
     /*background: #ffab23 !important;*/
 }
-#product-description .product-full-content,
-#product-description .product-excerpt{
-    margin-top: 20px;
+#product-description .full-content{
+    position: relative;
+    overflow: hidden;
 }
-#product-description .product-full-content.closed,
-#product-description .product-excerpt.closed{
-    display: none;
+#product-description .full-content.opened{
+    height: auto !important;
 }
-#product-description .product-full-content.opened{
-    display: block;
+#product-description .full-content.closed{
+    height: 255px;
+}
+#product-description .full-content.closed::after{
+    position:absolute;
+    bottom:0;
+    content:'';
+    display:block;
+    width:100%;
+    height: 30px;
+    background: -moz-linear-gradient(linear, 0% 100%, 0% 0%, from(rgb(255, 255, 255)), to(rgba(255, 255, 255, 0)));
+    background: -o-linear-gradient(linear, 0% 100%, 0% 0%, from(rgb(255, 255, 255)), to(rgba(255, 255, 255, 0)));
+    background: -ms-linear-gradient(linear, 0% 100%, 0% 0%, from(rgb(255, 255, 255)), to(rgba(255, 255, 255, 0)));
+    background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(rgb(255, 255, 255)), to(rgba(255, 255, 255, 0)));
 }
 
 .widget404.woocommerce.widget_product_search {
