@@ -89,8 +89,22 @@ add_filter( 'woocommerce_product_tabs', 'canvas_child_product_tabs', 90 );
 add_filter( 'gform_product_field_types', 'canvas_child_field_types' );
 
 add_action( 'template_redirect', 'canvas_child_track_product_view', 30 );
+
+remove_action( 'woocommerce_after_single_product_summary', array( YITH_WFBT_Frontend(), 'add_bought_together_form' ), 1 );
+add_action( 'woocommerce_after_single_product', array( 'YITH_WFBT_Frontend', 'add_bought_together_form' ), 1 );
+
 remove_action("woocommerce_after_single_product", "zwt_woocommerce_customer_also_viewed");
-add_action("woocommerce_after_single_product", "canvas_child_woocommerce_customer_also_viewed");
+add_action("woocommerce_after_single_product", "canvas_child_woocommerce_customer_also_viewed", 2);
+
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+add_action( 'woocommerce_after_single_product', 'woocommerce_output_related_products', 3 );
+
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+add_action( 'woocommerce_after_single_product', 'woocommerce_output_product_data_tabs', 4 );
+
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+add_action( 'woocommerce_after_single_product', 'woocommerce_upsell_display', 5 );
+
 // Single page - end
 
 
@@ -311,6 +325,12 @@ function canvas_child_archive_description_sidebar() {
 /******************************************************************************/
 /* Single page ****************************************************************/
 /******************************************************************************/
+
+function canvas_child_excerpt_length($length) {
+	return 150;
+}
+add_filter('excerpt_length', 'canvas_child_excerpt_length');
+
 /**
  * Add Facebook moderation.
  */
@@ -517,7 +537,7 @@ function canvas_child_woocommerce_customer_also_viewed ( $atts, $content = null 
 				exit;
 			}
 			else { //Displays title ?>
-				<div class="clear"></div>
+				<!-- div class="clear"></div -->
 				<div class="woocommerce customer_also_viewed">
 					<h2><?php _e( $plugin_title, 'woocommerce' ) ?></h2>
 					<?php // Start the loop
@@ -536,7 +556,7 @@ function canvas_child_woocommerce_customer_also_viewed ( $atts, $content = null 
 					 <?php endwhile; ?>
 					 <?php woocommerce_product_loop_end(); ?>
 				</div>
-				<div class="clear"></div>
+				<!-- div class="clear"></div -->
 		<?php }
 			wp_reset_postdata();
 		}

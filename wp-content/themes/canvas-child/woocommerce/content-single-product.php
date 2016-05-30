@@ -64,7 +64,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			do_action( 'woocommerce_single_product_summary' );
 		?>
 
-	</div><!-- .summary -->
 
 	<?php
 		/**
@@ -76,6 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 */
 		do_action( 'woocommerce_after_single_product_summary' );
 	?>
+	</div><!-- .summary -->
 
 	<meta itemprop="url" content="<?php the_permalink(); ?>" />
 

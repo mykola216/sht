@@ -355,22 +355,77 @@ ul.products li.product:nth-child(2n) > a >img {
     ul.products li.product:nth-child(2n) > a >img {
         padding-right:4px;
     }
+    ul.products li.product:nth-child(4n+1),
     .tax-product_cat ul.products li.product:nth-child(4n+1),
+    ul.products li.product:nth-child(4n+1) > a >img,
     .tax-product_cat ul.products li.product:nth-child(4n+1) > a >img,
     .recent.products ul.products li.product:nth-child(3n+1),
     .recent.products ul.products li.product:nth-child(3n+1) > a >img {
         padding-left:0;
     }
+    ul.products li.product:nth-child(4n),
     .tax-product_cat ul.products li.product:nth-child(4n),
+    ul.products li.product:nth-child(4n) > a >img,
     .tax-product_cat ul.products li.product:nth-child(4n) > a >img,
     .recent.products ul.products li.product:nth-child(3n),
     .recent.products ul.products li.product:nth-child(3n) > a >img {
         padding-right:0;
     }
     /* Shop Catalog - end */
+
+    .woocommerce.one-col .yith-wfbt-section.float,
+    .woocommerce.one-col .customer_also_viewed.float,
+    .woocommerce.one-col .related.products.float{
+        float: left;
+        width: 58%;
+        clear: none !important;
+    }
 }
 
+.woocommerce.one-col .customer_also_viewed,
+.woocommerce.one-col .yith-wfbt-section,
+.woocommerce.one-col .yith-wfbt-section .yith-wfbt-submit-block {
+    clear: both;
+}
 
+#product-description .more{
+    position: relative;
+    cursor: pointer;
+    margin: 20px 0;
+    width: 10em;
+    display: block !important;
+}
+#product-description .more::before{
+    /*content: "+";*/
+    /*display: block;*/
+    position: relative;
+    top: auto;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+#product-description .read-more::before{
+    content: "+";
+}
+#product-description .hide-more::before{
+    content: "-";
+}
+#product-description .hide-more{
+    /*background: #ffab23 !important;*/
+}
+#product-description .product-full-content,
+#product-description .product-excerpt{
+    margin-top: 20px;
+}
+#product-description .product-full-content.closed,
+#product-description .product-excerpt.closed{
+    display: none;
+}
+#product-description .product-full-content.opened{
+    display: block;
+}
 
 .widget404.woocommerce.widget_product_search {
     width: 100%;

@@ -67,4 +67,24 @@ jQuery(document).ready(function ($) {
             return jQuery(this).attr('title');
         }
     });
-});
+
+    /* Single product description */
+    $('#product-description').on('click', '.more', function () {
+        $(this).siblings('.product-excerpt').toggleClass('closed');
+        $(this).siblings('.product-full-content').toggleClass('opened');
+
+        $(this).toggleClass('read-more').toggleClass('hide-more');
+        if ($(this).hasClass('read-more')) {
+            $(this).text($(this).attr('data-label-read-more'));
+        }
+        if ($(this).hasClass('hide-more')) {
+            $(this).text($(this).attr('data-label-hide-more'));
+        }
+
+        $(this).closest("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").toggleClass("float");
+    });
+    $("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").addClass("float");
+
+
+
+});//DOM ready
