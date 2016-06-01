@@ -105,6 +105,9 @@ add_action( 'woocommerce_after_single_product', 'woocommerce_output_product_data
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 add_action( 'woocommerce_after_single_product', 'woocommerce_upsell_display', 5 );
 
+remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+add_action('woocommerce_before_single_product', 'woocommerce_template_single_title', 1);
+
 // Single page - end
 
 
