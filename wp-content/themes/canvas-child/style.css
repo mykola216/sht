@@ -139,6 +139,14 @@ Version:        0.1.0
 
 
 /* Widgets */
+.widget h2,
+.widget h3{
+    line-height: 1.5em !important;
+    padding-bottom: 1em;
+    font: bold 14px/1.2em Arial, sans-serif;
+    color: #555555;
+    border-bottom: 1px solid #e6e6e6;
+}
 .header-widget .widget {
     margin: 20px 0 0 0 !important;
 }
