@@ -162,6 +162,22 @@ Version:        0.1.0
 #tfcwidget {
     margin-left: -25px;
 }
+.widget.woocommerce_products_of_the_day{
+    float: none;
+    clear: both;
+    border-bottom: 1px solid #e6e6e6;
+}
+.widget.woocommerce_products_of_the_day .button{
+    padding: 5px 10px;
+}
+.widget.woocommerce_products_of_the_day .js_widget_product_price{
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 2em;
+}
+.widget.woocommerce_products_of_the_day ul li.product img.wp-post-image{
+    width: 100px;
+}
 /* Widgets - end */
 
 
