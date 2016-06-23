@@ -17,7 +17,7 @@ if ( ! defined( 'YITH_WCWL' ) ) {
     <ul>
         <?php if( $share_facebook_enabled ): ?>
             <li style="list-style-type: none; display: inline-block;">
-                <a target="_blank" class="facebook" href="https://www.facebook.com/sharer.php?s=100&amp;p%5Btitle%5D=<?php echo $share_link_title ?>&amp;p%5Burl%5D=<?php echo $share_link_url ?>&amp;p%5Bsummary%5D=<?php echo $share_summary ?>&amp;p%5Bimages%5D%5B0%5D=<?php echo $share_image_url ?>" title="<?php _e( 'Facebook', 'yith-woocommerce-wishlist' ) ?>"></a>
+                <a target="_blank" class="facebook" href="https://www.facebook.com/sharer.php?s=100&amp;p%5Btitle%5D=<?php echo $share_link_title ?>&amp;p%5Burl%5D=<?php echo urlencode( $share_link_url ) ?>" title="<?php _e( 'Facebook', 'yith-woocommerce-wishlist' ) ?>"></a>
             </li>
         <?php endif; ?>
 

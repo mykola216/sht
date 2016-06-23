@@ -78,11 +78,11 @@ $blog_info = get_bloginfo ( 'url' );
 //creating the products links
 if ((WPSC_RUNNING === true && WOO_RUNNING === true) || WPSC_RUNNING === true) {
         // $products_details_url = $site_url.'/wp-admin/post.php?post=';
-        $products_details_url = ADMIN_URL .'/post.php?post='; // Fix for X-Frame with SameOrigin
+        $products_details_url = SM_ADMIN_URL .'/post.php?post='; // Fix for X-Frame with SameOrigin
 } else if (WOO_RUNNING === true) {
         $product_id = '';
 	// $products_details_url = $site_url.'/wp-admin/post.php?action=edit&post='.$product_id;
-	$products_details_url = ADMIN_URL .'/post.php?action=edit&post='.$product_id; // Fix for X-Frame with SameOrigin
+	$products_details_url = SM_ADMIN_URL .'/post.php?action=edit&post='.$product_id; // Fix for X-Frame with SameOrigin
 }
 
 $updater = rand(3.0,3.9);
@@ -93,10 +93,10 @@ if (WPSC_RUNNING === true) {
 
 	if ( defined('IS_WPSC388') && IS_WPSC388 )	
 		// $orders_details_url = $site_url . "/wp-admin/index.php?page=wpsc-purchase-logs&c=item_details&id=";
-		$orders_details_url = ADMIN_URL . "/index.php?page=wpsc-purchase-logs&c=item_details&id=";
+		$orders_details_url = SM_ADMIN_URL . "/index.php?page=wpsc-purchase-logs&c=item_details&id=";
 	else
 		// $orders_details_url = $site_url . "/wp-admin/index.php?page=wpsc-sales-logs&purchaselog_id=";
-		$orders_details_url = ADMIN_URL . "/index.php?page=wpsc-sales-logs&purchaselog_id=";
+		$orders_details_url = SM_ADMIN_URL . "/index.php?page=wpsc-sales-logs&purchaselog_id=";
 
 	$weight_unit ['items']  = array (array ('id' => 0, 'name' => __('Pounds', $sm_text_domain), 'value' => 'pound' ), array ('id' => 1, 'name' => __('Ounces', $sm_text_domain), 'value' => 'ounce' ), array ('id' => 2, 'name' => __('Grams', $sm_text_domain), 'value' => 'gram' ), array ('id' => 3, 'name' => __('Kilograms', $sm_text_domain), 'value' => 'kilogram' ) );
 	$weight_unit ['totalCount'] = count ( $weight_unit ['items'] );
@@ -548,7 +548,7 @@ if (WPSC_RUNNING === true) {
 
 	// ================================================================================
 
-	$orders_details_url = ADMIN_URL . "/post.php?post=";
+	$orders_details_url = SM_ADMIN_URL . "/post.php?post=";
 	
 	$orderFieldsQuery = "SELECT DISTINCT meta_key FROM {$wpdb->prefix}postmeta WHERE meta_key IN 
 																					('_shipping_first_name' , '_shipping_last_name' , 
@@ -1426,8 +1426,8 @@ if (WPSC_RUNNING === true) {
 	var wooRunning          = '" . $woo . "';
 	var wpsc_woo			= '" . $wpsc_woo . "';
 	var newCatId            = '" . (isset($cat_id) ? $cat_id : '') . "';
-	var jsonURL             = '" . JSON_URL . "';
-	var imgURL              = '" . IMG_URL . "';
+	var jsonURL             = '" . SM_JSON_URL . "';
+	var imgURL              = '" . SM_IMG_URL . "';
 	var sm_beta_imgURL      = '" . SM_BETA_IMG_URL . "';
 	var productsDetailsLink = '" . $products_details_url . "';	
 	var ordersDetailsLink   = '" . $orders_details_url . "';

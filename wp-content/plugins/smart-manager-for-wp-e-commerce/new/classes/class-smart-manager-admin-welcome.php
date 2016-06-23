@@ -20,7 +20,7 @@ class Smart_Manager_Admin_Welcome {
 	public $sm_redirect_url,
 			$plugin_url;
 
-	static $text_domain;
+	static $text_domain, $prefix, $sku, $plugin_file;
 
 	public function __construct() {
 
@@ -32,9 +32,13 @@ class Smart_Manager_Admin_Welcome {
 		}
 
 		self::$text_domain = (defined('SM_TEXT_DOMAIN')) ? SM_TEXT_DOMAIN : 'smart-manager-for-wp-e-commerce';
+		self::$prefix = (defined('SM_PREFIX')) ? SM_PREFIX : 'sa_smart_manager';
+        self::$sku = (defined('SM_SKU')) ? SM_SKU : 'sm';
+        self::$plugin_file = (defined('SM_PLUGIN_FILE')) ? SM_PLUGIN_FILE : '';
 
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'admin_init', array( $this, 'smart_manager_welcome' ),11 );
+		add_action( 'admin_footer', array( $this, 'smart_manager_support_ticket_content' ) );
 
 		$this->plugin_url = plugins_url( '', __FILE__ );
 	}
@@ -127,6 +131,26 @@ class Smart_Manager_Admin_Welcome {
 	}
 
 	/**
+	 * Smart Manager's Support Form
+	 */
+	function smart_manager_support_ticket_content() {
+
+            if (!wp_script_is('thickbox')) {
+            	if (!function_exists('add_thickbox')) {
+                	require_once ABSPATH . 'wp-includes/general-template.php';
+            	}
+            	add_thickbox();
+        	}
+
+            if ( ! method_exists( 'Store_Apps_Upgrade', 'support_ticket_content' ) ) return;
+
+            $plugin_data = get_plugin_data( self::$plugin_file );
+            $license_key = get_site_option( self::$prefix.'_license_key' );
+
+            Store_Apps_Upgrade::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
+    }
+
+	/**
 	 * Intro text/links shown on all about pages.
 	 */
 	private function intro() {
@@ -171,13 +195,7 @@ class Smart_Manager_Admin_Welcome {
 					<?php if (SMPRO === true) { ?>
 						<a href="options-general.php?page=smart-manager-settings" target="_blank"><?php _e( 'Settings', self::$text_domain ); ?></a> | 
 					<?php } ?>
-					<a href="http://www.storeapps.org/support/documentation/smart-manager" target="_blank"><?php _e( 'Docs', self::$text_domain ); ?></a>
-					<?php if (SMPRO === true) { ?>
-		            	 | <a href="edit.php#TB_inline?max-height=420px&inlineId=smart_manager_post_query_form" title="Send your query" class="thickbox sm_support_link" id="support_link">
-		          			<?php echo __( 'Contact Us', self::$text_domain ); ?>
-			            </a>
-			        <?php } ?>
-
+					<a href="http://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=welcome_page&utm_campaign=view_docs" target="_blank"><?php _e( 'Docs', self::$text_domain ); ?></a>
 				</p>
 			</div>
 		</div>
@@ -224,13 +242,13 @@ class Smart_Manager_Admin_Welcome {
 					<div class="col">
 						<h4><?php echo __( 'Inline Editing', self::$text_domain ); ?></h4>
 						<p>
-							<?php echo sprintf(__( 'You can quickly update your products, customers and orders in the grid itself. This facilitates editing of multiple rows at a time instead of editing and sacing each row separately, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/support/documentation/smart-manager/#inline-editing" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'You can quickly update your products, customers and orders in the grid itself. This facilitates editing of multiple rows at a time instead of editing and sacing each row separately, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-use-inline-editing/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 					<div class="last-feature col">
 						<h4><?php echo __( 'Filter/Search Records', self::$text_domain ); ?></h4>
 						<p>
-							<?php echo sprintf(__( 'If you would like to filter the records, you can easily do the same by simply entering keyword in the “Search” field at the top of the grid (%s). If you need to have a more specific search result, then you can switch to “%s“ and then search.', self::$text_domain ), '<a href="http://www.storeapps.org/support/documentation/smart-manager/#filter-search-records" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>', '<a href="https://www.youtube.com/watch?v=hX7CcZYo060" target="_blank">' . __( 'Advanced Search', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'If you would like to filter the records, you can easily do the same by simply entering keyword in the “Search” field at the top of the grid (%s). If you need to have a more specific search result, then you can switch to “%s“ and then search.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-filter-records-using-simple-search/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>', '<a href="https://www.youtube.com/watch?v=hX7CcZYo060" target="_blank">' . __( 'Advanced Search', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 				</div>
@@ -246,7 +264,7 @@ class Smart_Manager_Admin_Welcome {
 							?>
 						</h4>
 						<p>
-							<?php echo sprintf(__( 'You can change / update multiple fields of the entire store OR for selected items by selecting multiple records and then simply click on “Batch Update”, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/support/documentation/smart-manager/#batch-update" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'You can change / update multiple fields of the entire store OR for selected items by selecting multiple records and then simply click on “Batch Update”, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-use-batch-update/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 					<div class="col">
@@ -260,7 +278,7 @@ class Smart_Manager_Admin_Welcome {
 							?>
 						</h4>
 						<p>
-							<?php echo sprintf(__( 'You can duplicate products of the entire store OR selected products by simply selecting products and then click on “Duplicate Products”, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/support/documentation/smart-manager/#duplicate-products" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'You can duplicate products of the entire store OR selected products by simply selecting products and then click on “Duplicate Products”, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-duplicate-products/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 					<div class="last-feature col">
@@ -382,7 +400,7 @@ class Smart_Manager_Admin_Welcome {
             					),
             				array(
             						'que' => __( 'How to add columns to Smart Manager dashboard?', self::$text_domain ),
-            						'ans' => sprintf(__( 'To show/hide columns from the Smart Manager dashboard, click the %s next to any of the column headers and simply check/uncheck the columns from the \'%s\' sub-menu. %s.', self::$text_domain ), '<code>down arrow</code>', '<code>Columns</code>', '<a href="http://www.storeapps.org/support/documentation/smart-manager/#add-products" target="_blank">' . __( 'See how', self::$text_domain ) . '</a>')
+            						'ans' => sprintf(__( 'To show/hide columns from the Smart Manager dashboard, click the %s next to any of the column headers and simply check/uncheck the columns from the \'%s\' sub-menu. %s.', self::$text_domain ), '<code>down arrow</code>', '<code>Columns</code>', '<a href="http://www.storeapps.org/docs/sm-how-to-show-hide-columns-in-dashboard/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_faqs" target="_blank">' . __( 'See how', self::$text_domain ) . '</a>')
             					),
             				array(
             						'que' => __( 'How to sort on the entire database in Smart Manager?', self::$text_domain ),
@@ -415,8 +433,16 @@ class Smart_Manager_Admin_Welcome {
             									%s Find the \'%s\' line of code.
             									%s Make changes to the \'%s\' and \'%s\' CSS property values in the line of code. Save the file.
             									%s Refresh your Smart Manager dashboard page.', self::$text_domain ), '<br/><br/>', '<br/> <ul><li>', '</li><li>', '<code>img width=16px height=16px src="\' + record.data.thumbnail + \'"</code>', '</li><li>', '<code>width</code>', '<code>height</code>', '</li></ul>')
-            					)            				
+            					)
             			);
+
+				
+				if (SMPRO === true) {
+					$faqs[] = array(
+								'que' => __( 'I can\'t find a way to do X...', self::$text_domain ),
+								'ans' => sprintf(__( 'Smart Manager is actively developed. If you can\'t find your favorite feature (or have a suggestion) %s. We\'d love to hear from you.', self::$text_domain ), '<a class="thickbox" href="' . admin_url('#TB_inline?inlineId=sa_smart_manager_post_query_form') .'" title="' . __( 'Submit your query', self::$text_domain ) .'">' . __( 'contact us', self::$text_domain ) . '</a>' )
+							);
+				}
 
 				$faqs = array_chunk( $faqs, 2 );
 

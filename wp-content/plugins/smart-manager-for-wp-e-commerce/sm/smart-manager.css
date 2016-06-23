@@ -21,6 +21,21 @@
 	display: block;
 }
 
+div.sr_social_links > iframe {
+                                max-height: 1.5em;
+                                vertical-align: middle;
+                                padding: 5px 2px 0px 0px;
+                            }
+                            iframe[id^="twitter-widget"] {
+                                max-width: 10.3em;
+                            }
+                            iframe#fb_like_sr {
+                                max-width: 6em;
+                            }
+                            span > iframe {
+                                vertical-align: middle;
+                            }
+
 /*	BOF Font color to blue - Append the id given to the header */
 .x-grid3-td-details, .x-grid3-td-total_purchased, .x-grid3-col-image, .x-grid3-td-last_order, .x-grid3-td-editLink {
 	color: #21759B;

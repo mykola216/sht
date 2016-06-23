@@ -131,7 +131,12 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
 				}
 
 				if( WC()->cart->add_to_cart( $product_id, 1, $variation_id, $attr ) ) {
-					$mess[] = $product_id;
+					if( version_compare( WC()->version, '2.6', '>=' ) ) {
+						$mess[$product_id] = 1;
+					}
+					else {
+						$mess[] = $product_id;
+					}
 				}
 			}
 

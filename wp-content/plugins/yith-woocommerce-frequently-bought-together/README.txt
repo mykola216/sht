@@ -2,8 +2,8 @@
 Contributors: yithemes
 Tags: yith, woocommerce, wc, shop, frequently bought together, bought together, bundles, products, frequently bought products, bought, together, product group, add to cart, cart
 Requires at least: 4.0
-Tested up to: 4.5.1
-Stable tag: 1.0.4
+Tested up to: 4.5.2
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,11 @@ Full documentation is available [here](http://yithemes.com/docs-plugins/yith-woo
 3. The plugin tab in edit product
 
 == Changelog ==
+
+== 1.0.5 == Released on Jun 10, 2016
+
+* Added: Support to WooCommerce 2.6 RC1.
+* Updated: Plugin core.
 
 == 1.0.4 == Released on Apr 27, 2016
 
@@ -75,10 +80,7 @@ If you have created your own language pack, or have an update for an existing on
 
 == Upgrade notice ==
 
-== 1.0.4 == Released on Apr 27, 2016
+== 1.0.5 == Released on Jun 10, 2016
 
-* Added: WordPress 4.5 compatibility.
-* Updated: Template yith-wfbt-form.php to version 1.0.4
-* Updated: Changed plugin textdomain from ywbt to yith-woocommerce-frequently-bought-together.
-* Updated: Language file.
+* Added: Support to WooCommerce 2.6 RC1.
 * Updated: Plugin core.

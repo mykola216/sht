@@ -3,7 +3,7 @@
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
 Description: <strong>Lite Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.15
+Version: 3.9.16
 Author: Store Apps
 Author URI: http://www.storeapps.org/
 Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Store Apps All rights reserved.
@@ -58,13 +58,13 @@ function smart_deactivate() {
 
 function smart_get_latest_version() {
 	$sm_plugin_info = get_site_transient( 'update_plugins' );
-	$latest_version = isset( $sm_plugin_info->response [SM_PLUGIN_FILE]->new_version ) ? $sm_plugin_info->response [SM_PLUGIN_FILE]->new_version : '';
+	$latest_version = isset( $sm_plugin_info->response [SM_PLUGIN_BASE_NM]->new_version ) ? $sm_plugin_info->response [SM_PLUGIN_BASE_NM]->new_version : '';
 	return $latest_version;
 }
 
 function smart_get_user_sm_version() {
 	$sm_plugin_info = get_plugins();
-	$user_version = $sm_plugin_info [SM_PLUGIN_FILE] ['Version'];
+	$user_version = $sm_plugin_info [SM_PLUGIN_BASE_NM] ['Version'];
 	return $user_version;
 }
 
@@ -86,16 +86,41 @@ $plugin_path  = untrailingslashit( plugin_dir_path( __FILE__ ) );
 
 require_once (ABSPATH . WPINC . '/default-constants.php');
 $plugin = plugin_basename( __FILE__ );
+
+define( 'SM_PLUGIN_FILE', __FILE__ );
 define( 'SM_PLUGIN_DIR', dirname( $plugin ) );
-define( 'SM_PLUGIN_FILE', $plugin );
-define( 'STORE_APPS_URL', 'http://www.storeapps.org/' );
+define( 'SM_PLUGIN_BASE_NM', $plugin );
 define( 'SM_TEXT_DOMAIN', 'smart-manager-for-wp-e-commerce' );
+define( 'SM_PREFIX', 'sa_smart_manager' );
+define( 'SM_SKU', 'sm' );
+define( 'SM_PLUGIN_NAME', 'Smart Manager' );
+
+if (!defined('STORE_APPS_URL')) {
+	define( 'STORE_APPS_URL', 'http://www.storeapps.org/' );
+}
 
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 include_once (ABSPATH . WPINC . '/functions.php');
 
 if (is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active( 'wp-e-commerce/wp-shopping-cart.php' )) {
 	include_once $plugin_path . '/new/classes/class-smart-manager-admin-welcome.php';
+}
+
+add_action( 'plugins_loaded', 'sm_upgrade' );
+
+//function to handle inclusion of the SA upgrade file
+function sm_upgrade() {
+	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
+		if ( ! class_exists( 'Store_Apps_Upgrade' ) ) {
+			require_once 'pro/class-storeapps-upgrade.php';
+		}
+
+		$sku = SM_SKU;
+		$prefix = SM_PREFIX;
+		$plugin_name = SM_PLUGIN_NAME;
+		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
+		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+	}
 }
 
 // add_action ( 'admin_notices', 'smart_admin_notices' );
@@ -152,7 +177,7 @@ function smart_manager_get_data() {
                 add_action( 'admin_head', 'remove_help_tab'); // For removing the help tab
                 
                 $plugin_info = get_plugins ();
-		$sm_plugin_info = $plugin_info [SM_PLUGIN_FILE];
+		$sm_plugin_info = $plugin_info [SM_PLUGIN_BASE_NM];
 		$ext_version = '3.3.1';
                 $sm_plugin_data = get_plugin_data(__FILE__);
                 $sm_version = $sm_plugin_data['Version'];
@@ -187,8 +212,11 @@ function smart_manager_get_data() {
             wp_enqueue_script( 'jquery' );
         }
 
-        wp_register_script ( 'sm_visualsearch_underscore', plugins_url ( '/visualsearch/underscore.js', __FILE__ ), array ('jquery'), '0.0.1' );
-        wp_register_script ( 'sm_visualsearch_jquery_ui_widget', plugins_url ( '/visualsearch/jquery.ui.widget.js', __FILE__ ), array ('sm_visualsearch_underscore'), '0.0.1' );
+        if ( !wp_script_is( 'underscore' ) ) {
+            wp_enqueue_script( 'underscore' );
+        }
+
+        wp_register_script ( 'sm_visualsearch_jquery_ui_widget', plugins_url ( '/visualsearch/jquery.ui.widget.js', __FILE__ ), array ('jquery', 'wp-util', 'underscore'), '0.0.1' );
         wp_register_script ( 'sm_visualsearch_jquery_ui_menu', plugins_url ( '/visualsearch/jquery.ui.menu.js', __FILE__ ), array ('sm_visualsearch_jquery_ui_widget'), '0.0.1' );
         wp_register_script ( 'sm_visualsearch_jquery_ui_autocomplete', plugins_url ( '/visualsearch/jquery.ui.autocomplete.js', __FILE__ ), array ('sm_visualsearch_jquery_ui_menu'), '0.0.1' );
         wp_register_script ( 'sm_visualsearch_jquery_ui_position', plugins_url ( '/visualsearch/jquery.ui.position.js', __FILE__ ), array ('sm_visualsearch_jquery_ui_autocomplete'), '0.0.1' );
@@ -261,7 +289,7 @@ function smart_manager_get_data() {
 			define ( 'SMPRO', false );
 		}
 		if (SMPRO === true) {
-			include ('pro/upgrade.php');
+			include ('pro/sm-settings.php');
 			// this allows you to add something to the end of the row of information displayed for your plugin - 
 			// like the existing after_plugin_row filter, but specific to your plugin, 
 			// so it only runs once instead of after each row of the plugin display
@@ -694,9 +722,9 @@ function smart_manager_get_data() {
 
 	function smart_show_console() {
 
-		define( 'PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
+		define( 'SM_PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
 		define( 'SM_PLUGIN_DIRNAME', plugins_url( '', __FILE__ ) );
-		define( 'IMG_URL', SM_PLUGIN_DIRNAME . '/images/' );
+		define( 'SM_IMG_URL', SM_PLUGIN_DIRNAME . '/images/' );
 		define( 'SM_BETA_IMG_URL', SM_PLUGIN_DIRNAME . '/new/assets/images/' );
 		
 		if (WPSC_RUNNING === true) {
@@ -705,10 +733,10 @@ function smart_manager_get_data() {
 			$json_filename = 'woo-json';
 		}
 		// define( 'JSON_URL', SM_PLUGIN_DIRNAME . "/sm/$json_filename.php" );
-		define( 'JSON_URL', $json_filename );
-		define( 'ADMIN_URL', get_admin_url() ); //defining the admin url
-		define( 'ABS_WPSC_URL', WP_PLUGIN_DIR . '/wp-e-commerce' );
-		define( 'WPSC_NAME', 'wp-e-commerce' );
+		define( 'SM_JSON_URL', $json_filename );
+		define( 'SM_ADMIN_URL', get_admin_url() ); //defining the admin url
+		define( 'SM_ABS_WPSC_URL', WP_PLUGIN_DIR . '/wp-e-commerce' );
+		define( 'SM_WPSC_NAME', 'wp-e-commerce' );
 		
 		$latest_version = smart_get_latest_version();
 		$is_pro_updated = smart_is_pro_updated();
@@ -738,8 +766,8 @@ function smart_manager_get_data() {
 	                $plug_page = '';
 			?>
 			<span style="float:right; margin: -6px -21px -20px 0px;">
-					<!-- <a href="http://www.storeapps.org/?buy-now=742&coupon=sm-festive-40-2013&utm_source=SM&utm_medium=Lite&utm_campaign=Festive2013" target="_blank"> <img src="<?php echo IMG_URL . '40perc-off-sm-thanks2013.png'?>" alt="40peroff"> </a> -->
-					<a href="http://www.storeapps.org/sm-in-app-promo" target="_blank"> <img src="<?php echo IMG_URL . 'sm-in-app-promo.png' ?>" alt=""> </a>
+					<!-- <a href="http://www.storeapps.org/?buy-now=742&coupon=sm-festive-40-2013&utm_source=SM&utm_medium=Lite&utm_campaign=Festive2013" target="_blank"> <img src="<?php echo SM_IMG_URL . '40perc-off-sm-thanks2013.png'?>" alt="40peroff"> </a> -->
+					<a href="http://www.storeapps.org/sm-in-app-promo" target="_blank"> <img src="<?php echo SM_IMG_URL . 'sm-in-app-promo.png' ?>" alt=""> </a>
 			</span>
 	   		<p class="wrap" style="font-size: 12px; margin: 18px -21px 0px 5px;"><span style="float: right; line-height: 17px;"> <?php
 				if ( SMPRO === true && ! is_multisite() ) {
@@ -785,7 +813,7 @@ function smart_manager_get_data() {
 
 
 	//			printf ( __ ( '%1s%2s%3s<a href="%4s" target=_storeapps>Docs</a>' , SM_TEXT_DOMAIN), $before_plug_page, $plug_page, $after_plug_page, "http://www.storeapps.org/support/documentation/" );
-				printf ( __ ( '%1s%2s<a href="%3s" target="_blank">Docs</a>' , SM_TEXT_DOMAIN) ,$sm_beta, $before_plug_page, "http://www.storeapps.org/support/documentation/smart-manager" );
+ 				printf ( __ ( '%1s%2s<a href="%3s" target="_blank">Docs</a>' , SM_TEXT_DOMAIN) ,$sm_beta, $before_plug_page, "http://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=sm_grid&utm_campaign=view_docs" );
 				?>
 				</span><?php
 			_e( '10x productivity gains with store administration. Quickly find and update products, orders and customers', SM_TEXT_DOMAIN );
@@ -793,7 +821,7 @@ function smart_manager_get_data() {
 	</h2>
 	<h6 align="right"><?php
 			if (! $is_pro_updated) {
-				$admin_url = ADMIN_URL . "plugins.php";
+				$admin_url = SM_ADMIN_URL . "plugins.php";
 				$update_link = __( 'An upgrade for Smart Manager Pro', SM_TEXT_DOMAIN ) . " " . $latest_version . " " . __( 'is available.', SM_TEXT_DOMAIN ) . " " . "<a align='right' href=$admin_url>" . __( 'Click to upgrade.', SM_TEXT_DOMAIN ) . "</a>";
 				smart_display_notice( $update_link );
 			}
@@ -909,7 +937,7 @@ function smart_manager_get_data() {
 		if (! function_exists( 'sm_get_download_url_from_db' ))
 			return;
 		$download_details = sm_get_download_url_from_db();
-		$link = $download_details ['results'] [0]->option_value; //$plugins->response [SM_PLUGIN_FILE]->package;
+		$link = $download_details ['results'] [0]->option_value; //$plugins->response [SM_PLUGIN_BASE_NM]->package;
 		
 
 		if (! empty( $link )) {

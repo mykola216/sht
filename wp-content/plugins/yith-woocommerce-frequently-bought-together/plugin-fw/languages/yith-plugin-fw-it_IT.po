@@ -4,21 +4,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YITH Plugin Starter 1.0.0 Plugin FW\n"
 "Report-Msgid-Bugs-To: Your Inspiration Themes <plugins@yithemes.com>\n"
-"POT-Creation-Date: 2016-03-18 15:29+0100\n"
-"PO-Revision-Date: 2016-03-18 15:34+0100\n"
+"POT-Creation-Date: 2016-05-16 16:37+0200\n"
+"PO-Revision-Date: 2016-05-16 16:37+0200\n"
 "Last-Translator: \n"
 "Language-Team: YIThemes <plugins@yithemes.com>\n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
 "_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
 "esc_html_x:1,2c\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -127,7 +127,7 @@ msgid "%s Settings"
 msgstr "Impostazioni %s"
 
 #: lib/yit-cpt-unlimited.php:1048 lib/yit-cpt-unlimited.php:1196
-#: lib/yit-cpt-unlimited.php:1202 lib/yit-plugin-panel.php:64
+#: lib/yit-cpt-unlimited.php:1202 lib/yit-plugin-panel.php:74
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -224,79 +224,83 @@ msgstr "Aggiungi %s dalla immagini"
 msgid "Upload multiple files"
 msgstr ""
 
-#: lib/yit-plugin-panel-wc.php:345
+#: lib/yit-plugin-panel-sidebar.php:421 templates/panel/sidebar/sidebar.php:3
+msgid "Hide sidebar"
+msgstr ""
+
+#: lib/yit-plugin-panel-sidebar.php:422 templates/panel/sidebar/sidebar.php:3
+msgid "Show sidebar"
+msgstr ""
+
+#: lib/yit-plugin-panel-wc.php:359
 msgid "The changes you have made will be lost if you leave this page."
 msgstr "Perderai tutti i cambiamenti effettuati se lasci questa pagina."
 
-#: lib/yit-plugin-panel.php:63
+#: lib/yit-plugin-panel.php:73
 msgid "Plugin Settings"
 msgstr "Impostazioni plugin"
 
-#: lib/yit-plugin-panel.php:99 lib/yit-plugin-subpanel.php:103
-msgid "YITH Plugins"
-msgstr "YITH Plugins"
-
-#: lib/yit-plugin-panel.php:276
+#: lib/yit-plugin-panel.php:293
 msgid "Premium version upgrade"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:322 lib/yit-plugin-subpanel.php:146
-#: templates/panel/woocommerce/woocommerce-form.php:5
+#: lib/yit-plugin-panel.php:344 lib/yit-plugin-subpanel.php:146
+#: templates/panel/woocommerce/woocommerce-form.php:11
 msgid "Save Changes"
 msgstr "Salva modifiche"
 
-#: lib/yit-plugin-panel.php:325 templates/panel/woocommerce/woocommerce-form.php:8
+#: lib/yit-plugin-panel.php:347 templates/panel/woocommerce/woocommerce-form.php:14
 msgid "If you continue with this action, you will reset all options in this page."
 msgstr ""
 "Se prosegui con questa azione, tutte le opzioni di questa pagina saranno "
 "reimpostate."
 
-#: lib/yit-plugin-panel.php:327 lib/yit-plugin-subpanel.php:151
+#: lib/yit-plugin-panel.php:349 lib/yit-plugin-subpanel.php:151
 msgid "Reset to default"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:327 lib/yit-plugin-subpanel.php:151
-#: templates/panel/woocommerce/woocommerce-form.php:11
+#: lib/yit-plugin-panel.php:349 lib/yit-plugin-subpanel.php:151
+#: templates/panel/woocommerce/woocommerce-form.php:18
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
-#: lib/yit-plugin-panel.php:461
+#: lib/yit-plugin-panel.php:545
 msgid "The element you have entered already exists. Please, enter another name."
 msgstr "L'elemento inserito esiste già. Per favore, inserisci un altro nome."
 
-#: lib/yit-plugin-panel.php:462
+#: lib/yit-plugin-panel.php:546
 msgid "Settings saved"
 msgstr "Impostazioni salvate"
 
-#: lib/yit-plugin-panel.php:463
+#: lib/yit-plugin-panel.php:547
 msgid "Settings reset"
 msgstr "Impostazioni azzerate"
 
-#: lib/yit-plugin-panel.php:464
+#: lib/yit-plugin-panel.php:548
 msgid "Element deleted correctly."
 msgstr "Elemento rimosso correttamente."
 
-#: lib/yit-plugin-panel.php:465 lib/yit-plugin-panel.php:466
+#: lib/yit-plugin-panel.php:549 lib/yit-plugin-panel.php:550
 msgid "Element updated correctly."
 msgstr "Elemento aggiornato correttamente."
 
-#: lib/yit-plugin-panel.php:467
+#: lib/yit-plugin-panel.php:551
 msgid "Database imported correctly."
 msgstr "Database importato correttamente."
 
-#: lib/yit-plugin-panel.php:468
+#: lib/yit-plugin-panel.php:552
 msgid "An error has occurred during import. Please try again."
 msgstr "Si è verificato un errore durante l'importazione. Prova di nuovo."
 
-#: lib/yit-plugin-panel.php:469
+#: lib/yit-plugin-panel.php:553
 msgid "The added file is not valid."
 msgstr "Il file aggiunto non è valido."
 
-#: lib/yit-plugin-panel.php:470
+#: lib/yit-plugin-panel.php:554
 msgid "Sorry, import is disabled."
 msgstr "Ci dispiace, l'importazione è disabilitata."
 
-#: lib/yit-plugin-panel.php:471
+#: lib/yit-plugin-panel.php:555
 msgid "Sorting successful."
 msgstr "Ordinamento effettuato con successo."
 
@@ -1003,11 +1007,27 @@ msgstr "Corsivo"
 msgid "Italic bold"
 msgstr "Grassetto corsivo"
 
+#: templates/panel/sidebar/widgets/widgets.php:17
+msgid "Join the club"
+msgstr ""
+
+#: templates/panel/sidebar/widgets/widgets.php:24
+msgid "Despacho Theme - 100% FREE"
+msgstr ""
+
+#: templates/panel/sidebar/widgets/widgets.php:28
+msgid "FREE!"
+msgstr ""
+
+#: templates/panel/sidebar/widgets/widgets.php:34
+msgid "Important Links"
+msgstr ""
+
 #: templates/panel/types/upload.php:32
 msgid "Reset"
 msgstr ""
 
-#: templates/panel/woocommerce/woocommerce-form.php:11
+#: templates/panel/woocommerce/woocommerce-form.php:17
 msgid "Reset Defaults"
 msgstr "Ripristina impostazioni iniziali"
 
@@ -1121,12 +1141,8 @@ msgstr ""
 msgid ""
 "The last step is the activation of the plugin through its license key you received "
 "after the purchase. Click on \"License Activation\" that you find in \"YITH Plugins"
-"\" and insert the license key and the email address you used during the purchas."
+"\" and insert the license key and the email address you used during the purchase."
 msgstr ""
-"Ultimo step è attivare il plugin con la chiave di licenza che hai ricevuto dopo "
-"l'acquisto. Clicca quindi sul link \"License Activation\" che trovi sotto \"YITH "
-"Plugins\" ed inserisci la license key in tuo possesso ed email utilizzata in fase "
-"di acquisto."
 
 #: templates/upgrade/upgrade-to-pro-version.php:61
 msgid ""
@@ -1136,6 +1152,20 @@ msgstr ""
 "Se non trovi l'email che ti abbiamo inviato contenete la license key puoi "
 "facilmente recuperarla dalla sezione \"My Licenses\" all'interno della sezione My "
 "Account del nostro sito yithemes.com."
+
+#~ msgid "YITH Plugins"
+#~ msgstr "YITH Plugins"
+
+#~ msgid ""
+#~ "The last step is the activation of the plugin through its license key you "
+#~ "received after the purchase. Click on \"License Activation\" that you find in "
+#~ "\"YITH Plugins\" and insert the license key and the email address you used "
+#~ "during the purchas."
+#~ msgstr ""
+#~ "Ultimo step è attivare il plugin con la chiave di licenza che hai ricevuto dopo "
+#~ "l'acquisto. Clicca quindi sul link \"License Activation\" che trovi sotto "
+#~ "\"YITH Plugins\" ed inserisci la license key in tuo possesso ed email "
+#~ "utilizzata in fase di acquisto."
 
 #~ msgid "YIT Plugins"
 #~ msgstr "YIT Plugins"

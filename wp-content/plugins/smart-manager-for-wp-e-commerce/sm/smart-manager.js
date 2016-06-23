@@ -3804,7 +3804,7 @@ var showCustomerDetails = function(record,rowIndex){
         var wWidth = 0;
 
         //code to handle the sizing od the Smart Manager Grid w.r.to collapse menu
-        if ( document.documentElement.offsetWidth > 1000 ) {
+        if ( document.documentElement.offsetWidth > 557 ) {
 	        if ( !jQuery(document.body).hasClass('folded') ) {
 	            wWidth  = document.documentElement.offsetWidth - 183;
 	        }
