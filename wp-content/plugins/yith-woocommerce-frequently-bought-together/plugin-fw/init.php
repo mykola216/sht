@@ -1,7 +1,7 @@
 <?php
 /**
  * Framework Name: YIT Plugin Framework
- * Version: 2.9.22
+ * Version: 2.9.33
  * Author: Yithemes
  * Text Domain: yith-plugin-fw
  * Domain Path: /languages/
@@ -55,3 +55,20 @@ if ( ! function_exists ( 'yit_maybe_plugin_fw_loader' ) ) {
         }
     }
 }
+
+if( is_admin() && function_exists( 'WC' ) && version_compare( WC()->version, '2.6', '<' ) ){
+    add_action( 'admin_notices', 'yit_before_woocommerce_2_6_update' );
+}
+
+if( ! function_exists( 'yit_before_woocommerce_2_6_update' ) ){
+    function yit_before_woocommerce_2_6_update(){ ?>
+        <div id="message" class="error notice is-dismissible">
+            <p>
+                <strong>Attention!</strong> In the following days the new version 2.6 will be released for WooCommerce. <strong>Update all YITH plugins before updating WooCommerce</strong> to version 2.6 in order to avoid any possible unexpected errors occur.
+            </p>
+            <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+        </div>
+        <?php
+    }
+}
+

@@ -622,11 +622,11 @@ if ( ! class_exists( 'YITH_WCWL' ) ) {
                     $sql_args[] = $id;
                 }
 
+                $sql .= " GROUP BY i.prod_id, l.ID";
+
                 if( ! empty( $limit ) ){
                     $sql .= " LIMIT " . $offset . ", " . $limit;
                 }
-
-                $sql .= " GROUP BY i.prod_id, l.ID";
 
                 $wishlist = $wpdb->get_results( $wpdb->prepare( $sql, $sql_args ), ARRAY_A );
             }

@@ -1218,7 +1218,7 @@ of YITH WOOCOMMERCE WISHLIST to benefit from all features!', 'yith-woocommerce-w
 				),
 				'socials_text' =>  array(
 					'name'    => __( 'Social text', 'yith-woocommerce-wishlist' ),
-					'desc'    => __( 'It will be used by Facebook, Twitter and Pinterest. Use <strong>%wishlist_url%</strong> where you want to show the URL of your wishlist.', 'yith-woocommerce-wishlist' ),
+					'desc'    => __( 'It will be used by Twitter and Pinterest. Use <strong>%wishlist_url%</strong> where you want to show the URL of your wishlist.', 'yith-woocommerce-wishlist' ),
 					'id'      => 'yith_wcwl_socials_text',
 					'css'     => 'width:100%; height: 75px;',
 					'std'     => '', // for woocommerce < 2.0
@@ -1227,6 +1227,7 @@ of YITH WOOCOMMERCE WISHLIST to benefit from all features!', 'yith-woocommerce-w
 				),
 				'socials_image' => array(
 					'name'    => __( 'Social image URL', 'yith-woocommerce-wishlist' ),
+					'desc'    => __( 'It will be used by Pinterest.', 'yith-woocommerce-wishlist' ),
 					'id'      => 'yith_wcwl_socials_image_url',
 					'std'     => '', // for woocommerce < 2.0
 					'default' => '', // for woocommerce >= 2.0

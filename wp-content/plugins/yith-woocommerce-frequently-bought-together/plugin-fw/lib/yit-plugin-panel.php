@@ -155,6 +155,7 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
             wp_register_script( 'codemirror', YIT_CORE_PLUGIN_URL . '/assets/js/codemirror/codemirror.js', array( 'jquery' ), $this->version, true );
             wp_register_script( 'codemirror-javascript', YIT_CORE_PLUGIN_URL . '/assets/js/codemirror/javascript.js', array( 'jquery', 'codemirror' ), $this->version, true );
             wp_register_script( 'colorbox', YIT_CORE_PLUGIN_URL . '/assets/js/jquery.colorbox.js', array( 'jquery' ), '1.6.3', true );
+            wp_enqueue_script( 'yith_how_to', YIT_CORE_PLUGIN_URL . '/assets/js/how-to.js', array('jquery'), $this->version, true );
 
             //styles
             $jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
@@ -175,7 +176,8 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
             if( 'admin.php' == $pagenow && strpos( get_current_screen()->id, 'yith_upgrade_premium_version' ) !== false ){
                 wp_enqueue_style( 'yit-upgrade-to-pro' );
                 wp_enqueue_script( 'colorbox' );
-        }
+            }
+
         }
 
         /**
@@ -287,10 +289,15 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
          * @author   Andrea Grillo <andrea.grillo@yithemes.com>
          */
         public function add_premium_version_upgrade_to_menu(){
-            global $_parent_pages;
+            global $submenu;
 
-            if( apply_filters( 'yit_show_upgrade_to_premium_version', ! isset( $_parent_pages['yith_upgrade_premium_version'] ) ) ){
-                add_submenu_page( 'yit_plugin_panel', __( 'Premium version upgrade', 'yith-plugin-fw' ), __( 'Premium version upgrade', 'yith-plugin-fw' ), 'install_plugins', 'yith_upgrade_premium_version', array( $this, 'show_premium_version_upgrade' ) );
+            if( apply_filters( 'yit_show_upgrade_to_premium_version', ! isset( $submenu['yit_plugin_panel']['how_to'] ) ) ){
+                $submenu['yit_plugin_panel']['how_to'] = array(
+                    sprintf( '%s%s%s', '<span id="yith-how-to-premium">', __( 'How to install premium version', 'yith-plugin-fw' ), '</span>' ),
+                    'install_plugins',
+                    '//support.yithemes.com/hc/en-us/articles/217840988',
+                    __( 'How to install premium version', 'yith-plugin-fw' ),
+                );
             }
         }
 
@@ -906,16 +913,5 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
 
 		    $this->add_videobox( $args );
 	    }
-
-        /**
-         * Show the upgrade to pro version page
-         *
-         * @return   void
-         * @since    2.9.13
-         * @author   Andrea Grillo <andrea.grillo@yithemes.com>
-         */
-        public function show_premium_version_upgrade() {
-            yit_plugin_get_template ( YIT_CORE_PLUGIN_PATH, 'upgrade/upgrade-to-pro-version.php', array( 'core_plugin_url' => YIT_CORE_PLUGIN_URL ) ) ;
-    }
     }
 }

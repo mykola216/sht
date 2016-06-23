@@ -180,7 +180,7 @@ if ( !class_exists( 'YIT_Plugin_Panel_Sidebar' ) ) {
             $updated_expiration = DAY_IN_SECONDS; // update frequency
 
             $remote_xml = wp_remote_get( $this->_remote_widget_xml );
-            if ( !is_wp_error( $remote_xml ) && isset( $remote_xml[ 'response' ][ 'code' ] ) && '200' == $remote_xml[ 'response' ][ 'code' ] ) {
+            if ( !is_wp_error( $remote_xml ) && isset( $remote_xml[ 'response' ][ 'code' ] ) && '200' == $remote_xml[ 'response' ][ 'code' ] && class_exists( 'SimpleXmlElement' ) ) {
                 try {
                     // suppress all XML errors when loading the document
                     libxml_use_internal_errors( true );

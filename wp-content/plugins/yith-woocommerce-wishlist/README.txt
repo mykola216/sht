@@ -3,13 +3,13 @@
 Contributors: yithemes
 Tags: wishlist, woocommerce, products, themes, yit, e-commerce, shop, ecommerce wishlist, yith, woocommerce wishlist, woocommerce 2.3 ready, shop wishlist
 Requires at least: 4.0
-Tested up to: 4.4
-Stable tag: 2.0.15
+Tested up to: 4.5.2
+Stable tag: 2.0.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 YITH WooCommerce Wishlist add all Wishlist features to your website. Needs WooCommerce to work.
-WooCommerce 2.4.x compatible.
+WooCommerce 2.6.x compatible.
 
 
 == Description ==
@@ -105,6 +105,13 @@ you should ask theme developers to update custom templates and replace the old t
 4. The Wishlist settings page
 
 == Changelog ==
+
+= 2.0.16 - Released: Jun, 14 - 2016 =
+
+* Added: WooCommerce 2.6 support
+* Tweak: changed uninstall procedure to work with multisite and delete plugin options
+* Tweak: removed description and image from facebook share link (fb doesn't allow anymore)
+* Fixed: product query (GROUP By and LIMIT statement conflicting)
 
 = 2.0.15 - Released: Apr, 04 - 2016 =
 

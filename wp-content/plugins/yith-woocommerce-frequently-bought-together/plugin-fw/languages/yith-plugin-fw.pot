@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YITH Plugin Starter 1.0.0 Plugin FW\n"
 "Report-Msgid-Bugs-To: Your Inspiration Themes <plugins@yithemes.com>\n"
-"POT-Creation-Date: 2016-03-07 15:11+0100\n"
+"POT-Creation-Date: 2016-05-16 16:37+0200\n"
 "PO-Revision-Date: 2015-05-05 10:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: Your Inspiration Themes <info@yithemes.com>\n"
@@ -13,13 +13,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
 "_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
 "esc_html_x:1,2c\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -128,7 +128,7 @@ msgid "%s Settings"
 msgstr ""
 
 #: lib/yit-cpt-unlimited.php:1048 lib/yit-cpt-unlimited.php:1196
-#: lib/yit-cpt-unlimited.php:1202 lib/yit-plugin-panel.php:64
+#: lib/yit-cpt-unlimited.php:1202 lib/yit-plugin-panel.php:74
 msgid "Settings"
 msgstr ""
 
@@ -220,73 +220,81 @@ msgstr ""
 msgid "Upload multiple files"
 msgstr ""
 
-#: lib/yit-plugin-panel-wc.php:341
+#: lib/yit-plugin-panel-sidebar.php:421 templates/panel/sidebar/sidebar.php:3
+msgid "Hide sidebar"
+msgstr ""
+
+#: lib/yit-plugin-panel-sidebar.php:422 templates/panel/sidebar/sidebar.php:3
+msgid "Show sidebar"
+msgstr ""
+
+#: lib/yit-plugin-panel-wc.php:359
 msgid "The changes you have made will be lost if you leave this page."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:63
+#: lib/yit-plugin-panel.php:73
 msgid "Plugin Settings"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:99 lib/yit-plugin-subpanel.php:103
-msgid "YITH Plugins"
+#: lib/yit-plugin-panel.php:293
+msgid "Premium version upgrade"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:297 lib/yit-plugin-subpanel.php:146
-#: templates/panel/woocommerce/woocommerce-form.php:5
+#: lib/yit-plugin-panel.php:344 lib/yit-plugin-subpanel.php:146
+#: templates/panel/woocommerce/woocommerce-form.php:11
 msgid "Save Changes"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:300 templates/panel/woocommerce/woocommerce-form.php:8
+#: lib/yit-plugin-panel.php:347 templates/panel/woocommerce/woocommerce-form.php:14
 msgid "If you continue with this action, you will reset all options in this page."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:302 lib/yit-plugin-subpanel.php:151
+#: lib/yit-plugin-panel.php:349 lib/yit-plugin-subpanel.php:151
 msgid "Reset to default"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:302 lib/yit-plugin-subpanel.php:151
-#: templates/panel/woocommerce/woocommerce-form.php:11
+#: lib/yit-plugin-panel.php:349 lib/yit-plugin-subpanel.php:151
+#: templates/panel/woocommerce/woocommerce-form.php:18
 msgid "Are you sure?"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:436
+#: lib/yit-plugin-panel.php:545
 msgid "The element you have entered already exists. Please, enter another name."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:437
+#: lib/yit-plugin-panel.php:546
 msgid "Settings saved"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:438
+#: lib/yit-plugin-panel.php:547
 msgid "Settings reset"
 msgstr ""
 
-#: lib/yit-plugin-panel.php:439
+#: lib/yit-plugin-panel.php:548
 msgid "Element deleted correctly."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:440 lib/yit-plugin-panel.php:441
+#: lib/yit-plugin-panel.php:549 lib/yit-plugin-panel.php:550
 msgid "Element updated correctly."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:442
+#: lib/yit-plugin-panel.php:551
 msgid "Database imported correctly."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:443
+#: lib/yit-plugin-panel.php:552
 msgid "An error has occurred during import. Please try again."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:444
+#: lib/yit-plugin-panel.php:553
 msgid "The added file is not valid."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:445
+#: lib/yit-plugin-panel.php:554
 msgid "Sorry, import is disabled."
 msgstr ""
 
-#: lib/yit-plugin-panel.php:446
+#: lib/yit-plugin-panel.php:555
 msgid "Sorting successful."
 msgstr ""
 
@@ -961,10 +969,116 @@ msgstr ""
 msgid "Italic bold"
 msgstr ""
 
+#: templates/panel/sidebar/widgets/widgets.php:17
+msgid "Join the club"
+msgstr ""
+
+#: templates/panel/sidebar/widgets/widgets.php:24
+msgid "Despacho Theme - 100% FREE"
+msgstr ""
+
+#: templates/panel/sidebar/widgets/widgets.php:28
+msgid "FREE!"
+msgstr ""
+
+#: templates/panel/sidebar/widgets/widgets.php:34
+msgid "Important Links"
+msgstr ""
+
 #: templates/panel/types/upload.php:32
 msgid "Reset"
 msgstr ""
 
-#: templates/panel/woocommerce/woocommerce-form.php:11
+#: templates/panel/woocommerce/woocommerce-form.php:17
 msgid "Reset Defaults"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:2
+msgid "Upgrade to Premium Version"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:3
+msgid ""
+"Have you purchased the premium version of a plugin? Don't you know how to activate "
+"the license after the purchase?"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:5
+msgid ""
+"To upgrade from a FREE to a PREMIUM plugin is not suffice to insert the license "
+"key provided after the purchase.\n"
+"        The reason is that they are two distinct products, with significant "
+"differences both for available options and for number of files included in the "
+"plugin package.\n"
+"        To start to use the PREMIUM version of the plugin, you simply need to "
+"download the PREMIUM packet and install it on your site."
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:9
+#, php-format
+msgid ""
+"%1$sDo you need to know how to do it?%2$s Easy! %1$sFollow this list of steps%2$s "
+"and in a few minutes the plugin you purchased will be installed on your site"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:12
+msgid "Go to yithemes.com and login to \"My Account\" page"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:18
+msgid ""
+"From the menu on the left, click on \"My Downloads\", look for the plugin you want "
+"to install among the available downloads and click on \"Download\" button"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:24
+msgid ""
+"After downloading the packet, go to your website and login to WordPress "
+"administration area."
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:30
+msgid ""
+"From the menu on the left, click on \"Plugins\". You will be redirected to the "
+"page where you will find the complete list of all the plugins available on your "
+"site. Click on \"Add New\" button that you find above on the left to add a new "
+"plugin"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:36
+msgid ""
+"You will be redirected to a new page where you will find, above on the left next "
+"to the page title, the \"Upload Plugin\" button."
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:42
+msgid ""
+"Click on \"Upload Plugins\" button to start the upload of the PREMIUM version of "
+"the plugin previously downloaded. Click on \"Select File\", search for the "
+"download folder related to the plugin and upload the package. Now you only need to "
+"wait a few minutes for the upload and the installation on your site. (We used YITH "
+"Live Chat plugin by way of example)"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:48
+msgid "After completing the installation, click on \"Activate plugin\""
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:52
+msgid ""
+"If everything worked allright, your plugin is now correctly installed on your "
+"website. Enjoy it :-)"
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:55
+msgid ""
+"The last step is the activation of the plugin through its license key you received "
+"after the purchase. Click on \"License Activation\" that you find in \"YITH Plugins"
+"\" and insert the license key and the email address you used during the purchase."
+msgstr ""
+
+#: templates/upgrade/upgrade-to-pro-version.php:61
+msgid ""
+"In case you had difficulty to recover the license key we sent you by email, you "
+"can easily find it in \"My Licenses\" section of your account on yithemes.com"
 msgstr ""
