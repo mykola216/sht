@@ -1,7 +1,6 @@
 
-// jQuery(function($) {
-var $ = jQuery.noConflict(),
-    sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_nonce: ''},
+// jQuery(function(jQuery) {
+var sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_nonce: ''},
     page = 1,
     hideDialog = '',
     inline_edit_dlg = '',
@@ -41,7 +40,7 @@ var $ = jQuery.noConflict(),
             modal_height = dlg_height;
         }
 
-        var grid = $("#sm_editor_grid"),
+        var grid = jQuery("#sm_editor_grid"),
             gID = grid[0].id,
             IDs = {
                 themodal:gID+'_inlinemod',
@@ -54,14 +53,14 @@ var $ = jQuery.noConflict(),
             window_height = jQuery(window).height();
 
             hideDialog = function() {
-                $(document).trigger("sm_inline_edit_dlg_hide",edited_col); //event for adding custom elements to jqgrid titlebar
-                $.jgrid.hideModal("#"+IDs.themodal,{gb:"#gbox_"+gID,jqm:true, onClose: null});
+                jQuery(document).trigger("sm_inline_edit_dlg_hide",edited_col); //event for adding custom elements to jqgrid titlebar
+                jQuery.jgrid.hideModal("#"+IDs.themodal,{gb:"#gbox_"+gID,jqm:true, onClose: null});
                 index = 0;
             }
 
-                if ($('#'+IDs.themodal).length===0) {
+                if (jQuery('#'+IDs.themodal).length===0) {
                     // dialog not yet exist. we need create it.
-                    $.jgrid.createModal(
+                    jQuery.jgrid.createModal(
                         IDs,
                         dlgContent,
                         {
@@ -82,25 +81,25 @@ var $ = jQuery.noConflict(),
                             
                         },
                         "#gview_"+gID,
-                        $("#gview_"+gID)[0]);
-                        $("#"+gID+"_inlinemod").css({'overflow-x': 'hidden', 'overflow-y': 'scroll'});
+                        jQuery("#gview_"+gID)[0]);
+                        jQuery("#"+gID+"_inlinemod").css({'overflow-x': 'hidden', 'overflow-y': 'scroll'});
                 } else {
-                    $("#"+gID+"_inlinemod").css({'width': modal_width, 'height': modal_height, 'overflow-x': 'hidden', 'overflow-y': 'scroll', 'left': ((window_width - modal_width)/2), 'top':((window_height - modal_height)/2)});
-                    // $("#edit_product_attributes").html(dialog_content);
+                    jQuery("#"+gID+"_inlinemod").css({'width': modal_width, 'height': modal_height, 'overflow-x': 'hidden', 'overflow-y': 'scroll', 'left': ((window_width - modal_width)/2), 'top':((window_height - modal_height)/2)});
+                    // jQuery("#edit_product_attributes").html(dialog_content);
 
-                    $("#"+gID+"_inlinecnt").html(dialog_content);
+                    jQuery("#"+gID+"_inlinecnt").html(dialog_content);
                 }
 
-                $.jgrid.viewModal("#"+IDs.themodal,{gbox:"#gbox_"+gID,jqm:true, overlay: 10, modal:false});
+                jQuery.jgrid.viewModal("#"+IDs.themodal,{gbox:"#gbox_"+gID,jqm:true, overlay: 10, modal:false});
 
 
-                $("#"+gID+"_inlinehd").find('.ui-jqdialog-titlebar-close').hide();
+                jQuery("#"+gID+"_inlinehd").find('.ui-jqdialog-titlebar-close').hide();
 
     }
 
-$(document).ready(function() {
+jQuery(document).ready(function() {
 
-    sm_dashboards_combo = sm_dashboards = $.parseJSON(sm_dashboards[0]);
+    sm_dashboards_combo = sm_dashboards = jQuery.parseJSON(sm_dashboards[0]);
 
     sm.dashboard_key = sm_dashboards['default'];
 
@@ -116,7 +115,7 @@ $(document).ready(function() {
     }
 
 
-    $('#collapse-menu').live('click', function() {
+    jQuery('#collapse-menu').live('click', function() {
 
         if ( !jQuery(document.body).hasClass('folded') ) {
             grid_width  = document.documentElement.offsetWidth - 220;
@@ -125,14 +124,14 @@ $(document).ready(function() {
             grid_width  = document.documentElement.offsetWidth - 100;
         }
 
-        $('#sm_editor_grid').jqGrid("setGridWidth", grid_width);
-        $('#sm_editor_grid').trigger( 'reloadGrid' );
+        jQuery('#sm_editor_grid').jqGrid("setGridWidth", grid_width);
+        jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
 
     });
 
     sm_qtags_btn_init = 0;
 
-    sm_wp_editor_html = $('#sm_wp_editor').html();
+    sm_wp_editor_html = jQuery('#sm_wp_editor').html();
 
     jqgrid_custom_func();
     load_dashboard ();
@@ -143,9 +142,9 @@ $(document).ready(function() {
 var load_dashboard = function () {
 
 
-    // $('#sm_editor_grid').jqGrid('GridUnload');
-    // $('#sm_editor_grid').jqGrid('gridUnload');
-    $.jgrid.gridUnload('sm_editor_grid');
+    // jQuery('#sm_editor_grid').jqGrid('GridUnload');
+    // jQuery('#sm_editor_grid').jqGrid('gridUnload');
+    jQuery.jgrid.gridUnload('sm_editor_grid');
 
     column_names_batch_update = new Array();
 
@@ -157,28 +156,28 @@ var load_dashboard = function () {
     load_grid();
 
     //Code for enabling the batch update button
-    // $( "input[id^='jqg_sm_editor_grid_'], #jqgh_sm_editor_grid_cb input" ).live('change', function() {
+    // jQuery( "input[id^='jqg_sm_editor_grid_'], #jqgh_sm_editor_grid_cb input" ).live('change', function() {
 
-    //     var selected_row_count = $("input[id^='jqg_sm_editor_grid_']:checked").length,
-    //         cb_header_selected = $("#jqgh_sm_editor_grid_cb input").is(':checked');
-    //     if (selected_row_count > 0 || (cb_header_selected && $(this).parent().attr('id') == 'jqgh_sm_editor_grid_cb' ) ) {
-    //         $('#batch_sm_editor_grid').removeClass('ui-state-disabled');
+    //     var selected_row_count = jQuery("input[id^='jqg_sm_editor_grid_']:checked").length,
+    //         cb_header_selected = jQuery("#jqgh_sm_editor_grid_cb input").is(':checked');
+    //     if (selected_row_count > 0 || (cb_header_selected && jQuery(this).parent().attr('id') == 'jqgh_sm_editor_grid_cb' ) ) {
+    //         jQuery('#batch_sm_editor_grid').removeClass('ui-state-disabled');
     //     } else if(selected_row_count <= 0 ) {
-    //         $('#batch_sm_editor_grid').addClass('ui-state-disabled');
+    //         jQuery('#batch_sm_editor_grid').addClass('ui-state-disabled');
     //     }
 
-    //     if ($(this).parent().attr('id') == 'jqgh_sm_editor_grid_cb' && cb_header_selected === false) {
-    //         $('#batch_sm_editor_grid').addClass('ui-state-disabled');
+    //     if (jQuery(this).parent().attr('id') == 'jqgh_sm_editor_grid_cb' && cb_header_selected === false) {
+    //         jQuery('#batch_sm_editor_grid').addClass('ui-state-disabled');
     //     }
 
     // })
 
     //code for inline editing dirty cell highlighting
-    $('#sm_editor_grid td input, #sm_editor_grid td select').live('change',function() {
-        if ($(this).parent().attr('aria-describedby') == 'sm_editor_grid_cb' ) return;
-        $(this).parent().addClass('sm-jqgrid-dirty-cell');
-        $(this).parent().parent().addClass('edited'); // for adding class to the td element
-        $('#save_sm_editor_grid').removeClass('ui-state-disabled');
+    jQuery('#sm_editor_grid td input, #sm_editor_grid td select').live('change',function() {
+        if (jQuery(this).parent().attr('aria-describedby') == 'sm_editor_grid_cb' ) return;
+        jQuery(this).parent().addClass('sm-jqgrid-dirty-cell');
+        jQuery(this).parent().parent().addClass('edited'); // for adding class to the td element
+        jQuery('#save_sm_editor_grid').removeClass('ui-state-disabled');
 
     });
 
@@ -203,7 +202,7 @@ var load_dashboard = function () {
         batch_update_action_options_number += '<option value="'+key+'">'+ batch_update_action_number[key] +'</option>';
     }
 
-    var grid = $("#sm_editor_grid"),
+    var grid = jQuery("#sm_editor_grid"),
         gID = grid[0].id,
         IDs = {
             themodal:'batchmod'+gID,
@@ -212,7 +211,7 @@ var load_dashboard = function () {
             scrollelm:'BatchTbl_'+gID
         },
         hideDialog = function() {
-            $.jgrid.hideModal("#"+IDs.themodal,{gb:"#gbox_"+gID,jqm:true, onClose: null});
+            jQuery.jgrid.hideModal("#"+IDs.themodal,{gb:"#gbox_"+gID,jqm:true, onClose: null});
         },
         rowId,
         createBatchUpdateDialog = function() {
@@ -246,12 +245,12 @@ var load_dashboard = function () {
                     "</tbody>"+
                 "</table>";
 
-            if ($('#'+IDs.themodal).length===0) {
+            if (jQuery('#'+IDs.themodal).length===0) {
                 // dialog not yet exist. we need create it.
 
 
 
-                // $.jgrid.createModal(
+                // jQuery.jgrid.createModal(
                 //     IDs,
                 //     dlgContent,
                 //     {
@@ -270,38 +269,38 @@ var load_dashboard = function () {
                 //         onClose: null
                 //     },
                 //     "#gview_"+gID,
-                //     $("#gview_"+gID)[0]);
+                //     jQuery("#gview_"+gID)[0]);
             }
 
-            $.jgrid.viewModal("#"+IDs.themodal,{gbox:"#gbox_"+gID,jqm:true, overlay: 10, modal:false});
+            jQuery.jgrid.viewModal("#"+IDs.themodal,{gbox:"#gbox_"+gID,jqm:true, overlay: 10, modal:false});
 
-            $("#batch_update_field").on('change',function(){
-                var selected_field = $( "#batch_update_field option:selected" ).val(),
+            jQuery("#batch_update_field").on('change',function(){
+                var selected_field = jQuery( "#batch_update_field option:selected" ).val(),
                     type = column_names_batch_update[selected_field].type,
                     col_val = column_names_batch_update[selected_field].values;
 
                 if (type == 'number') {
-                    $("#batch_update_action").empty().append(batch_update_action_options_number);
+                    jQuery("#batch_update_action").empty().append(batch_update_action_options_number);
                 } else if (type == 'string') {
-                    $("#batch_update_action").empty().append(batch_update_action_options_string);
+                    jQuery("#batch_update_action").empty().append(batch_update_action_options_string);
                 } else {
-                    $("#batch_update_action").empty().append(batch_update_action_options_default);
+                    jQuery("#batch_update_action").empty().append(batch_update_action_options_default);
                 }
 
-                $("#batch_update_value").val('');
+                jQuery("#batch_update_value").val('');
 
-                $("#batch_update_value_td").empty().append('<input type="text" id="batch_update_value" placeholder="Enter a value..." class="FormElement ui-widget-content" style="height:28px;min-width:130px !important;">');
+                jQuery("#batch_update_value_td").empty().append('<input type="text" id="batch_update_value" placeholder="Enter a value..." class="FormElement ui-widget-content" style="height:28px;min-width:130px !important;">');
 
                 if (type == 'date' || type == 'datetime') {
-                    $("#batch_update_value").attr('placeholder','Enter Date');
-                    $("#batch_update_value").datepicker();
+                    jQuery("#batch_update_value").attr('placeholder','Enter Date');
+                    jQuery("#batch_update_value").datepicker();
                 } else {
-                    $("#batch_update_value").attr('placeholder','Enter a value...');
-                    $("#batch_update_value").datepicker('destroy');
+                    jQuery("#batch_update_value").attr('placeholder','Enter a value...');
+                    jQuery("#batch_update_value").datepicker('destroy');
                 }
 
                 if(type == 'toggle') {
-                    $("#batch_update_value_td").empty().append('<select id="batch_update_value" style="min-width:130px !important;">'+
+                    jQuery("#batch_update_value_td").empty().append('<select id="batch_update_value" style="min-width:130px !important;">'+
                                                                 '<option value="yes"> Yes </option>'+
                                                                 '<option value="no"> No </option>'+
                                                             '</select>');
@@ -315,10 +314,10 @@ var load_dashboard = function () {
 
                     batch_update_value_options += '</select>';
 
-                    $("#batch_update_value_td").empty().append(batch_update_value_options);
+                    jQuery("#batch_update_value_td").empty().append(batch_update_value_options);
 
                 } else if (type == 'longtext') {
-                    $("#batch_update_value_td").empty().append('<`a id="batch_update_value" placeholder="Enter a value..." class="FormElement ui-widget-content" style="height:28px;min-width:130px;margin-top:5px; !important;"> </textarea>');
+                    jQuery("#batch_update_value_td").empty().append('<`a id="batch_update_value" placeholder="Enter a value..." class="FormElement ui-widget-content" style="height:28px;min-width:130px;margin-top:5px; !important;"> </textarea>');
                 }
 
             });
@@ -356,15 +355,15 @@ var load_dashboard = function () {
                         "</div>"+
                     "</div>";
 
-    $(".ui-jqgrid-titlebar").append(sm_top_bar);
-    $('#sm_dashboard_select').append(sm.dashboard_select_options);
+    jQuery(".ui-jqgrid-titlebar").append(sm_top_bar);
+    jQuery('#sm_dashboard_select').append(sm.dashboard_select_options);
 
-    $('#sm_dashboard_select').width($('#sm_dashboard_select').width()+16); //Code for dynamically increasing the width of the select-box
+    jQuery('#sm_dashboard_select').width(jQuery('#sm_dashboard_select').width()+16); //Code for dynamically increasing the width of the select-box
 
     // Code for handling all the click events
 
     // Code for handling the delete row functionality
-    $("#del_sm_editor_grid").click(function(){
+    jQuery("#del_sm_editor_grid").click(function(){
         // "Delete" button is clicked
         // var rowId = grid.jqGrid('getGridParam', 'selrow');
         var row_ids = grid.jqGrid('getGridParam', 'selarrrow');
@@ -374,7 +373,7 @@ var load_dashboard = function () {
             return;
         }
 
-        $.ajax({
+        jQuery.ajax({
                 type : 'POST',
                 url : sm_ajax_url,
                 dataType:"text",
@@ -388,7 +387,7 @@ var load_dashboard = function () {
                 success: function(response) { 
                     if ( response != 0 ) {
                         inline_edit_dlg(response,'Success',150,50);    
-                        $('#sm_editor_grid').trigger( 'reloadGrid' );
+                        jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
                     }
                 }
         });
@@ -396,33 +395,33 @@ var load_dashboard = function () {
     });
 
     // Code for handling the add row functionality
-    $("#add_sm_editor_grid").click(function(){
+    jQuery("#add_sm_editor_grid").click(function(){
         var add_row_data = {},
-        length = $( "tr[id^='jqg_sm_add_row_']" ).length;
+        length = jQuery( "tr[id^='jqg_sm_add_row_']" ).length;
 
-          $("#sm_editor_grid").jqGrid('addRowData','jqg_sm_add_row_'+length ,add_row_data,'first');
+          jQuery("#sm_editor_grid").jqGrid('addRowData','jqg_sm_add_row_'+length ,add_row_data,'first');
             
           // Code for aligning the checkbox
-          var chkbox = $("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_cb"]').html();
+          var chkbox = jQuery("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_cb"]').html();
 
           var updated_html = '<div class="tree-wrap tree-wrap-ltr" style="width:18px;"></div>'+
                                 '<span class="cell-wrapperleaf">'+chkbox+'</span>';
 
 
-          $("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_cb"]').html(updated_html);
+          jQuery("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_cb"]').html(updated_html);
           
           // Code for udpating the post type
-          $("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_posts_post_type"]').html(sm.dashboard_key);
-          $("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_posts_post_type"]').addClass('sm-jqgrid-dirty-cell').addClass('dirty-cell');
+          jQuery("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_posts_post_type"]').html(sm.dashboard_key);
+          jQuery("#jqg_sm_add_row_"+length).find('[aria-describedby="sm_editor_grid_posts_post_type"]').addClass('sm-jqgrid-dirty-cell').addClass('dirty-cell');
 
-          $(document).trigger("sm_add_row",['jqg_sm_add_row_'+length]);
+          jQuery(document).trigger("sm_add_row",['jqg_sm_add_row_'+length]);
 
-          $(this).attr("disabled",false);
+          jQuery(this).attr("disabled",false);
     });
 
     // Code for handling the save row functionality
-    $("#save_sm_editor_grid").click(function(){
-        $("#sm_editor_grid").jqGrid("saveCell",lastrow,lastcell);
+    jQuery("#save_sm_editor_grid").click(function(){
+        jQuery("#sm_editor_grid").jqGrid("saveCell",lastrow,lastcell);
 
         var edited_ids = jQuery('.edited').toArray(),
             rowdata = {},
@@ -435,8 +434,8 @@ var load_dashboard = function () {
             children = jQuery('#'+id).children(".sm-jqgrid-dirty-cell");
 
             //Code to get the edited item ids
-            $(children).each(function(index, item){
-                item_id = $(item).attr('aria-describedby');
+            jQuery(children).each(function(index, item){
+                item_id = jQuery(item).attr('aria-describedby');
                 edited_field_nm = item_id.substr(15);
                 if ( edited_item_ids.indexOf(edited_field_nm) == '-1' ) {
                     edited_item_ids.push(edited_field_nm); //strlen() for 'sm_editor_grid' is 15    
@@ -451,7 +450,7 @@ var load_dashboard = function () {
             var formatted_row_data = {};
 
             id = edited_ids[edited_id].id;
-            edited_rowData = $('#sm_editor_grid').jqGrid('getRowData', id);
+            edited_rowData = jQuery('#sm_editor_grid').jqGrid('getRowData', id);
 
             for (var row_data_key in edited_rowData) {
 
@@ -470,7 +469,7 @@ var load_dashboard = function () {
         }
 
         //Ajax request to save the edited data
-        $.ajax({
+        jQuery.ajax({
                 type : 'POST',
                 url : sm_ajax_url,
                 dataType:"text",
@@ -484,33 +483,33 @@ var load_dashboard = function () {
                 },
                 success: function(response) {
                     inline_edit_dlg(response,'Success',150,50);
-                    $('#sm_editor_grid').trigger( 'reloadGrid' );
-                    $('#save_sm_editor_grid').addClass('ui-state-disabled');
+                    jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
+                    jQuery('#save_sm_editor_grid').addClass('ui-state-disabled');
                 }
             });
     });
 
     // Code for handling the refresh grid functionality
-    $("#refresh_sm_editor_grid").click(function(){
-        $('#sm_editor_grid').trigger( 'reloadGrid' );
+    jQuery("#refresh_sm_editor_grid").click(function(){
+        jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
     });
 
     // Code for handling the show/hide columns functionality
-    $("#show_hide_cols_sm_editor_grid").click(function(){
+    jQuery("#show_hide_cols_sm_editor_grid").click(function(){
 
         setTimeout(function() {
-            $("div.ui-widget-overlay.ui-front").hide();
+            jQuery("div.ui-widget-overlay.ui-front").hide();
         },10);
         
-        $('#sm_editor_grid').jqGrid('columnChooser', {
+        jQuery('#sm_editor_grid').jqGrid('columnChooser', {
                                                         modal: true,
                                                         done : function (perm) {
                                                             if (perm) {
-                                                                $("#sm_editor_grid").jqGrid("remapColumns", perm, true);
+                                                                jQuery("#sm_editor_grid").jqGrid("remapColumns", perm, true);
                                                                 
                                                                 setTimeout(function() {
-                                                                    $("#sm_editor_grid").jqGrid("setGridWidth", grid_width);
-                                                                    $("#sm_editor_grid").clearGridData().trigger("reloadGrid");    
+                                                                    jQuery("#sm_editor_grid").jqGrid("setGridWidth", grid_width);
+                                                                    jQuery("#sm_editor_grid").clearGridData().trigger("reloadGrid");    
                                                                 },100);
                                                             }
                                                         }
@@ -518,34 +517,34 @@ var load_dashboard = function () {
     });
 
     // Column Chooser CSS
-    $('body').live('DOMNodeInserted', '#colchooser_sm_editor_grid', function(e) {
-        if ( $(e.target).attr('id') == 'colchooser_sm_editor_grid' ) {
+    jQuery('body').live('DOMNodeInserted', '#colchooser_sm_editor_grid', function(e) {
+        if ( jQuery(e.target).attr('id') == 'colchooser_sm_editor_grid' ) {
             setTimeout(function(){
-                var count  = $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.selected').find('.count').text();
-                $('#colchooser_sm_editor_grid').parent().find('.ui-dialog-titlebar').text('Show / Hide Columns ['+count+']');
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.selected').find('.count').text();
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').css({"max-height":"250px","overflow-y":"scroll"});
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.selected').css('width','50%');
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.available').css('width','50%');
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('ul').css('width','100%');
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').attr('placeholder','Search...');
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').css({"height":"20px","opacity":"1","margin":"6px","width":"150px","font-weight":"400"});
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('li').css({"color":"#444","font-weight":"400"});
-                $('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').on('focus',function(){
-                    $(this).css({"border":"1px solid #0073ea","background":"transparent","color":"#444"});
+                var count  = jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.selected').find('.count').text();
+                jQuery('#colchooser_sm_editor_grid').parent().find('.ui-dialog-titlebar').text('Show / Hide Columns ['+count+']');
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.selected').find('.count').text();
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').css({"max-height":"250px","overflow-y":"scroll"});
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.selected').css('width','50%');
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('.available').css('width','50%');
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('ul').css('width','100%');
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').attr('placeholder','Search...');
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').css({"height":"20px","opacity":"1","margin":"6px","width":"150px","font-weight":"400"});
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('li').css({"color":"#444","font-weight":"400"});
+                jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').on('focus',function(){
+                    jQuery(this).css({"border":"1px solid #0073ea","background":"transparent","color":"#444"});
                 });                
             },100);
         }
     })
     
     // Code for handling the batch update functionality : TODO
-    // $("#batch_update_sm_editor_grid").click(function(){
+    // jQuery("#batch_update_sm_editor_grid").click(function(){
     //     rowId = grid.jqGrid('getGridParam', 'selrow');
 
     //     if (rowId === null) {
     //         var alertIDs = {themodal: 'alertmod_' + this.p.id, modalhead: 'alerthd_' + this.p.id,modalcontent: 'alertcnt_' + this.p.id},
-    //         $t = this, twd, tdw;
-    //         $.jgrid.viewModal("#"+alertIDs.themodal,{gbox:"#gbox_"+$.jgrid.jqID($t.p.id),jqm:true});$("#jqg_alrt").focus();
+    //         jQueryt = this, twd, tdw;
+    //         jQuery.jgrid.viewModal("#"+alertIDs.themodal,{gbox:"#gbox_"+jQuery.jgrid.jqID(jQueryt.p.id),jqm:true});jQuery("#jqg_alrt").focus();
 
     //     } else {
     //         createBatchUpdateDialog();
@@ -554,9 +553,9 @@ var load_dashboard = function () {
     //     return false;
     // });
 
-    $(document).trigger("sm_jqgrid_titlebar_load"); //event for adding custom elements to jqgrid titlebar
+    jQuery(document).trigger("sm_jqgrid_titlebar_load"); //event for adding custom elements to jqgrid titlebar
 
-     $("#sm_editor_grid").jqGrid('navGrid','#sm_pagging_bar',{
+     jQuery("#sm_editor_grid").jqGrid('navGrid','#sm_pagging_bar',{
                           edit:false,
                           add:false,
                           search:false,
@@ -566,27 +565,27 @@ var load_dashboard = function () {
                           del:true,
                           refresh:true});
 
-    $("#sm_dashboard_select").on('change',function(){
-        sm.dashboard_key = $( "#sm_dashboard_select" ).val();
+    jQuery("#sm_dashboard_select").on('change',function(){
+        sm.dashboard_key = jQuery( "#sm_dashboard_select" ).val();
         sm.dashboard_model = '';
         load_dashboard ();
-        $('#sm_editor_grid').trigger( 'reloadGrid' );
+        jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
     });
 
-    $('#save_sm_editor_grid,#batch_sm_editor_grid').addClass('ui-state-disabled');
+    jQuery('#save_sm_editor_grid,#batch_sm_editor_grid').addClass('ui-state-disabled');
 
-    $('#add_sm_editor_grid div, #save_sm_editor_grid div, #batch_sm_editor_grid div').css('padding-right','5px');
+    jQuery('#add_sm_editor_grid div, #save_sm_editor_grid div, #batch_sm_editor_grid div').css('padding-right','5px');
 
-    $('#gbox_sm_editor_grid').css({border:'1px solid #3892D3'}); // for main grid
+    jQuery('#gbox_sm_editor_grid').css({border:'1px solid #3892D3'}); // for main grid
 
     //Code for handling the cell edit view part
-    $(document).on('focus','td[role="gridcell"]', function(){
-        var parent = $(this).parent(),
+    jQuery(document).on('focus','td[role="gridcell"]', function(){
+        var parent = jQuery(this).parent(),
             parent_id = parent[0].id,
-            attr_val = $(this).attr('aria-describedby'),
+            attr_val = jQuery(this).attr('aria-describedby'),
             cell_nm_const = 'sm_editor_grid_';
             cell_nm = attr_val.substr(cell_nm_const.length,attr_val.length);
-            grid_cell = $("#"+parent_id+" td[aria-describedby='"+attr_val+"']"),
+            grid_cell = jQuery("#"+parent_id+" td[aria-describedby='"+attr_val+"']"),
             input_el = grid_cell[0].children[0],
             input_el_id = grid_cell[0].children[0].id,
             columns = sm.dashboard_model[sm.dashboard_key].columns,
@@ -602,27 +601,27 @@ var load_dashboard = function () {
         }
 
         if ( attr_val != 'sm_editor_grid_cb' && field_datetime !== true ) {
-            $(document).on('focusout','#'+input_el_id, function(){
-                var grid_cell = $(this).parent();
-                $(this).hide();
-                $(this).parent().attr('tabindex','-1');
-                $(this).parent().removeClass('edit-cell ui-state-highlight');
-                $(this).parent().html(grid_cell[0].children[0]).append($(this).val());
+            jQuery(document).on('focusout','#'+input_el_id, function(){
+                var grid_cell = jQuery(this).parent();
+                jQuery(this).hide();
+                jQuery(this).parent().attr('tabindex','-1');
+                jQuery(this).parent().removeClass('edit-cell ui-state-highlight');
+                jQuery(this).parent().html(grid_cell[0].children[0]).append(jQuery(this).val());
             });
         }
 
         if (input_el.style.display == 'none') { 
             
-            $(this).attr('tabindex','0');
-            $(this).addClass('edit-cell ui-state-highlight');
+            jQuery(this).attr('tabindex','0');
+            jQuery(this).addClass('edit-cell ui-state-highlight');
 
             if ( field_datetime === true ) {
-                $(this).children().each(function() {
-                    $(this).show();
+                jQuery(this).children().each(function() {
+                    jQuery(this).show();
                 });
             } else {
-                $(this).html(input_el);
-                $('#'+input_el_id).show().focus();
+                jQuery(this).html(input_el);
+                jQuery('#'+input_el_id).show().focus();
             }
         }
     });
@@ -630,7 +629,7 @@ var load_dashboard = function () {
 
 var smInitDateWithButton = function (elem) {
 
-        $(elem).datepicker({
+        jQuery(elem).datepicker({
             dateFormat: 'yy-mm-dd',
             showOn: 'button',
             changeYear: true,
@@ -649,24 +648,24 @@ var smInitDateWithButton = function (elem) {
                 inst.input[0].value = dateText;
                 inst.input.focus();
 
-                var grid_cell = $(this).parent(),
-                    id = $(this).attr('id');
+                var grid_cell = jQuery(this).parent(),
+                    id = jQuery(this).attr('id');
 
-                $(this).hide();
-                $(this).parent().find('button').hide();
-                $(this).parent().attr('tabindex','-1');
-                $(this).parent().removeClass('edit-cell ui-state-highlight');
-                $(this).parent().find('#'+id+'_span').remove();
+                jQuery(this).hide();
+                jQuery(this).parent().find('button').hide();
+                jQuery(this).parent().attr('tabindex','-1');
+                jQuery(this).parent().removeClass('edit-cell ui-state-highlight');
+                jQuery(this).parent().find('#'+id+'_span').remove();
                 
-                $(this).parent().addClass('sm-jqgrid-dirty-cell');
-                $(this).parent().parent().addClass('edited'); // for adding class to the td element
-                $('#save_sm_editor_grid').removeClass('ui-state-disabled');
+                jQuery(this).parent().addClass('sm-jqgrid-dirty-cell');
+                jQuery(this).parent().parent().addClass('edited'); // for adding class to the td element
+                jQuery('#save_sm_editor_grid').removeClass('ui-state-disabled');
 
-                $(this).parent().append('<span id="'+id+'_span">'+$(this).text()+'</span>');
+                jQuery(this).parent().append('<span id="'+id+'_span">'+jQuery(this).text()+'</span>');
                 
             }
         });
-        $(elem).next('button.ui-datepicker-trigger').button({
+        jQuery(elem).next('button.ui-datepicker-trigger').button({
             text: false,
             icons: {primary: 'ui-icon-calculator'}
         }).find('span.ui-button-text').css('padding', '0.1em');
@@ -723,12 +722,12 @@ var format_dashboard_column_model = function (column_model) {
                     }
 
                     column_model[i].unformat = function(cellvalue, options, rowObject) {
-                        var edited_val = $(rowObject).find('#sm_formatter').html();
+                        var edited_val = jQuery(rowObject).find('#sm_formatter').html();
                         return edited_val;
                     }
 
                 } else if (column_model[i].type == 'datetime') {
-                    // column_model[i].editoptions= { dataInit: function(el) { $(el).datepicker(); } };
+                    // column_model[i].editoptions= { dataInit: function(el) { jQuery(el).datepicker(); } };
                     column_model[i].editoptions= { dataInit: smInitDateWithButton, size: 11};
                 } else if ( column_model[i].type == 'serialized' ) {
                     column_model[i].formatter = function(v) {
@@ -783,7 +782,7 @@ var get_dashboard_model = function () {
     sm.dashboard_model = '';
 
     //Ajax request to get the dashboard model
-    $.ajax({
+    jQuery.ajax({
             type : 'POST',
             url : sm_ajax_url,
             dataType:"json",
@@ -862,49 +861,49 @@ var load_grid = function () {
                             'cellEdit': true, // for cell editing
                             'cellsubmit' : 'clientArray',
                             onSelectCell: function (rowid, celname, value, iRow, iCol) {
-                                $(document).trigger("sm_on_cell_click",[rowid, celname, value, iRow, iCol]);
+                                jQuery(document).trigger("sm_on_cell_click",[rowid, celname, value, iRow, iCol]);
                             },
                             beforeEditCell:function(rowid,cellname,v,iRow,iCol){
                                 lastrow = iRow;
                                 lastcell = iCol;
                             },
                             afterEditCell : function(rowid, cellname, value, iRow, iCol) {
-                                $(document).trigger("sm_after_edit_cell",[rowid, celname, value, iRow, iCol]);
+                                jQuery(document).trigger("sm_after_edit_cell",[rowid, celname, value, iRow, iCol]);
                             },
                             gridComplete: function() {
 
                                 //Code for changing the tree grid icons
-                                $('.ui-icon.ui-icon-radio-off.tree-leaf.treeclick').replaceWith('<div style="margin-left: 20px;height: 18px;width: 18px;color: #469BDD;font-size: 1em;" class="">•••</div>');
+                                jQuery('.ui-icon.ui-icon-radio-off.tree-leaf.treeclick').replaceWith('<div style="margin-left: 20px;height: 18px;width: 18px;color: #469BDD;font-size: 1em;" class="">•••</div>');
 
                                 if ( sm.dashboard_model[sm.dashboard_key].treegrid === true ) {
-                                    $('#cb_sm_editor_grid').css('margin-right','8px');
+                                    jQuery('#cb_sm_editor_grid').css('margin-right','8px');
                                 } else {
-                                    $('#cb_sm_editor_grid').css('margin-right','0px');
+                                    jQuery('#cb_sm_editor_grid').css('margin-right','0px');
                                 }
 
-                                $('#sm_pagging_bar').hide();
-                                var records_view = $('#sm_pagging_bar_right').find('.ui-paging-info').html();
+                                jQuery('#sm_pagging_bar').hide();
+                                var records_view = jQuery('#sm_pagging_bar_right').find('.ui-paging-info').html();
 
                                 var records_view_html = '<div id="sm_records_view" style="float:right;color:#3892D3;margin-right:3.3em;font-weight:bold;font-style:italic;">'+records_view+'</div>';
 
-                                $('#sm_records_view').remove(); //Code for refreshing the sm_records_view
-                                $("#gbox_sm_editor_grid").after(records_view_html);
+                                jQuery('#sm_records_view').remove(); //Code for refreshing the sm_records_view
+                                jQuery("#gbox_sm_editor_grid").after(records_view_html);
 
 
-                                $("#gbox_sm_editor_grid").find('input[type=checkbox]').each(function() {
-                                    $(this).live('change',function(){
+                                jQuery("#gbox_sm_editor_grid").find('input[type=checkbox]').each(function() {
+                                    jQuery(this).live('change',function(){
 
-                                        if ( $(this).attr('id') == 'cb_sm_editor_grid' ) {
-                                            if( $(this).is(':checked')) {
+                                        if ( jQuery(this).attr('id') == 'cb_sm_editor_grid' ) {
+                                            if( jQuery(this).is(':checked')) {
                                                 setTimeout(function() {
-                                                    $('input[id^=jqg_sm_editor_grid_]').each(function() {
-                                                        $(this).parents('tr:last').removeClass('ui-state-highlight').addClass('selected-row').addClass('ui-state-hover').css({"color":"#444","font-weight":"400"});
+                                                    jQuery('input[id^=jqg_sm_editor_grid_]').each(function() {
+                                                        jQuery(this).parents('tr:last').removeClass('ui-state-highlight').addClass('selected-row').addClass('ui-state-hover').css({"color":"#444","font-weight":"400"});
                                                     });
                                                 });
                                             } else {
                                                 setTimeout(function() {
-                                                    $('input[id^=jqg_sm_editor_grid_]').each(function() {
-                                                        $(this).parents('tr:last').removeClass('selected-row').removeClass('ui-state-hover');
+                                                    jQuery('input[id^=jqg_sm_editor_grid_]').each(function() {
+                                                        jQuery(this).parents('tr:last').removeClass('selected-row').removeClass('ui-state-hover');
                                                     });
                                                 });
                                             }
@@ -912,19 +911,19 @@ var load_grid = function () {
                                             return;
                                         }
 
-                                        var colid = $(this).parents('tr:last').attr('id');
+                                        var colid = jQuery(this).parents('tr:last').attr('id');
 
-                                        $("#sm_editor_grid").jqGrid('setSelection', colid );
+                                        jQuery("#sm_editor_grid").jqGrid('setSelection', colid );
 
-                                        if( $(this).is(':checked')) {
-                                           $(this).prop('checked',true);
+                                        if( jQuery(this).is(':checked')) {
+                                           jQuery(this).prop('checked',true);
                                            setTimeout(function() {
-                                                $('#'+colid).removeClass('ui-state-highlight').addClass('selected-row').addClass('ui-state-hover').css({"color":"#444","font-weight":"400"}); 
+                                                jQuery('#'+colid).removeClass('ui-state-highlight').addClass('selected-row').addClass('ui-state-hover').css({"color":"#444","font-weight":"400"}); 
                                            },10);
                                         } else {                                            
-                                           $(this).prop('checked',false);
+                                           jQuery(this).prop('checked',false);
                                            setTimeout(function() {
-                                                $('#'+colid).removeClass('selected-row').removeClass('ui-state-hover');
+                                                jQuery('#'+colid).removeClass('selected-row').removeClass('ui-state-hover');
                                            },10);
                                         }
                                         return true;
@@ -932,7 +931,7 @@ var load_grid = function () {
                                 });
 
 
-                                $(document).trigger("sm_grid_complete");
+                                jQuery(document).trigger("sm_grid_complete");
 
                             },
                             // recordpos: 'left', // for position of the view records label ... left, center, right
@@ -945,18 +944,18 @@ var load_grid = function () {
 
     //Code for adding tree-grid params
     if ( sm.dashboard_model[sm.dashboard_key].treegrid === true ) {
-        jqgrid_params = $.extend(jqgrid_params, {
+        jqgrid_params = jQuery.extend(jqgrid_params, {
                                                     treeGrid: true,
                                                     treeGridModel: 'adjacency',
                                                     treedatatype: 'json',
                                                     ExpandColumn: 'tree_grid_col',
                                                 });
     }
-    $("#sm_editor_grid").jqGrid(jqgrid_params);
+    jQuery("#sm_editor_grid").jqGrid(jqgrid_params);
 }
 
 //Code for handling cell click for multiselect
-$(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
+jQuery(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
     var columns = sm.dashboard_model[sm.dashboard_key].columns,
         multiselect_edit_html = '',
         current_value = '',
@@ -978,27 +977,27 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
             if (columns[i].hasOwnProperty('type') !== false && columns[i].type == 'longstring') {
 
                 //Code for unformatting the 'longstring' type values
-                var unformatted_val = $('#'+sm_grid_nm).find('#'+rowid).find('[aria-describedby="sm_editor_grid_'+celname+'"]').find('#sm_formatter').html();
+                var unformatted_val = jQuery('#'+sm_grid_nm).find('#'+rowid).find('[aria-describedby="sm_editor_grid_'+celname+'"]').find('#sm_formatter').html();
 
                 if ( sm_last_edited_row_id != rowid || sm_last_edited_col != iCol ) {
 
-                    // $('#sm_wp_editor').html(sm_wp_editor_html);
+                    // jQuery('#sm_wp_editor').html(sm_wp_editor_html);
                     // sm_qtags_btn_init = 0;
                 }
 
-                $('#sm_wp_editor').find('.quicktags-toolbar').hide(); 
+                jQuery('#sm_wp_editor').find('.quicktags-toolbar').hide(); 
 
                 if (unformatted_val != '') {
-                    $('#sm_wp_editor').find('.wp-editor-area').text(unformatted_val);    
+                    jQuery('#sm_wp_editor').find('.wp-editor-area').text(unformatted_val);    
                 } else {
-                    $('#sm_wp_editor').find('.wp-editor-area').text('');
+                    jQuery('#sm_wp_editor').find('.wp-editor-area').text('');
                 }
 
-                if ( $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').length != 0 ) {
-                    $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html(unformatted_val);
+                if ( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').length != 0 ) {
+                    jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html(unformatted_val);
                 }
 
-                var wp_editor_html = $('#sm_wp_editor').html();
+                var wp_editor_html = jQuery('#sm_wp_editor').html();
 
                 if ( sm_last_edited_row_id == '' && sm_last_edited_col == '' ) {
                    wp_editor_html += '<span id="edit_attributes_toolbar">'+
@@ -1013,17 +1012,17 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
                 sm_last_edited_col = iCol;
 
 
-                if ( $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').length != 0 ) {
-                    $('#sm_inline_wp_editor-tmce').on('click',function() {
-                        $('#sm_editor_grid_inlinecnt').find('#mceu_36').show();
+                if ( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').length != 0 ) {
+                    jQuery('#sm_inline_wp_editor-tmce').on('click',function() {
+                        jQuery('#sm_editor_grid_inlinecnt').find('#mceu_36').show();
                     });
 
-                    $('#sm_inline_wp_editor-html').on('click',function() {
-                        $('#sm_editor_grid_inlinecnt').find('#mceu_36').hide();
+                    jQuery('#sm_inline_wp_editor-html').on('click',function() {
+                        jQuery('#sm_editor_grid_inlinecnt').find('#mceu_36').hide();
                     });
 
-                    $('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('head').html( $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('head').html() );
-                    $('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('body').html( $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html() );
+                    jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('head').html( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('head').html() );
+                    jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('body').html( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html() );
                 }
 
                 tinyMCE.init({ id : tinyMCEPreInit.mceInit[ 'sm_inline_wp_editor' ]});
@@ -1031,18 +1030,18 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
                 QTags._buttonsInit();
                 sm_qtags_btn_init = 1;
                 
-                $(document).on("sm_inline_edit_dlg_hide", function(e,edited_col) {
+                jQuery(document).on("sm_inline_edit_dlg_hide", function(e,edited_col) {
                     
                     if (edited_col.hasOwnProperty('type') !== false && edited_col.type == 'longstring')
                         return;
                     
-                    $('#sm_wp_editor').html( $('#sm_editor_grid_inlinecnt').html() );
-                    $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('head').html( $('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('head').html() );
-                    $('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html( $('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('body').html() );
+                    jQuery('#sm_wp_editor').html( jQuery('#sm_editor_grid_inlinecnt').html() );
+                    jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('head').html( jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('head').html() );
+                    jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html( jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('body').html() );
                 });
                 
                 //Code for click event of 'ok' btn
-                $("#inline_edit_longstring_ok").on('click',function(){
+                jQuery("#inline_edit_longstring_ok").on('click',function(){
 
                     var edit_val,
                         longstring_col_index = '',
@@ -1056,13 +1055,13 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
 
                     tinyMCE.triggerSave();
                     
-                    var rowData = $('#sm_editor_grid').jqGrid('getRowData', grid_rowid);
+                    var rowData = jQuery('#sm_editor_grid').jqGrid('getRowData', grid_rowid);
 
                     // rowData[longstring_col_index] = '<div id="sm_formatter" style="max-height: 20px"> ' + jQuery('#sm_inline_wp_editor').val() + ' </div>';
                     rowData[longstring_col_index] = jQuery('#sm_inline_wp_editor').val();
 
-                    $('#sm_editor_grid').jqGrid('smsetCell',grid_rowid, longstring_col_index, '', 'sm-jqgrid-dirty-cell', false, true, true);
-                    $('#sm_editor_grid').jqGrid('setRowData', grid_rowid, rowData);
+                    jQuery('#sm_editor_grid').jqGrid('smsetCell',grid_rowid, longstring_col_index, '', 'sm-jqgrid-dirty-cell', false, true, true);
+                    jQuery('#sm_editor_grid').jqGrid('setRowData', grid_rowid, rowData);
 
                     hideDialog();
 
@@ -1153,8 +1152,8 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
         }
     }
 
-    // multiselect_chkbox_list = $(document).trigger("oncell_multiselect_click",[actual_value, current_value, multiselect_chkbox_list ,dashboard_model]);
-    $(document).trigger("oncell_multiselect_click",[multiselect_chkbox_list]);
+    // multiselect_chkbox_list = jQuery(document).trigger("oncell_multiselect_click",[actual_value, current_value, multiselect_chkbox_list ,dashboard_model]);
+    jQuery(document).trigger("oncell_multiselect_click",[multiselect_chkbox_list]);
 
     multiselect_edit_html = '<div id="edit_product_attributes">'+ multiselect_chkbox_list + 
                             '<span id="edit_attributes_toolbar">'+
@@ -1165,7 +1164,7 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
     inline_edit_dlg(multiselect_edit_html, column_names[iCol-1]);
 
     //Code for click event of 'ok' btn
-    $("#inline_edit_multiselect_ok").on('click',function(){
+    jQuery("#inline_edit_multiselect_ok").on('click',function(){
 
             var mutiselect_edited_text = '',
                 mutiselect_col_val = '',
@@ -1179,8 +1178,8 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
                 }
             }
 
-            selected_val = $("input[name='chk_multiselect']:checked" ).map(function () {
-                                    return $(this).val();
+            selected_val = jQuery("input[name='chk_multiselect']:checked" ).map(function () {
+                                    return jQuery(this).val();
                                 }).get();
 
             for (var index in mutiselect_col_val) {
@@ -1192,12 +1191,12 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
                 }
             }
 
-            var rowData = $('#sm_editor_grid').jqGrid('getRowData', grid_rowid);
+            var rowData = jQuery('#sm_editor_grid').jqGrid('getRowData', grid_rowid);
 
             rowData[mutiselect_col_index] = mutiselect_edited_text;
 
-            $('#sm_editor_grid').jqGrid('smsetCell',grid_rowid, mutiselect_col_index, '', 'sm-jqgrid-dirty-cell', false, true, true);
-            $('#sm_editor_grid').jqGrid('setRowData', grid_rowid, rowData);
+            jQuery('#sm_editor_grid').jqGrid('smsetCell',grid_rowid, mutiselect_col_index, '', 'sm-jqgrid-dirty-cell', false, true, true);
+            jQuery('#sm_editor_grid').jqGrid('setRowData', grid_rowid, rowData);
 
             hideDialog();
 
@@ -1209,56 +1208,56 @@ $(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, iCol){
 //Code for adding custom functions for the jqgrid
 var jqgrid_custom_func = function() {
 
-    $.jgrid.extend({
+    jQuery.jgrid.extend({
         smsetCell : function(rowid,colname,nData,cssp,attrp, forceupd,removeClass) {
             return this.each(function(){
-                var $t = this, pos =-1,v, title;
-                if(!$t.grid) {return;}
+                var jQueryt = this, pos =-1,v, title;
+                if(!jQueryt.grid) {return;}
                 if(isNaN(colname)) {
-                    $($t.p.colModel).each(function(i){
+                    jQuery(jQueryt.p.colModel).each(function(i){
                         if (this.name === colname) {
                             pos = i;return false;
                         }
                     });
                 } else {pos = parseInt(colname,10);}
                 if(pos>=0) {
-                    var ind = $($t).jqGrid('getGridRowById', rowid); 
+                    var ind = jQuery(jQueryt).jqGrid('getGridRowById', rowid); 
                     if (ind){
-                        var tcell = $("td:eq("+pos+")",ind);
+                        var tcell = jQuery("td:eq("+pos+")",ind);
                         if(nData !== "" || forceupd === true) {
-                            v = $t.formatter(rowid, nData, pos,ind,'edit');
+                            v = jQueryt.formatter(rowid, nData, pos,ind,'edit');
 
-                            title = $t.p.colModel[pos].title ? {"title":$.jgrid.stripHtml(v)} : {};
+                            title = jQueryt.p.colModel[pos].title ? {"title":jQuery.jgrid.stripHtml(v)} : {};
 
-                            if($t.p.treeGrid && $(".tree-wrap",$(tcell)).length>0) {
-                                $("span",$(tcell)).html(v).attr(title);
+                            if(jQueryt.p.treeGrid && jQuery(".tree-wrap",jQuery(tcell)).length>0) {
+                                jQuery("span",jQuery(tcell)).html(v).attr(title);
                             } else {
-                                $(tcell).html(v).attr(title);
+                                jQuery(tcell).html(v).attr(title);
                             }
-                            if($t.p.datatype === "local") {
-                                var cm = $t.p.colModel[pos], index;
-                                nData = cm.formatter && typeof cm.formatter === 'string' && cm.formatter === 'date' ? $.unformat.date.call($t,nData,cm) : nData;
-                                index = $t.p._index[$.jgrid.stripPref($t.p.idPrefix, rowid)];
+                            if(jQueryt.p.datatype === "local") {
+                                var cm = jQueryt.p.colModel[pos], index;
+                                nData = cm.formatter && typeof cm.formatter === 'string' && cm.formatter === 'date' ? jQuery.unformat.date.call(jQueryt,nData,cm) : nData;
+                                index = jQueryt.p._index[jQuery.jgrid.stripPref(jQueryt.p.idPrefix, rowid)];
                                 if(index !== undefined) {
-                                    $t.p.data[index][cm.name] = nData;
+                                    jQueryt.p.data[index][cm.name] = nData;
                                 }
                             }
                         }
                         if(typeof cssp === 'string'){
                             if (removeClass === true) {
-                                $(tcell).removeClass('edit-cell ui-state-highlight').addClass(cssp);
+                                jQuery(tcell).removeClass('edit-cell ui-state-highlight').addClass(cssp);
                             } else {
-                                $(tcell).addClass(cssp);
+                                jQuery(tcell).addClass(cssp);
                             }
                             
                         } else if(cssp) {
-                            $(tcell).css(cssp);
+                            jQuery(tcell).css(cssp);
                         }
 
-                        $(tcell).parent().addClass('edited'); // for adding class to the td element
-                        $('#save_sm_editor_grid').removeClass('ui-state-disabled');
+                        jQuery(tcell).parent().addClass('edited'); // for adding class to the td element
+                        jQuery('#save_sm_editor_grid').removeClass('ui-state-disabled');
 
-                        if(typeof attrp === 'object') {$(tcell).attr(attrp);}
+                        if(typeof attrp === 'object') {jQuery(tcell).attr(attrp);}
                     }
                 }
             });
@@ -1266,9 +1265,9 @@ var jqgrid_custom_func = function() {
 
         // columnChooser : function(opts) {
         //     var self = this;
-        //     if($("#colchooser_"+$.jgrid.jqID(self[0].p.id)).length ) { return; }
-        //     var selector = $('<div id="colchooser_'+self[0].p.id+'" style="position:relative;overflow:hidden"><div><select multiple="multiple"></select></div></div>');
-        //     var select = $('select', selector);
+        //     if(jQuery("#colchooser_"+jQuery.jgrid.jqID(self[0].p.id)).length ) { return; }
+        //     var selector = jQuery('<div id="colchooser_'+self[0].p.id+'" style="position:relative;overflow:hidden"><div><select multiple="multiple"></select></div></div>');
+        //     var select = jQuery('select', selector);
 
         //     function insert(perm,i,v) {
         //         if(i>=0){
@@ -1279,7 +1278,7 @@ var jqgrid_custom_func = function() {
         //             return a.concat(b);
         //         }
         //     }
-        //     opts = $.extend({
+        //     opts = jQuery.extend({
         //         "width" : 420,
         //         "height" : 240,
         //         "classname" : null,
@@ -1314,7 +1313,7 @@ var jqgrid_custom_func = function() {
         //             buttons[opts.bCancel] = function() {
         //                 opts.cleanup(true);
         //             };
-        //             return $.extend(true, {
+        //             return jQuery.extend(true, {
         //                 "buttons": buttons,
         //                 "close": function() {
         //                     opts.cleanup(true);
@@ -1323,32 +1322,32 @@ var jqgrid_custom_func = function() {
         //                 "resizable": opts.resizable ? opts.resizable : true,
         //                 "width": opts.width+20,
         //                 resize: function (e, ui) {
-        //                     var $container = $(this).find('>div>div.ui-multiselect'),
-        //                         containerWidth = $container.width(),
-        //                         containerHeight = $container.height(),
-        //                         $selectedContainer = $container.find('>div.selected'),
-        //                         $availableContainer = $container.find('>div.available'),
-        //                         $selectedActions = $selectedContainer.find('>div.actions'),
-        //                         $availableActions = $availableContainer.find('>div.actions'),
-        //                         $selectedList = $selectedContainer.find('>ul.connected-list'),
-        //                         $availableList = $availableContainer.find('>ul.connected-list'),
-        //                         dividerLocation = opts.msel_opts.dividerLocation || $.ui.multiselect.defaults.dividerLocation;
+        //                     var jQuerycontainer = jQuery(this).find('>div>div.ui-multiselect'),
+        //                         containerWidth = jQuerycontainer.width(),
+        //                         containerHeight = jQuerycontainer.height(),
+        //                         jQueryselectedContainer = jQuerycontainer.find('>div.selected'),
+        //                         jQueryavailableContainer = jQuerycontainer.find('>div.available'),
+        //                         jQueryselectedActions = jQueryselectedContainer.find('>div.actions'),
+        //                         jQueryavailableActions = jQueryavailableContainer.find('>div.actions'),
+        //                         jQueryselectedList = jQueryselectedContainer.find('>ul.connected-list'),
+        //                         jQueryavailableList = jQueryavailableContainer.find('>ul.connected-list'),
+        //                         dividerLocation = opts.msel_opts.dividerLocation || jQuery.ui.multiselect.defaults.dividerLocation;
 
-        //                     $container.width(containerWidth); // to fix width like 398.96px                     
-        //                     $availableContainer.width(Math.floor(containerWidth*(1-dividerLocation)));
-        //                     $selectedContainer.width(containerWidth - $availableContainer.outerWidth() - ($.browser.webkit ? 1: 0));
+        //                     jQuerycontainer.width(containerWidth); // to fix width like 398.96px                     
+        //                     jQueryavailableContainer.width(Math.floor(containerWidth*(1-dividerLocation)));
+        //                     jQueryselectedContainer.width(containerWidth - jQueryavailableContainer.outerWidth() - (jQuery.browser.webkit ? 1: 0));
 
-        //                     $availableContainer.height(containerHeight);
-        //                     $selectedContainer.height(containerHeight);
-        //                     $selectedList.height(Math.max(containerHeight-$selectedActions.outerHeight()-1,1));
-        //                     $availableList.height(Math.max(containerHeight-$availableActions.outerHeight()-1,1));
+        //                     jQueryavailableContainer.height(containerHeight);
+        //                     jQueryselectedContainer.height(containerHeight);
+        //                     jQueryselectedList.height(Math.max(containerHeight-jQueryselectedActions.outerHeight()-1,1));
+        //                     jQueryavailableList.height(Math.max(containerHeight-jQueryavailableActions.outerHeight()-1,1));
         //                 }
         //             }, opts.dialog_opts || {});
         //         },
         //         /* Function to get the permutation array, and pass it to the
         //            "done" function */
         //         "apply_perm" : function() {
-        //             $('option',select).each(function(i) {
+        //             jQuery('option',select).each(function(i) {
         //                 if (this.selected) {
         //                     self.jqGrid("showCol", colModel[this.value].name);
         //                 } else {
@@ -1358,9 +1357,9 @@ var jqgrid_custom_func = function() {
 
         //             var perm = [];
         //             //fixedCols.slice(0);
-        //             $('option:selected',select).each(function() { perm.push(parseInt(this.value,10)); });
-        //             $.each(perm, function() { delete colMap[colModel[parseInt(this,10)].name]; });
-        //             $.each(colMap, function() {
+        //             jQuery('option:selected',select).each(function() { perm.push(parseInt(this.value,10)); });
+        //             jQuery.each(perm, function() { delete colMap[colModel[parseInt(this,10)].name]; });
+        //             jQuery.each(colMap, function() {
         //                 var ti = parseInt(this,10);
         //                 perm = insert(perm,ti,ti);
         //             });
@@ -1380,16 +1379,16 @@ var jqgrid_custom_func = function() {
         //             }
         //         },
         //         "msel_opts" : {}
-        //     }, $.jgrid.col, opts || {});
-        //     if($.ui) {
-        //         if ($.ui.multiselect ) {
+        //     }, jQuery.jgrid.col, opts || {});
+        //     if(jQuery.ui) {
+        //         if (jQuery.ui.multiselect ) {
         //             if(opts.msel == "multiselect") {
-        //                 if(!$.jgrid._multiselect) {
+        //                 if(!jQuery.jgrid._multiselect) {
         //                     // should be in language file
         //                     alert("Multiselect plugin loaded after jqGrid. Please load the plugin before the jqGrid!");
         //                     return;
         //                 }
-        //                 opts.msel_opts = $.extend($.ui.multiselect.defaults,opts.msel_opts);
+        //                 opts.msel_opts = jQuery.extend(jQuery.ui.multiselect.defaults,opts.msel_opts);
         //             }
         //         }
         //     }
@@ -1401,11 +1400,11 @@ var jqgrid_custom_func = function() {
         //         select.addClass(opts.classname);
         //     }
         //     if (opts.width) {
-        //         $(">div",selector).css({"width": opts.width,"margin":"0 auto"});
+        //         jQuery(">div",selector).css({"width": opts.width,"margin":"0 auto"});
         //         select.css("width", opts.width);
         //     }
         //     if (opts.height) {
-        //         $(">div",selector).css("height", opts.height);
+        //         jQuery(">div",selector).css("height", opts.height);
         //         select.css("height", opts.height - 10);
         //     }
         //     var colModel = self.jqGrid("getGridParam", "colModel");
@@ -1413,7 +1412,7 @@ var jqgrid_custom_func = function() {
         //     var colMap = {}, fixedCols = [];
 
         //     select.empty();
-        //     $.each(colModel, function(i) {
+        //     jQuery.each(colModel, function(i) {
         //         colMap[this.name] = i;
         //         if (this.hidedlg) {
         //             if (!this.hidden) {
@@ -1428,34 +1427,34 @@ var jqgrid_custom_func = function() {
         //     function call(fn, obj) {
         //         if (!fn) { return; }
         //         if (typeof fn == 'string') {
-        //             if ($.fn[fn]) {
-        //                 $.fn[fn].apply(obj, $.makeArray(arguments).slice(2));
+        //             if (jQuery.fn[fn]) {
+        //                 jQuery.fn[fn].apply(obj, jQuery.makeArray(arguments).slice(2));
         //             }
-        //         } else if ($.isFunction(fn)) {
-        //             fn.apply(obj, $.makeArray(arguments).slice(2));
+        //         } else if (jQuery.isFunction(fn)) {
+        //             fn.apply(obj, jQuery.makeArray(arguments).slice(2));
         //         }
         //     }
 
-        //     var dopts = $.isFunction(opts.dlog_opts) ? opts.dlog_opts.call(self, opts) : opts.dlog_opts;
+        //     var dopts = jQuery.isFunction(opts.dlog_opts) ? opts.dlog_opts.call(self, opts) : opts.dlog_opts;
         //     call(opts.dlog, selector, dopts);
-        //     var mopts = $.isFunction(opts.msel_opts) ? opts.msel_opts.call(self, opts) : opts.msel_opts;
+        //     var mopts = jQuery.isFunction(opts.msel_opts) ? opts.msel_opts.call(self, opts) : opts.msel_opts;
         //     call(opts.msel, select, mopts);
         //     // fix height of elements of the multiselect widget
-        //     var resizeSel = "#colchooser_"+$.jgrid.jqID(self[0].p.id),
-        //         $container = $(resizeSel + '>div>div.ui-multiselect'),
-        //         $selectedContainer = $(resizeSel + '>div>div.ui-multiselect>div.selected'),
-        //         $availableContainer = $(resizeSel + '>div>div.ui-multiselect>div.available'),
+        //     var resizeSel = "#colchooser_"+jQuery.jgrid.jqID(self[0].p.id),
+        //         jQuerycontainer = jQuery(resizeSel + '>div>div.ui-multiselect'),
+        //         jQueryselectedContainer = jQuery(resizeSel + '>div>div.ui-multiselect>div.selected'),
+        //         jQueryavailableContainer = jQuery(resizeSel + '>div>div.ui-multiselect>div.available'),
         //         containerHeight,
-        //         $selectedActions = $selectedContainer.find('>div.actions'),
-        //         $availableActions = $availableContainer.find('>div.actions'),
-        //         $selectedList = $selectedContainer.find('>ul.connected-list'),
-        //         $availableList = $availableContainer.find('>ul.connected-list');
-        //     $container.height($container.parent().height()); // increase the container height
-        //     containerHeight = $container.height();
-        //     $selectedContainer.height(containerHeight);
-        //     $availableContainer.height(containerHeight);
-        //     $selectedList.height(Math.max(containerHeight-$selectedActions.outerHeight()-1,1));
-        //     $availableList.height(Math.max(containerHeight-$availableActions.outerHeight()-1,1));
+        //         jQueryselectedActions = jQueryselectedContainer.find('>div.actions'),
+        //         jQueryavailableActions = jQueryavailableContainer.find('>div.actions'),
+        //         jQueryselectedList = jQueryselectedContainer.find('>ul.connected-list'),
+        //         jQueryavailableList = jQueryavailableContainer.find('>ul.connected-list');
+        //     jQuerycontainer.height(jQuerycontainer.parent().height()); // increase the container height
+        //     containerHeight = jQuerycontainer.height();
+        //     jQueryselectedContainer.height(containerHeight);
+        //     jQueryavailableContainer.height(containerHeight);
+        //     jQueryselectedList.height(Math.max(containerHeight-jQueryselectedActions.outerHeight()-1,1));
+        //     jQueryavailableList.height(Math.max(containerHeight-jQueryavailableActions.outerHeight()-1,1));
         //     // extend the list of components which will be also-resized
         //     selector.data('dialog').uiDialog.resizable("option", "alsoResize",
         //         resizeSel + ',' + resizeSel +'>div' + ',' + resizeSel + '>div>div.ui-multiselect');

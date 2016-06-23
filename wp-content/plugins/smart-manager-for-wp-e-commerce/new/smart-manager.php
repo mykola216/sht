@@ -22,7 +22,8 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 			$this->plugin_url   = untrailingslashit( plugins_url( '/', __FILE__ ) );
 
 			$plugin_info = get_plugins ();
-			$this->plugin_info = $plugin_info [SM_PLUGIN_FILE];
+			$this->plugin_info = $plugin_info [SM_PLUGIN_BASE_NM];
+			
             $sm_plugin_data = get_plugin_data(__FILE__);
             $this->version = $sm_plugin_data['Version'];
 
@@ -59,9 +60,9 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 				define ( 'SMPRO', false );
 			}
 
-			define( 'PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
-			define( 'IMG_URL', $this->plugin_path . '/assets/images/' );
-			define( 'ADMIN_URL', get_admin_url() ); //defining the admin url
+			define( 'SM_PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
+			define( 'SM_IMG_URL', $this->plugin_path . '/assets/images/' );
+			define( 'SM_ADMIN_URL', get_admin_url() ); //defining the admin url
 
 		} 
 
@@ -179,13 +180,13 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 
 		function get_latest_version() {
 			$sm_plugin_info = get_site_transient( 'update_plugins' );
-			$latest_version = isset( $sm_plugin_info->response [SM_PLUGIN_FILE]->new_version ) ? $sm_plugin_info->response [SM_PLUGIN_FILE]->new_version : '';
+			$latest_version = isset( $sm_plugin_info->response [SM_PLUGIN_BASE_NM]->new_version ) ? $sm_plugin_info->response [SM_PLUGIN_BASE_NM]->new_version : '';
 			return $latest_version;
 		}
 
 		function get_user_sm_version() {
 			$sm_plugin_info = get_plugins();
-			$user_version = $sm_plugin_info [SM_PLUGIN_FILE] ['Version'];
+			$user_version = $sm_plugin_info [SM_PLUGIN_BASE_NM] ['Version'];
 			return $user_version;
 		}
 
@@ -263,7 +264,7 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 	                }
 
 						//			printf ( __ ( '%1s%2s%3s<a href="%4s" target=_storeapps>Docs</a>' , self::$text_domain), $before_plug_page, $plug_page, $after_plug_page, "http://www.storeapps.org/support/documentation/" );
-							printf ( __ ( '%1s%2s<a href="%3s" target="_blank">Docs</a>' , self::$text_domain), $sm_old, $before_plug_page, "http://www.storeapps.org/support/documentation/smart-manager" );
+							printf ( __ ( '%1s%2s<a href="%3s" target="_blank">Docs</a>' , self::$text_domain), $sm_old, $before_plug_page, "http://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=sm_beta_grid&utm_campaign=view_docs" );
 							?>
 							</span><?php
 						_e( '10x productivity gains with store administration. Quickly find and update products, orders and customers', self::$text_domain );
@@ -271,7 +272,7 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 						</h2>
 						<h6 align="right"><?php
 								if (! $is_pro_updated) {
-									$admin_url = ADMIN_URL . "plugins.php";
+									$admin_url = SM_ADMIN_URL . "plugins.php";
 									$update_link = __( 'An upgrade for Smart Manager Pro', self::$text_domain ) . " " . $latest_version . " " . __( 'is available.', self::$text_domain ) . " " . "<a align='right' href=$admin_url>" . __( 'Click to upgrade.', self::$text_domain ) . "</a>";
 									$this->display_notice( $update_link );
 								}

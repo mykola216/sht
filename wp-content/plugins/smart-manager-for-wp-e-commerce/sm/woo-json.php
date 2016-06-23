@@ -2576,6 +2576,7 @@ if (isset ( $_GET ['func_nm'] ) && $_GET ['func_nm'] == 'exportCsvWoo') {
                 $columns_header['_billing_last_name']       = __('Billing Last Name', $sm_text_domain);
                 $columns_header['_billing_email']           = __('Billing E-mail ID', $sm_text_domain);
                 $columns_header['_billing_phone']           = __('Billing Phone Number', $sm_text_domain);
+                $columns_header['details']                  = __('Details', $sm_text_domain);
                 $columns_header['_order_shipping']          = __('Order Shipping', $sm_text_domain);
                 $columns_header['_order_discount']          = __('Order Discount', $sm_text_domain);
                 $columns_header['_cart_discount']           = __('Cart Discount', $sm_text_domain);
@@ -2583,6 +2584,7 @@ if (isset ( $_GET ['func_nm'] ) && $_GET ['func_nm'] == 'exportCsvWoo') {
                 $columns_header['_order_tax']               = __('Order Tax', $sm_text_domain);
                 $columns_header['_order_shipping_tax']      = __('Order Shipping Tax', $sm_text_domain);
                 $columns_header['_order_total']             = __('Order Total', $sm_text_domain);
+                $columns_header['order_total_ex_tax']       = __('Order Total Excluding Tax', $sm_text_domain);
                 $columns_header['_order_currency']          = __('Order Currency', $sm_text_domain);
                 $columns_header['products_name']            = __('Order Items (Product Name [SKU][Qty][Price])', $sm_text_domain);
                 $columns_header['_payment_method_title']    = __('Payment Method', $sm_text_domain);
@@ -3061,7 +3063,9 @@ function woo_insert_update_data($post) {
                                         if ( 'yes' === get_post_meta( $post_id, '_manage_stock', true ) ) { //check if manage stock is enabled or not  
                                             if( version_compare( $woo_version, '2.4', ">=" ) ) {
                                                 if ($postarr['post_parent'] > 0) {
-                                                    $woo_prod_obj_stock_status->set_stock_status();
+                                                    $stock_status_option = get_post_meta($post_id,'stock_status',true);
+                                                    $stock_status = (!empty($stock_status_option)) ? $stock_status : '';
+                                                    $woo_prod_obj_stock_status->set_stock_status($stock_status);
                                                 } else {
                                                     $woo_prod_obj_stock_status->check_stock_status();
                                                 }
@@ -3320,11 +3324,19 @@ if (isset ( $_POST ['cmd'] ) && $_POST ['cmd'] == 'dupData') {
             if ($post->post_parent == 0) {
                 
                 if ($woo_dup_obj instanceof WC_Admin_Duplicate_Product) {
-                    $post_data [] = $woo_dup_obj -> duplicate_product($post,0,'publish');
-
+                    $post_data[] = $new_id = $woo_dup_obj -> duplicate_product($post,0,'publish');
                 } else {
-                    $post_data [] = woocommerce_create_duplicate_from_product($post,0,'publish');
+                    $post_data [] = $new_id = woocommerce_create_duplicate_from_product($post,0,'publish');
                 }
+
+                //Code for updating the post name
+                $new_slug = sanitize_title( get_the_title($new_id) );
+                wp_update_post(
+                                    array (
+                                        'ID'        => $new_id,
+                                        'post_name' => $new_slug
+                                    )
+                                );
 
             }
             else{

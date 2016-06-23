@@ -4,8 +4,8 @@ Donate link: http://www.storeapps.org/
 Tags: administration, wp e-commerce, woo commerce, woocommerce, wpec, wpsc, jigoshop, ecommerce, management, batch update, bulk edit, mass update, wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management,
 woocommerce manager, woocommerce order management, woocommerce product management, woocommerce smart manager, woocommerce store management
 Requires at least: 2.0.2
-Tested up to: 4.5
-Stable tag: 3.9.15
+Tested up to: 4.5.2
+Stable tag: 3.9.16
 License: GPLv3
 
 The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features. 
@@ -138,6 +138,17 @@ It also gives the warm feeling of supporting further development of the plugin.
 4. Batch Update (only in paid version)
 
 == Changelog ==
+
+= 3.9.16 =
+* Update: Tested with latest versions of WordPress, WPeC & WooCommerce (v2.6 or greater)
+* Update: New columns 'Details' & 'Order Total Excluding Tax' added to Orders CSV export (WooCommerce)
+* Update: POT file
+* Fix: Upgrade file - Unnecessary calls for latest update on every background process
+* Fix: Compatibility issue with 'Yoast SEO Premium' plugin (WooCommerce)
+* Fix: Product url breaking when duplicating products using Smart Manager (WooCommerce)
+* Fix: Serialized data not getting updated properly using Batch Update (WooCommerce)
+* Fix: Removed debug warnings
+* Fix: Some minor fixes
 
 = 3.9.15 =
 * New: View & Manage Product Type (WooCommerce)
@@ -651,6 +662,9 @@ It also gives the warm feeling of supporting further development of the plugin.
 * Product administration features
 
 == Upgrade Notice ==
+
+= 3.9.16 =
+Compatibility with WooCommerce v2.6+, new columns in orders CSV export for WooCommerce along with other important fixes. Recommended upgrade.
 
 = 3.9.15 =
 New feature of handling product type, advanced search related fixes along with other important fixes. Recommended upgrade.
