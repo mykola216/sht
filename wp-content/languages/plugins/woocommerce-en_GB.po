@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2016-04-25 20:56:18+0000\n"
+"PO-Revision-Date: 2016-05-18 11:04:13+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -8958,11 +8958,11 @@ msgstr[1] "All <span class=\"count\">(%s)</span>"
 #: includes/admin/meta-boxes/class-wc-meta-box-order-actions.php:78
 #: includes/admin/settings/views/html-webhooks-edit.php:153
 msgid "Move to Trash"
-msgstr "Move to Trash"
+msgstr "Move to Bin"
 
 #: includes/admin/class-wc-admin-webhooks-table-list.php:263
 msgid "Empty Trash"
-msgstr "Empty Trash"
+msgstr "Empty Bin"
 
 #: includes/admin/class-wc-admin-webhooks.php:49
 #: includes/admin/class-wc-admin-webhooks.php:195
@@ -10285,7 +10285,7 @@ msgstr "Move this item to the Trash"
 #: includes/admin/class-wc-admin-post-types.php:577
 #: includes/admin/class-wc-admin-webhooks-table-list.php:106
 msgid "Trash"
-msgstr "Trash"
+msgstr "Bin"
 
 #: includes/admin/class-wc-admin-post-types.php:450
 #: includes/admin/class-wc-admin-post-types.php:581
@@ -10487,7 +10487,7 @@ msgstr "Catalog/search"
 #: includes/admin/views/html-bulk-edit-product.php:187
 #: includes/admin/views/html-quick-edit-product.php:144
 msgid "Catalog"
-msgstr "Catalog"
+msgstr "Catalogue"
 
 #: includes/admin/class-wc-admin-post-types.php:2155
 #: includes/admin/views/html-bulk-edit-product.php:188
