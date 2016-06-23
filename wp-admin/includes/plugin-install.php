@@ -146,7 +146,7 @@ function plugins_api( $action, $args = array() ) {
 			$url = set_url_scheme( $url, 'https' );
 
 		$http_args = array(
-			'timeout' => 65,
+			'timeout' => 15,
 			'body' => array(
 				'action' => $action,
 				'request' => serialize( $args )

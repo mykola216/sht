@@ -41,7 +41,7 @@ function translations_api( $type, $args = null ) {
 		}
 
 		$options = array(
-			'timeout' => 65,
+			'timeout' => 3,
 			'body' => array(
 				'wp_version' => $wp_version,
 				'locale'     => get_locale(),
