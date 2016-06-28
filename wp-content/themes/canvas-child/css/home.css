@@ -134,6 +134,9 @@
     .bestselling.products ul.products li.product.first {
         clear: left !important;
     }
+	.recent.products ul.products li.product.first.status-private{
+		clear: none !important;
+	}
 
 
 
