@@ -35,17 +35,32 @@ add_filter( 'gfield_content_format', function( $gfield_content_format ) {
 
 
 add_filter( 'woocommerce_cart_shipping_method_full_label', function( $label, $method ) {
-	switch ( $method->id ) {
+/*	switch ( $method->id ) {
 		case 'flat_rate':
 			$description = 'Als u kiest voor de standaard bezorging, dan leveren wij tot de eerste drempel begane grond.';
 			break;
 		case 'flat_rate:uitgebreide-bezorging':
 			$description = 'Voor leveringen met montage, op een etage of verder dan de eerste drempel raden wij u aan om voor deze verzendmethode te kiezen.';
 			break;
+		default:
+			$description = 'default';
+			break;
 	}
+*/
 
-	if ( isset( $description ) ) {
-		$label .= canvas_child_field_description( $description );
+	$labelParts = array(
+		trim(explode(':', $label)[0]), // Title | Description
+		trim(explode(':', $label)[1]), // Price (html string)
+		trim(explode('|', explode(':', $label)[0])[0]), // Only Title
+	);
+
+	$description = explode(':', $label);
+	$description = explode('|', $description[0]);
+	$description = $description[1];
+
+	if ( isset( $description ) && !empty($description) ) {
+		//$label .= canvas_child_field_description( $description );
+		$label = $labelParts[2] . ':' . canvas_child_field_description( $description ) . '&nbsp;&nbsp;' . $labelParts[1];
 	}
 
 	return $label;
