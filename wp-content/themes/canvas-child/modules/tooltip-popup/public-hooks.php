@@ -48,19 +48,16 @@ add_filter( 'woocommerce_cart_shipping_method_full_label', function( $label, $me
 	}
 */
 
-	$labelParts = array(
-		trim(explode(':', $label)[0]), // Title | Description
-		trim(explode(':', $label)[1]), // Price (html string)
-		trim(explode('|', explode(':', $label)[0])[0]), // Only Title
-	);
-
-	$description = explode(':', $label);
-	$description = explode('|', $description[0]);
-	$description = $description[1];
+	// $label => Title | Description : Price
+	$explodeLabel = explode(':', $label);
+	$price = trim($explodeLabel[1]);
+	$explodeLabel = explode('|', $explodeLabel[0]);
+	$title = trim($explodeLabel[0]);
+	$description = trim($explodeLabel[1]);
 
 	if ( isset( $description ) && !empty($description) ) {
 		//$label .= canvas_child_field_description( $description );
-		$label = $labelParts[2] . ':' . canvas_child_field_description( $description ) . '&nbsp;&nbsp;' . $labelParts[1];
+		$label = $title . ':' . canvas_child_field_description( $description ) . '&nbsp;&nbsp;' . $price;
 	}
 
 	return $label;
