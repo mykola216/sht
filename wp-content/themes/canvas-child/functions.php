@@ -69,6 +69,7 @@ add_action( 'woo_main_before', 'canvas_child_home' );
 
 // Archive page
 add_action( 'woocommerce_archive_description', 'canvas_child_archive_description_sidebar', 20 );
+add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
 // Archive - end
 
 
@@ -182,6 +183,12 @@ function canvas_child_register_sidebars() {
 		'name' => 'Single product info block',
 		'id' => 'canvas-child-single-product',
 		'before_widget' => '<div id="%1$s" class="widget canvas-child-single-product %2$s">',
+		'after_widget' => '</div>',
+	) );
+	register_sidebar( array(
+		'name' => 'After Main Content',
+		'id' => 'canvas_child_after_main_content',
+		'before_widget' => '<div id="%1$s" class="widget canvas_child_after_main_content %2$s">',
 		'after_widget' => '</div>',
 	) );
 }
@@ -320,6 +327,11 @@ function canvas_child_home() {
 function canvas_child_archive_description_sidebar() {
 	dynamic_sidebar('canvas-child-archive-description');
 }
+function canvas_child_after_main_content_sidebar () {
+	dynamic_sidebar('canvas_child_after_main_content');
+}
+
+
 /******************************************************************************/
 /* Archive page - end *********************************************************/
 /******************************************************************************/
