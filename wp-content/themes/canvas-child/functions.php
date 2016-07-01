@@ -69,7 +69,8 @@ add_action( 'woo_main_before', 'canvas_child_home' );
 
 // Archive page
 add_action( 'woocommerce_archive_description', 'canvas_child_archive_description_sidebar', 20 );
-add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
+add_action( 'woocommerce_archive_description', 'canvas_child_after_main_content_sidebar', 1);
+//add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
 // Archive - end
 
 
@@ -326,6 +327,7 @@ function canvas_child_home() {
 /******************************************************************************/
 function canvas_child_archive_description_sidebar() {
 	dynamic_sidebar('canvas-child-archive-description');
+	echo '<div class="clear"></div>';
 }
 function canvas_child_after_main_content_sidebar () {
 	dynamic_sidebar('canvas_child_after_main_content');
