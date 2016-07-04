@@ -180,11 +180,11 @@ body.archive .woocommerce-result-count{
 }
 body.archive .widget.woocommerce_products_of_the_day{
     float: right;
-    padding: 5px;
-    margin-left: 5px;
-    border: 3px solid #72afb8;
-    height: 234px;
-    overflow: auto;
+    margin: 0 0 5px 5px;
+    /*padding: 0 0 5px 5px;*/
+    /*border: 3px solid #72afb8;*/
+    /*height: 234px;*/
+    /*overflow: auto;*/
 }
 body.archive .widget.woocommerce_products_of_the_day .widgettitle{
     margin-bottom: 1em;
