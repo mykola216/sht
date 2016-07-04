@@ -12,7 +12,7 @@
 <?php printf(
 	__( 'If you have any questions, please directly contact our <a href="%s">customer service</a> by phone %s or email %s.', 'w3cm-pending-order-email' ),
 	'http://steigerhouttrend.nl/klantenservice/',
-	'050 – 3642594',
+	'+31(0)502 301 066',
 	'info@steigerhouttrend.nl'
 ); ?><br />
 <br />
