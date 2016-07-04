@@ -68,7 +68,7 @@ class PHPExcel_Settings
      *
      * @var string
      */
-    private static $zipClass = self::ZIPARCHIVE;
+    private static $zipClass = self::PCLZIP; //self::ZIPARCHIVE;
 
 
     /**
