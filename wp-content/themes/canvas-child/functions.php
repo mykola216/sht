@@ -170,6 +170,8 @@ function canvas_child_wp_enqueue_script() {
 		wp_enqueue_style( 'canvas_child_archive', $uri . '/css/archive.css', array( 'theme-child-style' ) );
 	}
 
+	wp_enqueue_script( 'canvas-child-common-js',  $uri . '/js/common.js', array('jquery') );
+
 	wp_enqueue_script( 'sharethis', '//w.sharethis.com/button/buttons.js' );
 }
 

@@ -556,3 +556,101 @@ ul.products li.product:nth-child(2n) > a >img {
         margin-bottom: 1.618em;
     }
 }
+
+/* ****** Recent Reviews ******* */
+.widget_recent_reviews,
+.widget_recent_reviews:before,
+.widget_recent_reviews > h3,
+.widget_recent_reviews .product_list_widget{
+    background: #efefef;
+}
+.widget_recent_reviews{
+    position:fixed;
+    z-index: 9;
+    top: 100%;
+    left:0;
+    width: 100%;
+    height: 50%;
+    margin: auto;
+    border-top: 1px solid #ccc;
+    transition: all 0.4s ease;
+}
+.widget_recent_reviews.opened{
+    top: 50%;
+    transition: all 0.4s ease;
+}
+.widget_recent_reviews:before{
+    content: '';
+    position:absolute;
+    z-index: 1;
+    top: 0;
+    left: -1em;
+    display: block;
+    width: 100%;
+    height: 1em;
+}
+.widget_recent_reviews > h3{
+    position: relative;
+    top: -4em;
+    left: 1em;
+    display: inline-block;
+    line-height: 4em !important;
+    padding: 0 4em 0 2em !important;
+    margin-top: -1px !important;
+    cursor: pointer;
+    border: 1px solid #ccc !important;
+    border-bottom: none !important;
+    -webkit-border-bottom: none !important;
+    -moz-border-radius:5px 5px 0 0;
+    -o-border-radius:5px 5px 0 0;
+    -ms-border-radius:5px 5px 0 0;
+    border-radius:5px 5px 0 0;
+    box-shadow: 0 -2px 10px 0px #000;
+}
+.widget_recent_reviews > h3:before{
+    content: '\f062';
+    position: absolute;
+    display:block;
+    top: 50%;
+    right: 1.25em;
+    margin-top: -0.8em;
+    width: 1.5em;
+    height: 1.5em;
+    line-height:1.5em;
+    text-align:center;
+    color: #fff;
+    font-family: FontAwesome;
+    background:#000;
+}
+.widget_recent_reviews.opened > h3:before{
+    content: '\f063';
+}
+.widget_recent_reviews .product_list_widget{
+    padding: 0 1em 0 !important;
+    margin: -3em 0 0 0 !important;
+    height: 95%;
+    overflow: auto;
+}
+.widget_recent_reviews .product_list_widget > li {
+    display: inline-block;
+    vertical-align: top;
+    width: 29%;
+    padding: 0 3% 6%;
+    margin: 0 !important;
+}
+.widget_recent_reviews .product_list_widget > li:nth-child(3n+1){
+    padding-left:0;
+}
+.widget_recent_reviews .product_list_widget > li:nth-child(3n){
+    padding-right:0;
+}
+.widget_recent_reviews .product_list_widget > li > a > img.wp-post-image{
+    float: none;
+    display: block;
+    margin: 0 auto .5em;
+    width: 100%;
+    height: auto;
+}
+.widget_recent_reviews .product_list_widget > li .star-rating {
+    margin: 0.5em 0 !important;
+}
