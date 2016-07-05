@@ -1,6 +1,6 @@
 (function ($) {
     $(function () {
-        $('.widget_recent_reviews').on('click', '> h3', null, function (e) {
+        $('.widget_recently_viewed_products').on('click', '> h3', null, function (e) {
             $(this).parent().toggleClass('opened');
         });
     });
