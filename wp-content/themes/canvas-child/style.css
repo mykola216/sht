@@ -481,6 +481,12 @@ ul.products li.product:nth-child(2n) > a >img {
     background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(rgb(255, 255, 255)), to(rgba(255, 255, 255, 0)));
 }
 
+/**** Single Product ****/
+.single-product .summary .stock{
+    display: none;
+}
+/**** /Single Product ****/
+
 .widget404.woocommerce.widget_product_search {
     width: 100%;
     margin: 15px auto;
