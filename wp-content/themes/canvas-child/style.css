@@ -201,6 +201,12 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
 .widget.woocommerce_products_of_the_day ul li.product img.wp-post-image{
     width: 100px;
 }
+#main.col-left .widget{
+    float: none;
+    width: auto;
+    clear: both;
+    overflow: hidden;
+}
 /* Widgets - end */
 
 
@@ -364,10 +370,10 @@ ul.products li.product:nth-child(2n) > a >img {
 
 
     /* Widgets */
-    #main.col-left .widget_sp_image /*, #main.col-left .widget_text*/ {
+    #main.col-left .widget {
         float: left;
-        /* margin: 0 1%; */
-        width: 48%;
+        width: 50%;
+        clear: none;
     }
     /* Widgets - end */
 
