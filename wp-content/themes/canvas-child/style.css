@@ -634,20 +634,14 @@ ul.products li.product:nth-child(2n) > a >img {
 .widget_recently_viewed_products .product_list_widget > li {
     display: inline-block;
     vertical-align: top;
-    width: 29%;
-    padding: 0 3% 6%;
+    width: 12%;
+    padding: 0 2.5% 6%;
     margin: 0 !important;
 }
-@media(max-width: 760px) {
-    .widget_recently_viewed_products .product_list_widget > li{
-        padding-left: 2.5%;
-        padding-right: 2.5%;
-    }
-}
-.widget_recently_viewed_products .product_list_widget > li:nth-child(3n+1){
+.widget_recently_viewed_products .product_list_widget > li:nth-child(6n+1){
     padding-left:0;
 }
-.widget_recently_viewed_products .product_list_widget > li:nth-child(3n){
+.widget_recently_viewed_products .product_list_widget > li:nth-child(6n){
     padding-right:0;
 }
 .widget_recently_viewed_products .product_list_widget > li > a > img.wp-post-image{
@@ -670,4 +664,50 @@ ul.products li.product:nth-child(2n) > a >img {
 }
 .widget_recently_viewed_products .product_list_widget > li .star-rating {
     margin: 0.5em 0 !important;
+}
+.widget_recently_viewed_products .product_list_widget > li > del,
+.widget_recently_viewed_products .product_list_widget > li > del .amount{
+    color: rgba(255, 119, 0, 0.5);
+}
+.widget_recently_viewed_products .product_list_widget > li > ins{
+    text-decoration:none;
+}
+@media (min-width: 761px) {
+    .widget_recently_viewed_products{
+        /*height:50%;*/
+    }
+    .widget_recently_viewed_products.opened{
+        /*top:50%;*/
+    }
+    .widget_recently_viewed_products .product_list_widget > li{
+        width:12%;
+    }
+    .widget_recently_viewed_products .product_list_widget > li:nth-child(6n+1){
+        padding-left:0;
+    }
+    .widget_recently_viewed_products .product_list_widget > li:nth-child(6n){
+        padding-right:0;
+    }
+}
+@media (min-width: 321px) and (max-width: 760px) {
+    .widget_recently_viewed_products .product_list_widget > li{
+        width:20%;
+    }
+    .widget_recently_viewed_products .product_list_widget > li:nth-child(4n+1){
+        padding-left:0;
+    }
+    .widget_recently_viewed_products .product_list_widget > li:nth-child(4n){
+        padding-right:0;
+    }
+}
+@media (max-width: 320px) {
+    .widget_recently_viewed_products .product_list_widget > li{
+        width:45%;
+    }
+    .widget_recently_viewed_products .product_list_widget > li:nth-child(2n+1){
+        padding-left:0;
+    }
+    .widget_recently_viewed_products .product_list_widget > li:nth-child(2n){
+        padding-right:0;
+    }
 }
