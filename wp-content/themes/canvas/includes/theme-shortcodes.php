@@ -431,7 +431,7 @@ function woo_shortcode_footer_childtheme_link ( $atts ) {
 	$atts = array_map( 'wp_kses_post', $atts );
 
 	if ( is_child_theme() ) {
-		$theme_data = get_theme_data( get_stylesheet_directory() . '/style.css' );
+		$theme_data = wp_get_theme( get_stylesheet_directory() . '/style.css' );
 		define( 'CHILD_THEME_URL', $theme_data['URI'] );
 		define( 'CHILD_THEME_NAME', $theme_data['Name'] );
 	}

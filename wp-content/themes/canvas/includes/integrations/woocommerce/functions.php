@@ -2,6 +2,16 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /*-----------------------------------------------------------------------------------*/
+/* Remove Canvas metaboxes from specific custom post types
+/*-----------------------------------------------------------------------------------*/
+if ( ! function_exists( 'remove_woothemes_meta_boxes_from_wc_bookings' ) ) {
+	function remove_woothemes_meta_boxes_from_wc_bookings() {
+		remove_meta_box( 'woothemes-settings' , 'wc_booking' , 'normal' );
+	}
+	add_action( 'admin_menu' , 'remove_woothemes_meta_boxes_from_wc_bookings', 99 );
+}
+
+/*-----------------------------------------------------------------------------------*/
 /* Declare support for WooCommerce
 /*-----------------------------------------------------------------------------------*/
 

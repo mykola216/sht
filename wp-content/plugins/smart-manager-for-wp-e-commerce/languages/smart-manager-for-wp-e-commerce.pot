@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Smart Manager for e-Commerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Fri Oct 16 2015 18:24:10 GMT+0530 (IST)\n"
-"POT-Revision-Date: Mon Jun 20 2016 14:43:31 GMT+0530 (IST)\n"
+"POT-Revision-Date: Mon Jul 11 2016 12:22:38 GMT+0530 (IST)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -46,193 +46,193 @@ msgstr ""
 msgid "http://www.storeapps.org"
 msgstr ""
 
-#: ../smart-manager.php:389
+#: ../smart-manager.php:406
 msgctxt "timezone date format"
 msgid "Y-m-d H:i:s"
 msgstr ""
 
-#: ../smart-manager.php:402
+#: ../smart-manager.php:419
 msgid "Congratulations!!!"
 msgstr ""
 
-#: ../smart-manager.php:402
+#: ../smart-manager.php:419
 msgid "Kindly check your mail to avail the discount"
 msgstr ""
 
-#: ../smart-manager.php:403
+#: ../smart-manager.php:420
 msgid "*Only For Today*"
 msgstr ""
 
-#: ../smart-manager.php:404
+#: ../smart-manager.php:421
 msgid "No, I don't like offers..."
 msgstr ""
 
-#: ../smart-manager.php:407
+#: ../smart-manager.php:424
 msgid "Big Savings!!!"
 msgstr ""
 
-#: ../smart-manager.php:407
+#: ../smart-manager.php:424
 msgid "20% OFF "
 msgstr ""
 
-#: ../smart-manager.php:407 ../smart-manager.php:413
+#: ../smart-manager.php:424 ../smart-manager.php:430
 msgid "on Smart Manager Pro!"
 msgstr ""
 
-#: ../smart-manager.php:410
+#: ../smart-manager.php:427
 msgid "Missed yesterday?"
 msgstr ""
 
-#: ../smart-manager.php:410
+#: ../smart-manager.php:427
 msgid "15% OFF "
 msgstr ""
 
-#: ../smart-manager.php:410
+#: ../smart-manager.php:427
 msgid "on Smart Manager Pro"
 msgstr ""
 
-#: ../smart-manager.php:413
+#: ../smart-manager.php:430
 msgid "Last chance!!!"
 msgstr ""
 
-#: ../smart-manager.php:413
+#: ../smart-manager.php:430
 msgid "10% OFF "
 msgstr ""
 
-#: ../smart-manager.php:416
+#: ../smart-manager.php:433
 msgid "Sign up to get updates, insights & tips..."
 msgstr ""
 
-#: ../smart-manager.php:418
+#: ../smart-manager.php:435
 msgid "Thank you for Subscribing!!!"
 msgstr ""
 
-#: ../smart-manager.php:420
+#: ../smart-manager.php:437
 msgid "No, I don't need help..."
 msgstr ""
 
-#: ../smart-manager.php:444 ../smart-manager.php:854 ../new/smart-manager.php:289
+#: ../smart-manager.php:461 ../smart-manager.php:871 ../new/smart-manager.php:289
 msgid "Learn more about Pro version"
 msgstr ""
 
-#: ../smart-manager.php:444 ../smart-manager.php:854 ../new/smart-manager.php:289
+#: ../smart-manager.php:461 ../smart-manager.php:871 ../new/smart-manager.php:289
 msgid "or take a"
 msgstr ""
 
-#: ../smart-manager.php:444 ../smart-manager.php:854 ../new/smart-manager.php:289
+#: ../smart-manager.php:461 ../smart-manager.php:871 ../new/smart-manager.php:289
 msgid "Live Demo"
 msgstr ""
 
-#: ../smart-manager.php:541 ../smart-manager.php:889 ../smart-manager.php:924
+#: ../smart-manager.php:558 ../smart-manager.php:906 ../smart-manager.php:941
 msgid "add-on requires"
 msgstr ""
 
-#: ../smart-manager.php:541 ../smart-manager.php:889 ../smart-manager.php:924
+#: ../smart-manager.php:558 ../smart-manager.php:906 ../smart-manager.php:941
 msgid "WP e-Commerce"
 msgstr ""
 
-#: ../smart-manager.php:541 ../smart-manager.php:889 ../smart-manager.php:924
+#: ../smart-manager.php:558 ../smart-manager.php:906 ../smart-manager.php:941
 msgid "plugin or"
 msgstr ""
 
-#: ../smart-manager.php:541 ../smart-manager.php:889 ../smart-manager.php:924
+#: ../smart-manager.php:558 ../smart-manager.php:906 ../smart-manager.php:941
 msgid "WooCommerce"
 msgstr ""
 
-#: ../smart-manager.php:541 ../smart-manager.php:889 ../smart-manager.php:924
+#: ../smart-manager.php:558 ../smart-manager.php:906 ../smart-manager.php:941
 msgid "plugin. Please install and activate it."
 msgstr ""
 
-#: ../smart-manager.php:679 ../new/smart-manager.php:326
+#: ../smart-manager.php:696 ../new/smart-manager.php:326
 msgid "A required Smart Manager file is missing. Can't continue. "
 msgstr ""
 
-#: ../smart-manager.php:795 ../smart-manager.php:795
+#: ../smart-manager.php:812 ../smart-manager.php:812
 msgid "Try out Smart Manager Beta"
 msgstr ""
 
-#: ../smart-manager.php:816 ../new/smart-manager.php:267
+#: ../smart-manager.php:833 ../new/smart-manager.php:267
 #, php-format
 msgid "%1s%2s<a href=\"%3s\" target=\"_blank\">Docs</a>"
 msgstr ""
 
-#: ../smart-manager.php:819 ../new/smart-manager.php:270
+#: ../smart-manager.php:836 ../new/smart-manager.php:270
 msgid ""
 "10x productivity gains with store administration. Quickly find and update "
 "products, orders and customers"
 msgstr ""
 
-#: ../smart-manager.php:825 ../new/smart-manager.php:276
+#: ../smart-manager.php:842 ../new/smart-manager.php:276
 msgid "An upgrade for Smart Manager Pro"
 msgstr ""
 
-#: ../smart-manager.php:825 ../new/smart-manager.php:276
+#: ../smart-manager.php:842 ../new/smart-manager.php:276
 msgid "is available."
 msgstr ""
 
-#: ../smart-manager.php:825 ../new/smart-manager.php:276
+#: ../smart-manager.php:842 ../new/smart-manager.php:276
 msgid "Click to upgrade."
 msgstr ""
 
-#: ../smart-manager.php:842
+#: ../smart-manager.php:859
 msgid ""
 "Please enter your license key for automatic upgrades and support to get "
 "activated."
 msgstr ""
 
-#: ../smart-manager.php:842
+#: ../smart-manager.php:859
 msgid "Enter License Key"
 msgstr ""
 
-#: ../smart-manager.php:854 ../new/smart-manager.php:289 ../sm/manager-console.
+#: ../smart-manager.php:871 ../new/smart-manager.php:289 ../sm/manager-console.
 #: php:1510
 msgid "Important:"
 msgstr ""
 
-#: ../smart-manager.php:854 ../new/smart-manager.php:289
+#: ../smart-manager.php:871 ../new/smart-manager.php:289
 msgid ""
 "Upgrade to Pro to get features like '<i>Batch Update</i>' , '<i>Export "
 "CSV</i>' , '<i>Duplicate Products</i>' &amp; many more..."
 msgstr ""
 
-#: ../smart-manager.php:871 ../smart-manager.php:884 ../smart-manager.php:899 ..
-#: /smart-manager.php:916
+#: ../smart-manager.php:888 ../smart-manager.php:901 ../smart-manager.php:916 ..
+#: /smart-manager.php:933
 msgid "A required Smart Manager file is missing. Can't continue."
 msgstr ""
 
-#: ../smart-manager.php:874 ../smart-manager.php:902
+#: ../smart-manager.php:891 ../smart-manager.php:919
 msgid "Smart Manager currently works only with WP e-Commerce 3.7 or above."
 msgstr ""
 
-#: ../smart-manager.php:878 ../smart-manager.php:910
+#: ../smart-manager.php:895 ../smart-manager.php:927
 msgid "Smart Manager currently works only with WooCommerce 1.4 or above."
 msgstr ""
 
-#: ../smart-manager.php:905
+#: ../smart-manager.php:922
 msgid "WP e-Commerce plugin is not activated."
 msgstr ""
 
-#: ../smart-manager.php:905
+#: ../smart-manager.php:922
 msgid "add-on requires WP e-Commerce plugin, please activate it."
 msgstr ""
 
-#: ../smart-manager.php:920
+#: ../smart-manager.php:937
 msgid "WooCommerce plugin is not activated."
 msgstr ""
 
-#: ../smart-manager.php:920
+#: ../smart-manager.php:937
 msgid "add-on requires WooCommerce plugin, please activate it."
 msgstr ""
 
-#: ../smart-manager.php:947
+#: ../smart-manager.php:964
 msgid "Or"
 msgstr ""
 
-#: ../smart-manager.php:947
+#: ../smart-manager.php:964
 msgid "click here to download the latest version."
 msgstr ""
 
-#: ../smart-manager.php:954 ../new/smart-manager.php:367
+#: ../smart-manager.php:971 ../new/smart-manager.php:367
 msgid "Error:"
 msgstr ""
 
@@ -703,38 +703,38 @@ msgid "%s"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:202 ../sm/manager-console.php:
-#: 981 ../sm/manager-console.php:1606 ../pro/woo.php:2265
+#: 981 ../sm/manager-console.php:1606 ../pro/woo.php:2273
 msgid "Catalog & Search"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:203 ../sm/manager-console.php:
-#: 982 ../sm/manager-console.php:1607 ../pro/woo.php:2266
+#: 982 ../sm/manager-console.php:1607 ../pro/woo.php:2274
 msgid "Catalog"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:204 ../sm/manager-console.php:
 #: 983 ../sm/manager-console.php:1495 ../sm/manager-console.php:1608 ../pro/woo.
-#: php:2267
+#: php:2275
 msgid "Search"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:205 ../sm/manager-console.php:
-#: 984 ../sm/manager-console.php:1609 ../pro/woo.php:2268
+#: 984 ../sm/manager-console.php:1609 ../pro/woo.php:2276
 msgid "Hidden"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:207 ../sm/manager-console.php:
-#: 988 ../sm/manager-console.php:1626 ../sm/woo-json.php:130 ../pro/woo.php:2259
+#: 988 ../sm/manager-console.php:1626 ../sm/woo-json.php:130 ../pro/woo.php:2267
 msgid "Taxable"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:208 ../sm/manager-console.php:
-#: 989 ../sm/manager-console.php:1627 ../sm/woo-json.php:131 ../pro/woo.php:2260
+#: 989 ../sm/manager-console.php:1627 ../sm/woo-json.php:131 ../pro/woo.php:2268
 msgid "Shipping only"
 msgstr ""
 
 #: ../new/classes/class-smart-manager-product.php:209 ../sm/manager-console.php:
-#: 990 ../sm/manager-console.php:1628 ../sm/woo-json.php:132 ../pro/woo.php:2261
+#: 990 ../sm/manager-console.php:1628 ../sm/woo-json.php:132 ../pro/woo.php:2269
 msgid "None"
 msgstr ""
 
@@ -1002,7 +1002,7 @@ msgstr ""
 msgid "Shippping Country"
 msgstr ""
 
-#: ../sm/json38.php:1760 ../sm/woo-json.php:3363 ../pro/woo.php:2064
+#: ../sm/json38.php:1760 ../sm/woo-json.php:3363 ../pro/woo.php:2072
 msgid "s were not duplicated"
 msgstr ""
 
@@ -1065,12 +1065,12 @@ msgid "Records Updated and"
 msgstr ""
 
 #: ../sm/json38.php:2402 ../sm/woo-json.php:3277 ../sm/json37.php:681 ../pro/woo.
-#: php:2189 ../pro/sm38.php:1089
+#: php:2197 ../pro/sm38.php:1089
 msgid "Record Updated Successfully"
 msgstr ""
 
 #: ../sm/json38.php:2404 ../sm/woo-json.php:3279 ../sm/json37.php:683 ../pro/sm37.
-#: php:572 ../pro/woo.php:2090 ../pro/woo.php:2192 ../pro/sm38.php:1092
+#: php:572 ../pro/woo.php:2098 ../pro/woo.php:2200 ../pro/sm38.php:1092
 msgid "Records Updated Successfully"
 msgstr ""
 
@@ -2028,7 +2028,7 @@ msgstr ""
 msgid "Batch Updation of Region not successful"
 msgstr ""
 
-#: ../pro/woo.php:1987 ../pro/woo.php:2005
+#: ../pro/woo.php:1995 ../pro/woo.php:2013
 msgid "Success"
 msgstr ""
 
