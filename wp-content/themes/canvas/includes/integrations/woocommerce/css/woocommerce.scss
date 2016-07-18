@@ -1210,6 +1210,36 @@ ul.order_details {
 	}
 }
 
+.order-actions {
+	.button {
+		margin-right: 5px;
+	}
+}
+
+@media only screen and ( max-width: $tablet - 1 ) {
+  .woocommerce-MyAccount-navigation ul {
+      width: 100%;
+  }
+}
+
+@media only screen and ( min-width: $tablet ) {
+  .woocommerce-MyAccount-content {
+    width: 78%;
+    float: right;
+  }
+}
+
+.woocommerce-MyAccount-navigation ul {
+  float: left;
+  list-style: none;
+  margin-left: -30px;
+}
+
+li.woocommerce-MyAccount-navigation-link {
+  padding: 1em 0;
+  border-bottom: 1px solid #e6e6e6;
+}
+
 @media only screen and ( max-width: $tablet - 1 ) {
 
 	// Make cart fit responsive layout

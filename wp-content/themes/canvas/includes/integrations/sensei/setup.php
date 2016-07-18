@@ -37,8 +37,7 @@ add_action( 'sensei_after_main_content', 'woo_sensei_content_wrap_end', 8 );
  * Pull the Woo Breadcrumbs in
  */
 add_action( 'sensei_before_main_content', 'sensei_breadcrumbs', 12 );
-
-
+add_filter( 'woo_breadcrumbs_args', 'woo_custom_breadcrumbs_args', 10 );
 /**
  * Pagination
  * Remove the Sensei pagination and add our own

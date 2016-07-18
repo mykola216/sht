@@ -223,7 +223,7 @@ function woo_wooslider_business() {
 	if ( isset( $post->ID ) ) {
 		$stored_slide_page = get_post_meta( $post->ID, '_slide-page', true );
 		if ( '0' == $stored_slide_page ) {
-			$slide_page = '';
+			$slide_page = ( isset( $slide_page ) && ! empty( $slide_page ) ) ? $slide_page : '';
 		}
 		if ( '' != $stored_slide_page && '0' != $stored_slide_page ) {
 			$slide_page_obj	= get_term( $stored_slide_page, 'slide-page' );

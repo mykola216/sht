@@ -1,5 +1,5 @@
 /*
- * jQuery FlexSlider v2.6.0
+ * jQuery FlexSlider v2.6.1
  * Copyright 2012 WooThemes
  * Contributing Author: Tyler Smith
  */
@@ -218,7 +218,7 @@
             for (var i = 0; i < slider.pagingCount; i++) {
               slide = slider.slides.eq(i);
               if ( undefined === slide.attr( 'data-thumb-alt' ) ) { slide.attr( 'data-thumb-alt', '' ); }
-              altText = ( '' !== slide.attr( 'data-thumb-alt' ) ) ? altText = ' alt="' + slide.attr( 'data-thumb-alt' ) + '"' : '';
+              var altText = ( '' !== slide.attr( 'data-thumb-alt' ) ) ? altText = ' alt="' + slide.attr( 'data-thumb-alt' ) + '"' : '';
               item = (slider.vars.controlNav === "thumbnails") ? '<img src="' + slide.attr( 'data-thumb' ) + '"' + altText + '/>' : '<a href="#">' + j + '</a>';
               if ( 'thumbnails' === slider.vars.controlNav && true === slider.vars.thumbCaptions ) {
                 var captn = slide.attr( 'data-thumbcaption' );
@@ -592,7 +592,7 @@
       smoothHeight: function(dur) {
         if (!vertical || fade) {
           var $obj = (fade) ? slider : slider.viewport;
-          (dur) ? $obj.animate({"height": slider.slides.eq(slider.animatingTo).height()}, dur) : $obj.height(slider.slides.eq(slider.animatingTo).height());
+          (dur) ? $obj.animate({"height": slider.slides.eq(slider.animatingTo).innerHeight()}, dur) : $obj.innerHeight(slider.slides.eq(slider.animatingTo).innerHeight());
         }
       },
       sync: function(action) {
@@ -1117,7 +1117,7 @@
     // Usability features
     pauseOnAction: true,            //Boolean: Pause the slideshow when interacting with control elements, highly recommended.
     pauseOnHover: false,            //Boolean: Pause the slideshow when hovering over slider, then resume when no longer hovering
-    pauseInvisible: true,   		//{NEW} Boolean: Pause the slideshow when tab is invisible, resume when visible. Provides better UX, lower CPU usage.
+    pauseInvisible: true,       //{NEW} Boolean: Pause the slideshow when tab is invisible, resume when visible. Provides better UX, lower CPU usage.
     useCSS: true,                   //{NEW} Boolean: Slider will use CSS3 transitions if available
     touch: true,                    //{NEW} Boolean: Allow touch swipe navigation of the slider on touch-enabled devices
     video: false,                   //{NEW} Boolean: If using video in the slider, will prevent CSS3 3D Transforms to avoid graphical glitches
@@ -1171,7 +1171,7 @@
             selector = (options.selector) ? options.selector : ".slides > li",
             $slides = $this.find(selector);
 
-      if ( ( $slides.length === 1 && options.allowOneSlide === true ) || $slides.length === 0 ) {
+      if ( ( $slides.length === 1 && options.allowOneSlide === false ) || $slides.length === 0 ) {
           $slides.fadeIn(400);
           if (options.start) { options.start($this); }
         } else if ($this.data('flexslider') === undefined) {

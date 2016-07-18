@@ -3,7 +3,7 @@
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
 Description: <strong>Lite Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.16
+Version: 3.9.17
 Author: Store Apps
 Author URI: http://www.storeapps.org/
 Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Store Apps All rights reserved.
@@ -111,15 +111,19 @@ add_action( 'plugins_loaded', 'sm_upgrade' );
 //function to handle inclusion of the SA upgrade file
 function sm_upgrade() {
 	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
-		if ( ! class_exists( 'Store_Apps_Upgrade' ) ) {
-			require_once 'pro/class-storeapps-upgrade.php';
-		}
+		if ( !class_exists( 'Store_Apps_Upgrade_1_1' ) ) {
+	        require_once 'pro/class-storeapps-upgrade-v-1-1.php';
+	    }
 
 		$sku = SM_SKU;
 		$prefix = SM_PREFIX;
 		$plugin_name = SM_PLUGIN_NAME;
 		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
-		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade_1_1( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+
+		//filters for handling quick_help_widget
+		add_filter( $prefix . '_is_page_for_notifications', 'sm_quick_help_widget_pages' );
+		add_filter( $prefix . '_ig_modify_remote_params', 'sm_quick_help_widget_params' );
 	}
 }
 
@@ -127,6 +131,9 @@ function sm_upgrade() {
 //	admin_init is triggered before any other hook when a user access the admin area. 
 // This hook doesn't provide any parameters, so it can only be used to callback a specified function.
 add_action ( 'admin_init', 'smart_admin_init' );
+
+//For handling media links on plugins page
+add_action( 'admin_footer', 'sm_add_plugin_style_script' );
 
 //Language loader
 
@@ -152,6 +159,38 @@ function smart_manager_get_data() {
 	return get_plugin_data( __FILE__ );
 }
 
+// function to handle the display of quick help widget
+function sm_quick_help_widget_pages() {
+	
+	if ( isset($_GET['page']) && ($_GET['page'] == "smart-manager-woo" || $_GET['page'] == "smart-manager-wpsc" || ( !empty($_GET['sm_beta']) && $_GET['sm_beta'] == 1 ) || $_GET['page'] == "smart-manager-settings")) {
+		return true;
+	}
+
+	return false;
+}
+
+// function to modify quick help widget params
+function sm_quick_help_widget_params( $params ) {
+	
+	$params['kb_slug'] = 'smart-manager';
+
+	return $params;
+}
+
+/*
+* Function to to handle media links on plugin page
+*/ 
+function sm_add_plugin_style_script() {
+?>
+<script type="text/javascript">
+    jQuery(function() {
+        jQuery(document).ready(function() {
+            jQuery('tr[id="smart-manager"]').find( 'div.plugin-version-author-uri' ).addClass( 'sa_smart_manager_social_links' );
+        })
+    });
+</script>
+<?php
+}
 	
 	function smart_admin_init() {
                 global $wp_version,$wpdb;

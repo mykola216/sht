@@ -1484,12 +1484,12 @@ if ( ! function_exists( 'woo_slider_biz_view' ) ) {
 	<div id="<?php echo esc_attr( $args['id'] ); ?>"<?php if ( '' != $args['container_css'] ): ?> class="<?php echo esc_attr( $args['container_css'] ); ?>"<?php endif; ?><?php if ( !apply_filters( 'woo_slider_autoheight', true ) ): ?> style="height: <?php echo apply_filters( 'woo_slider_height', 350 ); ?>px;"<?php endif; ?>>
 
 		<ul class="slides"<?php if ( !apply_filters( 'woo_slider_autoheight', true ) ): ?> style="height: <?php echo apply_filters( 'woo_slider_height', 350 ); ?>px;"<?php endif; ?>>
-
+			<?php $original_slide_styles = $args['slide_styles']; ?>
 			<?php foreach ( $slides as $k => $post ) { setup_postdata( $post ); $count++; ?>
 
 			<?php
 				// Slide Styles
-				if ( $count >= 2 ) { $args['slide_styles'] .= ' display:none;'; } else { $args['slide_styles'] = ''; }
+				if ( $count >= 2 ) { $args['slide_styles'] = $original_slide_styles . ' display:none;'; } else { $args['slide_styles'] = ''; }
 			?>
 
 			<li id="slide-<?php echo esc_attr( $post->ID ); ?>" class="slide slide-number-<?php echo esc_attr( $count ); ?>" <?php if ( '' != $args['slide_styles'] ): ?>style="<?php echo esc_attr( $args['slide_styles'] ); ?>"<?php endif; ?>>

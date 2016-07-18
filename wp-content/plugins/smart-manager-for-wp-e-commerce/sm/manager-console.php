@@ -519,7 +519,7 @@ if (WPSC_RUNNING === true) {
 		if($obj['meta_key'] == "individual_use" || $obj['meta_key'] == "apply_before_tax"|| $obj['meta_key'] == "free_shipping"
 			|| $obj['meta_key'] == "exclude_sale_items") {
 
-			$couponfield_names ['items'] [$cnt] ['type'] = 'bool';
+			$couponfield_names ['items'] [$cnt] ['type'] = 'yesno';
 
 		} elseif ($obj['meta_key'] == "expiry_date") {
 			$couponfield_names ['items'] [$cnt] ['type'] = 'datetime';

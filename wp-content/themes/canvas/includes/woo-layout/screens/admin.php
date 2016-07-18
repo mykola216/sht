@@ -1,5 +1,5 @@
 <div class="wrap" id="woothemes-layouts">
-<?php screen_icon( 'themes' ); ?><h2><?php _e( 'Layouts', 'woothemes' ); ?></h2>
+<h2><?php _e( 'Layouts', 'woothemes' ); ?></h2>
 <?php if ( isset( $_GET['updated'] ) && $_GET['updated'] == 'true' ) { echo '<div class="updated fade"><p><strong>' . __( 'Layouts Settings Updated.', 'woothemes' ) . '</strong></p></div>'; } ?>
 <form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=woo-layout-manager&updated=true' ) ); ?>">
 <?php

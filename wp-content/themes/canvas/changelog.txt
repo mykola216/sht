@@ -1,5 +1,28 @@
 *** Canvas Changelog ***
 
+2016.07.01 - version 5.10.1
+* Fix - Removes WooThemes metaboxes from WC Bookings Extension post type admin interfaces.
+  includes/integrations/woocommerce/functions.php
+* Fix - Fixes WooSlider empty variable value.
+  includes/integrations/wooslider/wooslider.php
+* Fix - Replaces deprecated functions.
+  includes/theme-shortcodes.php,
+  includes/woo-hoooks/screens/admin.php,
+  includes/woo-layout/screens/admin.php,
+  includes/woo-meta/screens/admin.php
+
+2016.05.05 - version 5.10.0
+* New - Adds support for new WooCommerce tabbed My Account page.
+  includes/integrations/woocommerce/css/woocommerce.css
+  includes/integrations/woocommerce/css/woocommerce.scss
+* Fix - Increase width of side nav when cart total is displayed, to allow for larger numbers.
+  css/partials/_navigation.scss
+* Fix - FlexSlider to v2.6.1.
+  includes/js/jquery.flexslider.js
+  includes/js/jquery.flexslider.min.js
+* Fix - duplicate display:none; markup in slider styles attribute.
+  includes/theme-actions.php
+
 2016.04.29 - version 5.9.22
  * Fix - Removes custom function for related products output in WooCommerce.
    includes/integrations/woocommerce/setup.php,
