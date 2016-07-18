@@ -579,7 +579,7 @@ ul.nav ul li.current-menu-item a,
 				 	$width: $i * 3;
 
 					&.cart-extended {
-						$width: $width + 9.5;
+						$width: $width + 12.5;
 
 						#main-nav {
 							margin-right: #{$width}em;

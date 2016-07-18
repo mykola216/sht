@@ -590,7 +590,7 @@ if (isset ( $_POST ['cmd'] ) && $_POST ['cmd'] == 'delData') {
 		$data = implode ( ',', $data );
 		$query = "UPDATE " . WPSC_TABLE_PRODUCT_LIST . " SET active = 0 WHERE id in ($data)";
 		$result = $wpdb->query ( $query );
-		$delCnt = mysql_affected_rows ();
+		$delCnt = $wpdb->rows_affected;
 		if ($result) {
 			if ($delCnt == 1) {
 				$encoded ['msg'] = $delCnt . " " . __( 'Product deleted Successfully' , $sm_text_domain);

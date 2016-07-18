@@ -4,8 +4,8 @@ Donate link: http://www.storeapps.org/
 Tags: administration, wp e-commerce, woo commerce, woocommerce, wpec, wpsc, jigoshop, ecommerce, management, batch update, bulk edit, mass update, wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management,
 woocommerce manager, woocommerce order management, woocommerce product management, woocommerce smart manager, woocommerce store management
 Requires at least: 2.0.2
-Tested up to: 4.5.2
-Stable tag: 3.9.16
+Tested up to: 4.5.3
+Stable tag: 3.9.17
 License: GPLv3
 
 The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features. 
@@ -138,6 +138,15 @@ It also gives the warm feeling of supporting further development of the plugin.
 4. Batch Update (only in paid version)
 
 == Changelog ==
+
+= 3.9.17 =
+* Update: PHP 7.0 compatibility
+* Fix: Rounding of decimals when using 'Increase By %' and 'Decrease By %'
+* Fix: Sale price not getting displayed on site when updated using Smart Manager (WooCommerce)
+* Fix: Inline edit of coupon fields like 'individual use' not working properly (WooCommerce)
+* Fix: 'Virtual' & 'Downloadable' tags getting removed when updating using Smart Manager (Lite) (WooCommerce)
+* Fix: Removed debug warnings
+* Fix: Some minor fixes
 
 = 3.9.16 =
 * Update: Tested with latest versions of WordPress, WPeC & WooCommerce (v2.6 or greater)
@@ -662,6 +671,9 @@ It also gives the warm feeling of supporting further development of the plugin.
 * Product administration features
 
 == Upgrade Notice ==
+
+= 3.9.17 =
+PHP 7 compatibility along with other important fixes. Recommended upgrade.
 
 = 3.9.16 =
 Compatibility with WooCommerce v2.6+, new columns in orders CSV export for WooCommerce along with other important fixes. Recommended upgrade.

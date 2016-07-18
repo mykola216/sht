@@ -2947,11 +2947,8 @@ function woo_insert_update_data($post) {
                         'content'                   => $post_content,
                         'product-type'              => isset($product_type) ? $product_type : 'simple',
                         // '_virtual'                  => isset($product_custom_fields['_virtual'][0]) ? $product_custom_fields['_virtual'][0] : 'no',
-                        '_virtual'                  => isset($obj->_virtual) ? $obj->_virtual : 'no',
                         // '_downloadable'             => isset($product_custom_fields['_downloadable'][0]) ? $product_custom_fields['_downloadable'][0] : 'no',
-                        '_downloadable'             => isset($obj->_downloadable) ? $obj->_downloadable : 'no',
                         // '_featured'                 => isset($product_custom_fields['_featured'][0]) ? $product_custom_fields['_featured'][0] : 'no',
-                        '_featured'                 => isset($obj->_featured) ? $obj->_featured : 'no',
                         '_sku'                      => isset($obj->_sku) ? $obj->_sku : '',
 //                      '_price'                    => ( ($obj->post_parent == 0 && $obj->product_type != 'variable') || ($product_type_parent[0] == "grouped") ) ? $price : $obj->_regular_price,
                         '_price'                    =>  $price,
@@ -2979,6 +2976,9 @@ function woo_insert_update_data($post) {
                 );
 
                 if ( (defined('SMPRO') && SMPRO === true) || $obj->id == '' ) {
+                    $postarr['_featured'] = isset($obj->_featured) ? $obj->_featured : 'no';
+                    $postarr['_virtual'] = isset($obj->_virtual) ? $obj->_virtual : 'no';
+                    $postarr['_downloadable'] = isset($obj->_downloadable) ? $obj->_downloadable : 'no';
                     $postarr['_tax_class'] = isset($obj->_tax_class) ? $obj->_tax_class : '';
                     $postarr['_stock_status'] = isset($obj->_stock_status) ? $obj->_stock_status : 'instock';
                     $postarr['_manage_stock'] = isset($obj->_manage_stock) ? $obj->_manage_stock : 'no';
@@ -3091,6 +3091,13 @@ function woo_insert_update_data($post) {
                     }
                 }
 
+                //Clearing the transients to handle the proper functioning of the widgets
+                if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true") {
+                    wc_delete_product_transients($obj->id);
+                } else{
+                    $woocommerce->clear_product_transients($obj->id);
+                }
+
             } 
             elseif ($_POST ['active_module'] == 'Orders') {
                 foreach ( $obj as $key => $value ) {
@@ -3184,13 +3191,6 @@ function woo_insert_update_data($post) {
         }
     } else {
             $result = array('inserted' => 0, 'insertCnt' => 0, 'updated' => 0, 'updateCnt' => 0);
-    }
-        
-    //Clearing the transients to handle the proper functioning of the widgets
-    if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true") {
-        wc_delete_product_transients();
-    } else{
-        $woocommerce->clear_product_transients();
     }
 
     return $result;

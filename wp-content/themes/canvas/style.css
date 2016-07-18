@@ -2,7 +2,7 @@
 /*
 Theme Name: Canvas
 Theme URI: http://www.woothemes.com/
-Version: 5.9.22
+Version: 5.10.1
 Description: Designed by <a href="http://www.woothemes.com">WooThemes</a>.
 Author: WooThemes
 Author URI: http://www.woothemes.com/
@@ -3776,21 +3776,21 @@ ul.nav ul li.current-menu-item a,
       margin-right: .5em;
       height: auto; }
   #navigation .menus.nav-icons-1.cart-extended #main-nav {
-    margin-right: 12.5em; }
-  #navigation .menus.nav-icons-1.cart-extended .side-nav {
-    width: 12.5em; }
-  #navigation .menus.nav-icons-2.cart-extended #main-nav {
     margin-right: 15.5em; }
-  #navigation .menus.nav-icons-2.cart-extended .side-nav {
+  #navigation .menus.nav-icons-1.cart-extended .side-nav {
     width: 15.5em; }
-  #navigation .menus.nav-icons-3.cart-extended #main-nav {
+  #navigation .menus.nav-icons-2.cart-extended #main-nav {
     margin-right: 18.5em; }
-  #navigation .menus.nav-icons-3.cart-extended .side-nav {
+  #navigation .menus.nav-icons-2.cart-extended .side-nav {
     width: 18.5em; }
-  #navigation .menus.nav-icons-4.cart-extended #main-nav {
+  #navigation .menus.nav-icons-3.cart-extended #main-nav {
     margin-right: 21.5em; }
+  #navigation .menus.nav-icons-3.cart-extended .side-nav {
+    width: 21.5em; }
+  #navigation .menus.nav-icons-4.cart-extended #main-nav {
+    margin-right: 24.5em; }
   #navigation .menus.nav-icons-4.cart-extended .side-nav {
-    width: 21.5em; } }
+    width: 24.5em; } }
 /*-------------------------------------------------------------------------------------------*/
 /* 4. WIDGETS */
 /*-------------------------------------------------------------------------------------------*/
