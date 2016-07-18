@@ -179,7 +179,12 @@ body.archive .widget.canvas-child-archive-description{
 }
 body.archive .woocommerce-result-count{
     width: 60%;
+    margin-top: 1.618em;
     text-align: right;
+}
+body.archive .woocommerce_ordering,
+body.archive .woocommerce-ordering{
+    margin-top: 1.618em;
 }
 body.archive .widget.woocommerce_products_of_the_day{
     float: right !important;
