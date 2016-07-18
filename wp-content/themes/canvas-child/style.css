@@ -171,16 +171,25 @@ Version:        0.1.0
     margin-left: -25px;
 }
 body.archive .widget.canvas-child-archive-description{
-    clear: both;
+    clear: both !important;
     text-align: center;
+    margin: auto !important;
+    float:none !important;
+    width: auto !important;
 }
 body.archive .woocommerce-result-count{
     width: 60%;
+    margin-top: 1.618em;
     text-align: right;
 }
+body.archive .woocommerce_ordering,
+body.archive .woocommerce-ordering{
+    margin-top: 1.618em;
+}
 body.archive .widget.woocommerce_products_of_the_day{
-    float: right;
+    float: right !important;
     margin: 0 0 5px 5px;
+    width: 40% !important;
     /*padding: 0 0 5px 5px;*/
     /*border: 3px solid #72afb8;*/
     /*height: 234px;*/
@@ -337,7 +346,14 @@ ul.products li.product:nth-child(2n) > a >img {
 }
 /* Minicart - end */
 
-
+@media (max-width: 768px){
+    body.archive .widget.woocommerce_products_of_the_day{
+        clear: both !important;
+        margin: auto !important;
+        float:none !important;
+        width: auto !important;
+    }
+}
 @media only screen and (min-width: 768px) {
     #header .widget_metaslider_widget > div {
         float: right;

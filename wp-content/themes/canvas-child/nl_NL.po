@@ -1,51 +1,445 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: canvas-child\n"
-"POT-Creation-Date: 2015-04-22 16:35+0300\n"
-"PO-Revision-Date: 2015-05-25 09:38+0200\n"
+"POT-Creation-Date: 2016-07-18 11:30+0300\n"
+"PO-Revision-Date: 2016-07-18 11:31+0300\n"
 "Last-Translator: Aleksandr Levashov <w3craftsman@gmail.com>\n"
 "Language-Team: w3craftsman.com <w3craftsman@gmail.com>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-KeywordsList: __;_e;_;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: /home/awoo/www/steigerhouttrend.nl/httpdocs/wp-"
-"content/themes/canvas-child\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ../canvas\n"
 
-msgid "New scaffold wood furniture"
-msgstr "Nieuwe steigerhouten meubelen"
+#: template-contact.php:30 ../canvas/template-contact.php:30
+msgid "You got the maths wrong."
+msgstr ""
 
+#: template-contact.php:38 ../canvas/template-contact.php:38
+msgid "You forgot to enter your name."
+msgstr ""
+
+#: template-contact.php:46 ../canvas/template-contact.php:46
+msgid "You forgot to enter your email address."
+msgstr ""
+
+#: template-contact.php:49 ../canvas/template-contact.php:49
+msgid "You entered an invalid email address."
+msgstr ""
+
+#: template-contact.php:57 ../canvas/template-contact.php:57
+msgid "You forgot to enter your comments."
+msgstr ""
+
+#: template-contact.php:67 ../canvas/template-contact.php:67
+msgid "Contact Form Submission from "
+msgstr ""
+
+#: template-contact.php:69 ../canvas/template-contact.php:74
+#, php-format
+msgid ""
+"Name: %s \n"
+"\n"
+"Email: %s \n"
+"\n"
+"Comments: %s"
+msgstr ""
+
+#: template-contact.php:70 template-contact.php:76
+#: ../canvas/template-contact.php:75 ../canvas/template-contact.php:86
+msgid "From: "
+msgstr ""
+
+#: template-contact.php:70 ../canvas/template-contact.php:75
+msgid "Reply-To: "
+msgstr ""
+
+#: template-contact.php:75 ../canvas/template-contact.php:85
+msgid "You emailed "
+msgstr ""
+
+#: template-contact.php:95 ../canvas/template-contact.php:105
+msgid "You got the maths wrong"
+msgstr ""
+
+#: template-contact.php:102 ../canvas/template-contact.php:112
+msgid "You forgot to enter your"
+msgstr ""
+
+#: template-contact.php:109 ../canvas/template-contact.php:119
+msgid "You entered an invalid"
+msgstr ""
+
+#: template-contact.php:120 ../canvas/template-contact.php:130
+msgid "<strong>Thanks!</strong> Your email was successfully sent."
+msgstr ""
+
+#: template-contact.php:162 ../canvas/template-contact.php:171
+#: ../canvas/functions/admin-shortcodes.php:1443
+msgid "Your email was successfully sent."
+msgstr ""
+
+#: template-contact.php:179
+#: woocommerce/woocommerce-pip-template/template.php:44
+#: modules/customer-offer/partials/customer-offer.php:32
+#: modules/customer-invoice/partials/customer-invoice.php:32
+#: ../canvas/template-contact.php:188
+msgid "Tel:"
+msgstr ""
+
+#: template-contact.php:180 ../canvas/template-contact.php:189
+msgid "Fax:"
+msgstr ""
+
+#: template-contact.php:197 ../canvas/template-contact.php:206
+msgid "There was an error submitting the form."
+msgstr ""
+
+#: template-contact.php:201 ../canvas/template-contact.php:210
+msgid ""
+"Please <strong>add your e-mail</strong> in <em>Contact Page > Contact Form E-"
+"mail</em>."
+msgstr ""
+
+#: template-contact.php:208
+msgid "Naam"
+msgstr ""
+
+#: template-contact.php:215 ../canvas/template-contact.php:224
+#: ../canvas/functions/admin-shortcodes.php:1375
+#: ../canvas/functions/admin-shortcodes.php:1482
+msgid "Email"
+msgstr ""
+
+#: template-contact.php:222
+msgid "Bericht"
+msgstr ""
+
+#: template-contact.php:229
+msgid "Hoeveel is:"
+msgstr ""
+
+#: template-contact.php:236
+msgid "Stuur een kopie van dit bericht naar je eigen emailadres"
+msgstr ""
+
+#: template-contact.php:237 ../canvas/template-contact.php:246
+#: ../canvas/functions/admin-shortcodes.php:1616
+msgid "If you want to submit this form, do not enter anything in this field"
+msgstr ""
+
+#: template-best_selling_products.php:16
 msgid "Best-selling scaffold wood furniture"
 msgstr "Best verkochte steigerhouten meubelen"
 
-msgid "Home"
-msgstr "Home"
+#: template-recent_products.php:16
+msgid "New scaffold wood furniture"
+msgstr "Nieuwe steigerhouten meubelen"
 
+#: functions.php:161
+msgid "Coupon code applied successfully."
+msgstr ""
+
+#: functions.php:214 functions.php:224
+#, php-format
+msgid "(Includes %s)"
+msgstr ""
+
+#: functions.php:214 functions.php:224
+msgid "VAT"
+msgstr ""
+
+#: functions.php:239 ../canvas/template-sitemap.php:68
+#: ../canvas/includes/theme-options.php:1280
+msgid "Products"
+msgstr ""
+
+#: functions.php:240
+msgid "All Products"
+msgstr ""
+
+#: functions.php:281 functions.php:660
+msgid "Product Image"
+msgstr ""
+
+#: functions.php:297
+msgid "Free"
+msgstr ""
+
+#: functions.php:637
+msgid "Update Cart"
+msgstr ""
+
+#: content-404.php:26 ../canvas/content-tumblog.php:25
+#: ../canvas/content.php:29 ../canvas/content-page.php:27
+#: ../canvas/content-page-template-business.php:24
+#: ../canvas/content-magazine-grid.php:27 ../canvas/content-post.php:41
+#: ../canvas/content-archive-portfolio.php:30 ../canvas/content-404.php:26
+#: ../canvas/content-search.php:41 ../canvas/content-magazine-featured.php:27
+msgid "Pages:"
+msgstr ""
+
+#: content-404.php:34 ../canvas/content-404.php:34
+msgid "Error 404 - Page not found!"
+msgstr ""
+
+#: content-404.php:39 ../canvas/content-404.php:39
+msgid ""
+"The page you are trying to reach does not exist, or has been moved. Please "
+"use the menus or the search box to find what you are looking for."
+msgstr ""
+
+#: classes/wc-pending-order-email.php:14
+msgid "Thank you for your order"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:15
+msgid "Your {site_title} order receipt from {order_date}"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:89
+msgid "Enable/Disable"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:91
+msgid "Enable this email notification"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:95
+msgid "Recipient(s)"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:97
+#, php-format
+msgid ""
+"Enter recipients (comma separated) for this email. Defaults to <code>%s</"
+"code>."
+msgstr ""
+
+#: classes/wc-pending-order-email.php:102
+msgid "Subject"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:104
+#, php-format
+msgid ""
+"This controls the email subject line. Leave blank to use the default "
+"subject: <code>%s</code>."
+msgstr ""
+
+#: classes/wc-pending-order-email.php:109
+#: modules/customer-offer/class-wc-email-customer-offer.php:164
+msgid "Email Heading"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:111
+#, php-format
+msgid ""
+"This controls the main heading contained within the email notification. "
+"Leave blank to use the default heading: <code>%s</code>."
+msgstr ""
+
+#: classes/wc-pending-order-email.php:116
+msgid "Email type"
+msgstr ""
+
+#: classes/wc-pending-order-email.php:118
+#: modules/customer-offer/class-wc-email-customer-offer.php:190
+msgid "Choose which format of email to send."
+msgstr ""
+
+#: woocommerce/single-product/product-image.php:47
+msgid "Placeholder"
+msgstr ""
+
+#: woocommerce/emails/ccpending-order.php:10
+msgid "The order is in the status of \"Pending Payment\""
+msgstr ""
+
+#: woocommerce/emails/ccpending-order.php:14
+#, fuzzy, php-format
+msgid "Order #%s"
+msgstr "Direct bestellen"
+
+#: woocommerce/emails/ccpending-order.php:19 woocommerce/cart/cart.php:35
+#: woocommerce/cart/cart.php:77
+#: woocommerce/woocommerce-pip-template/template.php:67
+#: woocommerce/woocommerce-pip-template/template.php:109
+#: modules/customer-offer/partials/customer-offer.php:46
+#: modules/customer-invoice/partials/customer-invoice.php:46
+#: modules/cart-checkout-popup/partials/email-cart-items.php:7
+msgid "Product"
+msgstr ""
+
+#: woocommerce/emails/ccpending-order.php:20 woocommerce/cart/cart.php:37
+#: woocommerce/cart/cart.php:101
+#: woocommerce/woocommerce-pip-template/template.php:68
+#: woocommerce/woocommerce-pip-template/template.php:110
+#: modules/customer-offer/partials/customer-offer.php:47
+#: modules/customer-invoice/partials/customer-invoice.php:47
+#: modules/cart-checkout-popup/partials/email-cart-items.php:9
+msgid "Quantity"
+msgstr ""
+
+#: woocommerce/emails/ccpending-order.php:21 woocommerce/cart/cart.php:36
+#: woocommerce/cart/cart.php:95
+#: woocommerce/woocommerce-pip-template/template.php:69
+#: modules/customer-offer/partials/customer-offer.php:48
+#: modules/customer-invoice/partials/customer-invoice.php:48
+#: modules/cart-checkout-popup/partials/email-cart-items.php:8
+msgid "Price"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:14
+msgid "Customer Details"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:19
+msgid "Note:"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:26
+#: woocommerce/woocommerce-pip-template/template.php:41
+#: modules/customer-offer/partials/customer-offer.php:29
+#: modules/customer-invoice/partials/customer-invoice.php:29
+msgid "Email:"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:33
+msgid "Telephone:"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:49
+msgid "Billing Address"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:52
+#: woocommerce/order/order-details-customer.php:63
+msgid "N/A"
+msgstr ""
+
+#: woocommerce/order/order-details-customer.php:60
+msgid "Shipping Address"
+msgstr ""
+
+#: woocommerce/cart/cart.php:38 woocommerce/cart/cart.php:118
+#: modules/cart-checkout-popup/partials/email-cart-items.php:10
+msgid "Total"
+msgstr ""
+
+#: woocommerce/cart/cart.php:58
+msgid "Remove this item"
+msgstr ""
+
+#: woocommerce/cart/cart.php:136
+#, fuzzy
+msgid "Coupon"
+msgstr "Kortingsbon invullen"
+
+#: woocommerce/woocommerce-pip-template/template.php:5
+msgid "Print order details"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:12
+msgid "Print"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:16
+#: modules/customer-invoice/partials/customer-invoice.php:13
+msgid "Invoice"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:18
+msgid "Packing list"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:20
+#: modules/customer-offer/partials/customer-offer.php:14
+#: modules/customer-invoice/partials/customer-invoice.php:14
+#, fuzzy
+msgid "Order"
+msgstr "Direct bestellen"
+
+#: woocommerce/woocommerce-pip-template/template.php:35
+#: modules/customer-offer/partials/customer-offer.php:26
+#: modules/customer-invoice/partials/customer-invoice.php:26
+msgid "Billing address"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:51
+#: modules/customer-offer/partials/customer-offer.php:36
+#: modules/customer-invoice/partials/customer-invoice.php:36
+msgid "Shipping address"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:66
+#: woocommerce/woocommerce-pip-template/template.php:108
+#: modules/customer-offer/partials/customer-offer.php:45
+#: modules/customer-invoice/partials/customer-invoice.php:45
+msgid "SKU"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:75
+#: modules/customer-offer/partials/customer-offer.php:57
+#: modules/customer-invoice/partials/customer-invoice.php:57
+msgid "Subtotal:"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:80
+#: modules/customer-offer/partials/customer-offer.php:62
+#: modules/customer-invoice/partials/customer-invoice.php:62
+msgid "Shipping:"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:85
+#: modules/customer-offer/partials/customer-offer.php:68
+#: modules/customer-invoice/partials/customer-invoice.php:68
+msgid "Discount:"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:90
+#: modules/customer-offer/partials/customer-offer.php:74
+#: modules/customer-invoice/partials/customer-invoice.php:74
+msgid "Tax:"
+msgstr ""
+
+#: woocommerce/woocommerce-pip-template/template.php:95
+#: modules/customer-offer/partials/customer-offer.php:79
+#: modules/customer-invoice/partials/customer-invoice.php:79
+msgid "Total:"
+msgstr ""
+
+#: templates/module-quick-order.php:12
+msgid "Quick order"
+msgstr "Interne bestelling"
+
+#: templates/home.php:18
 msgid "Scaffold wood furniture"
 msgstr "Steigerhouten meubelen"
 
+#: templates/home.php:19
 msgid "All scaffold wood articles"
 msgstr "Alle steigerhouten produkten"
 
-msgid "Order now"
-msgstr "Direct bestellen"
+#: templates/single-product/product-description.php:20
+#: templates/single-product/product-description.php:22
+msgid "Read more"
+msgstr ""
 
-msgid "Quotation for a customised article"
-msgstr "Offerte voor maatwerk"
+#: templates/single-product/product-description.php:21
+msgid "Verbergen"
+msgstr ""
 
-msgid "You are here:"
-msgstr "U bent hier:"
-
-msgid "All Rights Reserved."
-msgstr "Alle rechten voorbehouden."
-
+#: templates/single-product/product-summary-after.php:19
 msgid "Can't find the size what you need?"
 msgstr "Staat jouw gewenste maat er niet bij?"
 
+#: templates/single-product/product-summary-after.php:20
 msgid ""
 "This is not a problem. At Steigerhouttrend we can produse any furnuture "
 "according your request. We can easily adjust any model or size."
@@ -53,6 +447,7 @@ msgstr ""
 "Geen probleem! Bij Steigerhouttrend maken we alle meubels op bestelling. We "
 "kunnen dus makkelijk een aanpassing in het model of de maten uitvoeren."
 
+#: templates/single-product/product-summary-after.php:21
 msgid ""
 "Describe in the form below how the furniture should look like, within one "
 "day we will send a no-obligation quote."
@@ -60,20 +455,4651 @@ msgstr ""
 "Omschrijf in onderstaand formulier hoe het meubel eruit moet zien, dan "
 "sturen we binnen een dag een geheel vrijblijvende offerte op maat."
 
+#: templates/single-product/product-summary-before.php:17
+msgid "Order now"
+msgstr "Direct bestellen"
+
+#: templates/single-product/product-summary-before.php:20
+msgid "Quotation for a customised article"
+msgstr "Offerte voor maatwerk"
+
+#: modules/yith-wishlist/public-hooks.php:53
+msgid "Wishlist"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:42
+msgid "Customer offer"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:43
+msgid ""
+"Customer offer emails can be sent to customers containing their order "
+"information and payment links."
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:47
+msgid "Offer for order {order_number} from {order_date}"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:48
+msgid "Offer for order {order_number}"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:50
+msgid "Your {site_title} offer from {order_date}"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:51
+msgid "Offer {order_number} details"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:156
+msgid "Email Subject"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:158
+#: modules/customer-offer/class-wc-email-customer-offer.php:166
+#: modules/customer-offer/class-wc-email-customer-offer.php:174
+#: modules/customer-offer/class-wc-email-customer-offer.php:182
+#, php-format
+msgid "Defaults to <code>%s</code>"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:172
+msgid "Email Subject (paid)"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:180
+msgid "Email Heading (paid)"
+msgstr ""
+
+#: modules/customer-offer/class-wc-email-customer-offer.php:188
+msgid "Email Type"
+msgstr ""
+
+#: modules/customer-offer/partials/customer-offer.php:7
+#: modules/customer-invoice/partials/customer-invoice.php:7
+msgid "Customer invoice"
+msgstr ""
+
+#: modules/customer-offer/partials/customer-offer.php:13
+msgid "Offerte"
+msgstr ""
+
+#: modules/wood-treatments/partials/wood-treatments.php:9
+msgid "Behandeling van steigerhout"
+msgstr ""
+
+#: ../canvas/template-contact.php:217
+#: ../canvas/functions/admin-shortcodes.php:1375
+#: ../canvas/functions/admin-shortcodes.php:1473
+#: ../canvas/includes/theme-actions.php:2109
+msgid "Name"
+msgstr ""
+
+#: ../canvas/template-contact.php:231
+#: ../canvas/functions/admin-shortcodes.php:1375
+#: ../canvas/functions/admin-shortcodes.php:1491
+msgid "Message"
+msgstr ""
+
+#: ../canvas/template-contact.php:238
+msgid "Solve:"
+msgstr ""
+
+#: ../canvas/template-contact.php:245
+#: ../canvas/functions/admin-shortcodes.php:1609
+msgid "Send a copy of this email to yourself"
+msgstr ""
+
+#: ../canvas/template-archives.php:35
+msgid "The Last 30 Posts"
+msgstr ""
+
+#: ../canvas/template-archives.php:40
+msgid "comments"
+msgstr ""
+
+#: ../canvas/template-archives.php:44 ../canvas/template-sitemap.php:41
+msgid "Categories"
+msgstr ""
+
+#: ../canvas/template-archives.php:50
+msgid "Monthly Archives"
+msgstr ""
+
+#: ../canvas/content-tumblog.php:38 ../canvas/content-page.php:44
+#: ../canvas/content-magazine-grid.php:51 ../canvas/content-post.php:59
+#: ../canvas/content-magazine-featured.php:56
+msgid "Continue Reading &rarr;"
+msgstr ""
+
+#: ../canvas/template-sitemap.php:36
+msgid "Pages"
+msgstr ""
+
+#: ../canvas/template-sitemap.php:46
+msgid "Posts per category"
+msgstr ""
+
+#: ../canvas/template-sitemap.php:55
+#: ../canvas/includes/widgets/widget-woo-tabs.php:65
+#: ../canvas/includes/widgets/widget-woo-tabs.php:70
+#: ../canvas/includes/widgets/widget-woo-tabs.php:202
+#: ../canvas/includes/widgets/widget-woo-tabs.php:214
+msgid "Comments"
+msgstr ""
+
+#: ../canvas/template-sitemap.php:63
+msgid "Product Categories"
+msgstr ""
+
+#: ../canvas/content-noposts.php:2
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#: ../canvas/comments.php:14
+msgid "Please do not load this page directly. Thanks!"
+msgstr ""
+
+#: ../canvas/comments.php:17
+msgid "This post is password protected. Enter the password to view comments."
+msgstr ""
+
+#: ../canvas/comments.php:50
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr ""
+
+#: ../canvas/comments.php:51
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: ../canvas/comments.php:59
+msgid "Trackbacks/Pingbacks"
+msgstr ""
+
+#: ../canvas/comments.php:80
+msgid "Comments are closed."
+msgstr ""
+
+#: ../canvas/comments.php:81
+msgid "No comments yet."
+msgstr ""
+
+#: ../canvas/loop-search.php:18
+#, php-format
+msgid "Search results for &quot;%s&quot;"
+msgstr ""
+
+#: ../canvas/searchform.php:4
+msgid "Search..."
+msgstr " Zoeken..."
+
+#: ../canvas/searchform.php:5
+#: ../canvas/includes/integrations/woocommerce/template.php:132
+#: ../canvas/includes/integrations/woocommerce/template.php:133
+msgid "Search"
+msgstr " Zoeken"
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:51
+msgid "WooFramework Internal Container"
+msgstr ""
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:155
+#: ../canvas/functions/classes/class-wf-fields.php:1285
+#: ../canvas/functions/classes/class-wf-fields.php:1315
+msgid "Upload"
+msgstr ""
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:181
+msgid "View File"
+msgstr ""
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:316
+msgid "Gallery"
+msgstr ""
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:316
+msgid "Previously Uploaded"
+msgstr ""
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:333
+msgid "Use this Image"
+msgstr ""
+
+#: ../canvas/functions/admin-medialibrary-uploader.php:334
+#, php-format
+msgid "Use as %s"
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:83
+msgid "Documentation"
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:84
+msgid "Changelog"
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:85
+msgid "Help"
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:228
+msgid ""
+"ATTENTION: A possible old version of the TimThumb script was detected in "
+"your theme folder. Please remove the following files from your theme as a "
+"security precaution."
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:231
+msgid ""
+"If you've added \"thumb.php\" to your child theme manually please ensure the "
+"file is kept up to date. You can then safely hide this notice."
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:264
+#, php-format
+msgid ""
+"WooFramework update is available (v%s). %sDownload new version%s (%sSee "
+"Changelog%s)"
+msgstr ""
+
+#: ../canvas/functions/admin-interface.php:309
+#, php-format
+msgid ""
+"An important WooFramework update is available (v%s). %sDownload new version"
+"%s (%sSee Changelog%s)"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:170
+#: ../canvas/functions/js/shortcode-generator/dialog.php:52
+msgid "Customize the Shortcode"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:185
+#: ../canvas/functions/js/shortcode-generator/dialog.php:67
+msgid "Ninja Trouble"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:188
+#: ../canvas/functions/js/shortcode-generator/dialog.php:70
+#, php-format
+msgid ""
+"Your version of the WooFramework (%s) does not yet support shortcodes. "
+"Shortcodes were introduced with version %s of the framework."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:190
+#: ../canvas/functions/admin-shortcode-generator.php:204
+#: ../canvas/functions/js/shortcode-generator/dialog.php:72
+#: ../canvas/functions/js/shortcode-generator/dialog.php:86
+msgid "What to do now?"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:192
+#: ../canvas/functions/js/shortcode-generator/dialog.php:74
+msgid ""
+"Upgrading your theme, or rather the WooFramework portion of it, will do the "
+"trick."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:194
+#: ../canvas/functions/js/shortcode-generator/dialog.php:76
+#, php-format
+msgid ""
+"The framework is a collection of functionality that all WooThemes have in "
+"common. In most cases you can update the framework even if you have modified "
+"your theme, because the framework resides in a separate location (under %s)."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:196
+#: ../canvas/functions/js/shortcode-generator/dialog.php:78
+#, php-format
+msgid ""
+"There's a tutorial on how to do this on WooThemes.com: %sHow to upgradeyour "
+"theme%s."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:198
+#: ../canvas/functions/js/shortcode-generator/dialog.php:80
+msgid ""
+"<strong>Remember:</strong> Every Ninja has a backup plan. Safe or not, "
+"always backup your theme before you update it or make changes to it."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:202
+#: ../canvas/functions/js/shortcode-generator/dialog.php:84
+msgid ""
+"Looks like your active theme is not from WooThemes. The shortcode generator "
+"only works with themes from WooThemes."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcode-generator.php:206
+#: ../canvas/functions/js/shortcode-generator/dialog.php:88
+msgid ""
+"Pick a fight: (1) If you already have a theme from WooThemes, install and "
+"activate it or (2) if you don't yet have one of the awesome WooThemes head "
+"over to the <a href=\"http://www.woothemes.com/themes/\" target=\"_blank\" "
+"title=\"WooThemes Gallery\">WooThemes Gallery</a> and get one."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:991
+msgid "WooDojo Twitter widgets."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1063
+msgid "Framework Updates"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1069
+msgid "A new version of WooFramework is available."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1070
+msgid ""
+"This updater will download and extract the latest WooFramework files to your "
+"current theme's functions folder."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1071
+#: ../canvas/functions/admin-functions.php:3604
+msgid ""
+"We recommend backing up your theme files and updating WordPress to latest "
+"version before proceeding."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1080
+#: ../canvas/functions/admin-functions.php:3612
+msgid "Read the Release Notes"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1343
+#, php-format
+msgid "Page %s"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1406
+msgid "Arial"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1407
+msgid "Verdana"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1408
+msgid "Trebuchet"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1409
+msgid "Georgia"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1410
+msgid "Times New Roman"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1411
+msgid "Tahoma"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1412
+msgid "Palatino"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1413
+msgid "Helvetica *"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1414
+msgid "Calibri *"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1415
+msgid "Myriad Pro *"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1416
+msgid "Lucida"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1417
+msgid "Arial Black"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1418
+msgid "Gill Sans *"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1419
+msgid "Geneva *"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1420
+msgid "Impact"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1421
+msgid "Courier"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:1422
+msgid "Century Gothic"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2342
 msgid "&larr; Previous"
 msgstr "&larr; Vorige"
 
+#: ../canvas/functions/admin-functions.php:2343
 msgid "Next &rarr;"
 msgstr "Volgende &rarr;"
 
-msgid "%s removed. %sUndo?%s"
-msgstr "%s verwijderd. %sOngedaan maken?%s"
+#: ../canvas/functions/admin-functions.php:2466
+msgid "You are here:"
+msgstr "U bent hier:"
 
-msgid "Apply Coupon"
-msgstr "Kortingsbon invullen"
+#: ../canvas/functions/admin-functions.php:2469
+#: ../canvas/includes/theme-actions.php:1636
+#: ../canvas/includes/theme-actions.php:1651
+msgid "Home"
+msgstr "Home"
 
+#: ../canvas/functions/admin-functions.php:2685
+msgid "g:i a"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2688
+#, php-format
+msgid "Minute %1$s"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2688
+msgid "i"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2691
+msgid "g a"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2701
+#: ../canvas/functions/admin-functions.php:2707
+#: ../canvas/functions/admin-functions.php:2712
+#: ../canvas/functions/admin-functions.php:2717
+msgid "Y"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2702
+#: ../canvas/functions/admin-functions.php:2713
+msgid "F"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2703
+msgid "j"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2708
+#, php-format
+msgid "Week %1$s"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2724
+#, php-format
+msgid "Search results for &quot;%1$s&quot;"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:2728
+msgid "404 Not Found"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3016
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3300
+msgid "Enhance your theme with WooDojo."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3301
+msgid ""
+"WooDojo is a powerful WooThemes features suite for enhancing your website. "
+"Learn more."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3302
+msgid "Get WooDojo"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3303
+#: ../canvas/functions/admin-functions.php:3363
+#: ../canvas/functions/admin-functions.php:3393
+msgid "Close"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3316
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3318
+msgid "You have taken too long. Please go back and retry."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3359
+msgid "ATTENTION: Insecure Version of Timthumb Image Resize Script Detected"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3360
+msgid ""
+"A possible old version of the TimThumb script was detected in your theme "
+"folder. Please remove the following files from your theme as a security "
+"precaution"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3392
+#, php-format
+msgid ""
+"You have setup a static front page in %1$sSettings > Reading%2$s.  Please "
+"set it to show \"Your latest posts\" if you want to display the default "
+"homepage in %3$s."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3462
+#, php-format
+msgid "Framework %s"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3568
+msgid "Remove Timthumb"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3574
+msgid "Processing Updates......"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3580
+msgid ""
+"If your browser doesn&#8217;t start loading the next page automatically, "
+"click this link:"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3580
+msgid "Next"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3593
+msgid "Update completed successfully!"
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3602
+msgid "Timthumb has officially been discontinued."
+msgstr ""
+
+#: ../canvas/functions/admin-functions.php:3603
+msgid ""
+"This updater will convert any existing custom fields that TimThumb used for "
+"Posts into Featured Images, and will remove the Theme Options settings for "
+"Timthumb that could be found under the Dynamic Images tab."
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:13 ../canvas/functions/deprecated.php:77
+#: ../canvas/functions/deprecated.php:427
+#: ../canvas/functions/deprecated.php:551
+#: ../canvas/functions/deprecated.php:592
+#: ../canvas/functions/deprecated.php:609
+#: ../canvas/functions/deprecated.php:635
+#: ../canvas/functions/deprecated.php:660
+msgid "an instance of the WF_Fields_Meta class"
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:43
+#: ../canvas/includes/theme-options.php:89
+msgid "General Settings"
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:366
+#: ../canvas/functions/deprecated.php:1223
+#: ../canvas/functions/classes/class-wf-fields.php:1344
+msgid "@"
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:563
+#: ../canvas/functions/deprecated.php:576
+#: ../canvas/functions/deprecated.php:577
+#, php-format
+msgid "%s Custom Settings"
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:690
+#: ../canvas/functions/deprecated.php:697
+msgid "an instance of the WF_Fields class"
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:1327
+msgid ""
+"You are not able to update this option because you lack the "
+"<code>unfiltered_html</code> capability."
+msgstr ""
+
+#: ../canvas/functions/deprecated.php:1493
+#: ../canvas/functions/deprecated.php:1528
+#: ../canvas/functions/deprecated.php:1536
+msgid "Shortlinks feature in WooDojo."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:394
+#, php-format
+msgid ""
+"%1$s is <strong>deprecated</strong> since version %2$s of the WooFramework! "
+"Please upgrade your WordPress to the latest version to use the latest "
+"functionality."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:503
+msgid "Tweet"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:919
+msgid "Hide the Content"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:920
+msgid "Show the Content"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:927
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:178
+msgid "Read More"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:928
+msgid "Read Less"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1048
+msgid "Message via the contact form"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1049
+#: ../canvas/includes/theme-functions.php:343
+#: ../canvas/includes/theme-functions.php:352
+msgid "Submit"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1347
+msgid "Please enter your name"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1348
+msgid "Please enter your email address (and please make sure it's valid)"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1349
+msgid "Please enter your message"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1449
+msgid "There were one or more errors while submitting the form."
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1454
+msgid "E-mail has not been setup properly. Please add your contact e-mail!"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1901
+#: ../canvas/functions/admin-shortcodes.php:1936
+#: ../canvas/functions/admin-shortcodes.php:1946
+#, php-format
+msgid "My %s Profile"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:1915
+msgid "Subscribe to our RSS feed"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:2223
+msgid "Follow"
+msgstr ""
+
+#: ../canvas/functions/admin-shortcodes.php:2340
+msgid "Pin It"
+msgstr ""
+
+#: ../canvas/functions/admin-custom-nav.php:29
+#, php-format
+msgid ""
+"%1$s is <strong>deprecated</strong> since version %2$s of the WooFramework! "
+"Use %3$s instead."
+msgstr ""
+
+#: ../canvas/functions/admin-custom-nav.php:29
+msgid "WordPress Menu Management"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:75
+#: ../canvas/functions/classes/class-wf-fields.php:1544
+#: ../canvas/functions/classes/class-wf-fields.php:1586
+msgid "The settings data provided is malformed. Please try again."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:243
+msgid "The provided field data is invalid and cannot be validated."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:792
+msgid "Thin"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:792
+msgid "Thin Italic"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:792
+#: ../canvas/includes/theme-options.php:1826
+msgid "Normal"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:792
+msgid "Italic"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:792
+msgid "Bold"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:792
+msgid "Bold/Italic"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:806
+msgid "-- Google WebFonts --"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:909
+msgid "Solid"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:909
+msgid "Dashed"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:909
+msgid "Dotted"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:1285
+#: ../canvas/functions/classes/class-wf-fields.php:1315
+#, php-format
+msgid "Select %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:1285
+#: ../canvas/functions/classes/class-wf-fields.php:1315
+#, php-format
+msgid "Use image as %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-fields.php:1291
+#: ../canvas/functions/classes/class-wf-fields.php:1321
+#, php-format
+msgid "Remove %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf.php:174
+#: ../canvas/functions/classes/class-wf.php:183
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-meta.php:76
+#: ../canvas/functions/classes/class-wf-meta.php:86
+#, php-format
+msgid "%s Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen.php:49
+msgid "No menu found for the specified menu key."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:53
+msgid "WooThemes Settings Backup"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:53
+#: ../canvas/functions/classes/class-wf-backup.php:76
+msgid "Backup Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:77
+msgid "Import Theme Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:79
+msgid "Import your theme settings from a previously exported backup."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:87
+msgid "Choose a file"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:91
+#, php-format
+msgid "Maximum Size: %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:98
+msgid "Upload and Import"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:103
+msgid "Export Theme Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:105
+msgid ""
+"Export your settings and download them to your computer as an importable "
+"text file."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:112
+msgid "Export"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:116
+msgid "All Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:117
+msgid "This will contain all of the options listed below."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:119
+msgid "Theme Options"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:120
+msgid "Framework Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:129
+msgid "Download Export File"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:148
+#, php-format
+msgid ""
+"Please note that this backup manager backs up only your settings and not "
+"your content. To backup your content, please use the %sWordPress Export Tool"
+"%s."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:151
+msgid "There was a problem importing your settings. Please try again."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:153
+msgid "There was a problem exporting your settings. Please try again."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:155
+msgid "The import file you've provided is invalid. Please try again."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-backup.php:157
+#, php-format
+msgid "Settings successfully imported. | Return to %sTheme Options%s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:43
+msgid "Framework"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:79
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:95
+msgid "Update WooFramework"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:97
+msgid "Backup/Import Your Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:98
+msgid "Read the Documentation"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:114
+msgid "Theme"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:115
+msgid "Version"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-framework.php:141
+msgid "WooFramework"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:92
+#, php-format
+msgid "Welcome to %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:99
+#, php-format
+msgid "This <a href=\"%1$s\">child theme</a> loads its parent theme, %2$s."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:100
+msgid "http://codex.wordpress.org/Child_Themes"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:105
+#, php-format
+msgid "Configure %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:106
+msgid "View Documentation &rarr;"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:136
+#, php-format
+msgid "Version %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:140
+#, php-format
+msgid "%s Version %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:145
+#, php-format
+msgid "WooFramework %s - %s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-welcome.php:145
+#, php-format
+msgid "%sUpdate%s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-settings.php:91
+#: ../canvas/functions/classes/class-wf-settings.php:92
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:176
+msgid "Settings"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-settings.php:110
+msgid "Settings saved."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:80
+msgid "Activate the WooThemes Helper"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:82
+msgid "Install the WooThemes Helper"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:84
+#, php-format
+msgid "%s to receive updates for your purchased WooThemes products."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:192
+msgid "Download"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:196
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:253
+msgid "Activate"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:199
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:256
+msgid "Activated"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:215
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:272
+#, php-format
+msgid "Extend %1$s %2$s"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:215
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:272
+#, php-format
+msgid ""
+"%1$s offers support for several plugins allowing you add advanced "
+"functionality at the click of a button."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:215
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:272
+msgid "To install or activate them, use the actions below."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:216
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:273
+msgid "Plugin"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:249
+msgid "Not Active"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:289
+#: ../canvas/includes/theme-options.php:1259
+msgid "WooCommerce"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:289
+msgid "An ecommerce toolkit to help you sell anything. Beautifully."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:290
+msgid "Testimonials"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:290
+msgid "Share customer testimonials with your visitors."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:291
+msgid "Features"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:291
+msgid "Display the features or services you offer."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:292
+#: ../canvas/includes/integrations/our-team/template-our-team.php:16
+msgid "Our Team"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:292
+msgid "Showcase your team members and the roles they play."
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:293
+#: ../canvas/includes/theme-options.php:1837
+msgid "Projects"
+msgstr ""
+
+#: ../canvas/functions/classes/class-wf-screen-admin-base.php:293
+msgid "Showcase your recent projects."
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:42
+msgid "Continue Reading"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:198
+#, php-format
+msgid "Visit %s&#8217;s website"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:256
+msgid "Comments are closed"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:297
+msgid "Tags: "
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:342
+#, php-format
+msgid "View all items in %s"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:397
+msgid "Back to top"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:522
+msgid "Log in"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:524
+msgid "Log out"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:551
+msgid "All Rights Reserved."
+msgstr "Alle rechten voorbehouden."
+
+#: ../canvas/includes/theme-shortcodes.php:575
+msgid "Powered by"
+msgstr ""
+
+#: ../canvas/includes/theme-shortcodes.php:575
+msgid "Designed by"
+msgstr ""
+
+#: ../canvas/includes/theme-comments.php:18
+msgid "at"
+msgstr ""
+
+#: ../canvas/includes/theme-comments.php:20
+msgid "Edit"
+msgstr ""
+
+#: ../canvas/includes/theme-comments.php:29
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:9
+msgid "Primary"
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:9
+msgid ""
+"The default primary sidebar for your website, used in two or three-column "
+"layouts."
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:10
+msgid "Secondary"
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:10
+msgid "A secondary sidebar for your website, used in three-column layouts."
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:16
+#, php-format
+msgid "Footer %d"
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:16
+#, php-format
+msgid "Widgetized Footer Region %d."
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:19
+#, fuzzy
+msgid "Homepage"
+msgstr "Home"
+
+#: ../canvas/includes/sidebar-init.php:19
+msgid "Optional widgetized homepage (displays only if widgets are added here)."
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:20
+msgid "\"Widgets\" Page Template"
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:20
+msgid ""
+"The widgetized area used on the \"Widgets\" page template (displays only if "
+"widgets are added here). Defaults to page content if no widgets are added."
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:22
+#: ../canvas/includes/theme-options.php:472
+msgid "Header"
+msgstr ""
+
+#: ../canvas/includes/sidebar-init.php:22
+msgid "Optional widgetized area in your right header"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:188
+msgid "Primary Menu"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:193
+msgid "Top Menu"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:1172
+msgid ""
+"Setup slider by adding <strong>Post Tags</strong> in <em>Magazine Template > "
+"Posts Slider</em>."
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:1424
+msgid "Please add some slider posts via Slides > Add New"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:1429
+msgid ""
+"Please note that this slider requires 2 or more slides in order to function. "
+"Please add another slide."
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:1621
+msgid "Return to Content"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:1824
+#, php-format
+msgid "View all posts by %s %s"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2001
+#: ../canvas/includes/theme-functions.php:886
+#: ../canvas/includes/theme-functions.php:938
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:104
+msgid "By"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2001
+#: ../canvas/includes/theme-functions.php:888
+#: ../canvas/includes/theme-functions.php:938
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:104
+msgid "in"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2109
+#: ../canvas/includes/theme-actions.php:2111
+msgid "required"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2111
+msgid "Email (will not be published)"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2113
+msgid "Website"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2141
+msgid "Submit Comment"
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2144
+msgid "Click here to cancel reply."
+msgstr ""
+
+#: ../canvas/includes/theme-actions.php:2647
+#: ../canvas/includes/theme-options.php:623
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:635
 msgid "Navigation"
 msgstr "Navigatie"
 
-msgid "Quick order"
+#: ../canvas/includes/theme-functions.php:69
+#, fuzzy
+msgid "Older posts"
+msgstr "Direct bestellen"
+
+#: ../canvas/includes/theme-functions.php:70
+msgid "Newer posts"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:128
+msgid "Add New Slide"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:129
+msgid "Edit Slide"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:130
+msgid "New Slide"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:131
+msgid "View Slide"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:132
+msgid "Search Slides"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:133
+msgid "No slides found"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:134
+msgid "No slides found in Trash"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:159
+msgid "Search Slide Groups"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:160
+msgid "All Slide Groups"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:161
+msgid "Parent Slide Group"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:162
+msgid "Parent Slide Group:"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:163
+msgid "Edit Slide Group"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:164
+msgid "Update Slide Group"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:165
+msgid "Add New Slide Group"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:166
+msgid "New Slide Group Name"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:167
+msgid "Slide Groups"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:217
+msgid "Add New Portfolio Item"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:218
+msgid "Edit Portfolio Item"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:219
+msgid "New Portfolio Item"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:220
+msgid "View Portfolio Item"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:221
+msgid "Search Portfolio Items"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:222
+msgid "No portfolio items found"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:223
+msgid "No portfolio items found in Trash"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:256
+msgid "Search Portfolio Galleries"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:257
+msgid "All Portfolio Galleries"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:258
+msgid "Parent Portfolio Gallery"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:259
+msgid "Parent Portfolio Gallery:"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:260
+msgid "Edit Portfolio Gallery"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:261
+msgid "Update Portfolio Gallery"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:262
+msgid "Add New Portfolio Gallery"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:263
+msgid "New Portfolio Gallery Name"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:264
+msgid "Portfolio Galleries"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:293
+#: ../canvas/includes/theme-functions.php:332
+#: ../canvas/includes/theme-options.php:1646
+msgid "Subscribe"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:295
+#: ../canvas/includes/theme-functions.php:335
+msgid "Subscribe to our e-mail newsletter to receive updates."
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:339
+#: ../canvas/includes/theme-functions.php:351
+msgid "E-mail"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:404
+msgid "Related Posts:"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:457
+#: ../canvas/includes/theme-functions.php:468
+#: ../canvas/includes/theme-functions.php:475
+#: ../canvas/includes/theme-functions.php:482
+#: ../canvas/includes/theme-functions.php:503
+msgid "Archive"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:488
+msgid "Author Archive"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:494
+msgid "Tag Archives"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:511
+msgid " Archives"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:517
+#, php-format
+msgid "%1$s Archives: %2$s"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:594
+#: ../canvas/includes/integrations/projects/template.php:215
+msgid "Select a category:"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:615
+#: ../canvas/includes/theme-options.php:2049
+#: ../canvas/includes/integrations/projects/template.php:218
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:227
+msgid "All"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:652
+msgid "Visit Website"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:854
+msgid "Posted In "
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:937
+msgid "Above portfolio item content"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:938
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:104
+msgid "on"
+msgstr ""
+
+#: ../canvas/includes/theme-functions.php:940
+msgid "Data above the content of your portfolio items."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:44
+#: ../canvas/includes/theme-options.php:45
+msgid "Select a number:"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:53
+msgid "Disabled"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:53
+msgid "Before"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:53
+msgid "After"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:54
+msgid "The Image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:54
+msgid "The Post"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:69
+msgid "Select a Slide Group:"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:93
+#, fuzzy
+msgid "Quick Start"
 msgstr "Interne bestelling"
+
+#: ../canvas/includes/theme-options.php:96
+msgid "Custom Logo"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:97
+msgid "Upload a logo for your theme, or specify an image URL directly."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:102
+msgid "Custom Favicon"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:103
+msgid ""
+"Upload a 16px x 16px Png/Gif image that will represent your website's "
+"favicon."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:108
+msgid "Tracking Code"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:109
+msgid ""
+"Paste your Google Analytics (or other) tracking code here. This will be "
+"added into the footer template of your theme."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:114
+msgid "Subscription Settings"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:117
+msgid "RSS URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:118
+msgid "Enter your preferred RSS URL. (Feedburner or other)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:123
+msgid "Display Options"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:126
+msgid "Custom CSS"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:127
+msgid "Quickly add some CSS to your theme by adding it to this block."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:132
+msgid "Post/Page Comments"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:133
+msgid "Select if you want to comments on posts and/or pages."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:136
+msgid "Posts Only"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:136
+msgid "Pages Only"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:136
+msgid "Pages / Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:136
+#: ../canvas/includes/theme-options.php:1205
+#: ../canvas/includes/integrations/wooslider/wooslider.php:35
+msgid "None"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:138
+msgid "Post Content"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:139
+msgid "Select if you want to show the full content or the excerpt on posts."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:142
+#: ../canvas/includes/theme-options.php:1053
+#: ../canvas/includes/theme-options.php:1085
+msgid "The Excerpt"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:142
+#: ../canvas/includes/theme-options.php:1053
+#: ../canvas/includes/theme-options.php:1085
+msgid "Full Content"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:144
+msgid "Display Breadcrumbs"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:145
+msgid "Display dynamic breadcrumbs on each page of your website."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:150
+msgid "Pagination Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:151
+msgid "Select the style of pagination you would like to use on the blog."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:154
+msgid "Numbers"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:154
+msgid "Next/Previous"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:157
+msgid "General Styling"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:161
+msgid "Base Styling"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:164
+msgid "Disable ALL Custom Styling"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:165
+msgid ""
+"Disable output of all custom styling (CSS) from the theme options and use "
+"default styles from the stylesheet."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:170
+msgid "Background Options"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:173
+#, php-format
+msgid ""
+"Background options can also be set in <a href=\"%s\">Appearance > Customize</"
+"a>. The options on that page <strong>override</strong> the background "
+"options below."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:176
+#: ../canvas/includes/theme-options.php:659
+msgid "Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:177
+msgid ""
+"Pick a custom color for site background or add a hex color code e.g. #e6e6e6"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:182
+msgid "Background Image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:183
+msgid ""
+"Upload a background image, or specify the image address of your image. "
+"(http://yoursite.com/image.png)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:188
+msgid "Background Image Repeat"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:189
+#: ../canvas/includes/theme-options.php:444
+#: ../canvas/includes/theme-options.php:488
+msgid "Select how you want your background image to display."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:194
+msgid "Background image position"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:195
+msgid "Select how you would like to position the background"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:201
+msgid "Background Attachment"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:202
+msgid ""
+"Select whether the background should be fixed or move when the user scrolls"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:208
+msgid "Top Border"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:209
+msgid "Specify border properties for the top border."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:217
+msgid "Link Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:218
+msgid "Pick a custom color for links or add a hex color code e.g. #697e09"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:223
+msgid "Link Hover Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:224
+msgid ""
+"Pick a custom color for links hover or add a hex color code e.g. #697e09"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:229
+msgid "Button Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:230
+msgid "Pick a custom color for buttons or add a hex color code e.g. #697e09"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:235
+msgid "Button Hover Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:236
+msgid ""
+"Pick a custom hover color for buttons or add a hex color code e.g. #697e09"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:241
+msgid "General Border Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:242
+msgid ""
+"Pick a custom color for general border colors or add a hex color code e.g. "
+"#e6e6e6"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:248
+#: ../canvas/includes/theme-options.php:251
+msgid "Misc Typography"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:254
+msgid ""
+"The misc typography options below only control typography not covered by "
+"other typography options. You can control specific typography on post title, "
+"post content, widget titles etc. in the other sections in the options panel."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:257
+msgid "General Text Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:258
+msgid "Select typography for general text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:263
+msgid "H1 Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:264
+msgid "Select the typography you want for header H1."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:269
+msgid "H2 Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:270
+msgid "Select the typography you want for header H2."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:275
+msgid "H3 Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:276
+msgid "Select the typography you want for header H3."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:281
+msgid "H4 Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:282
+msgid "Select the typography you want for header H4."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:287
+msgid "H5 Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:288
+msgid "Select the typography you want for header H5."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:293
+msgid "H6 Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:294
+msgid "Select the typography you want for header H6."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:299
+#: ../canvas/includes/theme-options.php:1912
+#: ../canvas/includes/theme-options.php:2074
+msgid "Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:303
+msgid "General Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:306
+msgid "Layout Manager"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:309
+#, php-format
+msgid ""
+"Below you can set the general site width and layout. To control the width of "
+"the columns in your themes layout, please visit the <a href=\"%s\">Layout "
+"Manager</a>."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:312
+msgid "Site Width"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:323
+msgid "Main Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:324
+#: ../canvas/includes/theme-options.php:1264
+#: ../canvas/includes/theme-options.php:1355
+#: ../canvas/includes/theme-options.php:1369
+#: ../canvas/includes/theme-options.php:1847
+#: ../canvas/includes/theme-options.php:1861
+msgid ""
+"Select main content and sidebar alignment. Choose between 1, 2 or 3 column "
+"layout."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:339
+msgid "Footer Widget Areas"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:340
+msgid "Select how many footer widget areas you want to display."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:352
+msgid "Enable Fixed Mobile Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:353
+msgid ""
+"Canvas is responsive, meaning it adapts its layout on mobile devices. "
+"Enabling Fixed Layout will remove the responsive layout on mobile devices."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:359
+msgid "Boxed Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:362
+msgid "Boxed Layout Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:363
+msgid "Enable the boxed layout style."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:368
+msgid "Box Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:369
+msgid ""
+"Pick a custom color for the boxed background or add a hex color code e.g. "
+"#ffffff"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:374
+msgid "Box Margin"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:375
+msgid "Enter an integer value i.e. 20 for the desired top and bottom margin."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:382
+#: ../canvas/includes/theme-options.php:507
+#: ../canvas/includes/theme-options.php:521
+#: ../canvas/includes/theme-options.php:728
+#: ../canvas/includes/theme-options.php:2006
+msgid "Top"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:386
+#: ../canvas/includes/theme-options.php:511
+#: ../canvas/includes/theme-options.php:525
+#: ../canvas/includes/theme-options.php:732
+#: ../canvas/includes/theme-options.php:1205
+#: ../canvas/includes/theme-options.php:2007
+msgid "Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:389
+msgid "Box Border Top/Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:390
+#: ../canvas/includes/theme-options.php:396
+msgid "Specify border properties for the boxed layout."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:395
+msgid "Box Border Left/Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:401
+msgid "Box Rounded Corners"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:402
+#: ../canvas/includes/theme-options.php:590
+#: ../canvas/includes/theme-options.php:714
+#: ../canvas/includes/theme-options.php:822
+#: ../canvas/includes/theme-options.php:935
+msgid ""
+"Set amount of pixels for border radius (rounded corners). Will only show in "
+"CSS3 compatible browser."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:408
+msgid "Box Shadow"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:409
+msgid "Enable box shadow. Will only show in CSS3 compatible browser."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:416
+#: ../canvas/includes/theme-options.php:419
+msgid "Full Width Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:422
+msgid ""
+"Below you can enable full width header and footer areas and set the "
+"background. You can set the styling options for the full width navigation "
+"under the Primary Navigation options. Please note that Boxed Layout must be "
+"disabled."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:425
+msgid "Enable Full Width Header"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:426
+msgid "Set header container to display full width."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:431
+#: ../canvas/includes/theme-options.php:475
+msgid "Header Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:432
+msgid "Select the background color you want for your full width header."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:437
+#: ../canvas/includes/theme-options.php:481
+msgid "Header Background Image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:438
+#: ../canvas/includes/theme-options.php:482
+msgid ""
+"Upload a background image, or specify the image address of your image "
+"(http://yoursite.com/image.png). <br/>Image should be same width as your "
+"site width."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:443
+#: ../canvas/includes/theme-options.php:487
+msgid "Header Background Image Repeat"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:449
+msgid "Enable Full Width Footer"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:450
+msgid "Set footer widget area and footer container to display full width."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:455
+msgid "Footer Widget Area Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:456
+msgid "Select the background color you want for your full width widget area."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:461
+msgid "Footer Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:462
+msgid "Select the background color you want for your full width footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:467
+msgid "Header &amp; Footer"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:476
+msgid ""
+"Pick a custom color for header background or add a hex color code e.g. "
+"#e6e6e6"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:493
+msgid "Header Border"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:494
+msgid "Specify border properties for the header."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:499
+msgid "Header Margin Top/Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:500
+#: ../canvas/includes/theme-options.php:721
+msgid "Enter an integer value i.e. 20 for the desired header margin."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:513
+msgid "Header Padding Top/Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:514
+#: ../canvas/includes/theme-options.php:529
+msgid "Enter an integer value i.e. 20 for the desired header padding."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:528
+msgid "Header Padding Left/Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:536
+#: ../canvas/includes/theme-options.php:1205
+#: ../canvas/includes/theme-options.php:2008
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:209
+msgid "Left"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:540
+#: ../canvas/includes/theme-options.php:1205
+#: ../canvas/includes/theme-options.php:2009
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:210
+msgid "Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:543
+msgid "Site Title Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:544
+msgid "Select typography for site title."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:549
+msgid "Site Description Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:550
+msgid "Select typography for site description."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:556
+msgid "Footer"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:559
+msgid "Footer Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:560
+msgid "Select typography for footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:565
+msgid "Footer Background"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:566
+msgid "Select the background color you want for your footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:571
+msgid "Footer Border Top"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:572
+msgid "Specify top border properties for the footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:577
+msgid "Footer Border Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:578
+msgid "Specify bottom border properties for the footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:583
+msgid "Footer Border Left/Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:584
+msgid "Specify left/right border properties for the footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:589
+msgid "Footer Rounded Corners"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:595
+msgid "Enable Custom Footer (Left)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:596
+#: ../canvas/includes/theme-options.php:610
+msgid "Activate to add the custom text below to the theme footer."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:602
+msgid "Custom Text (Left)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:603
+#: ../canvas/includes/theme-options.php:617
+msgid "Custom HTML and Text that will appear in the footer of your theme."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:609
+msgid "Enable Custom Footer (Right)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:616
+msgid "Custom Text (Right)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:628
+#, fuzzy
+msgid "Top Navigation"
+msgstr "Navigatie"
+
+#: ../canvas/includes/theme-options.php:631
+msgid "Top Navigation - Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:632
+#, php-format
+msgid ""
+"Pick a custom color for the top navigation background or add a hex color "
+"code e.g. #000.<br />Top Navigation can be added with <a href=\"%s\">WP "
+"Menus</a>"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:637
+msgid "Top Navigation - Hover / Sub Menu Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:638
+msgid ""
+"Pick a custom color for the top navigation hover text color or add a hex "
+"color code e.g. #000"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:643
+msgid "Top Navigation - Hover / Sub Menu Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:644
+msgid ""
+"Pick a custom color for the top navigation hover background color or add a "
+"hex color code e.g. #000"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:649
+msgid "Top Navigation Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:650
+#: ../canvas/includes/theme-options.php:666
+msgid "Select typography for navigation."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:656
+#, fuzzy
+msgid "Primary Navigation"
+msgstr "Navigatie"
+
+#: ../canvas/includes/theme-options.php:660
+msgid ""
+"Pick a custom color for the navigation background or add a hex color code e."
+"g. #cccccc"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:665
+#, fuzzy
+msgid "Navigation Font Style"
+msgstr "Navigatie"
+
+#: ../canvas/includes/theme-options.php:671
+msgid "Hover / Sub Menu Text Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:672
+msgid ""
+"Pick a custom color for the navigation hover / sub menu text color or add a "
+"hex color code e.g. #eeeeee"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:677
+msgid "Hover / Sub Menu Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:678
+msgid ""
+"Pick a custom color for the navigation hover / sub menu background color or "
+"add a hex color code e.g. #eeeeee"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:683
+msgid "Divider"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:684
+msgid "Specify border properties for the menu items dividers."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:689
+msgid "Dropdown menu border"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:690
+msgid "Specify border properties for the navigation dropdown menu."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:695
+#, fuzzy
+msgid "Border Top"
+msgstr "Direct bestellen"
+
+#: ../canvas/includes/theme-options.php:696
+#: ../canvas/includes/theme-options.php:702
+#: ../canvas/includes/theme-options.php:708
+#: ../canvas/includes/theme-options.php:816
+msgid "Specify border properties for the navigation."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:701
+msgid "Border Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:707
+msgid "Border Left/Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:713
+msgid "Navigation Rounded Corners"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:720
+msgid "Navigation Margin Top/Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:735
+msgid "Enable Subscribe Icon"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:736
+msgid "Enable the Subscribe to RSS icon in right navigation."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:741
+msgid "Enable E-mail Icon"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:742
+msgid "Enter an URL for the mail icon in the right navigation"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:747
+msgid "Enable Search"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:748
+msgid "Enable Search in the right navigation."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:753
+#: ../canvas/includes/theme-options.php:1280
+msgid "Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:758
+msgid "Posts / Pages"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:761
+msgid "Post/Page Title Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:762
+msgid "Specify typography for post/page title text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:767
+msgid "Post Meta Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:768
+msgid "Specify typography for post meta."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:773
+msgid "Post/Page Text Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:774
+msgid "Specify typography for post/page content text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:779
+msgid "Post More (bottom) Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:780
+msgid "Specify typography for post bottom text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:785
+msgid "Post More (bottom) Border Top"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:786
+#: ../canvas/includes/theme-options.php:792
+msgid "Specify border properties for post more section."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:791
+msgid "Post More (bottom) Border Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:797
+msgid "Post Author Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:798
+msgid ""
+"Pick a custom background color for the post author section or add a hex "
+"color code e.g. #fafafa"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:803
+msgid "Post Author Border Top"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:804
+#: ../canvas/includes/theme-options.php:810
+msgid "Specify border properties for post author section."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:809
+msgid "Post Author Border Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:815
+msgid "Post Author Border Left/Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:821
+msgid "Post Author Rounded Corners"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:828
+msgid "Disable Post Author"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:829
+msgid "Disable post author below post?"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:834
+msgid "Comments Background Color (even threads)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:835
+msgid ""
+"Pick a custom background color for the post comments even threads or add a "
+"hex color code e.g. #fafafa"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:840
+msgid "Page Navigation Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:841
+msgid "Select typography for Page Navigation text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:846
+msgid "Page Navigation Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:847
+msgid ""
+"Pick a custom color for the Page Navigation background or add a hex color "
+"code e.g. #fafafa"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:852
+msgid "Page Navigation Border Top"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:853
+#: ../canvas/includes/theme-options.php:859
+msgid "Specify border properties for Page Navigation section."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:858
+msgid "Page Navigation Border Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:864
+msgid "Archives"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:867
+msgid "Archive Header Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:868
+msgid "Select typography for Archive header."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:873
+msgid "Archive Header Border Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:874
+msgid "Specify border properties for Archive header"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:879
+msgid "Disable Archive Header RSS link"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:880
+msgid "Disable RSS link in Archive header"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:885
+msgid "Widgets"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:889
+msgid "Widget Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:890
+msgid ""
+"Pick a custom color for the widget background or add a hex color code e.g. "
+"#cccccc"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:895
+msgid "Widget Border"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:896
+msgid "Specify border properties for widgets."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:901
+msgid "Widget Padding"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:902
+msgid "Enter an integer value i.e. 20 for the desired widget padding."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:909
+msgid "Top/Bottom"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:913
+msgid "Left/Right"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:916
+msgid "Widget Title"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:917
+msgid "Select the typography you want for the widget title."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:922
+msgid "Widget Title Bottom Border"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:923
+msgid "Specify border property for the widget title."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:928
+msgid "Widget Text"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:929
+#: ../canvas/includes/theme-options.php:953
+#: ../canvas/includes/theme-options.php:959
+msgid "Select the typography you want for the widget text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:934
+msgid "Widget Rounded Corners"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:940
+msgid "Tabs Widget Background color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:941
+#: ../canvas/includes/theme-options.php:947
+msgid ""
+"Pick a custom color for the tabs widget or add a hex color code e.g. #cccccc"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:946
+msgid "Tabs Widget Inside Background Color"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:952
+msgid "Tabs Widget Title"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:958
+msgid "Tabs Widget Meta / Tabber Font"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:965
+msgid "Magazine Template"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:970
+msgid "Posts Slider"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:973
+msgid "Magazine Page Template"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:976
+#, php-format
+msgid ""
+"Below you can control settings for the Magazine page template. Please refer "
+"to <a href=\"%s\">documentation</a> on how to setup the page template."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:979
+msgid "Enable Featured Slider"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:980
+msgid "Enable the featured slider on the \"Magazine\" page template."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:985
+msgid "Post Tag(s)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:986
+msgid ""
+"Add comma separated list for the tags that you would like to have displayed "
+"in the featured slider on the \"Magazine\" page template. For example, if "
+"you add \"tag1, tag3\" here, then all posts tagged with either \"tag1\" or "
+"\"tag3\" will be shown in the featured area. These posts will be excluded "
+"from normal posts below slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:991
+msgid "Number Of Posts To Display"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:992
+msgid "Select the number of entries that should appear in the Featured Slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:998
+msgid "Exclude Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:999
+msgid "Exclude the slider posts from the posts grid below slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1004
+msgid "Display The Post Titles"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1005
+msgid "Show the post title in the \"Posts\" slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1011
+msgid "Title Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1012
+msgid "Select typography for title."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1018
+msgid "Display The Post Excerpts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1019
+msgid "Show the post excerpt in the \"Posts\" slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1025
+msgid "Excerpt Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1026
+msgid "Select typography for excerpt text."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1032
+msgid "Excerpt Length"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1033
+msgid "Total number of words to show in the excerpt."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1039
+msgid "Featured Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1042
+msgid "Number Of Featured Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1043
+msgid ""
+"Select how many featured (full width) posts you would like to show before "
+"your two-column posts. Set total number of posts in Settings > Reading."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1048
+msgid "Post Content for \"Featured\" Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1049
+msgid ""
+"Select if you want to show the full content or the excerpt on posts in the "
+"\"Featured\" section."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1055
+msgid "Featured Image Dimensions"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1056
+#: ../canvas/includes/theme-options.php:1094
+#: ../canvas/includes/theme-options.php:1340
+#: ../canvas/includes/theme-options.php:1476
+msgid "Enter an integer value i.e. 250 for the image size."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1063
+#: ../canvas/includes/theme-options.php:1101
+#: ../canvas/includes/theme-options.php:1347
+#: ../canvas/includes/theme-options.php:1455
+#: ../canvas/includes/theme-options.php:1483
+msgid "Width"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1067
+#: ../canvas/includes/theme-options.php:1105
+#: ../canvas/includes/theme-options.php:1351
+#: ../canvas/includes/theme-options.php:1459
+#: ../canvas/includes/theme-options.php:1487
+msgid "Height"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1070
+msgid "Featured Post Image Alignment"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1071
+msgid "Select how to align your featured post images."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1077
+msgid "Posts Grid"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1080
+msgid "Post Content for \"Grid\" Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1081
+msgid ""
+"Select if you want to show the full content or the excerpt on posts in the "
+"\"Grid\" section."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1087
+msgid "Post Title Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1088
+msgid "Specify typography for post title."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1093
+msgid "Post Image Dimensions"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1108
+msgid "Post Image Alignment"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1109
+msgid "Select how to align your normal post images."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1117
+msgid "Business Template"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1121
+msgid "\"Business\" Setup"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1124
+msgid "Business Page Template"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1127
+#, php-format
+msgid ""
+"Below you can control settings for the Business page template. Please refer "
+"to <a href=\"%s\">documentation</a> on how to setup the page template. You "
+"can add slider posts with the <strong><em>Slides</em></strong> custom post "
+"type."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1130
+msgid "Disable Footer Widgets"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1131
+msgid "Disable the footer widgets on this template."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1136
+msgid "Disable Slides Admin Menu"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1137
+msgid "Disable the slides admin menu functionality."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1142
+#: ../canvas/includes/theme-options.php:1145
+msgid "Featured Slider"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1146
+msgid "Enable the featured slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1151
+msgid "Full Width Slider"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1152
+msgid "Enable the slider to be full width."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1157
+msgid "Number of Slides"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1158
+msgid "Select how many slides you would like to show in the slider."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1165
+#: ../canvas/includes/theme-options.php:2062
+msgid "Slide Group"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1166
+msgid "Optionally choose to display only slides from a specific slide group."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1173
+msgid "Display Order"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1174
+msgid "Select the order in which you want to show your slides."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1178
+msgid "Newest first"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1178
+msgid "Oldest first"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1180
+msgid "Featured Slider Title"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1181
+msgid ""
+"Show the page title in slider when using Featured Image as background image."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1187
+msgid "Featured Slider Title Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1188
+msgid "Select typography for title (when using image background)."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1194
+msgid "Featured Slider Content Font Style"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1195
+msgid "Select typography for content text (when using image background)."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1200
+msgid "Featured Slider Content Overlay"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1201
+msgid ""
+"Select the position of the slider content overlay which is shown when using "
+"a featured image in the slide post."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1205
+#: ../canvas/includes/theme-options.php:1899
+#: ../canvas/includes/theme-options.php:2005
+#: ../canvas/includes/integrations/wooslider/wooslider.php:37
+msgid "Center"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1205
+#: ../canvas/includes/integrations/wooslider/wooslider.php:36
+msgid "Full"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1208
+#: ../canvas/includes/theme-options.php:1212
+msgid "Slider Settings"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1215
+msgid ""
+"Below you can control the generic slider settings which will apply to both "
+"Business and Magazine templates."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1218
+msgid "Auto Start"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1219
+msgid ""
+"Set the slider to start sliding automatically. Adjust the speed of sliding "
+"underneath."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1224
+msgid "Hover Pause"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1225
+msgid "Hovering over slideshow will pause it"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1230
+msgid "Animation Speed"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1231
+msgid ""
+"The time in <b>seconds</b> the animation between frames will take e.g. 0.6"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1237
+msgid "Auto Slide Interval"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1238
+msgid ""
+"The time in <b>seconds</b> each slide pauses for, before sliding to the "
+"next. Only when using Auto Start option above."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1244
+msgid "Features Slider Effect"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1245
+msgid ""
+"Select the effect used when transitioning between posts (default: "
+"<strong>slide</strong>)."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1249
+msgid "Slide"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1249
+msgid "Fade"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1251
+msgid "Slider Pagination"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1252
+msgid "Enable/disable the display of pagination in the sliders."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1263
+msgid "WooCommerce Page Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1276
+msgid "Search scope"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1277
+msgid ""
+"Select whether you want the search widget to search for products or posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1282
+msgid "Custom Placeholder"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1283
+msgid ""
+"Upload a custom placeholder to be displayed when there is no product image."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1288
+msgid "Header Cart Link"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1289
+msgid "Display a link to the cart in the main navigation"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1294
+msgid "Header Cart Totals"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1295
+msgid "Display item and amount totals in the cart in the main navigation"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1305
+msgid "Portfolio"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1309
+msgid "Portfolio Setup"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1312
+#, php-format
+msgid ""
+"<strong>Important:</strong> This feature will be removed from the theme in "
+"the future and replaced with %s. Please download and install the plugin. "
+"<br /><br />Below you can setup and enable/disable the portfolio settings. "
+"When modifying the portfolio settings, please visit the <a href=\"%s"
+"\">Settings - Permalinks</a> screen to refresh your WordPress URLs."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1312
+msgid "Projects by WooThemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1315
+msgid "Disable Portfolio"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1316
+msgid "Disable the portfolio functionality."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1321
+msgid "Enable Single Portfolio Gallery"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1322
+msgid "Enable the gallery feature in the single portfolio page layout."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1327
+msgid "Portfolio Items URL Base"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1328
+#, php-format
+msgid ""
+"The base of all portfolio item URLs (visit the %s screen after changing this "
+"setting)."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1328
+msgid "Settings- Permalinks"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1333
+msgid "Exclude Galleries from the Portfolio Navigation"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1334
+msgid ""
+"Optionally exclude portfolio galleries from the portfolio gallery navigation "
+"switcher. Place the gallery slugs here, separated by commas <br />(eg: one,"
+"two,three)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1339
+msgid "Portfolio Thumbnail Dimensions"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1354
+msgid "Portfolio Galleries Page Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1368
+msgid "Portfolio Single Post Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1382
+msgid "Exclude Portfolio Items from Search Results"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1383
+msgid "Exclude portfolio items from results when searching your website."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1388
+msgid "Portfolio Items Link To"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1389
+msgid ""
+"Do the portfolio items link to the lightbox, or to the single portfolio item "
+"screen?"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1393
+msgid "Lightbox"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1393
+msgid "Portfolio Item"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1398
+msgid "Dynamic Images"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1402
+msgid "Resizer Settings"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1405
+msgid "Dynamic Image Resizing"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1408
+msgid ""
+"There are two alternative methods of dynamically resizing the thumbnails in "
+"the theme, <strong>WP Post Thumbnail</strong> (default) or <strong>TimThumb</"
+"strong>."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1411
+msgid "WP Post Thumbnail"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1412
+msgid ""
+"Use WordPress post thumbnail to assign a post thumbnail. Will enable the "
+"<strong>Featured Image panel</strong> in your post sidebar where you can "
+"assign a post thumbnail."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1418
+msgid "WP Post Thumbnail - Dynamic Image Resizing"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1419
+msgid ""
+"The post thumbnail will be dynamically resized using native WP resize "
+"functionality. <em>(Requires PHP 5.2+)</em>"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1425
+msgid "WP Post Thumbnail - Hard Crop"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1426
+msgid ""
+"The post thumbnail will be cropped to match the target aspect ratio (only "
+"used if <em>Dynamic Image Resizing</em> is enabled)."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1432
+msgid "TimThumb"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1433
+msgid ""
+"This will enable the <a href=\"http://code.google.com/p/timthumb/"
+"\">TimThumb</a> (thumb.php) script which dynamically resizes images added "
+"through the <strong>custom settings panel</strong>  below the post editor. "
+"Make sure your themes <em>cache</em> folder is writable."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1438
+msgid "Automatic Image Thumbnail"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1439
+msgid ""
+"If no thumbnail is specified then the first uploaded image in the post is "
+"used."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1444
+msgid "Thumbnail Settings"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1447
+msgid "Thumbnail Dimensions"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1448
+msgid ""
+"Enter an integer value i.e. 250 for the desired size which will be used when "
+"dynamically creating the images."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1462
+msgid "Thumbnail Alignment"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1463
+msgid "Select how to align your thumbnails with posts."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1469
+msgid "Single Post - Show Thumbnail"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1470
+msgid "Show the thumbnail in the single post page."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1475
+msgid "Single Post - Thumbnail Dimensions"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1490
+msgid "Single Post - Thumbnail Alignment"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1491
+msgid "Select how to align your thumbnails with single posts."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1498
+msgid "Add Featured Image to RSS feed"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1499
+msgid "Add the featured image to your RSS feed"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1504
+msgid "Enable Lightbox"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1505
+msgid ""
+"Enable the PrettyPhoto lightbox script on images within your website's "
+"content."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1513
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:29
+msgid "Tumblog"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1517
+msgid "Tumblog Setup"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1520
+msgid "Tumblog Functionality"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1523
+#, php-format
+msgid ""
+"Tumblog will allow you to publish content using the WooTumblog "
+"functionality, including the Express for WordPress iPhone App. If you would "
+"like to use the iPhone app, you will need to enable XML-RPC publishing under "
+"Settings->Writing. Find out more at %s."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1526
+msgid "Enable Tumblog Functionality"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1527
+msgid "Enable Tumblog functionality in Canvas."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1532
+msgid "Taxonomy"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1533
+msgid "Post Formats"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1536
+msgid "Tumblog Content Method"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1537
+msgid ""
+"Select if you would like to use a Taxonomy of Post Formats to categorize "
+"your Tumblog content."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1543
+msgid "Use Custom Tumblog RSS Feed"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1544
+msgid "Replaces the default WordPress RSS feed output with Tumblog RSS output."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1549
+msgid "Tumblog Media Widths on the \"Magazine\" Page Template's Grid"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1550
+msgid ""
+"The output width for Tumblog media (images, videos, audio) on the \"Magazine"
+"\" page template's grid."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1555
+msgid "Content Formats"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1558
+msgid "Images Link to"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1559
+msgid "Select where your Tumblog Images will link to when clicked."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1565
+msgid "Tumblog Images Width"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1566
+msgid "The output width for Tumblog image post images."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1571
+msgid "Tumblog Content Position: Images"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1572
+#: ../canvas/includes/theme-options.php:1585
+#: ../canvas/includes/theme-options.php:1598
+#: ../canvas/includes/theme-options.php:1605
+msgid ""
+"Select where you would like the Tumblog Specific content to be output around "
+"the standard content."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1578
+msgid "Tumblog Audio Width"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1579
+msgid "The output width for Tumblog Audio player."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1584
+msgid "Tumblog Content Position: Audio"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1591
+msgid "Tumblog Video Width"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1592
+msgid "The output width for Tumblog Videos."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1597
+msgid "Tumblog Content Position: Video"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1604
+msgid "Tumblog Content Position: Quotes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1615
+msgid "Subscribe & Connect"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1619
+msgid "S&C Setup"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1622
+msgid "Enable Subscribe & Connect - Single Post"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1623
+#, php-format
+msgid ""
+"Enable the subscribe & connect area on single posts. You can also add this "
+"as a <a href=\"%s\">widget</a> in your sidebar."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1628
+msgid "Subscribe Title"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1629
+msgid "Enter the title to show in your subscribe & connect area."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1634
+msgid "Text"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1635
+msgid "Change the default text in this area."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1640
+msgid "Enable Related Posts"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1641
+msgid ""
+"Enable related posts in the subscribe area. Uses posts with the same "
+"<strong>tags</strong> to find related posts. Note: Will not show in the "
+"Subscribe widget."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1649
+msgid "Subscribe By E-mail ID (Feedburner)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1650
+#, php-format
+msgid ""
+"Enter your <a href=\"%s\">Feedburner ID</a> for the e-mail subscription form."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1655
+msgid "Subscribe By E-mail to MailChimp"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1656
+#, php-format
+msgid ""
+"If you have a MailChimp account you can enter the <a href=\"%s\" target="
+"\"_blank\">MailChimp List Subscribe URL</a> to allow your users to subscribe "
+"to a MailChimp List."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1661
+msgid "Connect"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1664
+msgid "Enable RSS"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1665
+msgid "Enable the subscribe and RSS icon."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1670
+msgid "Twitter URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1671
+msgid ""
+"Enter your  <a href=\"http://www.twitter.com/\">Twitter</a> URL e.g. http://"
+"www.twitter.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1676
+msgid "Facebook URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1677
+msgid ""
+"Enter your  <a href=\"http://www.facebook.com/\">Facebook</a> URL e.g. "
+"http://www.facebook.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1682
+msgid "YouTube URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1683
+msgid ""
+"Enter your  <a href=\"http://www.youtube.com/\">YouTube</a> URL e.g. http://"
+"www.youtube.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1688
+msgid "Flickr URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1689
+msgid ""
+"Enter your  <a href=\"http://www.flickr.com/\">Flickr</a> URL e.g. http://"
+"www.flickr.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1694
+msgid "LinkedIn URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1695
+msgid ""
+"Enter your  <a href=\"http://www.www.linkedin.com.com/\">LinkedIn</a> URL e."
+"g. http://www.linkedin.com/in/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1700
+msgid "Delicious URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1701
+msgid ""
+"Enter your <a href=\"http://www.delicious.com/\">Delicious</a> URL e.g. "
+"http://www.delicious.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1706
+msgid "Google+ URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1707
+msgid ""
+"Enter your <a href=\"http://plus.google.com/\">Google+</a> URL e.g. https://"
+"plus.google.com/104560124403688998123/"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1712
+#: ../canvas/includes/theme-options.php:1713
+msgid "Dribbble"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1713
+#, php-format
+msgid "Enter your %1$s URL e.g. http://dribbble.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1718
+#: ../canvas/includes/theme-options.php:1719
+msgid "Instagram"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1719
+#, php-format
+msgid "Enter your %1$s URL e.g. http://instagram.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1724
+#: ../canvas/includes/theme-options.php:1725
+msgid "Vimeo"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1725
+#, php-format
+msgid "Enter your %1$s URL e.g. http://vimeo.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1730
+#: ../canvas/includes/theme-options.php:1731
+msgid "Pinterest"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1731
+#, php-format
+msgid "Enter your %1$s URL e.g. http://pinterest.com/woothemes"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1739
+msgid "Contact Page"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1743
+msgid "Contact Information"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1746
+msgid "Contact Information Panel"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1747
+msgid "Enable the contact information panel on your contact page template."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1753
+msgid "Location Name"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1754
+msgid "Enter the location name. Example: London Office"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1760
+msgid "Location Address"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1761
+msgid "Enter your company's address"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1767
+msgid "Telephone"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1768
+msgid "Enter your telephone number"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1774
+msgid "Fax"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1775
+msgid "Enter your fax number"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1781
+msgid "Contact Form E-Mail"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1782
+msgid "Enter your E-mail address to use on the \"Contact Form\" page Template."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1787
+msgid "Enable Subscribe and Connect"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1788
+msgid ""
+"Enable the subscribe and connect functionality on the contact page template"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1793
+msgid "Maps"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1796
+msgid "Contact Form Google Maps Coordinates"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1797
+#, php-format
+msgid ""
+"Enter your Google Map coordinates to display a map on the Contact Form page "
+"template. You can get these details from %sGoogle Maps%s"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1802
+msgid "Disable Mousescroll"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1803
+msgid ""
+"Turn off the mouse scroll action for all the Google Maps on the site. This "
+"could improve usability on your site."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1808
+msgid "Map Height"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1809
+msgid "Height in pixels for the maps displayed on Single.php pages."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1814
+msgid "Default Map Zoom Level"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1815
+msgid "Set this to adjust the default in the post & page edit backend."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1821
+msgid "Default Map Type"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1822
+msgid "Set this to the default rendered in the post backend."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1826
+msgid "Satellite"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1826
+msgid "Hybrid"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1826
+msgid "Terrain"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1828
+msgid "Map Callout Text"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1829
+msgid ""
+"Text or HTML that will be output when you click on the map marker for your "
+"location."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1840
+msgid "Enable Old Portfolio Look"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1841
+msgid "This alternative design resembles the old Portfolio layout."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1846
+msgid "Galleries Page Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1860
+msgid "Single Project Layout"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1894
+#: ../canvas/includes/theme-options.php:1975
+msgid "Image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1896
+msgid "Upload an image or enter an URL."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1900
+#: ../canvas/includes/theme-options.php:2002
+msgid "Image Crop Alignment"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1902
+#: ../canvas/includes/theme-options.php:2004
+msgid "Select crop alignment for resized image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1914
+#: ../canvas/includes/theme-options.php:2076
+msgid ""
+"Select a specific layout for this post/page. Overrides default site layout."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1924
+msgid "Embed"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1926
+msgid "Enter embed code for use on single posts and with the Video widget."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1931
+msgid "Tumblog : Embed Code (Videos)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1933
+msgid "Add embed code for video services like Youtube or Vimeo - Tumblog only."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1937
+msgid "Tumblog : Quote Author"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1939
+msgid "Enter the name of the Quote Author."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1943
+msgid "Tumblog : Link to Quote"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1945
+msgid "Enter the url/web address of the Quote if available."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1949
+msgid "Tumblog : Quote"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1951
+msgid "Enter the Quote."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1955
+msgid "Tumblog : Audio URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1957
+msgid "Enter the url/web address of the Audio file."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1961
+msgid "Tumblog : Link URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1963
+msgid "Enter the url/web address of the Link."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1977
+msgid "Upload an image to be used as background of this slide. (optional)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1982
+#: ../canvas/includes/theme-options.php:2038
+msgid "URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1984
+msgid "Enter URL if you want to add a link to the uploaded image. (optional)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1996
+msgid "Portfolio Image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:1998
+msgid "Upload an image or enter an URL to your portfolio image"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2015
+msgid "Video Embed Code"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2017
+msgid ""
+"Enter the video embed code for your video (YouTube, Vimeo or similar). Will "
+"show instead of your image."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2021
+msgid "Lightbox URL"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2023
+#, php-format
+msgid "Enter an optional URL to show in the %s for this portfolio item."
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2023
+msgid "PrettyPhoto lightbox"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2027
+msgid "Testimonial"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2029
+msgid ""
+"Enter a testimonial from your client to be displayed on the single portfolio "
+"page"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2033
+msgid "Testimonial Author"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2035
+msgid "Enter the name of the author of the testimonial e.g. Joe Bloggs"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2040
+msgid "Enter URL of your clients site. (optional)"
+msgstr ""
+
+#: ../canvas/includes/theme-options.php:2064
+msgid ""
+"Optionally select a \"Slide Group\" to show slides from only that \"Slide "
+"Group\"."
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-tumblog.php:640
+#: ../canvas/includes/tumblog/theme-tumblog.php:748
+msgid "Play Audio"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-tumblog.php:645
+#: ../canvas/includes/tumblog/theme-tumblog.php:755
+msgid " ~ "
+msgstr ""
+
+#: ../canvas/includes/tumblog/wootumblog_postformat.class.php:330
+#: ../canvas/includes/tumblog/wootumblog_postformat.class.php:345
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:130
+msgid "View all Tumblogs"
+msgstr ""
+
+#: ../canvas/includes/tumblog/wootumblog_postformat.class.php:350
+msgid "Filter"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:28
+msgid "Tumblogs"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:30
+msgid "Search Tumblogs"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:31
+msgid "Popular Tumblogs"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:32
+msgid "All Tumblogs"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:33
+msgid "Parent Tumblog"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:34
+msgid "Parent Tumblog:"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:35
+msgid "Edit Tumblog"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:36
+msgid "Update Tumblog"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:37
+msgid "Add New Tumblog"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:38
+msgid "New Tumblog Name"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:49
+msgid "Articles"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:50
+msgid "Images"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:51
+msgid "Audio"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:52
+msgid "Video"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:53
+msgid "Quotes"
+msgstr ""
+
+#: ../canvas/includes/tumblog/theme-custom-post-types.php:54
+msgid "Links"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:103
+msgid "Above post content"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:106
+msgid "Data above the content of your blog posts."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:109
+msgid "\"Read more\" area below posts"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:112
+msgid "Data below each blog post."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:231
+#: ../canvas/includes/woo-meta/screens/admin.php:2
+msgid "Filters"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:281
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:239
+msgid ""
+"Fill in the area you'd like to customise and hit the \"Save Changes\" "
+"button. It's as easy as that!"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:282
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:266
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:240
+msgid "For more information:"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:283
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:267
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:241
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">WooThemes Help Desk</a>"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:285
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:269
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:243
+msgid "Overview"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:286
+msgid "Shortcode Reference"
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:296
+msgid "Use these shortcodes to include dynamic data into your meta sections."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:409
+msgid "Link to read the full post."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:410
+msgid "The post date."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:411
+msgid "The post time."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:412
+msgid "The post author (link to the author's website)."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:413
+msgid "The post author (link to the author's posts archive)."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:414
+msgid "Comments for the post."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:415
+msgid "Tags for the post."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:416
+msgid "Categories for the post."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/classes/woo-meta.class.php:417
+msgid "\"Edit\" link for the post."
+msgstr ""
+
+#: ../canvas/includes/woo-meta/screens/admin.php:3
+msgid "Filters Settings Updated."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:137
+#: ../canvas/includes/woo-layout/screens/admin.php:2
+msgid "Layouts"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:180
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:182
+msgid "Enable Layouts"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:183
+msgid ""
+"Load in the customisations you make to the layouts, using the options below."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:206
+#, php-format
+msgid "Your current layout width is %s and your current layout type is %s."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:207
+#, php-format
+msgid "You can select your desired layout on the %stheme options%s screen."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:232
+msgid "Column"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:265
+msgid ""
+"Adjust the widths of the layout you'd like to customise and hit the \"Save "
+"Changes\" button. It's as easy as that!"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:596
+msgid "One Column"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:596
+msgid "One column with no sidebars."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:600
+msgid "Two Columns (Content on the Left)"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:600
+msgid "Two columns with the main content column on the left."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:604
+msgid "Two Columns (Content on the Right)"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:604
+msgid "Two columns with the main content column on the right."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:608
+msgid "Three Columns (Content on the Left)"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:608
+msgid "Three columns with the main content column on the left."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:612
+msgid "Three Columns (Content in the Middle)"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:612
+msgid "Three columns with the main content column in the middle."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:616
+msgid "Three Columns (Content on the Right)"
+msgstr ""
+
+#: ../canvas/includes/woo-layout/classes/woo-layout.class.php:616
+msgid "Three columns with the main content column on the right."
+msgstr ""
+
+#: ../canvas/includes/woo-layout/screens/admin.php:3
+msgid "Layouts Settings Updated."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:178
+msgid "Execute Shortcodes on this Hook"
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:200
+#: ../canvas/includes/woo-hooks/screens/admin.php:2
+msgid "Hooks"
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:357
+msgid "Executed below the opening <code>&lt;body&gt;</code> tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:363
+msgid "Executed before the opening <code>#header</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:370
+msgid "Executed at the top, inside the <code>#header</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:376
+msgid "Executed after the closing <code>#header</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:386
+msgid "Executed before the opening <code>#navigation</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:392
+msgid "Executed at the top, inside the <code>#navigation</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:398
+msgid "Executed after the closing <code>#navigation</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:408
+msgid "Executed before the opening <code>#content</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:415
+msgid "Executed before the opening <code>#main</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:421
+msgid "Executed before the WordPress Loop."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:427
+msgid "Executed at the start of the WordPress Loop."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:433
+msgid "Executed at the end of the WordPress Loop."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:439
+msgid "Executed after the WordPress Loop."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:445
+msgid "Executed after the closing <code>#main</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:451
+msgid "Executed after the closing <code>#content</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:461
+msgid "Executed before each post."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:468
+msgid "Executed at the top, inside each post's DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:474
+msgid "Executed at the bottom, inside each post's DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:480
+msgid "Executed after each post."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:489
+msgid "Executed before each single page."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:495
+msgid "Executed at the top, inside each single page's DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:501
+msgid "Executed at the bottom, inside each single page's DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:507
+msgid "Executed after each single page."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:516
+msgid "Executed before each sidebar."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:523
+msgid "Executed at the top, inside each sidebar's DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:529
+msgid "Executed at the bottom, inside each sidebar's DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:535
+msgid "Executed after each sidebar."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:545
+msgid "Executed at the top of the <code>footer.php</code> file."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:551
+msgid "Executed before the opening <code>#footer</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:557
+msgid "Executed at the top, inside the <code>#footer</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:563
+msgid "Executed before the opening <code>#footer .col-left</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:569
+msgid "Executed after the ending <code>#footer .col-left</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:575
+msgid "Executed before the opening <code>#footer .col-right</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:581
+msgid "Executed after the ending <code>#footer .col-right</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:587
+msgid "Executed after the closing <code>#footer</code> DIV tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:597
+msgid "Executed before the closing <code>&lt;/head&gt;</code> tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:603
+msgid "Executed before the closing <code>&lt;/body&gt;</code> tag."
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:636
+msgid "WordPress"
+msgstr ""
+
+#: ../canvas/includes/woo-hooks/screens/admin.php:3
+msgid "Hooks Settings Updated."
+msgstr ""
+
+#: ../canvas/includes/integrations/wooslider/wooslider.php:48
+msgid "Magazine"
+msgstr ""
+
+#: ../canvas/includes/integrations/wooslider/wooslider.php:49
+msgid "Business"
+msgstr ""
+
+#: ../canvas/includes/integrations/woocommerce/template.php:131
+msgid "Search for:"
+msgstr ""
+
+#: ../canvas/includes/integrations/woocommerce/template.php:153
+msgid "View your shopping cart"
+msgstr ""
+
+#: ../canvas/includes/integrations/projects/template.php:218
+msgid "View all projects"
+msgstr ""
+
+#: ../canvas/includes/integrations/projects/template.php:225
+#, php-format
+msgid "View all post filed under %s"
+msgstr ""
+
+#: ../canvas/includes/integrations/projects/template-recent-projects.php:14
+msgid "Recent Projects"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:42
+msgid ""
+"This is a WooThemes standardized component loading widget. Intended "
+"primarily for use in the \"Widgets\" Page Template widget region."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:44
+msgid "Woo - Component"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:47
+msgid "Blog"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:48
+msgid "\"Business\" Slider"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:49
+msgid "\"Magazine\" Slider"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:50
+msgid "\"Magazine\" Grid"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:51
+msgid "Current Page Content"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:144
+#: ../canvas/includes/widgets/widget-woo-adspace.php:168
+#: ../canvas/includes/widgets/widget-woo-flickr.php:182
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:140
+msgid "Title (optional):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:149
+msgid "Component:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-component.php:159
+msgid "Slide Group:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:37
+msgid ""
+"This is a WooThemes standardized embed widget. It displays the video embed "
+"codes from your posts in a tab-like fashion."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:43
+msgid "Woo - Embed/Video"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:173
+msgid "Recent Videos"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:184
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:187
+msgid "Title:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:189
+msgid "Category:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:203
+msgid "Tag:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:208
+msgid "Limit (optional):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-embed.php:213
+msgid "Width:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:36
+msgid "Use this widget to add any type of Ad as a widget."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:42
+msgid "Woo - Adspace Widget"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:159
+msgid "Advert"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:173
+msgid "Ad Code:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:176
+msgid "or"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:179
+msgid "Image URL:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:184
+msgid "Link URL:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-adspace.php:189
+msgid "Alt text:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:36
+msgid "This Flickr widget populates photos from a Flickr ID."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:42
+msgid "Woo - Flickr"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:72
+msgid "Photos on"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:187
+msgid "Flickr ID (<a href=\"http://www.idgettr.com\">idGettr</a>):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:192
+msgid "Number:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:201
+msgid "Type:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:203
+msgid "User"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:204
+msgid "Group"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:209
+msgid "Sorting:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:211
+#: ../canvas/includes/widgets/widget-woo-tabs.php:64
+#: ../canvas/includes/widgets/widget-woo-tabs.php:69
+#: ../canvas/includes/widgets/widget-woo-tabs.php:201
+#: ../canvas/includes/widgets/widget-woo-tabs.php:211
+msgid "Latest"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:212
+msgid "Random"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:217
+msgid "Size:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:219
+msgid "Square"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:220
+msgid "Medium"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-flickr.php:221
+msgid "Thumbnail"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:36
+msgid "This is a WooThemes Blog Author Info widget."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:42
+msgid "Woo - Blog Author Info"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:173
+msgid "About The Author"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:192
+msgid "Bio:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:197
+msgid "<a href=\"http://www.gravatar.com/\">Gravatar</a> E-mail:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:202
+msgid "Gravatar Size:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:207
+msgid "Gravatar Alignment:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:215
+msgid "Read More Text (optional):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:220
+msgid "Read More URL (optional):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:225
+msgid "Visible Pages:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:228
+#, fuzzy
+msgid "Home only"
+msgstr "Home"
+
+#: ../canvas/includes/widgets/widget-woo-blogauthor.php:229
+msgid "Single only"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:36
+msgid ""
+"This widget is the Tabs that classically goes into the sidebar. It contains "
+"the Popular posts, Latest Posts, Recent comments and a Tag cloud."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:42
+msgid "Woo - Tabs"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:66
+#: ../canvas/includes/widgets/widget-woo-tabs.php:71
+#: ../canvas/includes/widgets/widget-woo-tabs.php:203
+#: ../canvas/includes/widgets/widget-woo-tabs.php:217
+msgid "Tags"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:68
+#: ../canvas/includes/widgets/widget-woo-tabs.php:200
+#: ../canvas/includes/widgets/widget-woo-tabs.php:208
+msgid "Popular"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:183
+msgid "Number of posts:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:188
+msgid "Thumbnail Size (0=disable):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:193
+msgid "Popular limit (days):"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:198
+msgid "First Visible Tab:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-tabs.php:206
+msgid "Hide Tabs:"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:36
+msgid "Add a subscribe/connect widget."
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:42
+msgid "Woo - Subscribe / Connect"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:133
+msgid "Subscribe / Connect"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:137
+#, php-format
+msgid ""
+"Setup this widget in your <a href=\"%s\">options panel</a> under "
+"<strong>Subscribe &amp; Connect</strong>"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:146
+msgid "Disable Subscription Form"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:151
+msgid "Disable Social Icons"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:156
+msgid "Disable in Posts"
+msgstr ""
+
+#: ../canvas/includes/widgets/widget-woo-subscribe.php:161
+msgid "Disable in Pages"
+msgstr ""
+
+#~ msgid "%s removed. %sUndo?%s"
+#~ msgstr "%s verwijderd. %sOngedaan maken?%s"
