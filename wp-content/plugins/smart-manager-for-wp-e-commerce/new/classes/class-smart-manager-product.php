@@ -323,13 +323,13 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 					}
 				}				
 
-				foreach ($data_model['items'] as $key => &$data) {
+				foreach ($data_model['items'] as $key => $data) {
 
 					if (empty($data['posts_id'])) continue;
 					$post_ids[] = $data['posts_id'];
 
-					$data['loaded'] = true;
-					$data['expanded'] = true;
+					$data_model['items'][$key]['loaded'] = true;
+					$data_model['items'][$key]['expanded'] = true;
 
 					if ( !empty($data['posts_post_parent']) ) {
 
@@ -357,52 +357,52 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 							$parent_title .= ( !empty($parent_title) ) ? ' - ' : '';
 						}
 						
-						$data['parent'] = $data['posts_post_parent'];
-						$data['isLeaf'] = true;
-						$data['level'] = 1;
+						$data_model['items'][$key]['parent'] = $data['posts_post_parent'];
+						$data_model['items'][$key]['isLeaf'] = true;
+						$data_model['items'][$key]['level'] = 1;
 
 						//Code for modifying the variation name
 
 						$variation_title = '';
 
-						foreach ($data as $key => &$value) {
-							$start_pos = strrpos($key, '_meta_value_attribute_');
+						foreach ($data as $key1 => $value) {
+							$start_pos = strrpos($key1, '_meta_value_attribute_');
 
 							if ( $start_pos !== false ){
 								
-								$attr_nm = substr($key, $start_pos+22);
+								$attr_nm = substr($key1, $start_pos+22);
 
-								$value = (empty($value)) ? 'any' : $value;
+								$data_model['items'][$key][$key1] = (empty($data_model['items'][$key][$key1])) ? 'any' : $data_model['items'][$key][$key1];
 
 								if ( !empty($attr_values[$attr_nm]) ) {
 
 									$attr_lbl = (!empty($attr_values[$attr_nm]['lbl'])) ? $attr_values[$attr_nm]['lbl'] : $attr_nm;
-									$attr_val = ( !empty($attr_val_by_slug[$attr_nm][$value]) ) ? $attr_val_by_slug[$attr_nm][$value] : $value;
+									$attr_val = ( !empty($attr_val_by_slug[$attr_nm][$data_model['items'][$key][$key1]]) ) ? $attr_val_by_slug[$attr_nm][$data_model['items'][$key][$key1]] : $data_model['items'][$key][$key1];
 									$variation_title .= $attr_lbl . ' : ' . $attr_val;
 
 								} else {
-									$variation_title .= $attr_nm . ' : ' . $value;
+									$variation_title .= $attr_nm . ' : ' . $data_model['items'][$key][$key1];
 								}
 								$variation_title .= ', ';
 							}	
 						}
 
-						$data['posts_post_title'] = $parent_title .''. substr($variation_title, 0, strlen($variation_title)-2 );
+						$data_model['items'][$key]['posts_post_title'] = $parent_title .''. substr($variation_title, 0, strlen($variation_title)-2 );
 
 					} else if ( !empty($data['terms_product_type']) ) {
 						if ( $data['terms_product_type'] == 'simple' ) {
-							$data['icon_show'] = false;
+							$data_model['items'][$key]['icon_show'] = false;
 						} 
-						$data['parent'] = 'null';
-						$data['isLeaf'] = false;
-						$data['level'] = 0;							
+						$data_model['items'][$key]['parent'] = 'null';
+						$data_model['items'][$key]['isLeaf'] = false;
+						$data_model['items'][$key]['level'] = 0;							
 					}
 
 					if ( $this->prod_sort === true ) {
-						$data['icon_show'] = false;
-						$data['parent'] = 'null';
-						$data['isLeaf'] = false;
-						$data['level'] = 0;	
+						$data_model['items'][$key]['icon_show'] = false;
+						$data_model['items'][$key]['parent'] = 'null';
+						$data_model['items'][$key]['isLeaf'] = false;
+						$data_model['items'][$key]['level'] = 0;	
 					}
 
 					if (empty($data['postmeta_meta_key__product_attributes_meta_value__product_attributes'])) continue;
@@ -499,21 +499,21 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 		public function products_inline_update_pre($edited_data) {
 			if (empty($edited_data)) return $edited_data;
 
-			foreach ($edited_data as &$edited_row) {
+			foreach ($edited_data as $key => $edited_row) {
 				if (empty($edited_row['postmeta/meta_key=_product_attributes/meta_value=_product_attributes'])) continue;
 
 				$product_attributes = json_decode($edited_row['postmeta/meta_key=_product_attributes/meta_value=_product_attributes'],true); 
 
 				if (empty($product_attributes)) continue;
 
-				foreach ($product_attributes as $attr => &$attr_value) {
+				foreach ($product_attributes as $attr => $attr_value) {
 					if ($attr_value['is_taxonomy'] == 0) continue;
-					$attr_value['value'] = '';
+					$product_attributes[$attr]['value'] = '';
 				}
 
 				$product_attributes = sm_multidimensional_array_sort($product_attributes, 'position', SORT_ASC);
 				
-				$edited_row['postmeta/meta_key=_product_attributes/meta_value=_product_attributes'] = json_encode($product_attributes);
+				$edited_data[$key]['postmeta/meta_key=_product_attributes/meta_value=_product_attributes'] = json_encode($product_attributes);
 			}
 
 			return $edited_data;

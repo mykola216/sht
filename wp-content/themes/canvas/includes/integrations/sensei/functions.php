@@ -48,3 +48,20 @@ if ( ! function_exists( 'woo_sensei_remove_wrappers' ) ) {
 		remove_action( 'sensei_after_main_content', array( $woothemes_sensei->frontend, 'sensei_output_content_wrapper_end' ), 10 );
 	}
 }
+
+if (!function_exists('woo_custom_breadcrumbs_args')) {
+	/**
+	 * Custom Breadcrumb for Sensei pages
+	 * @param  array $args
+	 * @return array @args modified
+	 */
+	function woo_custom_breadcrumbs_args ( $args ) {
+		if ( !is_sensei() ) {
+			return $args;
+		}
+		$textdomain = 'woothemes';
+		$args = apply_filters( 'canvas_sensei_breadcrumb_args', array( 'show_home' => __( 'Home', $textdomain ) ) );
+		return $args;
+	} // End woo_custom_breadcrumbs_args()
+}
+

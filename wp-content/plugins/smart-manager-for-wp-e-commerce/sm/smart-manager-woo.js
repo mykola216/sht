@@ -948,6 +948,22 @@ Ext.onReady(function () {
         return value ? value.dateFormat('M d, Y') : '';
     }
 	
+    //Products custom columns bool type
+	var trueFalseCombo_inline = new Ext.form.ComboBox({
+		typeAhead: true,
+		triggerAction: 'all',
+		lazyRender:true,
+		editable: false,
+		mode: 'local',
+		store: new Ext.data.ArrayStore({
+			id: 0,
+			fields: ['value','name'],
+			data: [['true', 'True'], ['false', 'False']]
+		}),
+		valueField: 'value',
+		displayField: 'name'
+	});
+
     //Coupons == combo box consisting of yes and no values for inline editing
 	var yesNoCombo_inline = new Ext.form.ComboBox({
 		typeAhead: true,
@@ -958,7 +974,7 @@ Ext.onReady(function () {
 		store: new Ext.data.ArrayStore({
 			id: 0,
 			fields: ['value','name'],
-			data: [['true', 'Yes'], ['false', 'No']]
+			data: [['yes', 'Yes'], ['no', 'No']]
 		}),
 		valueField: 'value',
 		displayField: 'name'
@@ -1485,7 +1501,7 @@ jQuery(function($) {
 
 
         	if (value.dataType == "bool") {
-        		product_column.editor = yesNoCombo_inline;
+        		product_column.editor = trueFalseCombo_inline;
         	} else if (value.dataType == "date") {
         		product_column.renderer = formatDate;
         		product_column.editor = new fm.DateField({
@@ -4072,7 +4088,7 @@ var showCustomerDetails = function(record,rowIndex){
 				coupon.hidden = true;
         	}
 
-        	if (couponFields.coupon_dashbd.column.items[i].type == "bool") {
+        	if (couponFields.coupon_dashbd.column.items[i].type == "yesno") {
         		coupon.editor = yesNoCombo_inline;
         	} else if (couponFields.coupon_dashbd.column.items[i].type == "datetime") {
         		coupon.editor = new fm.DateField({
