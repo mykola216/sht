@@ -250,11 +250,6 @@ function fue_save_email( $args ) {
 
         // data cleanup
         switch ( $args['type'] ) {
-            case 'customer':
-                $args['product_id']    = 0;
-                $args['category_id']   = 0;
-                break;
-
             case 'signup':
                 $args['product_id']     = 0;
                 $args['category_id']    = 0;

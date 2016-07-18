@@ -4,6 +4,7 @@ class FUE_Addon_WC_Memberships_Scheduler {
 
     public function __construct() {
         add_action( 'wc_memberships_user_membership_status_changed', array($this, 'queue_status_emails'), 10, 3 );
+        add_action( 'wc_memberships_user_membership_created', array($this, 'queue_membership_active_emails'), 10, 2 );
         add_action( 'wc_memberships_grant_membership_access_from_purchase', array($this, 'schedule_reminders_from_purchase'), 10, 2 );
         add_filter( 'fue_skip_email_sending', array($this, 'skip_sending_if_status_changed'), 10, 3 );
     }
@@ -56,6 +57,21 @@ class FUE_Addon_WC_Memberships_Scheduler {
     }
 
     /**
+     * Trigger membership status emails after a new membership has been created
+     *
+     * @param WC_Memberships_Membership_Plan $plan
+     * @param array $membership_data
+     */
+    public function queue_membership_active_emails( $plan, $membership_data ) {
+        if ( $membership_data['updating'] ) {
+            return;
+        }
+
+        $membership = wc_memberships_get_user_membership( $membership_data['user_membership_id'] );
+        $this->queue_status_emails( $membership, 'pending', $membership->get_status() );
+    }
+
+    /**
      * Schedule reminder emails after access is granted from a product purchase
      * @param WC_Memberships_Membership_Plan $plan
      * @param array $data
@@ -78,8 +94,10 @@ class FUE_Addon_WC_Memberships_Scheduler {
         }
         $emails = fue_get_emails( 'wc_memberships', FUE_Email::STATUS_ACTIVE, array(
             'meta_query'    => array(
-                'key'   => '_interval_type',
-                'value' => 'membership_before_expire'
+                array(
+                    'key'   => '_interval_type',
+                    'value' => 'membership_before_expire'
+                )
             )
         ));
         foreach ( $emails as $email ) {
@@ -121,8 +139,10 @@ class FUE_Addon_WC_Memberships_Scheduler {
     public function clear_expiration_reminders( $membership ) {
         $emails = fue_get_emails( 'wc_memberships', FUE_Email::STATUS_ACTIVE, array(
             'meta_query'    => array(
-                'key'   => '_interval_type',
-                'value' => 'membership_before_expire'
+                array(
+                    'key'   => '_interval_type',
+                    'value' => 'membership_before_expire'
+                )
             )
         ));
 

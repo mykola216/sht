@@ -5,7 +5,7 @@
  * Description: Ultimate plugin to export WooCommerce sales
  * Author: AlgolPlus
  * Author URI: http://algolplus.com/
- * Version: 1.1.13
+ * Version: 1.2.0
  * Text Domain: woocommerce-order-export
  * Domain Path: /i18n/languages/
  *

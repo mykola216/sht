@@ -3,13 +3,12 @@ Contributors: alekv
 Donate link: http://www.wolfundbaer.ch/donations/
 Tags: woocommerce, woocommerce conversion tracking, google adwords, adwords, conversion, conversion value, conversion tag, conversion pixel, conversion value tracking, conversion tracking, conversion tracking adwords, conversion tracking pixel, conversion tracking script, track conversions, tracking code manager
 Requires at least: 3.1
-Tested up to: 4.5
-Stable tag: 1.3.1
+Tested up to: 4.5.3
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Track the dynamic order value in AdWords from WooCommerce.
-Easy and accurate.
+Track the dynamic order value in AdWords from WooCommerce
 
 == Description ==
 
@@ -20,13 +19,19 @@ This plugin <strong>tracks the value of WooCommerce orders in Google AdWords</st
 * Very accurate by preventing duplicate reporting effectively, excluding admins and shop managers from tracking, and not counting failed payments.
 * Very easy to install and maintain.
 
+<strong>Requirements</strong>
+
+* The payment gateway **must** support on-site payments. If you want to use an off-site payment solution like the free PayPal extension you need to make sure that the visitor is being redirected back to the WooCommerce thankyou page after the successful transaction. Only if the redirection is set up properly and the visitor doesn't stop the redirection, only then the conversion will be counted.
+
 <strong>Other plugins</strong>
 
 If you like this plugin you might like that one too: https://wordpress.org/plugins/woocommerce-google-dynamic-retargeting-tag/
 
-<strong>Translations</strong>
+<strong>Supported languages</strong>
 
-Thanks to Adrijana Nikolic from http://webhostinggeeks.com for the translation into Serbian.
+* English
+* German
+* Serbian ( by Adrijana Nikolic http://webhostinggeeks.com )
  
 == Installation ==
 
@@ -42,7 +47,12 @@ Thanks to Adrijana Nikolic from http://webhostinggeeks.com for the translation i
 
 = How do I check if the plugin is working properly? =
 
-Download the Google Tag Assistant browser plugin. It is a powerful tool to validate all Google tags on your pages.
+1. Log out of the shop.
+2. Search for one of your keywords and click on one of your ads.
+3. Purchase an item from your shop.
+4. Wait until the conversion shows up in AdWords.
+
+With the Google Tag Assistant you will also be able to see the tag fired on the thankyou page.
 
 = Where can I report a bug or suggest improvements? =
 
@@ -53,6 +63,10 @@ You can send the link to the front page of your shop too if you think it would b
 
 == Changelog ==
 
+= 1.3.3 =
+* Tweak: Refurbishment of the settings page
+= 1.3.2 =
+* New: Uninstall routine
 = 1.3.1 =
 * New: Keep old deduplication logic in the code as per recommendation by AdWords
 = 1.3.0 =

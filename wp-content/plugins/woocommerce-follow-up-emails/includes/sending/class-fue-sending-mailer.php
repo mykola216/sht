@@ -235,7 +235,11 @@ class FUE_Sending_Mailer {
         $headers[] = "X-FUE: $site_id";
         $headers[] = "X-FUE-EMAIL: {$email->id}";
         $headers[] = "X-FUE-QUEUE-ID: {$queue_item->id}";
-        $headers[] = "List-Unsubscribe: <{$email_data['unsubscribe']}>";
+
+
+	    if ( !empty( $email_data['unsubscribe'] ) ) {
+		    $headers[] = "List-Unsubscribe: <{$email_data['unsubscribe']}>";
+	    }
 
         // bounce handling
         $fue_bounce = new FUE_Bounce_Handler();
@@ -983,7 +987,7 @@ class FUE_Sending_Mailer {
         $global_bcc = get_option('fue_bcc', '');
         $types_bcc  = get_option('fue_bcc_types', array());
 
-        $email_bcc  = (isset($email_meta['bcc']) && is_email($email_meta['bcc']))
+        $email_bcc  = isset( $email_meta['bcc'] )
                         ? $email_meta['bcc']
                         : false;
 

@@ -28,7 +28,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<?php if ( $mode == 'profiles' ): ?>
 			<div class="my-block">
 				<div style="display: inline;">
-					<span class="wc-oe-header"><?php echo _e( 'Title', 'woocommerce-order-export' ) ?></span>
+					<span class="wc-oe-header"><?php _e( 'Title', 'woocommerce-order-export' ) ?></span>
 					<input type=text  style="width: 90%;" name="settings[title]" value='<?php echo ( isset( $settings[ 'title' ] ) ? $settings[ 'title' ] : '' ) ?>'>
 				</div>
 			</div>
@@ -36,7 +36,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<?php endif; ?>
 		<?php if ( $mode == 'cron' ): ?>
 			<div id="my-shedule-days" class="my-block">
-				<div class="wc-oe-header"><?php echo _e( 'Schedule', 'woocommerce-order-export' ) ?></div>
+				<div class="wc-oe-header"><?php _e( 'Schedule', 'woocommerce-order-export' ) ?></div>
 				<div id="d-schedule-1">
 					<input type="radio" name="settings[schedule][type]" value="schedule-1" id="schedule-1" class="wc-oe-schedule-type" <?php echo ((isset( $settings[ 'schedule' ] ) and $settings[ 'schedule' ][ 'type' ] == 'schedule-1') or ! isset( $settings[ 'schedule' ] )) ? 'checked' : '' ?>>
 					<div class="weekday">
@@ -99,8 +99,8 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<div id="d-schedule-2" class="padding-bottom-10">
 					<input type="radio" name="settings[schedule][type]" value="schedule-2" id="schedule-2" class="wc-oe-schedule-type" <?php echo (isset( $settings[ 'schedule' ] ) and $settings[ 'schedule' ][ 'type' ] == 'schedule-2') ? 'checked' : '' ?>>
 					<select class="wc_oe-select-interval" name="settings[schedule][interval]">
-						<option value="-1"><?php echo _e( 'Choose', 'woocommerce-order-export' ) ?></option>
-						<option value="custom"  <?php echo (isset( $settings[ 'schedule' ][ 'interval' ] ) AND $settings[ 'schedule' ][ 'interval' ] == 'custom') ? 'selected' : '' ?>><?php echo _e( 'Custom', 'woocommerce-order-export' ) ?></option>
+						<option value="-1"><?php _e( 'Choose', 'woocommerce-order-export' ) ?></option>
+						<option value="custom"  <?php echo (isset( $settings[ 'schedule' ][ 'interval' ] ) AND $settings[ 'schedule' ][ 'interval' ] == 'custom') ? 'selected' : '' ?>><?php _e( 'Custom', 'woocommerce-order-export' ) ?></option>
 						<?php
 						$schedules = wp_get_schedules();
 						foreach ( $schedules as $name => $schedule ) :
@@ -109,11 +109,11 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 								<?php echo $schedule[ 'display' ] ?>
 							</option>
 						<?php endforeach; ?>
-						<option value="first_day_month"  <?php echo (isset( $settings[ 'schedule' ][ 'interval' ] ) AND $settings[ 'schedule' ][ 'interval' ] == 'first_day_month') ? 'selected' : '' ?>><?php echo _e( 'On the 1st day of the month', 'woocommerce-order-export' ) ?></option>
-						<option value="first_day_quarter"  <?php echo (isset( $settings[ 'schedule' ][ 'interval' ] ) AND $settings[ 'schedule' ][ 'interval' ] == 'first_day_quarter') ? 'selected' : '' ?>><?php echo _e( 'On the 1st day of the quarter', 'woocommerce-order-export' ) ?></option>
+						<option value="first_day_month"  <?php echo (isset( $settings[ 'schedule' ][ 'interval' ] ) AND $settings[ 'schedule' ][ 'interval' ] == 'first_day_month') ? 'selected' : '' ?>><?php _e( 'On the 1st day of the month', 'woocommerce-order-export' ) ?></option>
+						<option value="first_day_quarter"  <?php echo (isset( $settings[ 'schedule' ][ 'interval' ] ) AND $settings[ 'schedule' ][ 'interval' ] == 'first_day_quarter') ? 'selected' : '' ?>><?php _e( 'On the 1st day of the quarter', 'woocommerce-order-export' ) ?></option>
 					</select>
 					<label id="custom_interval">
-						<?php echo _e( 'interval (min)', 'woocommerce-order-export' ) ?>:
+						<?php _e( 'interval (min)', 'woocommerce-order-export' ) ?>:
 						<input name="settings[schedule][custom_interval]" value="<?php echo isset( $settings[ 'schedule' ][ 'custom_interval' ] ) ? $settings[ 'schedule' ][ 'custom_interval' ] : '' ?>" >
 					</label>
 				</div>
@@ -121,53 +121,53 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<br>
 			<div id="my-export-options" class="my-block">
 				<div class="wc-oe-header">
-					<?php echo _e( 'Export options', 'woocommerce-order-export' ) ?>:
+					<?php _e( 'Export options', 'woocommerce-order-export' ) ?>:
 				</div>
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (!isset( $settings[ 'export_rule' ] ) || ($settings[ 'export_rule' ] == 'last_run')) ? 'checked' : '' ?> value="last_run" >				
-					<?php echo _e( 'Since last Run', 'woocommerce-order-export' ) ?>
+					<?php _e( 'Since last Run', 'woocommerce-order-export' ) ?>
 				</label>
 				<br>
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'today')) ? 'checked' : '' ?> value="today" >					
-					<?php echo _e( 'Today', 'woocommerce-order-export' ) ?>
+					<?php _e( 'Today', 'woocommerce-order-export' ) ?>
 				</label>
 				<br>
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'last_day')) ? 'checked' : '' ?> value="last_day" >					
-					<?php echo _e( 'Yesterday', 'woocommerce-order-export' ) ?>
+					<?php _e( 'Yesterday', 'woocommerce-order-export' ) ?>
 				</label>
 				<br>
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'last_week')) ? 'checked' : '' ?> value="last_week" >
-					<?php echo _e( 'Last week', 'woocommerce-order-export' ) ?>		
+					<?php _e( 'Last week', 'woocommerce-order-export' ) ?>		
 				</label>
 				<br>
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'last_month')) ? 'checked' : '' ?> value="last_month" >
-					<?php echo _e( 'Last month', 'woocommerce-order-export' ) ?>		
+					<?php _e( 'Last month', 'woocommerce-order-export' ) ?>		
 				</label>
 				<br>
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'last_quarter')) ? 'checked' : '' ?> value="last_quarter" >
-					<?php echo _e( 'Last quarter', 'woocommerce-order-export' ) ?>		
+					<?php _e( 'Last quarter', 'woocommerce-order-export' ) ?>		
 				</label>
 				<br>				
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'custom')) ? 'checked' : '' ?> value="custom" >
-					<?php echo _e( 'Last', 'woocommerce-order-export' ) ?> <input class="width-15" name="settings[export_rule_custom]" value="<?php echo isset( $settings[ 'export_rule_custom' ] ) ? $settings[ 'export_rule_custom' ] : '3' ?>" > <?php echo _e( 'days', 'woocommerce-order-export' ) ?>			
+					<?php _e( 'Last', 'woocommerce-order-export' ) ?> <input class="width-15" name="settings[export_rule_custom]" value="<?php echo isset( $settings[ 'export_rule_custom' ] ) ? $settings[ 'export_rule_custom' ] : '3' ?>" > <?php _e( 'days', 'woocommerce-order-export' ) ?>			
 				</label>
 				<div class="wc-oe-header">
-					<?php echo _e( 'Filter orders by', 'woocommerce-order-export' ) ?>:
+					<?php _e( 'Filter orders by', 'woocommerce-order-export' ) ?>:
 				</div>
 				<label>
 					<input type="radio" name="settings[export_rule_field]" class="width-100" <?php echo (!isset( $settings[ 'export_rule' ] ) || ($settings[ 'export_rule_field' ] == 'date')) ? 'checked' : '' ?> value="date" >					
-					<?php echo _e( 'date created', 'woocommerce-order-export' ) ?>
+					<?php _e( 'date created', 'woocommerce-order-export' ) ?>
 				</label>
 				&#09;&#09;
 				<label>
 					<input type="radio" name="settings[export_rule_field]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule_field' ] == 'modified')) ? 'checked' : '' ?> value="modified" >
-					<?php echo _e( 'date modified', 'woocommerce-order-export' ) ?>
+					<?php _e( 'date modified', 'woocommerce-order-export' ) ?>
 				</label>
 			</div>
 			<br>
@@ -176,9 +176,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<?php if ( $show[ 'date_filter' ] ) : ?>
 			<div id="my-main" class="my-block">
 				<div style="display: inline;">
-					<span class="wc-oe-header"><?php echo _e( 'Date range', 'woocommerce-order-export' ) ?></span>
+					<span class="wc-oe-header"><?php _e( 'Date range', 'woocommerce-order-export' ) ?></span>
 					<input type=text class='date' name="settings[from_date]" id="from_date" value='<?php echo $settings[ 'from_date' ] ?>'>
-					<?php echo _e( 'to', 'woocommerce-order-export' ) ?>
+					<?php _e( 'to', 'woocommerce-order-export' ) ?>
 					<input type=text class='date' name="settings[to_date]" id="to_date" value='<?php echo $settings[ 'to_date' ] ?>'>
 				</div>
 
@@ -189,7 +189,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		
 			<div id="my-export-file" class="my-block">
 				<div class="wc-oe-header">
-					<?php echo _e( 'Export filename', 'woocommerce-order-export' ) ?>:
+					<?php _e( 'Export filename', 'woocommerce-order-export' ) ?>:
 				</div>
 				<label id="export_filename" class="width-100">
 					<input type="text" name="settings[export_filename]" class="width-100" value="<?php echo isset( $settings[ 'export_filename' ] ) ? $settings[ 'export_filename' ] : 'orders-%y-%m-%d-%h-%i-%s.xlsx' ?>" >
@@ -199,7 +199,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 
 		<div id="my-format" class="my-block">
-			<span class="wc-oe-header"><?php echo _e( 'Format', 'woocommerce-order-export' ) ?></span><br>
+			<span class="wc-oe-header"><?php _e( 'Format', 'woocommerce-order-export' ) ?></span><br>
 			<p>
 				<?php foreach ( WC_Order_Export_Admin::$formats as $format ) { ?>
 					<label class="button-secondary">
@@ -211,10 +211,12 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			</p>
 
 			<div id='XLS_options' style='display:none'><strong><?php _e( 'XLS options', 'woocommerce-order-export' ) ?></strong><br>
+				<input type=hidden name="settings[format_xls_use_xls_format]" value=0>
 				<input type=hidden name="settings[format_xls_display_column_names]" value=0>
 				<input type=hidden name="settings[format_xls_auto_width]" value=0>
 				<input type=hidden name="settings[format_xls_populate_other_columns_product_rows]" value=0>
 				<input type=hidden name="settings[format_xls_direction_rtl]" value=0>
+				<input type=checkbox name="settings[format_xls_use_xls_format]" value=1 <?php if ( @$settings[ 'format_xls_use_xls_format' ] ) echo 'checked'; ?>  id="format_xls_use_xls_format">  <?php _e( 'Export as .xls (Binary File Format)', 'woocommerce-order-export' ) ?><br>
 				<input type=checkbox name="settings[format_xls_display_column_names]" value=1 <?php if ( @$settings[ 'format_xls_display_column_names' ] ) echo 'checked'; ?>  >  <?php _e( 'Output column titles as first line', 'woocommerce-order-export' ) ?><br>
 				<input type=checkbox name="settings[format_xls_auto_width]" value=1 <?php if ( @$settings[ 'format_xls_auto_width' ] ) echo 'checked'; ?>  >  <?php _e( 'Auto column width ', 'woocommerce-order-export' ) ?><br>
 				<input type=checkbox name="settings[format_xls_populate_other_columns_product_rows]" value=1 <?php if ( @$settings[ 'format_xls_populate_other_columns_product_rows' ] ) echo 'checked'; ?>  >  <?php _e( 'Populate other columns if products exported as rows', 'woocommerce-order-export' ) ?><br>
@@ -229,6 +231,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<input type=checkbox name="settings[format_csv_populate_other_columns_product_rows]" value=1 <?php if ( @$settings[ 'format_csv_populate_other_columns_product_rows' ] ) echo 'checked'; ?>  >  <?php _e( 'Populate other columns if products exported as rows', 'woocommerce-order-export' ) ?><br>
 				<?php _e( 'Field Delimiter', 'woocommerce-order-export' ) ?> <input type=text name="settings[format_csv_delimiter]" value='<?php echo $settings[ 'format_csv_delimiter' ] ?>' size=1>
 				<?php _e( 'Line Break', 'woocommerce-order-export' ) ?><input type=text name="settings[format_csv_linebreak]" value='<?php echo $settings[ 'format_csv_linebreak' ] ?>' size=4><br>
+				<?php if ( function_exists( 'iconv' ) ): ?>
+					<?php _e( 'Code Page', 'woocommerce-order-export' ) ?><input type=text name="settings[format_csv_encoding]" value="<?php echo isset( $settings[ 'format_csv_encoding' ] ) ? $settings[ 'format_csv_encoding' ] : 'UTF-8' ?>"><br>
+				<?php endif ?>
 			</div>
 			<div id='XML_options' style='display:none'><strong><?php _e( 'XML options', 'woocommerce-order-export' ) ?></strong><br>
 				<span class="xml-title"><?php _e( 'Prepend XML', 'woocommerce-order-export' ) ?></span><input type=text name="settings[format_xml_prepend_raw_xml]" value='<?php echo $settings[ 'format_xml_prepend_raw_xml' ] ?>'><br>
@@ -240,6 +245,46 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			</div>
 
 			<div id='JSON_options' style='display:none'></div>
+
+			<br>
+			<div id="my-date-time-format" class="">
+				<div id="date_format_block">
+					<span class="wc-oe-header"><?php _e( 'Date', 'woocommerce-order-export' ) ?></span>
+					<?php
+					$date_format = array(
+							'',
+							'F j, Y',
+							'Y-m-d',
+							'm/d/Y',
+							'd/m/Y',
+					);
+					$date_format = apply_filters( 'woe_date_format', $date_format );
+					?>
+					<select name="settings[date_format]">
+						<?php foreach( $date_format as $format ):  ?>
+							<option value="<?php echo $format ?>" <?php echo selected( @$settings[ 'date_format' ], $format ) ?> ><?php echo !empty( $format ) ? current_time( $format ) : __( '-', 'woocommerce-order-export' ) ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+
+				<div id="time_format_block">
+					<span class="wc-oe-header"><?php _e( 'Time', 'woocommerce-order-export' ) ?></span>
+					<?php
+					$time_format = array(
+							'',
+							'g:i a',
+							'g:i A',
+							'H:i',
+					);
+					$time_format = apply_filters( 'woe_time_format', $time_format );
+					?>
+					<select name="settings[time_format]">
+						<?php foreach( $time_format as $format ):  ?>
+							<option value="<?php echo $format ?>" <?php echo selected( @$settings[ 'time_format' ], $format ) ?> ><?php echo !empty( $format ) ? current_time( $format ) : __( '-', 'woocommerce-order-export' ) ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -247,44 +292,58 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 	<div id="my-right" style="float: left; width: 48%; margin: 0px 10px; max-width: 500px;">
 		<?php if ( $mode == 'cron' ): ?>
 			<div id="my-shedule-destination" class="my-block">
-				<div class="wc-oe-header"><?php echo _e( 'Destination', 'woocommerce-order-export' ) ?></div>
+				<div class="wc-oe-header"><?php _e( 'Destination', 'woocommerce-order-export' ) ?></div>
 
 				<label class="button-secondary"><input type=radio name="settings[destination][type]" class="output_destination" value="email"
 					<?php if ( isset( $settings[ 'destination' ][ 'type' ] ) AND $settings[ 'destination' ][ 'type' ] == 'email' ) echo 'checked'; ?>
-													   > <?php echo _e( 'EMAIL', 'woocommerce-order-export' ) ?>
+													   > <?php _e( 'EMAIL', 'woocommerce-order-export' ) ?>
 					<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span>
 				</label>
 
 				<label class="button-secondary"><input type=radio name="settings[destination][type]" class="output_destination" value="ftp"
 					<?php if ( isset( $settings[ 'destination' ][ 'type' ] ) AND $settings[ 'destination' ][ 'type' ] == 'ftp' ) echo 'checked'; ?>
-													   > <?php echo _e( 'FTP', 'woocommerce-order-export' ) ?>
+													   > <?php _e( 'FTP', 'woocommerce-order-export' ) ?>
 					<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span>
 				</label>
 
 				<label class="button-secondary"><input type=radio name="settings[destination][type]" class="output_destination" value="http"
 					<?php if ( isset( $settings[ 'destination' ][ 'type' ] ) AND $settings[ 'destination' ][ 'type' ] == 'http' ) echo 'checked'; ?>
-													   > <?php echo _e( 'HTTP POST', 'woocommerce-order-export' ) ?>
+													   > <?php _e( 'HTTP POST', 'woocommerce-order-export' ) ?>
 					<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span>
 				</label>
 
 				<label class="button-secondary"><input type=radio name="settings[destination][type]" class="output_destination" value="folder"
 					<?php if ( isset( $settings[ 'destination' ][ 'type' ] ) AND $settings[ 'destination' ][ 'type' ] == 'folder' ) echo 'checked'; ?>
-													   > <?php echo _e( 'Folder', 'woocommerce-order-export' ) ?>
+													   > <?php _e( 'Folder', 'woocommerce-order-export' ) ?>
 					<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span>
 				</label>
 
 				<div class="padding-bottom-10 set-destination my-block" id="email" style="display: none;" >
-					<div class="wc-oe-header"><?php echo _e( 'Email Settings', 'woocommerce-order-export' ) ?></div>
+					<div class="wc-oe-header"><?php _e( 'Email Settings', 'woocommerce-order-export' ) ?></div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
-							<label><div><?php echo _e( 'Recipient(s)', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'From Email', 'woocommerce-order-export' ) ?></div>
+								<input type="text" name="settings[destination][email_from]" class="width-100" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][email_from]" ); ?>">
+							</label>
+						</div>
+					</div>
+					<div class="wc_oe-row">
+						<div class="col-100pr">
+							<label><div><?php _e( 'From Name', 'woocommerce-order-export' ) ?></div>
+								<input type="text" name="settings[destination][email_from_name]" class="width-100" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][email_from_name]" ); ?>">
+							</label>
+						</div>
+					</div>
+					<div class="wc_oe-row">
+						<div class="col-100pr">
+							<label><div><?php _e( 'Recipient(s)', 'woocommerce-order-export' ) ?></div>
 								<textarea name="settings[destination][email_recipients]" class="width-100"><?php echo $WC_Order_Export->get_value( $settings, "[destination][email_recipients]" ); ?></textarea>
 							</label>
 						</div>
 					</div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
-							<label><div><?php echo _e( 'Email Subject', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'Email Subject', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][email_subject]" class="width-100" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][email_subject]" ); ?>">
 							</label>
 						</div>
@@ -292,15 +351,15 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 					<div class="wc_oe-row">
 						<div class="col-100pr">
-							<label><div><?php echo _e( 'Email Body', 'woocommerce-order-export' ) ?></div>
-								<a href="#TB_inline?width=400&height=400&inlineId=modal-email-body" class="thickbox"><?php echo _e( 'Edit Email Body', 'woocommerce-order-export' ) ?></a>
+							<label><div><?php _e( 'Email Body', 'woocommerce-order-export' ) ?></div>
+								<a href="#TB_inline?width=400&height=400&inlineId=modal-email-body" class="thickbox"><?php _e( 'Edit Email Body', 'woocommerce-order-export' ) ?></a>
 							</label>
 						</div>
 					</div>
 
 
 					<div id="modal-email-body" >
-							<label><div><?php echo _e( 'Email Body', 'woocommerce-order-export' ) ?></div>						
+							<label><div><?php _e( 'Email Body', 'woocommerce-order-export' ) ?></div>						
 								<textarea name="settings[destination][email_body]" class="email_body_textarea" ><?php echo $WC_Order_Export->get_value( $settings, "[destination][email_body]" ); ?></textarea>
 							</label>							
 					</div>
@@ -309,22 +368,22 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="email" type="button" value="<?php echo _e( 'Test', 'woocommerce-order-export' ) ?>"></div>					
+								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="email" type="button" value="<?php _e( 'Test', 'woocommerce-order-export' ) ?>"></div>					
 							</label>
 						</div>
 					</div>
 				</div>
 
 				<div class="padding-bottom set-destination my-block" id="ftp" style="display: none;">
-					<div class="wc-oe-header"><?php echo _e( 'FTP Settings', 'woocommerce-order-export' ) ?></div>
+					<div class="wc-oe-header"><?php _e( 'FTP Settings', 'woocommerce-order-export' ) ?></div>
 					<div class="wc_oe-row">
 						<div class="col-50pr">
-							<label><div><?php echo _e( 'Server Name', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'Server Name', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][ftp_server]" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_server]" ); ?>">
 							</label>
 						</div>
 						<div class="col-50pr">
-							<label><div><?php echo _e( 'Port', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'Port', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][ftp_port]" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_port]" ); ?>">
 							</label>
 						</div>
@@ -332,19 +391,19 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<div class="wc_oe-row">
 
 						<div class="col-50pr">
-							<label><div><?php echo _e( 'Username', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'Username', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][ftp_user]" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_user]" ); ?>">
 							</label>
 						</div>
 						<div class="col-50pr">
-							<label><div><?php echo _e( 'Password', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'Password', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][ftp_pass]" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_pass]" ); ?>">
 							</label>
 						</div>
 					</div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
-							<label><div><?php echo _e( 'Initial path', 'woocommerce-order-export' ) ?></div>
+							<label><div><?php _e( 'Initial path', 'woocommerce-order-export' ) ?></div>
 								<input type="text" class="width-100" name="settings[destination][ftp_path]" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_path]" ); ?>">
 							</label>
 						</div>
@@ -352,25 +411,25 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div class=""><input name="settings[destination][ftp_passive_mode]" type="checkbox" <?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_passive_mode]" ) ? 'checked' : ''; ?>><?php echo _e( 'Passive mode', 'woocommerce-order-export' ) ?></div>
+								<div class=""><input name="settings[destination][ftp_passive_mode]" type="checkbox" <?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_passive_mode]" ) ? 'checked' : ''; ?>><?php _e( 'Passive mode', 'woocommerce-order-export' ) ?></div>
 							</label>
 						</div>
 					</div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="ftp" type="button" value="<?php echo _e( 'Test', 'woocommerce-order-export' ) ?>"></div>
+								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="ftp" type="button" value="<?php _e( 'Test', 'woocommerce-order-export' ) ?>"></div>
 							</label>
 						</div>
 					</div>
 				</div>
 
 				<div class="padding-bottom-10 set-destination my-block" id="http" style="display: none;" >
-					<div class="wc-oe-header"><?php echo _e( 'HTTP POST Settings', 'woocommerce-order-export' ) ?></div>
+					<div class="wc-oe-header"><?php _e( 'HTTP POST Settings', 'woocommerce-order-export' ) ?></div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div><?php echo _e( 'URL', 'woocommerce-order-export' ) ?></div>
+								<div><?php _e( 'URL', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][http_post_url]" class="width-100" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][http_post_url]" ); ?>">
 							</label>
 						</div>
@@ -378,18 +437,18 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="http" type="button" value="<?php echo _e( 'Test', 'woocommerce-order-export' ) ?>"></div>
+								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="http" type="button" value="<?php _e( 'Test', 'woocommerce-order-export' ) ?>"></div>
 							</label>
 						</div>
 					</div>
 				</div>
 
 				<div class="padding-bottom-10 set-destination my-block" id="folder" style="display: none;" >
-					<div class="wc-oe-header"><?php echo _e( 'To Folder Settings', 'woocommerce-order-export' ) ?></div>
+					<div class="wc-oe-header"><?php _e( 'To Folder Settings', 'woocommerce-order-export' ) ?></div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div><?php echo _e( 'Path', 'woocommerce-order-export' ) ?></div>
+								<div><?php _e( 'Path', 'woocommerce-order-export' ) ?></div>
 								<input type="text" name="settings[destination][path]" class="width-100" value="<?php echo $WC_Order_Export->get_value( $settings, "[destination][path]" ) ? $WC_Order_Export->get_value( $settings, "[destination][path]" ) : ABSPATH; ?>">
 							</label>
 						</div>
@@ -397,14 +456,14 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<div class="wc_oe-row">
 						<div class="col-100pr">
 							<label>
-								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="folder" type="button" value="<?php echo _e( 'Test', 'woocommerce-order-export' ) ?>"></div>
+								<div class="wrap"><input name="" class="wc_oe_test my-test-button add-new-h2" data-test="folder" type="button" value="<?php _e( 'Test', 'woocommerce-order-export' ) ?>"></div>
 							</label>
 						</div>
 					</div>
 				</div>			
 
 				<div id='test_reply_div'>
-					<b><?php echo _e( 'Test Results', 'woocommerce-order-export' ) ?></b><br>
+					<b><?php _e( 'Test Results', 'woocommerce-order-export' ) ?></b><br>
 					<textarea rows=5 id='test_reply' style="overflow: auto; width:100%" wrap='off'></textarea>
 				</div>
 
@@ -416,21 +475,29 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<span class="my-hide-next "><?php _e( 'Filter by order', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-order" hidden="hidden">
-				<span class="wc-oe-header"><?php echo _e( 'Order Statuses', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Order Statuses', 'woocommerce-order-export' ) ?></span>
 				<select id="statuses" name="settings[statuses][]" multiple="multiple" style="width: 100%">
 					<?php foreach ( wc_get_order_statuses() as $id => $status ) { ?>
 						<option value="<?php echo $id ?>" <?php if ( in_array( $id, $settings[ 'statuses' ] ) ) echo 'selected'; ?>><?php echo $status ?></option>
 					<?php } ?>
 				</select>
 				
-				<span class="wc-oe-header"><?php echo _e( 'Custom fields', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Custom fields', 'woocommerce-order-export' ) ?></span>
 				<br>
 				<select id="custom_fields" style="width: auto;">
 					<?php foreach ( WC_Order_Export_Data_Extractor::get_order_custom_fields() as $cf_name ) { ?>
 						<option><?php echo $cf_name; ?></option>
 					<?php } ?>
 				</select>
-				=
+
+				<select id="custom_fields_compare" class="select_compare">
+					<option>=</option>
+					<option>&lt;&gt;</option>
+					<option>LIKE</option>
+				</select>
+
+				<input type="text" id="text_custom_fields" disabled style="display: none;">
+
 				<button id="add_custom_fields" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
 				<br>
 				<select id="custom_fields_check" multiple name="settings[order_custom_fields][]" style="width: 100%;">
@@ -454,7 +521,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-products" hidden="hidden">
 				<div><input type="hidden" name="settings[all_products_from_order]" value="0"/><label><input type="checkbox" name="settings[all_products_from_order]" value="1" <?php checked($settings[ 'all_products_from_order' ]) ?> /> <?php _e( 'Export all products from a order', 'woocommerce-order-export' ) ?></label></div>
-				<span class="wc-oe-header"><?php echo _e( 'Product categories', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Product categories', 'woocommerce-order-export' ) ?></span>
 				<select id="product_categories" name="settings[product_categories][]" multiple="multiple" style="width: 100%">
 					<?php
 					if ( $settings[ 'product_categories' ] )
@@ -465,7 +532,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 						<?php } ?>
 				</select>
 
-				<span class="wc-oe-header"><?php echo _e( 'Product', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Product', 'woocommerce-order-export' ) ?></span>
 
 				<select id="products" name="settings[products][]" multiple="multiple" style="width: 100%;">
 					<?php
@@ -477,14 +544,22 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 						<?php } ?>
 				</select>
 
-				<span class="wc-oe-header"><?php echo _e( 'Product Attributes', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Product Attributes', 'woocommerce-order-export' ) ?></span>
 				<br>
 				<select id="attributes" style="width: auto;">
 					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_attributes() as $attr_id => $attr_name ) { ?>
 						<option><?php echo $attr_name; ?></option>
 					<?php } ?>
 				</select>
-				=
+
+				<select id="attributes_compare" class="select_compare">
+					<option>=</option>
+					<option>&lt;&gt;</option>
+					<option>LIKE</option>
+				</select>
+
+				<input type="text" id="text_attributes" disabled style="display: none;">
+
 				<button id="add_attributes" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
 				<br>
 				<select id="attributes_check" multiple name="settings[product_attributes][]" style="width: 100%;">
@@ -496,7 +571,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 						<?php } ?>
 				</select>
 
-				<span class="wc-oe-header"><?php echo _e( 'Product Taxonomies', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Product Taxonomies', 'woocommerce-order-export' ) ?></span>
 				<br>
 				<select id="taxonomies" style="width: auto;">
 					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_taxonomies() as $attr_id => $attr_name ) { ?>
@@ -525,7 +600,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<span class="my-hide-next "><?php _e( 'Filter by shipping', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-shipping" hidden="hidden">
-				<span class="wc-oe-header"><?php echo _e( 'Shipping locations', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Shipping locations', 'woocommerce-order-export' ) ?></span>
 				<br>
 				<select id="shipping_locations">
 					<option>City</option>
@@ -558,7 +633,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<span class="my-hide-next "><?php _e( 'Filter by users/roles', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-users" hidden="hidden">
-				<span class="wc-oe-header"><?php echo _e( 'User roles', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'User roles', 'woocommerce-order-export' ) ?></span>
 				<select id="user_roles" name="settings[user_roles][]" multiple="multiple" style="width: 100%">
 					<?php
 					global $wp_roles;
@@ -567,7 +642,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<?php } ?>
 				</select>
 
-				<span class="wc-oe-header"><?php echo _e( 'User names', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'User names', 'woocommerce-order-export' ) ?></span>
 				<select id="user_names" name="settings[user_names][]" multiple="multiple" style="width: 100%">
 					<?php
 					if ( $settings[ 'user_names' ] )
@@ -918,7 +993,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 	function change_filename_ext() {
 		if ( jQuery( '#export_filename' ).size() ) {
 			var filename = jQuery( '#export_filename input' ).val();
-			var ext = output_format.toLowerCase() != 'xls' ? output_format.toLowerCase() : 'xlsx';
+			var ext = output_format.toLowerCase();
+			if( ext=='xls'  && !jQuery( '#format_xls_use_xls_format' ).prop('checked') ) //fix for XLSX
+				ext = 'xlsx';
 			var file = filename.replace( /^(.*)\..+$/, "$1." + ext );
 			jQuery( '#export_filename input' ).val( file );
 		}
@@ -1152,7 +1229,10 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 						alert( xhr.responseText );
 					},
 					success: function( response ) {
-						$( '#export_new_window_frame' ).attr( "src", ajaxurl + (ajaxurl.indexOf('?') === -1? '?':'&')+'action=order_exporter&method=export_download&format=' + output_format + '&file_id=' + window.file_id );
+						var download_format = output_format;
+						if( output_format=='XLS' && !jQuery( '#format_xls_use_xls_format' ).prop('checked') ) 
+							download_format =  'XLSX';
+						$( '#export_new_window_frame' ).attr( "src", ajaxurl + (ajaxurl.indexOf('?') === -1? '?':'&')+'action=order_exporter&method=export_download&format=' + download_format + '&file_id=' + window.file_id );
 					}
 				} );
 
@@ -1279,5 +1359,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		openFilter('my-users');
 		
 
+		//for XLSX
+		$('#format_xls_use_xls_format').click(function() {
+			change_filename_ext();
+		});
 	} );
 </script>

@@ -80,7 +80,7 @@ class WC_Order_Export_Engine {
 
 	private static function init_formater( $mode, $settings, $fname, &$labels, &$static_vals ) {
 		$format = strtolower( $settings['format'] );
-		include_once dirname(__FILE__) . "/formats/abstract-class-woe-formatter.php";
+		include_once dirname( __FILE__ ) . "/formats/abstract-class-woe-formatter.php";
 		include_once dirname( __FILE__ ) . "/formats/class-woe-formatter-$format.php";
 
 		$format_settings = array( 'global_job_settings' => $settings );
@@ -156,7 +156,7 @@ class WC_Order_Export_Engine {
 		//get IDs
 		$sql = WC_Order_Export_Data_Extractor::sql_get_order_ids( $settings );
 		if ( $make_mode == 'preview' ) {
-			$sql .= " ORDER BY order_id DESC LIMIT 1";
+			$sql .= " ORDER BY order_id DESC LIMIT 3";
 		} elseif ( $make_mode != 'estimate' ) {
 			$sql .= " ORDER BY order_id ASC";
 		}
@@ -222,6 +222,16 @@ class WC_Order_Export_Engine {
 			$options['include_products'] = false;
 		else
 			$options['include_products'] =  $wpdb->get_col( WC_Order_Export_Data_Extractor::sql_get_product_ids( $settings ) );
+
+		if ( isset( $settings['date_format'] ) )
+			$options['date_format'] = $settings['date_format'];
+		else
+			$options['date_format'] = 'Y-m-d';
+
+		if ( isset( $settings['time_format'] ) )
+			$options['time_format'] = $settings['time_format'];
+		else
+			$options['time_format'] = 'H:i';
 
 		if ( $make_mode != 'partial' ) {
 			$formater->start( $header );
@@ -325,6 +335,16 @@ class WC_Order_Export_Engine {
 			$options['include_products'] = false;
 		else
 			$options['include_products'] =  $wpdb->get_col( WC_Order_Export_Data_Extractor::sql_get_product_ids( $settings ) );
+
+		if ( isset( $settings['date_format'] ) )
+			$options['date_format'] = $settings['date_format'];
+		else
+			$options['date_format'] = 'Y-m-d';
+
+		if ( isset( $settings['time_format'] ) )
+			$options['time_format'] = $settings['time_format'];
+		else
+			$options['time_format'] = 'H:i';
 
 		$formater->start( $header );
 

@@ -1492,8 +1492,9 @@ class FUE_Addon_Woocommerce_Scheduler {
             'meta_query' => array(
                 'relation'  => 'AND',
                 array(
-                    'key'   => '_interval_type',
-                    'value' => 'product_purchase_above_one',
+                    'key'       => '_interval_type',
+                    'value'     => array('product_purchase_above_one', 'purchase_above_one'),
+                    'compare'   => 'IN'
                 )
             )
         );

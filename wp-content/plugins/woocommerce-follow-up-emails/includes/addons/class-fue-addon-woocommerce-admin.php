@@ -228,22 +228,12 @@ class FUE_Addon_Woocommerce_Admin {
 
         if ( $page == 'followup-emails' || $page == 'followup-emails-settings' || $page == 'followup-emails-queue' ) {
             wp_enqueue_script( 'wc-product-search', plugins_url( 'templates/js/fue-select.js', FUE_FILE ), array( 'jquery', 'select2' ), FUE_VERSION );
-            
-            if (WC_FUE_Compatibility::is_wc_version_gt('2.1')) {
-                $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-                wp_register_script( 'ajax-chosen', WC()->plugin_url() . '/assets/js/chosen/ajax-chosen.jquery' . $suffix . '.js', array('jquery', 'chosen'), WC()->version );
-                wp_register_script( 'chosen', WC()->plugin_url() . '/assets/js/chosen/chosen.jquery' . $suffix . '.js', array('jquery'), WC()->version );
-            } else {
-                // For WC < 2.1
-                woocommerce_admin_scripts();
-            }
 
-            wp_enqueue_script( 'fue-queue', FUE_TEMPLATES_URL .'/js/queue.js', array('jquery', 'chosen'), FUE_VERSION );
+            wp_enqueue_style('select2');
+            wp_enqueue_script( 'fue-queue', FUE_TEMPLATES_URL .'/js/queue.js', array('jquery'), FUE_VERSION );
 
             wp_enqueue_script( 'woocommerce_admin' );
             wp_enqueue_script('farbtastic');
-            wp_enqueue_script( 'ajax-chosen' );
-            wp_enqueue_script( 'chosen' );
             wp_enqueue_script( 'jquery-ui-sortable' );
             wp_enqueue_script( 'jquery-ui-autocomplete', null, array('jquery-ui-core') );
 
@@ -507,7 +497,7 @@ class FUE_Addon_Woocommerce_Admin {
      * @param FUE_Email $email
      */
     public function email_form( $email ) {
-        $types = apply_filters('fue_wc_form_products_selector_email_types', array('storewide', 'reminder') );
+        $types = apply_filters('fue_wc_form_products_selector_email_types', array('storewide', 'reminder', 'customer') );
         if ( !in_array($email->type, $types) ) {
             return;
         }
@@ -536,7 +526,7 @@ class FUE_Addon_Woocommerce_Admin {
      */
     public function register_trigger_fields( $email ) {
 
-        if ( in_array( $email->type, apply_filters('fue_wc_form_products_selector_email_types', array('storewide', 'reminder') ) ) ) {
+        if ( in_array( $email->type, apply_filters('fue_wc_form_products_selector_email_types', array('storewide', 'reminder', 'customer') ) ) ) {
             // load the categories
             $categories     = get_terms( 'product_cat', array( 'order_by' => 'name', 'order' => 'ASC' ) );
             $has_variations = (!empty($email->product_id) && FUE_Addon_Woocommerce::product_has_children($email->product_id)) ? true : false;

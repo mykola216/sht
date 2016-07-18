@@ -4,7 +4,7 @@ function bind_events() {
 	// for filter by ORDER custom fields
     jQuery( '#custom_fields' ).change( function() {
 
-        jQuery( '#text_custom_fields' ).attr( 'disabled', 'disabled' );
+        jQuery( '#select_custom_fields' ).attr( 'disabled', 'disabled' );
         var data = {
             'cf_name': jQuery( this ).val(),
             method: "get_order_custom_fields_values",
@@ -12,25 +12,26 @@ function bind_events() {
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#text_custom_fields' ).remove();
+            jQuery( '#select_custom_fields' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="text_custom_fields" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_custom_fields' ) );
+                jQuery( '<select id="select_custom_fields" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_custom_fields' ) );
             }
             else {
-                jQuery( '<input type="text" id="text_custom_fields" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_custom_fields' ) );
+                jQuery( '<input type="text" id="select_custom_fields" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_custom_fields' ) );
             }
         }, 'json' );
     } );
     jQuery( '#add_custom_fields' ).click( function() {
 
-        var val = jQuery( "#text_custom_fields" ).val();
+        var val = !jQuery( "#select_custom_fields" ).is(':disabled') ? jQuery( "#select_custom_fields" ).val() : jQuery( "#text_custom_fields" ).val();
         var val2 = jQuery( '#custom_fields' ).val();
+        var val_op = jQuery( '#custom_fields_compare' ).val();
         if ( val != null && val2 != null && val.length && val2.length ) {
-            val = val2 + '=' + val;
+            val = val2 + ' ' + val_op + ' ' + val;
 
             var f = true;
             jQuery( '#custom_fields_check' ).next().find( 'ul li' ).each( function() {
@@ -48,17 +49,29 @@ function bind_events() {
                     jQuery( '#custom_fields_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
                 } );
 
-                jQuery( "input#text_custom_fields" ).val( '' );
+                jQuery( "input#select_custom_fields" ).val( '' );
             }
         }
 
         return false;
     } );
+
+    jQuery( '#custom_fields_compare').change(function() {
+        var val_op = jQuery( '#custom_fields_compare' ).val();
+        if ( 'LIKE' === val_op ) {
+            jQuery( "#select_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#text_custom_fields" ).css('display', 'inline' ).attr( 'disabled', false );
+        }
+        else {
+            jQuery( "#select_custom_fields" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#text_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+        }
+    });
 	//end of change 
 	
     jQuery( '#attributes' ).change( function() {
 
-        jQuery( '#text_attributes' ).attr( 'disabled', 'disabled' );
+        jQuery( '#select_attributes' ).attr( 'disabled', 'disabled' );
         var data = {
             'attr': jQuery( this ).val(),
             method: "get_products_attributes_values",
@@ -66,26 +79,27 @@ function bind_events() {
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#text_attributes' ).remove();
+            jQuery( '#select_attributes' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="text_attributes" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_attributes' ) );
+                jQuery( '<select id="select_attributes" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_attributes' ) );
             }
             else {
-                jQuery( '<input type="text" id="text_attributes" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_attributes' ) );
+                jQuery( '<input type="text" id="select_attributes" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_attributes' ) );
             }
         }, 'json' );
     } );
 
     jQuery( '#add_attributes' ).click( function() {
 
-        var val = jQuery( "#text_attributes" ).val();
+        var val = !jQuery( "#select_attributes" ).is(':disabled') ? jQuery( "#select_attributes" ).val() : jQuery( "#text_attributes" ).val();
         var val2 = jQuery( '#attributes' ).val();
+        var val_op = jQuery( '#attributes_compare' ).val();
         if ( val != null && val2 != null && val.length && val2.length ) {
-            val = val2 + '=' + val;
+            val = val2 + ' ' + val_op + ' ' + val;
 
             var f = true;
             jQuery( '#attributes_check' ).next().find( 'ul li' ).each( function() {
@@ -103,12 +117,24 @@ function bind_events() {
                     jQuery( '#attributes_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
                 } );
 
-                jQuery( "input#text_attributes" ).val( '' );
+                jQuery( "input#select_attributes" ).val( '' );
             }
         }
 
         return false;
     } );
+
+    jQuery( '#attributes_compare').change(function() {
+        var val_op = jQuery( '#attributes_compare' ).val();
+        if ( 'LIKE' === val_op ) {
+            jQuery( "#select_attributes" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#text_attributes" ).css('display', 'inline' ).attr( 'disabled', false );
+        }
+        else {
+            jQuery( "#select_attributes" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#text_attributes" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+        }
+    });
 
     jQuery( '#add_taxonomies' ).click( function() {
 

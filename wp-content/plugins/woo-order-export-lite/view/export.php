@@ -4,7 +4,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 ?>
 <h2>
-	<?php echo _e( 'Export Now', 'woocommerce-order-export' ) ?>
+	<?php _e( 'Export Now', 'woocommerce-order-export' ) ?>
 </h2>
 <div class="tabs-content">
 	<?php

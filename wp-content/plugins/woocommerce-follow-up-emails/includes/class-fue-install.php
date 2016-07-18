@@ -12,7 +12,7 @@ class FUE_Install {
 
     private $updates = array(
         '7.0', '7.1', '7.3', '7.4', '7.5', '7.6', '7.9', '7.13',
-        '7.14', '7.15', '7.17', '7.18', '7.19.4', '20160113', '20160203', '20160308'
+        '7.14', '7.15', '7.17', '7.18', '7.19.4', '20160113', '20160203', '20160308', '20160602'
     );
 
     public function __construct() {
@@ -140,7 +140,7 @@ class FUE_Install {
 
         flush_rewrite_rules();
 
-        if ( version_compare( $current_db_version, '20160308', '<' ) && null !== $current_db_version ) {
+        if ( version_compare( $current_db_version, '20160602', '<' ) && null !== $current_db_version ) {
             update_option( 'fue_needs_update', 1 );
         } else {
             update_option( 'fue_db_version', Follow_Up_Emails::$db_version );

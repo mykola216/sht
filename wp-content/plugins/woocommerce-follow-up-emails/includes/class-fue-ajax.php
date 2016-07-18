@@ -24,6 +24,7 @@ class FUE_AJAX {
             'user_search'               => false,
             'admin_search'              => false,
             'search_for_email'          => false,
+            'json_search_customers'     => false,
             'find_similar_emails'       => false,
             'toggle_email_status'       => false,
             'toggle_queue_status'       => false,
@@ -419,6 +420,75 @@ class FUE_AJAX {
         }
 
         $results = apply_filters( 'fue_email_query', $results, $term, $all_emails );
+
+        die(json_encode($results));
+    }
+
+    /**
+     * AJAX handler for searching for existing email addresses
+     *
+     * This method looks for partial user_email and/or display_name matches,
+     * as well as partial first_name and last_name matches. The results are
+     * formatted as an array of unique customer keys with values being formed as:
+     *
+     *     first_name last_name <user_email>
+     *
+     * The resulting array is then JSON-encoded before it is sent back
+     *
+     */
+    public static function json_search_customers() {
+        global $wpdb;
+        $term       = stripslashes($_GET['term']);
+        $results    = array();
+        $all_emails = array();
+
+        // Registered users
+        $email_term = $term .'%';
+        $name_term  = '%'. $term .'%';
+
+        $email_results = $wpdb->get_results( $wpdb->prepare("
+            SELECT DISTINCT u.ID, u.display_name, u.user_email
+            FROM {$wpdb->prefix}users u
+            WHERE (
+                `user_email` LIKE %s OR display_name LIKE %s
+            )
+            ", $email_term, $name_term) );
+
+        if ( $email_results ) {
+            foreach ( $email_results as $result ) {
+                $all_emails[] = $result->ID;
+
+                $first_name = get_user_meta( $result->ID, 'billing_first_name', true );
+                $last_name  = get_user_meta( $result->ID, 'billing_last_name', true );
+
+                if ( empty($first_name) && empty($last_name) ) {
+                    $first_name = $result->display_name;
+                }
+
+                $results[ $result->ID ] = $first_name .' '. $last_name .' &lt;'. $result->user_email .'&gt;';
+            }
+        }
+
+        // Full name (First Last format)
+        $name_results = $wpdb->get_results("
+            SELECT DISTINCT m1.user_id, u.user_email, m1.meta_value AS first_name, m2.meta_value AS last_name
+            FROM {$wpdb->prefix}users u, {$wpdb->prefix}usermeta m1, {$wpdb->prefix}usermeta m2
+            WHERE u.ID = m1.user_id
+            AND m1.user_id = m2.user_id
+            AND m1.meta_key =  'first_name'
+            AND m2.meta_key =  'last_name'
+            AND CONCAT_WS(  ' ', m1.meta_value, m2.meta_value ) LIKE  '%{$term}%'
+        ");
+
+        if ( $name_results ) {
+            foreach ( $name_results as $result ) {
+                if ( in_array($result->user_email, $all_emails) ) continue;
+
+                $all_emails[] = $result->user_email;
+
+                $results[ $result->user_id ] = $result->first_name .' '. $result->last_name .' &lt;'. $result->user_email .'&gt;';
+            }
+        }
 
         die(json_encode($results));
     }
@@ -2362,6 +2432,8 @@ class FUE_AJAX {
      * Each step, a session key will be returned which is used to continue an existing import process.
      */
     public static function wc_order_import() {
+	    ob_start();
+
         // We need to turn off the object cache temporarily while we deal with transients,
         // as a workaround to a W3 Total Cache object caching bug
         global $_wp_using_ext_object_cache;
@@ -2396,7 +2468,6 @@ class FUE_AJAX {
                 // generate a new session id
                 $session = time();
 
-                ob_start();
                 set_transient( 'fue_import_email_ids_'. $session, $email_id, 86400 );
                 set_transient( 'fue_import_filter_email_ids_'. $session, $email_id, 86400 );
 
@@ -2430,8 +2501,6 @@ class FUE_AJAX {
 
                 // re-enable caching if it was previously enabled
                 $_wp_using_ext_object_cache = $_wp_using_ext_object_cache_previous;
-
-                ob_clean();
 
                 self::send_response( $response );
 
@@ -2486,9 +2555,6 @@ class FUE_AJAX {
                 self::send_response( $return );
 
             } else {
-
-                ob_start();
-
                 $ids = get_transient( 'fue_import_email_ids_'. $session );
 
                 do {
@@ -2508,8 +2574,6 @@ class FUE_AJAX {
                 $results = $wc_importer->import_orders( $id, $orders, 50 );
 
                 FUE_Transients::set_transient( 'fue_import_filtered_'. $id .'_'. $session, $results['orders'] );
-
-                ob_clean();
 
                 $total_orders       = get_transient( 'fue_import_num_filtered_'. $session );
                 $remaining_orders   = $total_orders - $results['processed'];
@@ -3166,6 +3230,7 @@ class FUE_AJAX {
      * @param array $array
      */
     private static function send_response( $array ) {
+	    @ob_clean();
         die( json_encode( $array ) );
     }
 }

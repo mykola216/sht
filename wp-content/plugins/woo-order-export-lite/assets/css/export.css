@@ -314,7 +314,7 @@ input.date{
     margin-bottom: 5px;
 }
 
-#text_attributes, #text_locations,#text_custom_fields{
+#select_attributes, #text_locations,#select_custom_fields{
     width: 120px;
 }
 .dashicons{
@@ -379,11 +379,20 @@ input.date{
 }
 .select_compare
 {
-    width: 40px;
+    width: 60px;
     margin-top: 0px;
     margin-right: 6px;
 }
 
 #custom_meta_products_mode input, #custom_meta_coupons_mode input  {
     width: auto;
+}
+
+#date_format_block, #time_format_block {
+    display: inline-block;
+    width: 48%;
+}
+
+#date_format_block select, #time_format_block select {
+    width: 70%;
 }

@@ -1,5 +1,15 @@
 *** WooCommerce Follow-Up Emails ***
 
+2016.05.18 - version 4.4.14
+ * Added: WooCommerce 2.6 compatibility support
+ * Bug fix: Tweak for customer emails trigger - after purchased more than once
+ * Bug fix: Fixed bug where membership status emails are getting scheduled as expiration reminder emails
+ * Bug fix: Skip the List-Unsubscribe email header if empty
+ * Bug fix: Discard output generated while running the import script
+ * Bug fix: Fixed error in handling multiple BCC emails
+ * Improvement: Added the 'Enable For' setting for customer emails
+ * Update: Data update to reset membership emails with incorrect sending dates
+
 2016.04.28 - version 4.4.13
  * Bug fix: Fix the fatal error when Tickets Plus is not installed
  * Bug fix: Convert the FROM name's encoding

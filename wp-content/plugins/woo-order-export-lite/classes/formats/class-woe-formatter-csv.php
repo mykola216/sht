@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WOE_Formatter_Csv extends WOE_Formatter {
 	public static $linebreak = '';
 	public static $delimiter = '';
+	public static $encoding  = '';
 	var $rows;
 	
 	public function __construct( $mode, $filename, $settings, $format, $labels ) {
@@ -13,7 +14,8 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 		
 		self::$linebreak = $this->convert_literals( $this->settings['linebreak'] );
 		self::$delimiter = $this->convert_literals( $this->settings['delimiter'] );
-		
+		self::$encoding  = isset( $this->settings['encoding'] ) ? $this->settings['encoding'] : '';
+
 		// register the filter 
 		stream_filter_register( 'WOE_Formatter_Csv_crlf', 'WOE_Formatter_Csv_crlf_filter' );
 		// attach to stream 
@@ -22,6 +24,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 
 	public function start( $data = '' ) {
 		$data = apply_filters( "woe_csv_header_filter", $data );
+		$this->encode_array( $data );
 		
 		if ( $this->settings['add_utf8_bom'] ) {
 			fwrite( $this->handle, chr( 239 ) . chr( 187 ) . chr( 191 ) );
@@ -43,7 +46,16 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 		return $s;
 	}
 
+	private function encode_array( &$arr ) {
+		if ( ! in_array( self::$encoding, array( '', 'utf-8', 'UTF-8' ) ) ) {
+			$arr = array_map( function( $elem ) {
+				return iconv( 'UTF-8', self::$encoding, $elem );
+			}, $arr );
+		}
+	}
+
 	public function output( $rec ) {
+		$this->encode_array( $rec );
 
 		if ( $this->has_output_filter ) {
 			$rec = apply_filters( "woe_csv_output_filter", $rec, $rec );

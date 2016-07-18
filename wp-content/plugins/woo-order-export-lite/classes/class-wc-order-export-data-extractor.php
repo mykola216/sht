@@ -190,7 +190,8 @@ class WC_Order_Export_Data_Extractor {
 			'sku'         => array( 'label' => 'SKU', 'checked' => 1 ),
 			'name'        => array( 'label' => 'Name', 'checked' => 1 ),
 			'qty'         => array( 'label' => 'Quantity', 'checked' => 1 ),
-			'price'       => array( 'label' => 'Price', 'checked' => 0 ),
+			'item_price'  => array( 'label' => 'Item Cost', 'checked' => 1 ),
+			'price'       => array( 'label' => 'Product Current Price', 'checked' => 0 ),
 			'line_no_tax' => array( 'label' => 'Order line (w/o tax)', 'checked' => 0 ),
 			'line_tax'    => array( 'label' => 'Order line tax', 'checked' => 0 ),
 			'line_subtotal'=>array( 'label' => 'Order line subtotal', 'checked' => 0 ),
@@ -392,19 +393,26 @@ class WC_Order_Export_Data_Extractor {
 
 	private static function parse_complex_pairs( $pairs, $valid_types, $mode = '' ) {
 		$pair_types = array();
+		$delimiters = array(
+			'=' => 'IN',
+			'<>' => 'NOT IN',
+			'LIKE' => 'LIKE',
+		);
 		foreach ( $pairs as $pair ) {
-			$t = explode( "=", trim( $pair ) );
-			if(count($t) == 2)
-				$op = 'IN';
-			else {	
-				$op = 'NOT IN';
-				$t = explode( "<>", trim( $pair ) );
-				if(count($t) != 2)
-					continue;
-			}	
-			list( $filter_type,  $filter_value ) = $t;
+			$pair = trim( $pair );
+			$op = '';
+			foreach($delimiters as $delim=>$op_seek) {
+				$t = explode( $delim, $pair );
+				if(count($t) == 2) {
+					$op = $op_seek;
+					break;
+				}
+			}
+			if( !$op )
+				continue;
+				
+			list( $filter_type,  $filter_value ) = array_map("trim", $t);
 			
-			//list( $filter_type, $op, $filter_value ) = ;
 			if ( $mode == 'lower_filter_label' ) {
 				$filter_type = strtolower( $filter_type );
 			} // Country=>country for locations
@@ -607,15 +615,25 @@ class WC_Order_Export_Data_Extractor {
 		if ( $settings['product_attributes'] ) {
 			$attrs        = self::get_product_attributes();
 			$names2fields = array_flip( $attrs );
-			$filters      = self::parse_pairs( $settings['product_attributes'], $attrs );
-			foreach ( $filters as $label => $values ) {
-				$field  = $names2fields[ $label ];
-				$values = self::sql_subset( $values );
-				if ( $values ) {
-					$left_join_order_items_meta[] = "LEFT JOIN $wc_order_items_meta  AS `orderitemmeta_{$field}` ON `orderitemmeta_{$field}`.order_item_id = order_items.order_item_id";
-					$order_items_meta_where[]     = " (`orderitemmeta_{$field}`.meta_key='$field'  AND `orderitemmeta_{$field}`.meta_value IN  ($values) ) ";
-				}
-			}
+			$filters      = self::parse_complex_pairs( $settings['product_attributes'], $attrs );
+			foreach ( $filters as $operator => $fields) {
+				foreach ( $fields as $field => $values ) {
+					$field  = $names2fields[ $field ];
+					if ( $values ) {
+						$left_join_order_items_meta[] = "LEFT JOIN $wc_order_items_meta  AS `orderitemmeta_{$field}` ON `orderitemmeta_{$field}`.order_item_id = order_items.order_item_id";
+						if( $operator == 'IN' OR $operator == 'NOT IN' ) {
+							$values = self::sql_subset( $values );
+							$order_items_meta_where[]     = " (`orderitemmeta_{$field}`.meta_key='$field'  AND `orderitemmeta_{$field}`.meta_value $operator  ($values) ) ";
+						} elseif( $operator =='LIKE' ) {	
+							$pairs = array();
+							foreach($values as $v)
+								$pairs[] = " `orderitemmeta_{$field}`.meta_value LIKE '$v' ";
+							$pairs = join("OR", $pairs);
+							$order_items_meta_where[]     = " (`orderitemmeta_{$field}`.meta_key='$field'  AND  ($pairs) ) ";	
+						}	
+					}// values
+				}	
+			}// operators
 		}
 
 		$order_items_meta_where = join( " AND ", $order_items_meta_where );
@@ -639,15 +657,25 @@ class WC_Order_Export_Data_Extractor {
 		//add filter by custom fields in order
 		if ( $settings['order_custom_fields'] ) {
 			$cf_names = self::get_order_custom_fields();
-			$filters              = self::parse_pairs( $settings['order_custom_fields'], $cf_names);
+			$filters  = self::parse_complex_pairs( $settings['order_custom_fields'], $cf_names);
 			$pos=1;
-			foreach ( $filters as $field => $values ) {
-				$values = self::sql_subset( $values );
-				if ( $values ) {
-					$left_join_order_meta[] = "LEFT JOIN {$wpdb->postmeta} AS ordermeta_cf_{$pos} ON ordermeta_cf_{$pos}.post_id = orders.ID";
-					$order_meta_where []    = $wpdb->prepare(" (ordermeta_cf_{$pos}.meta_key=%s  AND ordermeta_cf_{$pos}.meta_value in ($values)) ", $field );
-					$pos++;
-				}
+			foreach ( $filters as $operator => $fields) {
+				foreach ( $fields as $field => $values ) {
+					if ( $values ) {
+						$left_join_order_meta[] = "LEFT JOIN {$wpdb->postmeta} AS ordermeta_cf_{$pos} ON ordermeta_cf_{$pos}.post_id = orders.ID";
+						if( $operator == 'IN' OR $operator == 'NOT IN' ) {
+							$values = self::sql_subset( $values );
+							$order_meta_where []    = " (ordermeta_cf_{$pos}.meta_key='$field'  AND ordermeta_cf_{$pos}.meta_value $operator ($values)) ";
+						} elseif( $operator =='LIKE' ) {	
+							$pairs = array();
+							foreach($values as $v)
+								$pairs[] = " ordermeta_cf_{$pos}.meta_value LIKE '$v' ";
+							$pairs = join("OR", $pairs);
+							$order_meta_where[]     = " (ordermeta_cf_{$pos}.meta_key='$field'  AND  ($pairs) ) ";	
+						}	
+						$pos++;
+					}//if values
+				}	
 			}
 		}
 		if ( $settings['shipping_locations'] ) {
@@ -789,6 +817,7 @@ class WC_Order_Export_Data_Extractor {
 		$sql = "SELECT ID as order_id FROM {$wpdb->posts} AS orders
 			{$left_join_order_meta}
 			WHERE orders.post_type='shop_order' AND $order_sql $order_meta_where $order_items_where";
+		//die($sql);
 		return $sql;
 	}
 
@@ -1017,13 +1046,13 @@ class WC_Order_Export_Data_Extractor {
 	public static function fetch_order_products( $order, $labels, $format, $filters_active, $static_vals , $export_only_products ) {
 		$products = array();
 		$i = 0;
-		foreach ( $order->get_items() as $item ) {
+		foreach ( $order->get_items('line_item') as $item_id=>$item ) {
 			// we export only matched products?
 			if( $export_only_products AND !in_array($item['product_id'], $export_only_products ) )
 				continue;
 			$i++;
 			$product   = $order->get_product_from_item( $item );
-			$item_meta = $item['item_meta'];
+			$item_meta = $order->get_item_meta( $item_id );
 			$row       = array();
 			foreach ( $labels as $field => $label ) {
 				if ( strpos( $field, '__' ) !== false && $taxonomies = wc_get_product_terms( $item['product_id'],
@@ -1061,6 +1090,8 @@ class WC_Order_Export_Data_Extractor {
 					$row['line_no_tax'] = $item_meta["_line_total"][0] - $item_meta["_line_tax"][0];
 				} elseif ( $field == 'line_id' ) {
 					$row[ $field ] = $i;
+				} elseif ( $field == 'item_price' ) {
+					$row[ $field ] = $order->get_item_total( $item, false, true ); // YES we have to calc item price
 				} elseif ( isset( $static_vals[ $field ] ) ) {
 					$row[ $field ] = $static_vals[ $field ];
 				} else {
@@ -1128,7 +1159,10 @@ class WC_Order_Export_Data_Extractor {
 
 		$must_adjust_extra_rows = array();
 
-		// fill as it must 
+		$date_fields = self::get_order_fields_as_type( $labels['order'], 'date' );
+		$date_format = trim( $options['date_format'] . ' ' . $options['time_format'] );
+
+		// fill as it must
 		foreach ( $labels['order'] as $field => $label ) {
 			if ( isset( $order_meta[ $field ] ) ) {
 				$field_data = array();
@@ -1213,6 +1247,9 @@ class WC_Order_Export_Data_Extractor {
 
 			//if ( isset( $filters_active['order'][ $field ] ) ) {
 			if ( isset( $row[ $field ] ) ) {
+				if ( in_array( $field, $date_fields ) ) {
+					$row[ $field ] = self::try_to_convert_date_to_format( $row[ $field ], $date_format );
+				}
 				$row[ $field ] = apply_filters( "woe_get_order_{$format}_value_{$field}", $row[ $field ] , $order);
 			}
 		}
@@ -1252,6 +1289,28 @@ class WC_Order_Export_Data_Extractor {
 		}
 
 		return $extra_rows;
+	}
+
+	public static function get_order_fields_as_type( $fields, $type ) {
+		$type_fields = array();
+		foreach ( $fields as $field => $label ) {
+			if (preg_match('/' . $type . '/', $field)) {
+				$type_fields[] = $field;
+			}
+		}
+
+		return apply_filters("woe_get_order_fields_as_{$type}", $type_fields);
+	}
+
+	public static function try_to_convert_date_to_format( $value, $date_format ) {
+		$new_value = strtotime( $value );
+
+		if ( $new_value ) {
+			return date( $date_format, $new_value );
+		}
+		else {
+			return $value;
+		}
 	}
 
 

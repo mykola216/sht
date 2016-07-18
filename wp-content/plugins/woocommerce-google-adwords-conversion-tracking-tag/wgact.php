@@ -5,7 +5,7 @@
  * Description:  Google AdWords dynamic conversion value tracking for WooCommerce.
  * Author:       Wolf+Bär GmbH
  * Author URI:   https://wolfundbaer.ch
- * Version:      1.3.1
+ * Version:      1.3.3
  * License:      GPLv2 or later
  * Text Domain:  woocommerce-google-adwords-conversion-tracking-tag
  **/
@@ -63,7 +63,7 @@ class WGACT {
 	// adds a link on the plugins page for the wgact settings
 	function wgact_settings_link( $links, $file ) {
 		if ( $file == plugin_basename( __FILE__ ) ) {
-			$links[] = '<a href="' . admin_url( "admin.php?page=do_wgact" ) . '">' . __( 'Settings' ) . '</a>';
+			$links[] = '<a href="' . admin_url( "admin.php?page=wgact" ) . '">' . __( 'Settings' ) . '</a>';
 		}
 
 		return $links;
@@ -71,8 +71,8 @@ class WGACT {
 
 	// add the admin options page
 	function wgact_plugin_admin_add_page() {
-		//add_options_page('WGACT Plugin Page', 'WGACT Plugin Menu', 'manage_options', 'do_wgact', array($this, 'wgact_plugin_options_page'));
-		add_submenu_page( 'woocommerce', esc_html__( 'AdWords Conversion Tracking', 'woocommerce-google-adwords-conversion-tracking-tag' ), esc_html__( 'AdWords Conversion Tracking', 'woocommerce-google-adwords-conversion-tracking-tag' ), 'manage_options', 'do_wgact', array(
+		//add_options_page('WGACT Plugin Page', 'WGACT Plugin Menu', 'manage_options', 'wgact', array($this, 'wgact_plugin_options_page'));
+		add_submenu_page( 'woocommerce', esc_html__( 'AdWords Conversion Tracking', 'woocommerce-google-adwords-conversion-tracking-tag' ), esc_html__( 'AdWords Conversion Tracking', 'woocommerce-google-adwords-conversion-tracking-tag' ), 'manage_options', 'wgact', array(
 			$this,
 			'wgact_plugin_options_page'
 		) );
@@ -84,49 +84,57 @@ class WGACT {
 		?>
 
 		<br>
-		<div style="background: #eee; width: 772px">
-			<div
-				style="background: #ccc; padding: 10px; font-weight: bold"><?php esc_html_e( 'AdWords Conversion Tracking Settings', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?></div>
-			<form action="options.php" method="post">
-				<?php settings_fields( 'wgact_plugin_options' ); ?>
-				<?php do_settings_sections( 'do_wgact' ); ?>
-				<br>
-				<table class="form-table" style="margin: 10px">
-					<tr>
-						<th scope="row" style="white-space: nowrap">
-							<input name="Submit" type="submit" value="<?php esc_attr_e( 'Save Changes' ); ?>"
-							       class="button"/>
-						</th>
-					</tr>
-				</table>
-			</form>
+		<div style="float: right; padding-right: 20px">
+			<div style="float:left; margin-right: 10px">Tell us how much you like the plugin!</div>
+			<div style="float:left"><?php require( 'includes/rating.php' ); ?></div>
 		</div>
-		<br>
-		<div style="background: #eee; width: 772px">
-			<div style="background: #ccc; padding: 10px; font-weight: bold"><?php esc_html_e( 'Donation', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?></div>
-			<table class="form-table" style="margin: 10px">
-				<tr>
-					<th scope="row">
-						<div
-							style="padding: 10px"><?php esc_html_e( 'This plugin was developed by', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
-							<a href="http://www.wolfundbaer.ch" target="_blank">Wolf + Bär GmbH</a>
-							<p><?php esc_html_e( 'Buy me a beer if you like the plugin.', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
-								<br>
-								<?php esc_html_e( 'If you want me to continue developing the plugin buy me a few more beers. Although, I probably will continue to develop the plugin anyway. It would be just much more fun if I had a few beers to celebrate my milestones.', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
-						</div>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-							<input type="hidden" name="cmd" value="_s-xclick">
-							<input type="hidden" name="hosted_button_id" value="UE3D2AW8YTML8">
-							<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
-							       name="submit" alt="PayPal - The safer, easier way to pay online!">
-							<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1"
-							     height="1">
-						</form>
-					</th>
-				</tr>
-			</table>
-		</div>
+		<div style="width:980px; float: left; margin: 5px">
+			<div style="float:left; margin: 5px; margin-right:20px; width:750px">
+				<div style="background: #0073aa; padding: 10px; font-weight: bold; color: white; border-radius: 2px">
+					<?php esc_html_e( 'Google AdWords Conversion Tracking Settings', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
+				</div>
+				<form action="options.php" method="post">
+					<?php settings_fields( 'wgact_plugin_options' ); ?>
+					<?php do_settings_sections( 'wgact' ); ?>
+					<br>
+					<table class="form-table" style="margin: 10px">
+						<tr>
+							<th scope="row" style="white-space: nowrap">
+								<input name="Submit" type="submit" value="<?php esc_attr_e( 'Save Changes' ); ?>"
+								       class="button button-primary"/>
+							</th>
+						</tr>
+					</table>
+				</form>
 
+				<br>
+				<div
+					style="background: #0073aa; padding: 10px; font-weight: bold; color: white; margin-bottom: 20px; border-radius: 2px">
+					<span>
+						<?php esc_html_e( 'Profit Driven Marketing by Wolf+Bär', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
+					</span>
+					<span style="float: right;">
+						<a href="https://wolfundbaer.ch/?utm_source=WGACT&utm_medium=plugin&utm_campaign=WGACT-Plugin"
+						   target="_blank" style="color: white">
+							<?php esc_html_e( 'Visit us here: https://wolfundbaer.ch', 'woocommerce-google-dynamic-retargeting-tag' ) ?>
+						</a>
+					</span>
+				</div>
+			</div>
+			<div style="float: left; margin: 5px">
+				<a href="https://wordpress.org/plugins/woocommerce-google-dynamic-retargeting-tag/" target="_blank">
+					<img src="<?php echo( plugins_url( 'images/wgdr-icon-256x256.png', __FILE__ ) ) ?>" width="150px"
+					     height="150px">
+				</a>
+			</div>
+			<div style="float: left; margin: 5px">
+				<a href="https://wordpress.org/plugins/woocommerce-google-adwords-conversion-tracking-tag/"
+				   target="_blank">
+					<img src="<?php echo( plugins_url( 'images/wgact-icon-256x256.png', __FILE__ ) ) ?>" width="150px"
+					     height="150px">
+				</a>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -136,18 +144,18 @@ class WGACT {
 		//register_setting( 'plugin_options', 'plugin_options', 'wgact_plugin_options_validate' );
 		register_setting( 'wgact_plugin_options', 'wgact_plugin_options_1' );
 		register_setting( 'wgact_plugin_options', 'wgact_plugin_options_2' );
-		add_settings_section( 'wgact_plugin_main', esc_html__( 'Main Settings', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
+		add_settings_section( 'wgact_plugin_main', esc_html__( 'Settings', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
 			$this,
 			'wgact_plugin_section_text'
-		), 'do_wgact' );
+		), 'wgact' );
 		add_settings_field( 'wgact_plugin_text_string_1', esc_html__( 'Conversion ID', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
 			$this,
 			'wgact_plugin_setting_string_1'
-		), 'do_wgact', 'wgact_plugin_main' );
+		), 'wgact', 'wgact_plugin_main' );
 		add_settings_field( 'wgact_plugin_text_string_2', esc_html__( 'Conversion Label', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
 			$this,
 			'wgact_plugin_setting_string_2'
-		), 'do_wgact', 'wgact_plugin_main' );
+		), 'wgact', 'wgact_plugin_main' );
 	}
 
 	function wgact_plugin_section_text() {

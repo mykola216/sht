@@ -24,7 +24,7 @@ Export any custom field assigned to orders/products/coupons is easy and you can 
 * mark your WooCommerce orders and run "Export as..." a **bulk operation**.
 * apply **powerful filters** and much more
 
-Export Includes:
+= Export Includes =
 
 * order data
 * summary order details (# of items, discounts, taxes etc…)
@@ -33,7 +33,7 @@ Export Includes:
 * coupon details
 * CSV, XLS, XML and JSON formats
 
-Use this plugin to **export orders** for
+= Use this plugin to export orders for =
 
 * sending order data to 3rd part drop shippers
 * updating your accounting system
@@ -43,7 +43,7 @@ Use this plugin to **export orders** for
 Have an idea or feature request?
 Please create a topic in the "Support" section with any ideas or suggestions for new features.
 
-> = Pro Version =
+> Pro Version
 
 > Are you looking to have your Woocommerce products drop shipped from a third party? Our plugin can help you export your orders to CSV/XML/etc and send them to your drop shipper. You can even automate this process with [Pro version](http://algolplus.com/plugins/downloads/woocommerce-order-export/) .
 
@@ -81,6 +81,16 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 
 == Changelog ==
 
+= 1.2.0 - 2016-07-11 =
+* Support both XLS and XLSX
+* Solved problem with filters ("Outdated Select2.js" warning)
+* Added date/time format
+* Comparison operators for custom fields & product attributes( + LIKE operator)
+* Codepage for CSV file
+* Preview displays 3 records
+* Fixed bug for "Item cost"
+* Refreshed language files 
+ 
 = 1.1.13 - 2016-06-18 =
 * Possibility to "Delete" fields (except default!)
 * Added 'Hide unused' for order/product/coupon fields (dropdowns filtered by matching orders)

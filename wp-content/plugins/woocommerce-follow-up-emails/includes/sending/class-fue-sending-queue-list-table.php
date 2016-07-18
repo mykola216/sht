@@ -443,6 +443,15 @@ class FUE_Sending_Queue_List_Table extends WP_List_Table {
      */
     function extra_tablenav( $which ) {
         $per_page = get_option( 'fue_sending_queue_list_table_per_page', 20 );
+        $user_string = '';
+        $user_id     = '';
+
+        if ( ! empty( $_GET['_customer_user'] ) ) {
+            $user_id     = absint( $_GET['_customer_user'] );
+            $user        = get_user_by( 'id', $user_id );
+            $user_string = esc_html( $user->display_name ) . ' (#' . absint( $user->ID ) . ' &ndash; ' . esc_html( $user->user_email ) . ')';
+        }
+
         if ( 'top' == $which ) { ?>
             <div class="alignleft actions">
                 <select id="dropdown_per_page" name="_items_per_page" class="select2">
@@ -451,15 +460,8 @@ class FUE_Sending_Queue_List_Table extends WP_List_Table {
                     <option value="100" <?php selected( 100, $per_page ); ?>><?php _e('Show 100 per page', 'follow_up_emails'); ?></option>
                     <option value="200" <?php selected( 200, $per_page ); ?>><?php _e('Show 200 per page', 'follow_up_emails'); ?></option>
                 </select>
-                <select id="dropdown_customers" name="_customer_user">
-                    <option value=""><?php _e( 'Show all customers', 'follow_up_emails' ) ?></option>
-                    <?php if ( ! empty( $_GET['_customer_user'] ) ) : ?>
-                        <?php $user = get_user_by( 'id', absint( $_GET['_customer_user'] ) ); ?>
-                        <option value="<?php echo absint( $user->ID ); ?>" <?php selected( 1, 1 ); ?>>
-                            <?php printf( '%s (#%s &ndash; %s)', esc_html( $user->display_name ), absint( $user->ID ), esc_html( $user->user_email ) ); ?>
-                        </option>
-                    <?php endif; ?>
-                </select>
+
+                <input type="hidden" class="fue-customer-search" name="_customer_user" data-placeholder="<?php esc_attr_e( 'Search for a customer&hellip;', 'woocommerce' ); ?>" data-selected="<?php echo htmlspecialchars( $user_string ); ?>" value="<?php echo $user_id; ?>" data-allow_clear="true" />
 
                 <?php
                 submit_button( __( 'Filter' ), 'button', false, false, array( 'id' => 'post-query-submit' ) );
@@ -513,7 +515,7 @@ class FUE_Sending_Queue_List_Table extends WP_List_Table {
                 $user    = get_user_by( 'id', absint( $_GET['_customer_user'] ) );
 
                 if ( false === $user ) {
-                    printf( __( 'Invalid user. ', 'follow_up_emails' ), $user->display_name );
+                    _e( 'Invalid user. ', 'follow_up_emails' );
                 } else {
                     printf( __( "Showing %s's emails", 'follow_up_emails' ), $user->display_name );
                 }

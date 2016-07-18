@@ -27,6 +27,7 @@ class WC_Order_Export_Admin {
 
 			if ( isset( $_GET['page'] ) && $_GET['page'] == 'wc-order-export' ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'thematic_enqueue_scripts' ) );
+				add_filter( 'script_loader_src', array( $this, 'script_loader_src' ), 10, 2 );
 			}
 			add_action( 'wp_ajax_order_exporter', array( $this, 'ajax_gate' ) );
 		}
@@ -278,6 +279,8 @@ class WC_Order_Export_Admin {
 			'format_xml_prepend_raw_xml'                     => '',
 			'format_xml_append_raw_xml'                      => '',
 			'all_products_from_order'                        => 1,
+			'date_format' 									 => 'Y-m-d',
+			'time_format' 									 => 'H:i',
 		);
 
 		if ( ! isset( $settings['format'] ) ) {
@@ -350,12 +353,18 @@ class WC_Order_Export_Admin {
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
 		//wp_enqueue_script( 'select2', WC()->plugin_url() . '/assets/js/select2/select2.min.js', array( 'jquery' ), '3.5.2' );
 		wp_enqueue_script( 'select22', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js',
-			array( 'jquery' ), '3.5.2' );
+			array( 'jquery' ), '4.0.0' );
 		//wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), WC_VERSION );
 		wp_enqueue_style( 'select2-css', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css',
 			array(), WC_VERSION );
 		wp_enqueue_script( 'export', $this->url_plugin . 'assets/js/export.js' );
 		wp_enqueue_style( 'export', $this->url_plugin . 'assets/css/export.css' );
+	}
+
+	public function script_loader_src($src, $handle) {
+		if (!preg_match('/\/select2\.min\.js\?ver=[1-3]/', $src)) {
+			return $src;
+		}
 	}
 
 	public function render( $view, $params = array(), $path_views = null ) {

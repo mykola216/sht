@@ -10,7 +10,7 @@ class Follow_Up_Emails {
     /**
      * @var float The current version of the database schema and data
      */
-    public static $db_version           = '20160317';
+    public static $db_version           = '20160602';
 
     /**
      * @var string The post type

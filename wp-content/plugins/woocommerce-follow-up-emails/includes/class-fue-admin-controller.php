@@ -531,7 +531,7 @@ class FUE_Admin_Controller {
             wp_enqueue_script( 'jquery-ui-datepicker', null, array('jquery') );
         }
 
-        if ( in_array( $page, array( 'followup-emails-settings', 'followup-emails', 'followup-emails-subscribers', 'followup-emails-reports-customers' ) ) ) {
+        if ( in_array( $page, array( 'followup-emails-queue', 'followup-emails-settings', 'followup-emails', 'followup-emails-subscribers', 'followup-emails-reports-customers' ) ) ) {
             wp_enqueue_script( 'select2' );
             wp_enqueue_style( 'select2-fue', plugins_url( 'templates/select2.css', FUE_FILE ), array(), '3.5.2' );
             wp_enqueue_script( 'jquery-tiptip' );

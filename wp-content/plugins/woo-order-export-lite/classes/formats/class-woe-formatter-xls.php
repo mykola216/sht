@@ -64,7 +64,7 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 			$this->objPHPExcel->getActiveSheet()->setRightToLeft(true);
 		
 		//save only header on init 
-		$objWriter = new PHPExcel_Writer_Excel2007( $this->objPHPExcel );
+		$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 		$objWriter->save( $this->filename );
 	}
 
@@ -118,7 +118,7 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 				$sheet->calculateColumnWidths();
 			}	
 
-			$objWriter = new PHPExcel_Writer_Excel2007( $this->objPHPExcel );
+			$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 			$objWriter->save( $this->filename );
 		}
 	}
