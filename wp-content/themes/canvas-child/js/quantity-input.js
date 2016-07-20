@@ -1,8 +1,8 @@
 (function( $ ) {
-    'use strict';
+	'use strict';
 
 	$(function(){
-		$("input.plus").click(function() {
+		$(document).on('click', 'input.plus', null, function() {
 			var item = $(this).closest(".quantity").find(".qty"),
 				step = Number(item.attr('step')) || 1,
 				max_value = Number(item.attr('max')),
@@ -10,9 +10,10 @@
 			if(max_value === max_value && max_value < value) {
 				value = max_value;
 			}
-			item.val(value); 
+			item.trigger('change').val(value);
 		});
-		$("input.minus").click(function() {
+
+		$(document).on('click', 'input.minus', null, function() {
 			var item = $(this).closest(".quantity").find(".qty"),
 				step = Number(item.attr('step')) || 1,
 				min_value = Number(item.attr('min')),
@@ -20,7 +21,8 @@
 			if(min_value === min_value && min_value > value) {
 				value = min_value;
 			}
-			item.val(value); 
+			item.trigger('change').val(value);
 		});
 	});
+
 })( jQuery );
