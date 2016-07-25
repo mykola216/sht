@@ -260,7 +260,7 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
 .quantity input.minus {
     border-radius: 0 0 2px 0;
     bottom: 0px;
-    top: initial;
+    top: auto;
 }
 /* Quantity input field - end */
 
@@ -274,6 +274,7 @@ img.thumbnail,
 a > div.star-rating {
     float: right !important;
     margin-right: 10px !important;
+    text-align: left;
 }
 ul.products li.product {
     box-sizing: border-box;
