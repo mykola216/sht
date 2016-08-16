@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013, Mollie B.V.
+ * Copyright (c) 2016, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,92 +29,52 @@
  * @copyright   Mollie B.V.
  * @link        https://www.mollie.com
  */
-class Mollie_API_Object_Payment_Refund
+class Mollie_API_Object_Customer_Mandate
 {
-	/**
-	 * The refund will be send to the bank on the next business day. You can still cancel the refund.
-	 */
-	const STATUS_PENDING    = 'pending';
+	const STATUS_PENDING = "pending";
+	const STATUS_VALID   = "valid";
+	const STATUS_INVALID = "invalid";
 
 	/**
-	 * The refund has been sent to the bank. The refund amount will be transferred to the consumer account as soon as possible.
+	 * @var string
 	 */
-	const STATUS_PROCESSING = 'processing';
+	public $resource;
 
 	/**
-	 * The refund amount has been transferred to the consumer.
-	 */
-	const STATUS_REFUNDED   = 'refunded';
-
-	/**
-	 * Id of the payment method.
-	 *
 	 * @var string
 	 */
 	public $id;
 
 	/**
-	 * The $amount that was refunded.
-	 *
-	 * @var float
-	 */
-	public $amount;
-
-	/**
-	 * The refund's description, if available.
-	 *
-	 * @var string|null
-	 */
-	public $description;
-
-	/**
-	 * The payment that was refunded.
-	 *
-	 * @var Mollie_API_Object_Payment
-	 */
-	public $payment;
-
-	/**
-	 * Date and time the payment was cancelled in ISO-8601 format.
-	 *
-	 * @var string|null
-	 */
-	public $refundedDatetime;
-
-	/**
-	 * The refund status
-	 *
 	 * @var string
 	 */
 	public $status;
 
 	/**
-	 * Is this refund pending?
-	 *
-	 * @return bool
+	 * @var string
 	 */
-	public function isPending ()
-	{
-		return $this->status == self::STATUS_PENDING;
-	}
+	public $method;
 
 	/**
-	 * Is this refund processing?
-	 *
-	 * @return bool
+	 * @var string
 	 */
-	public function isProcessing ()
-	{
-		return $this->status == self::STATUS_PROCESSING;
-	}
+	public $customerId;
 
 	/**
-	 * Is this refund transferred to consumer?
-	 *
+	 * @var object|null
+	 */
+	public $details;
+
+	/**
+	 * @var string
+	 */
+	public $createdDatetime;
+
+	/**
 	 * @return bool
 	 */
-	public function isTransferred ()
+	public function isValid ()
 	{
-		return $this->status == self::STATUS_REFUNDED;
+		return $this->status === self::STATUS_VALID;
 	}
 }

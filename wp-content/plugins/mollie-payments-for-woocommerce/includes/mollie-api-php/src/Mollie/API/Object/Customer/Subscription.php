@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013, Mollie B.V.
+ * Copyright (c) 2016, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,92 +29,104 @@
  * @copyright   Mollie B.V.
  * @link        https://www.mollie.com
  */
-class Mollie_API_Object_Payment_Refund
+class Mollie_API_Object_Customer_Subscription
 {
-	/**
-	 * The refund will be send to the bank on the next business day. You can still cancel the refund.
-	 */
-	const STATUS_PENDING    = 'pending';
+	const STATUS_ACTIVE    = "active";
+	const STATUS_PENDING   = "pending";   // Waiting for a valid mandate.
+	const STATUS_CANCELLED = "cancelled";
+	const STATUS_SUSPENDED = "suspended"; // Active, but mandate became invalid.
+	const STATUS_COMPLETED = "completed";
 
 	/**
-	 * The refund has been sent to the bank. The refund amount will be transferred to the consumer account as soon as possible.
+	 * @var string
 	 */
-	const STATUS_PROCESSING = 'processing';
+	public $resource;
 
 	/**
-	 * The refund amount has been transferred to the consumer.
-	 */
-	const STATUS_REFUNDED   = 'refunded';
-
-	/**
-	 * Id of the payment method.
-	 *
 	 * @var string
 	 */
 	public $id;
 
 	/**
-	 * The $amount that was refunded.
-	 *
-	 * @var float
+	 * @var string
 	 */
-	public $amount;
+	public $customerId;
 
 	/**
-	 * The refund's description, if available.
+	 * Either "live" or "test" depending on the customer's mode.
 	 *
-	 * @var string|null
+	 * @var string
 	 */
-	public $description;
+	public $mode;
 
 	/**
-	 * The payment that was refunded.
+	 * ISO 8601 format.
 	 *
-	 * @var Mollie_API_Object_Payment
+	 * @var string
 	 */
-	public $payment;
+	public $createdDatetime;
 
 	/**
-	 * Date and time the payment was cancelled in ISO-8601 format.
-	 *
-	 * @var string|null
-	 */
-	public $refundedDatetime;
-
-	/**
-	 * The refund status
-	 *
 	 * @var string
 	 */
 	public $status;
 
 	/**
-	 * Is this refund pending?
+	 * @var string
+	 */
+	public $amount;
+
+	/**
+	 * @var int|null
+	 */
+	public $times;
+
+	/**
+	 * @var string
+	 */
+	public $interval;
+
+	/**
+	 * @var string
+	 */
+	public $description;
+
+	/**
+	 * @var string|null
+	 */
+	public $method;
+
+	/**
+	 * ISO 8601 format.
+	 *
+	 * @var string|null
+	 */
+	public $cancelledDatetime;
+
+	/**
+	 * Contains an optional 'webhookUrl'.
+	 *
+	 * @var object|null
+	 */
+	public $links;
+
+	/**
+	 * Returns whether the Subscription is valid or not.
 	 *
 	 * @return bool
 	 */
-	public function isPending ()
+	public function isValid ()
 	{
-		return $this->status == self::STATUS_PENDING;
+		return $this->status === self::STATUS_ACTIVE;
 	}
 
 	/**
-	 * Is this refund processing?
+	 * Returns whether the Subscription is cancelled or not.
 	 *
 	 * @return bool
 	 */
-	public function isProcessing ()
+	public function isCancelled ()
 	{
-		return $this->status == self::STATUS_PROCESSING;
-	}
-
-	/**
-	 * Is this refund transferred to consumer?
-	 *
-	 * @return bool
-	 */
-	public function isTransferred ()
-	{
-		return $this->status == self::STATUS_REFUNDED;
+		return $this->status === self::STATUS_CANCELLED;
 	}
 }

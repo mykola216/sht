@@ -28,93 +28,22 @@
  * @author      Mollie B.V. <info@mollie.com>
  * @copyright   Mollie B.V.
  * @link        https://www.mollie.com
+ *
+ * @method Mollie_API_Object_Payment_Refund[]|Mollie_API_Object_List all($offset = 0, $limit = 0, array $filters = array())
+ * @method Mollie_API_Object_Payment_Refund get($resource_id, array $filters = array())
  */
-class Mollie_API_Object_Payment_Refund
+class Mollie_API_Resource_Refunds extends Mollie_API_Resource_Base
 {
 	/**
-	 * The refund will be send to the bank on the next business day. You can still cancel the refund.
-	 */
-	const STATUS_PENDING    = 'pending';
-
-	/**
-	 * The refund has been sent to the bank. The refund amount will be transferred to the consumer account as soon as possible.
-	 */
-	const STATUS_PROCESSING = 'processing';
-
-	/**
-	 * The refund amount has been transferred to the consumer.
-	 */
-	const STATUS_REFUNDED   = 'refunded';
-
-	/**
-	 * Id of the payment method.
-	 *
 	 * @var string
 	 */
-	public $id;
+	protected $resource_path = "refunds";
 
 	/**
-	 * The $amount that was refunded.
-	 *
-	 * @var float
+	 * @return Mollie_API_Object_Method
 	 */
-	public $amount;
-
-	/**
-	 * The refund's description, if available.
-	 *
-	 * @var string|null
-	 */
-	public $description;
-
-	/**
-	 * The payment that was refunded.
-	 *
-	 * @var Mollie_API_Object_Payment
-	 */
-	public $payment;
-
-	/**
-	 * Date and time the payment was cancelled in ISO-8601 format.
-	 *
-	 * @var string|null
-	 */
-	public $refundedDatetime;
-
-	/**
-	 * The refund status
-	 *
-	 * @var string
-	 */
-	public $status;
-
-	/**
-	 * Is this refund pending?
-	 *
-	 * @return bool
-	 */
-	public function isPending ()
+	protected function getResourceObject ()
 	{
-		return $this->status == self::STATUS_PENDING;
-	}
-
-	/**
-	 * Is this refund processing?
-	 *
-	 * @return bool
-	 */
-	public function isProcessing ()
-	{
-		return $this->status == self::STATUS_PROCESSING;
-	}
-
-	/**
-	 * Is this refund transferred to consumer?
-	 *
-	 * @return bool
-	 */
-	public function isTransferred ()
-	{
-		return $this->status == self::STATUS_REFUNDED;
+		return new Mollie_API_Object_Payment_Refund;
 	}
 }

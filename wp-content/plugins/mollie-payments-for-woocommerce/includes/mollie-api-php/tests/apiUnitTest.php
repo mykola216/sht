@@ -18,8 +18,14 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->compatibilityChecker = $this->getMock("Mollie_API_CompatibilityChecker", array("checkCompatibility"));
-		$this->api                  = $this->getMock("Mollie_API_Client", array("performHttpCall", "getCompatibilityChecker"), array(), '', FALSE);
+		$this->compatibilityChecker = $this->getMockBuilder("Mollie_API_CompatibilityChecker")
+			->setMethods(array("checkCompatibility"))
+			->getMock();
+
+		$this->api = $this->getMockBuilder("Mollie_API_Client")
+			->setMethods(array("performHttpCall", "getCompatibilityChecker"))
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->api->expects($this->any())
 			->method("getCompatibilityChecker")
@@ -35,17 +41,22 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSettingInvalidApiKeyFails ()
 	{
-		$api = $this->getMock("Mollie_API_Client", NULL, array(), '', FALSE);
+		$api = new Mollie_API_Client;
+
 		$api->setApiKey("invalid");
 	}
 
 	/**
 	 * @expectedException Mollie_API_Exception
-	 * @expectedExceptionMessage You have not set an API key. Please use setApiKey() to set the API key.
+	 * @expectedExceptionMessage You have not set an API key or OAuth access token. Please use setApiKey() to set the API key.
 	 */
 	public function testNotSettingApiKeyGivesException()
 	{
-		$this->api = $this->getMock("Mollie_API_Client", array('getCompatibilityChecker'), array(), '', FALSE);
+		$this->api = $this->getMockBuilder("Mollie_API_Client")
+			->setMethods(array("getCompatibilityChecker"))
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->api->expects($this->any())
 			->method("getCompatibilityChecker")
 			->will($this->returnValue($this->compatibilityChecker));
@@ -66,8 +77,8 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue(""));
 
 		$this->api->payments->create(array(
-			"amount"       => 100.00,
-			"description"  => "Order #1337 24 Roundhousekicks",
+			"amount"      => 100.00,
+			"description" => "Order #1337 24 Roundhousekicks",
 			"redirectUrl" => "http://www.chucknorris.rhk/return.php",
 		), array(
 			"profileId" => "pfl_wdy!aA6Zy",
@@ -86,8 +97,8 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue('{ "error":{ "type":"request", "message":"Unauthorized request", "links":{ "documentation":"https://www.mollie.nl/api/docs/" } } }'));
 
 		$this->api->payments->create(array(
-			"amount"       => 100.00,
-			"description"  => "Order #1337 24 Roundhousekicks",
+			"amount"      => 100.00,
+			"description" => "Order #1337 24 Roundhousekicks",
 			"redirectUrl" => "http://www.chucknorris.rhk/return.php",
 		));
 	}
@@ -103,8 +114,8 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 			->method("performHttpCall");
 
 		$this->api->payments->create(array(
-			"amount"       => 100.00,
-			"description"  => "Order #1337 24 Roundhousekicks \x80 15,-",
+			"amount"      => 100.00,
+			"description" => "Order #1337 24 Roundhousekicks \x80 15,-",
 			"redirectUrl" => "http://www.chucknorris.rhk/return.php",
 		));
 	}
@@ -118,9 +129,9 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 
 		/** @var Mollie_API_Object_Payment $payment */
 		$payment = $this->api->payments->create(array(
-			"amount"       => 100.00,
-			"description"  => "Order #1337 24 Roundhousekicks",
-			"redirectUrl"  => "http://www.chucknorris.rhk/return.php",
+			"amount"      => 100.00,
+			"description" => "Order #1337 24 Roundhousekicks",
+			"redirectUrl" => "http://www.chucknorris.rhk/return.php",
 		));
 
 		$this->assertEquals("tr_d0b0E3EA3v", $payment->id);
@@ -145,14 +156,14 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 	{
 		$this->api->expects($this->once())
 			->method("performHttpCall")
-			->with(Mollie_API_Client::HTTP_POST, "payments/tr_OCrlrHqKsr/refunds", '{"amount":60.33}')
-			->will($this->returnValue('{"id":"re_O3UbDhODzG","payment":{"id":"tr_OCrlrHqKsr","mode":"live","createdDatetime":"2014-09-15T09:24:39.0Z","status":"refunded","expiryPeriod":"PT15M","paidDatetime":"2014-09-15T09:28:29.0Z","amount":"100.00","amountRefunded":"60.33","description":"15 Round House Kicks To The Face","method":"ideal","metadata":null,"details":{"consumerName":"Hr E G H K\u00fcppers en/of MW M.J. K\u00fcppers-Veeneman","consumerAccount":"NL53INGB0654422370","consumerBic":"INGBNL2A"},"links":{"redirectUrl":"http://www.example.org/return.php"}},"amount":"60.33","refundedDatetime":"2014-09-15T09:24:39.0Z"}'));
+			->with(Mollie_API_Client::HTTP_POST, "payments/tr_OCrlrHqKsr/refunds", NULL)
+			->will($this->returnValue('{"id":"re_O3UbDhODzG","payment":{"id":"tr_OCrlrHqKsr","mode":"live","createdDatetime":"2014-09-15T09:24:39.0Z","status":"refunded","expiryPeriod":"PT15M","paidDatetime":"2014-09-15T09:28:29.0Z","amount":"60.33","amountRefunded":"60.33","amountRemaining":null,"description":"15 Round House Kicks To The Face","method":"ideal","metadata":null,"details":{"consumerName":"Hr E G H K\u00fcppers en/of MW M.J. K\u00fcppers-Veeneman","consumerAccount":"NL53INGB0654422370","consumerBic":"INGBNL2A"},"links":{"redirectUrl":"http://www.example.org/return.php"}},"amount":"60.33","refundedDatetime":"2014-09-15T09:24:39.0Z"}'));
 
 		$payment = new Mollie_API_Object_Payment();
 		$payment->id = "tr_OCrlrHqKsr";
 
 		/** @var Mollie_API_Object_Payment $payment */
-		$refund = $this->api->payments->refund($payment, 60.33);
+		$refund = $this->api->payments->refund($payment);
 
 		$this->assertEquals("re_O3UbDhODzG", $refund->id);
 		$this->assertEquals(60.33, $refund->amount);
@@ -164,6 +175,12 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals("2014-09-15T09:24:39.0Z", $payment->createdDatetime);
 		$this->assertEquals(Mollie_API_Object_Payment::STATUS_REFUNDED, $payment->status);
 
+		$this->assertEquals(60.33, $payment->getAmountRefunded());
+		$this->assertEquals(0, $payment->getAmountRemaining());
+
+		$this->assertFalse($payment->canBeRefunded());
+		$this->assertFalse($payment->canBePartiallyRefunded());
+
 		$this->assertFalse($payment->isOpen());
 		$this->assertFalse($payment->isExpired());
 		$this->assertFalse($payment->isCancelled());
@@ -174,12 +191,59 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @group refunds
+	 */
+	public function testCreateRefundSupportsPartialRefunds ()
+	{
+		$this->api->expects($this->once())
+			->method("performHttpCall")
+			->with(Mollie_API_Client::HTTP_POST, "payments/tr_OCrlrHqKsr/refunds", '{"amount":60.33}')
+			->will($this->returnValue('{"id":"re_O3UbDhODzG","payment":{"id":"tr_OCrlrHqKsr","mode":"live","createdDatetime":"2014-09-15T09:24:39.0Z","status":"refunded","expiryPeriod":"PT15M","paidDatetime":"2014-09-15T09:28:29.0Z","amount":"86.55","amountRefunded":"60.33","amountRemaining":"26.12","description":"15 Round House Kicks To The Face","method":"ideal","metadata":null,"details":{"consumerName":"Hr E G H K\u00fcppers en/of MW M.J. K\u00fcppers-Veeneman","consumerAccount":"NL53INGB0654422370","consumerBic":"INGBNL2A"},"links":{"redirectUrl":"http://www.example.org/return.php"}},"amount":60.33,"refundedDatetime":"2014-09-15T09:24:39.0Z"}'));
+
+		$payment = new Mollie_API_Object_Payment();
+		$payment->id = "tr_OCrlrHqKsr";
+
+		/** @var Mollie_API_Object_Payment $payment */
+		$refund = $this->api->payments->refund($payment, 60.33);
+
+		$this->assertEquals(60.33, $refund->amount);
+
+		$this->assertEquals(60.33, $payment->getAmountRefunded());
+		$this->assertEquals(26.12, $payment->getAmountRemaining());
+
+		$this->assertTrue($payment->canBeRefunded());
+		$this->assertTrue($payment->canBePartiallyRefunded());
+		$this->assertTrue($payment->isRefunded());
+	}
+
+	/**
+	 * @group refunds
+	 */
+	public function testCreateRefundSupportsDescriptions ()
+	{
+		$this->api->expects($this->once())
+			->method("performHttpCall")
+			->with(Mollie_API_Client::HTTP_POST, "payments/tr_OCrlrHqKsr/refunds", '{"amount":60.33,"description":"Foo bar"}')
+			->will($this->returnValue('{"id":"re_O3UbDhODzG","payment":{"id":"tr_OCrlrHqKsr","mode":"live","createdDatetime":"2014-09-15T09:24:39.0Z","status":"refunded","expiryPeriod":"PT15M","paidDatetime":"2014-09-15T09:28:29.0Z","amount":"86.55","amountRefunded":"60.33","amountRemaining":"26.12","description":"15 Round House Kicks To The Face","method":"ideal","metadata":null,"details":{"consumerName":"Hr E G H K\u00fcppers en/of MW M.J. K\u00fcppers-Veeneman","consumerAccount":"NL53INGB0654422370","consumerBic":"INGBNL2A"},"links":{"redirectUrl":"http://www.example.org/return.php"}},"amount":60.33,"description":"Foo bar","refundedDatetime":"2014-09-15T09:24:39.0Z"}'));
+
+		$payment = new Mollie_API_Object_Payment();
+		$payment->id = "tr_OCrlrHqKsr";
+
+		/** @var Mollie_API_Object_Payment $payment */
+		$refund = $this->api->payments->refund($payment, array("amount" => 60.33, "description" => "Foo bar"));
+
+		$this->assertEquals(60.33, $refund->amount);
+		$this->assertEquals("Foo bar", $refund->description);
+	}
+
+	/**
+	 * @expectedException Mollie_API_Exception
+	 * @expectedExceptionMessageRegExp /Invalid payment ID: '.*?'. A payment ID should start with 'tr_'./
+	 *
 	 * @dataProvider dpInvalidPaymentId
 	 */
 	public function testGetPaymentFailsWithInvalidPaymentId ($payment_id)
 	{
-		$this->setExpectedException('Mollie_API_Exception', "Invalid payment ID: '{$payment_id}'. A payment ID should start with 'tr_'.");
-
 		$this->api->payments->get($payment_id);
 	}
 
@@ -276,8 +340,23 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 
 		foreach ($methods as $method)
 		{
-			$this->assertInstanceof("Mollie_API_Object_Method", $method);
+			$this->assertInstanceOf("Mollie_API_Object_Method", $method);
 		}
+	}
+
+	public function testDeleteSubscriptionWorksCorrectly ()
+	{
+		$this->api->expects($this->once())
+				  ->method("performHttpCall")
+				  ->with(Mollie_API_Client::HTTP_DELETE, "customers/cst_3EA3vd0b0E/subscriptions/sub_d0b0E3EA3v")
+				  ->will($this->returnValue('{"id":"sub_d0b0E3EA3v", "customerId":"cst_EA3vd0b0E3", "mode":"live", "createdDatetime":"2013-11-21T09:57:08.0Z", "status":"cancelled", "amount":100, "description":"Subscription #1225", "method":null, "times":null, "interval":"months", "cancelledDatetime":"2016-07-25T09:57:08.0Z"}'));
+
+		/** @var Mollie_API_Object_Customer_Subscription $deleted_subscription */
+		$deleted_subscription = $this->api->customers_subscriptions->withParentId("cst_3EA3vd0b0E")->cancel("sub_d0b0E3EA3v");
+
+		$this->assertEquals("sub_d0b0E3EA3v", $deleted_subscription->id);
+
+		$this->assertTrue($deleted_subscription->isCancelled());
 	}
 
 	public function testUndefinedResourceCallsResourceEndpoint ()
@@ -290,12 +369,14 @@ class Mollie_ApiUnitTest extends PHPUnit_Framework_TestCase
 		$this->api->FooBars->get("foobar_ID", array("f" => "B"));
 	}
 
+	/**
+	 * @expectedException Mollie_API_Exception
+	 * @expectedExceptionMessage Subresource 'foos_bars' used without parent 'foos' ID.
+	 */
 	public function testUndefinedSubresourceRequiresParentId ()
 	{
 		$this->api->expects($this->never())
 			->method("performHttpCall");
-
-		$this->setExpectedException("Mollie_API_Exception", "Subresource 'foos_bars' used without parent 'foos' ID.");
 
 		$this->api->Foos_Bars->get("bar_ID", array("f" => "B"));
 	}

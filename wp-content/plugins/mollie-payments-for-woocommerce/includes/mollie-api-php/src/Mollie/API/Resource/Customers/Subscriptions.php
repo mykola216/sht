@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013, Mollie B.V.
+ * Copyright (c) 2016, Mollie B.V.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,93 +28,35 @@
  * @author      Mollie B.V. <info@mollie.com>
  * @copyright   Mollie B.V.
  * @link        https://www.mollie.com
+ *
+ * @method Mollie_API_Object_Customer_Subscription[]|Mollie_API_Object_List all($offset = 0, $limit = 0, array $filters = array())
+ * @method Mollie_API_Object_Customer_Subscription get($subscription_id, array $filters = array())
  */
-class Mollie_API_Object_Payment_Refund
+class Mollie_API_Resource_Customers_Subscriptions extends Mollie_API_Resource_Base
 {
 	/**
-	 * The refund will be send to the bank on the next business day. You can still cancel the refund.
-	 */
-	const STATUS_PENDING    = 'pending';
-
-	/**
-	 * The refund has been sent to the bank. The refund amount will be transferred to the consumer account as soon as possible.
-	 */
-	const STATUS_PROCESSING = 'processing';
-
-	/**
-	 * The refund amount has been transferred to the consumer.
-	 */
-	const STATUS_REFUNDED   = 'refunded';
-
-	/**
-	 * Id of the payment method.
-	 *
 	 * @var string
 	 */
-	public $id;
+	protected $resource_path = "customers_subscriptions";
 
 	/**
-	 * The $amount that was refunded.
-	 *
-	 * @var float
+	 * @return Mollie_API_Object_Customer_Subscription
 	 */
-	public $amount;
-
-	/**
-	 * The refund's description, if available.
-	 *
-	 * @var string|null
-	 */
-	public $description;
-
-	/**
-	 * The payment that was refunded.
-	 *
-	 * @var Mollie_API_Object_Payment
-	 */
-	public $payment;
-
-	/**
-	 * Date and time the payment was cancelled in ISO-8601 format.
-	 *
-	 * @var string|null
-	 */
-	public $refundedDatetime;
-
-	/**
-	 * The refund status
-	 *
-	 * @var string
-	 */
-	public $status;
-
-	/**
-	 * Is this refund pending?
-	 *
-	 * @return bool
-	 */
-	public function isPending ()
+	protected function getResourceObject ()
 	{
-		return $this->status == self::STATUS_PENDING;
+		return new Mollie_API_Object_Customer_Subscription;
 	}
 
 	/**
-	 * Is this refund processing?
+	 * Cancel the given Subscription. This is just an alias of the 'delete' method.
 	 *
-	 * @return bool
-	 */
-	public function isProcessing ()
-	{
-		return $this->status == self::STATUS_PROCESSING;
-	}
-
-	/**
-	 * Is this refund transferred to consumer?
+	 * @param string $subscription_id
 	 *
-	 * @return bool
+	 * @return Mollie_API_Object_Customer_Subscription
+	 * @throws Mollie_API_Exception
 	 */
-	public function isTransferred ()
+	public function cancel ($subscription_id)
 	{
-		return $this->status == self::STATUS_REFUNDED;
+		return $this->delete($subscription_id);
 	}
 }
