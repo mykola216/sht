@@ -466,6 +466,7 @@ function select2_inits()
     jQuery( "#statuses" ).select2();
     jQuery( "#shipping_locations" ).select2();
     jQuery( "#user_roles" ).select2();
+    jQuery( "#payment_methods" ).select2();
     jQuery( "#attributes" ).select2( {
         width: 150
     } );
@@ -498,6 +499,37 @@ function select2_inits()
                     q: params.term, // search term
                     page: params.page,
                     method: "get_categories",
+                    action: "order_exporter"
+                };
+            },
+            processResults: function( data, page ) {
+                // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function( markup ) {
+            return markup;
+        }, // let our custom formatter work
+        minimumInputLength: 3,
+        templateResult: formatItem, // omitted for brevity, see the source of this page
+        templateSelection: formatItemSelection // omitted for brevity, see the source of this page
+    } );
+
+    jQuery( "#product_vendors" ).select2( {
+        ajax: {
+            url: ajaxurl,
+            dataType: 'json',
+            delay: 250,
+            data: function( params ) {
+                return {
+                    q: params.term, // search term
+                    page: params.page,
+                    method: "get_vendors",
                     action: "order_exporter"
                 };
             },

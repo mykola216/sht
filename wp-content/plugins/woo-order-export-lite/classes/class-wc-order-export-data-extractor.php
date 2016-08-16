@@ -259,6 +259,7 @@ class WC_Order_Export_Data_Extractor {
 			'transaction_id' => array( 'label' => 'Transaction Id', 'checked' => 0 ),
 			'completed_date' => array( 'label' => 'Completed Date', 'checked' => 0 ),
 			'customer_note'  => array( 'label' => 'Customer Note', 'checked' => 1 ),
+			'order_notes'    => array( 'label' => 'Order Notes', 'checked' => 1 ),
 		);
 	}
 
@@ -487,6 +488,18 @@ class WC_Order_Export_Data_Extractor {
 					)";
 		}
 
+		if ( $settings['product_vendors'] ) {
+			$wp_query_args = array(
+				'author__in' => $settings['product_vendors'],
+				'post_type'  => 'product'
+			);
+			$products = new WP_Query( $wp_query_args );
+			foreach ( $products->get_posts() as $product ) {
+				$settings['products'][] = $product->ID;
+			}
+
+			$settings['products'] = array_unique( $settings['products'] );
+		}
 
 		// deep level still
 		$product_where = '';
@@ -509,21 +522,34 @@ class WC_Order_Export_Data_Extractor {
 		if ( $product_where ) {
 			$left_join_order_items_meta[] = "LEFT JOIN $wc_order_items_meta  AS orderitemmeta_product ON orderitemmeta_product.order_item_id = order_items.order_item_id";
 			$order_items_meta_where[]     = " (orderitemmeta_product.meta_key IN ('_variation_id', '_product_id')  AND orderitemmeta_product.meta_value IN $product_where)";
+		} else {
+			$left_join_order_items_meta[] = "LEFT JOIN $wc_order_items_meta  AS orderitemmeta_product ON orderitemmeta_product.order_item_id = order_items.order_item_id";
+			$order_items_meta_where[]     = " orderitemmeta_product.meta_key IN ('_variation_id', '_product_id')";
 		}
 
 		//by attrbutes in woocommerce_order_itemmeta
 		if ( $settings['product_attributes'] ) {
 			$attrs        = self::get_product_attributes();
 			$names2fields = array_flip( $attrs );
-			$filters      = self::parse_pairs( $settings['product_attributes'], $attrs );
-			foreach ( $filters as $label => $values ) {
-				$field  = $names2fields[ $label ];
-				$values = self::sql_subset( $values );
-				if ( $values ) {
-					$left_join_order_items_meta[] = "LEFT JOIN $wc_order_items_meta  AS `orderitemmeta_{$field}` ON `orderitemmeta_{$field}`.order_item_id = order_items.order_item_id";
-					$order_items_meta_where[]     = " (`orderitemmeta_{$field}`.meta_key='$field'  AND `orderitemmeta_{$field}`.meta_value IN  ($values) ) ";
-				}
-			}
+			$filters      = self::parse_complex_pairs( $settings['product_attributes'], $attrs );
+			foreach ( $filters as $operator => $fields) {
+				foreach ( $fields as $field => $values ) {
+					$field  = $names2fields[ $field ];
+					if ( $values ) {
+						$left_join_order_items_meta[] = "LEFT JOIN $wc_order_items_meta  AS `orderitemmeta_{$field}` ON `orderitemmeta_{$field}`.order_item_id = order_items.order_item_id";
+						if( $operator == 'IN' OR $operator == 'NOT IN' ) {
+							$values = self::sql_subset( $values );
+							$order_items_meta_where[]     = " (`orderitemmeta_{$field}`.meta_key='$field'  AND `orderitemmeta_{$field}`.meta_value $operator  ($values) ) ";
+						} elseif( $operator =='LIKE' ) {
+							$pairs = array();
+							foreach($values as $v)
+								$pairs[] = " `orderitemmeta_{$field}`.meta_value LIKE '$v' ";
+							$pairs = join("OR", $pairs);
+							$order_items_meta_where[]     = " (`orderitemmeta_{$field}`.meta_key='$field'  AND  ($pairs) ) ";
+						}
+					}
+				}// values
+			}// operators
 		}
 
 		$order_items_meta_where = join( " AND ", $order_items_meta_where );
@@ -536,10 +562,12 @@ class WC_Order_Export_Data_Extractor {
 		// final sql from WC tables
 		if ( !$order_items_meta_where ) 
 			return false;
-			
-		$sql= "SELECT DISTINCT orderitemmeta_product.meta_value FROM {$wpdb->prefix}woocommerce_order_items as order_items 
-			$left_join_order_items_meta
-			WHERE order_item_type='line_item' $order_items_meta_where";
+
+		$sql= "SELECT DISTINCT p_id FROM
+						(SELECT order_items.order_item_id as order_item_id, MAX(CONVERT(orderitemmeta_product.meta_value ,UNSIGNED INTEGER)) as p_id FROM {$wpdb->prefix}woocommerce_order_items as order_items
+							$left_join_order_items_meta
+							WHERE order_item_type='line_item' $order_items_meta_where GROUP BY order_item_id
+						) AS temp";
 		return $sql;	
 	}
 
@@ -587,6 +615,18 @@ class WC_Order_Export_Data_Extractor {
 					)";
 		}
 
+		if ( $settings['product_vendors'] ) {
+			$wp_query_args = array(
+					'author__in' => $settings['product_vendors'],
+					'post_type'  => 'product'
+			);
+			$products = new WP_Query( $wp_query_args );
+			foreach ( $products->get_posts() as $product ) {
+				$settings['products'][] = $product->ID;
+			}
+
+			$settings['products'] = array_unique( $settings['products'] );
+		}
 
 		// deep level still
 		$product_where = '';
@@ -713,6 +753,15 @@ class WC_Order_Export_Data_Extractor {
 				$left_join_order_meta[] = "LEFT JOIN {$wpdb->postmeta} AS ordermeta_{$field} ON ordermeta_{$field}.post_id = orders.ID";
 				$order_meta_where []    = " (ordermeta_{$field}.meta_key='_customer_user'  AND ordermeta_{$field}.meta_value in ($values)) ";
 			}	
+		}
+
+		// payment methods
+		if ( ! empty( $settings['payment_methods'] ) ) {
+			$field  = 'payment_method';
+			$values = self::sql_subset( $settings['payment_methods'] );
+
+			$left_join_order_meta[] = "LEFT JOIN {$wpdb->postmeta} AS ordermeta_{$field} ON ordermeta_{$field}.post_id = orders.ID";
+			$order_meta_where []    = " (ordermeta_{$field}.meta_key='_{$field}'  AND ordermeta_{$field}.meta_value in ($values)) ";
 		}
 			
 		$order_meta_where = join( " AND ", $order_meta_where );
@@ -1048,7 +1097,7 @@ class WC_Order_Export_Data_Extractor {
 		$i = 0;
 		foreach ( $order->get_items('line_item') as $item_id=>$item ) {
 			// we export only matched products?
-			if( $export_only_products AND !in_array($item['product_id'], $export_only_products ) )
+			if( $export_only_products AND !in_array($item['product_id'], $export_only_products ) AND !in_array($item['variation_id'], $export_only_products ) )
 				continue;
 			$i++;
 			$product   = $order->get_product_from_item( $item );
@@ -1095,7 +1144,7 @@ class WC_Order_Export_Data_Extractor {
 				} elseif ( isset( $static_vals[ $field ] ) ) {
 					$row[ $field ] = $static_vals[ $field ];
 				} else {
-					$row[ $field ] = $product->$field;
+					@$row[ $field ] = $product->$field;
 					if($row[ $field ] === '' ) // empty value ? try get custom!
 						$row[ $field ]  = get_post_meta( $product->id, $field, true );
 					if($row[ $field ] === '' ) // empty value ? try get attribute for !variaton
@@ -1240,6 +1289,29 @@ class WC_Order_Export_Data_Extractor {
 				$row[ $field ] = count( $data['products'] );
 			} elseif ( isset( $static_vals['order'][ $field ] ) ) {
 				$row[ $field ] = $static_vals['order'][ $field ];
+			} elseif ( $field == 'order_notes' ) {
+				$comments = array();
+				$args = array(
+						'post_id' 	=> $order->id,
+						'approve' 	=> 'approve',
+						'type' 		=> 'order_note',
+				);
+
+				remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10 );
+
+				$notes = get_comments( $args );
+
+				add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+
+				if ( $notes ) {
+					foreach( $notes as $note ) {
+						if ( $note->comment_author !== 'WooCommerce' && ! get_comment_meta( $note->comment_ID, 'is_customer_note', true ) ) {
+							$comments[] = $note->comment_content;
+						}
+					}
+				}
+				$row[ $field ] = implode("\n", $comments);
+
 			} else { // customer_note,order_date
 				$row[ $field ] = $order->$field;
 				//print_r($field."=".$label); echo "debug static!\n\n";

@@ -81,6 +81,13 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 
 == Changelog ==
 
+= 1.2.1 - 2016-08-12 =
+* New filter by Payment Method
+* New filter by Vendor( product creator)
+* New field "Order Notes"
+* Button "Export w/o progressbar" (added for servers behind a Load Balancer)
+* Fixed bug if order was filtered by variable product
+
 = 1.2.0 - 2016-07-11 =
 * Support both XLS and XLSX
 * Solved problem with filters ("Outdated Select2.js" warning)

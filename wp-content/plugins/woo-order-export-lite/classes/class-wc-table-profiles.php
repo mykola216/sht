@@ -81,7 +81,7 @@ class WC_Table_Profiles extends WP_List_Table {
 				break;
 			//
 			case 'actions':
-				return '' .
+				return '<div class="btn-edit button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
 				'<div class="btn-clone button-secondary" data-id="' . $item[ 'id' ] . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
 				'<div class="btn-trash button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-trash"></span></div>';
 				break;

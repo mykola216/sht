@@ -31,6 +31,12 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<span class="wc-oe-header"><?php _e( 'Title', 'woocommerce-order-export' ) ?></span>
 					<input type=text  style="width: 90%;" name="settings[title]" value='<?php echo ( isset( $settings[ 'title' ] ) ? $settings[ 'title' ] : '' ) ?>'>
 				</div>
+				<div>
+					<label>
+						<input type="checkbox" name="settings[use_as_bulk]" class="width-100" <?php echo isset( $settings[ 'use_as_bulk' ] ) ? 'checked' : '' ?>>
+						<?php _e( 'Use as bulk action', 'woocommerce-order-export' ) ?>
+					</label>
+				</div>
 			</div>
 			<hr>
 		<?php endif; ?>
@@ -477,8 +483,8 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<div id="my-order" hidden="hidden">
 				<span class="wc-oe-header"><?php _e( 'Order Statuses', 'woocommerce-order-export' ) ?></span>
 				<select id="statuses" name="settings[statuses][]" multiple="multiple" style="width: 100%">
-					<?php foreach ( wc_get_order_statuses() as $id => $status ) { ?>
-						<option value="<?php echo $id ?>" <?php if ( in_array( $id, $settings[ 'statuses' ] ) ) echo 'selected'; ?>><?php echo $status ?></option>
+					<?php foreach ( wc_get_order_statuses() as $i => $status ) { ?>
+						<option value="<?php echo $i ?>" <?php if ( in_array( $i, $settings[ 'statuses' ] ) ) echo 'selected'; ?>><?php echo $status ?></option>
 					<?php } ?>
 				</select>
 				
@@ -529,6 +535,17 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							$cat_term = get_term( $cat, 'product_cat' );
 							?>
 							<option selected value="<?php echo $cat_term->term_id ?>"> <?php echo $cat_term->name; ?></option>
+						<?php } ?>
+				</select>
+
+				<span class="wc-oe-header"><?php _e( 'Vendor/creator', 'woocommerce-order-export' ) ?></span>
+				<select id="product_vendors" name="settings[product_vendors][]" multiple="multiple" style="width: 100%">
+					<?php
+					if ( $settings[ 'product_vendors' ] )
+						foreach ( $settings[ 'product_vendors' ] as $user_id ) {
+							$user = get_user_by( 'id', $user_id );
+							?>
+							<option selected value="<?php echo $user_id ?>"> <?php echo $user->display_name; ?></option>
 						<?php } ?>
 				</select>
 
@@ -597,39 +614,6 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<br>
 
 		<div class="my-block">
-			<span class="my-hide-next "><?php _e( 'Filter by shipping', 'woocommerce-order-export' ) ?>
-				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
-			<div id="my-shipping" hidden="hidden">
-				<span class="wc-oe-header"><?php _e( 'Shipping locations', 'woocommerce-order-export' ) ?></span>
-				<br>
-				<select id="shipping_locations">
-					<option>City</option>
-					<option>State</option>
-					<option>Postcode</option>
-					<option>Country</option>
-				</select>
-				<select id="shipping_compare" class="select_compare">
-					<option>=</option>
-					<option>&lt;&gt;</option>
-				</select>
-				
-				<button id="add_locations" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
-				<br>
-				<select id="locations_check" multiple name="settings[shipping_locations][]" style="width: 100%;">
-					<?php
-					if ( $settings[ 'shipping_locations' ] )
-						foreach ( $settings[ 'shipping_locations' ] as $location ) {
-							?>
-							<option selected value="<?php echo $location; ?>"> <?php echo $location; ?></option>
-						<?php } ?>
-				</select>
-			</div>
-		</div>
-
-		<br>
-		<br>
-
-		<div class="my-block">
 			<span class="my-hide-next "><?php _e( 'Filter by users/roles', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-users" hidden="hidden">
@@ -651,6 +635,55 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							?>
 							<option selected value="<?php echo $user_id ?>"> <?php echo $user->display_name; ?></option>
 					<?php } ?>
+				</select>
+			</div>
+		</div>
+
+		<br>
+		<br>
+
+		<div class="my-block">
+			<span class="my-hide-next "><?php _e( 'Filter by payment', 'woocommerce-order-export' ) ?>
+				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
+			<div id="my-payments" hidden="hidden">
+				<span class="wc-oe-header"><?php _e( 'Payment Methods', 'woocommerce-order-export' ) ?></span>
+				<select id="payment_methods" name="settings[payment_methods][]" multiple="multiple" style="width: 100%">
+					<?php foreach ( WC()->payment_gateways->payment_gateways() as $gateway ) { ?>
+						<option value="<?php echo $gateway->id ?>" <?php if ( in_array( $gateway->id, $settings[ 'payment_methods' ] ) ) echo 'selected'; ?>><?php echo $gateway->get_title() ?></option>
+					<?php } ?>
+				</select>
+			</div>
+		</div>
+
+		<br>
+		<br>
+
+		<div class="my-block">
+			<span class="my-hide-next "><?php _e( 'Filter by shipping', 'woocommerce-order-export' ) ?>
+				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
+			<div id="my-shipping" hidden="hidden">
+				<span class="wc-oe-header"><?php _e( 'Shipping locations', 'woocommerce-order-export' ) ?></span>
+				<br>
+				<select id="shipping_locations">
+					<option>City</option>
+					<option>State</option>
+					<option>Postcode</option>
+					<option>Country</option>
+				</select>
+				<select id="shipping_compare" class="select_compare">
+					<option>=</option>
+					<option>&lt;&gt;</option>
+				</select>
+
+				<button id="add_locations" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
+				<br>
+				<select id="locations_check" multiple name="settings[shipping_locations][]" style="width: 100%;">
+					<?php
+					if ( $settings[ 'shipping_locations' ] )
+						foreach ( $settings[ 'shipping_locations' ] as $location ) {
+							?>
+							<option selected value="<?php echo $location; ?>"> <?php echo $location; ?></option>
+						<?php } ?>
 				</select>
 			</div>
 		</div>
@@ -727,6 +760,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<input type="submit" id='save-btn' class="button-primary" value="<?php _e( 'Save Settings', 'woocommerce-order-export' ) ?>" />
 		<?php if ( $show[ 'export_button' ] ) { ?>
 			<input type="submit" id='export-btn' class="button-secondary" value="<?php _e( 'Export', 'woocommerce-order-export' ) ?>" />
+			<input type="submit" id='export-wo-pb-btn' class="button-secondary" value="<?php _e( 'Export [w/o progressbar]', 'woocommerce-order-export' ) ?>" />
 		<div id="progress_div" style="display: none;">
 			<div id="progressBar"><div></div></div>
 		</div>
@@ -741,6 +775,14 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 <form id='export_new_window_form' method=POST target=_blank></form>
 <iframe id='export_new_window_frame' width=0 height=0 style='display:none'></iframe>
 
+<form id='export_wo_pb_form' method='post' target='export_wo_pb_frame'>
+	<input name="action" type="hidden" value="order_exporter">
+	<input name="method" type="hidden" value="plain_export">
+	<input name="mode" type="hidden" value="<?php echo $mode ?>">
+	<input name="id" type="hidden" value="<?php echo $id ?>">
+	<input name="settings" type="hidden">
+</form>
+<iframe id='export_wo_pb_frame' width=0 height=0 style='display:none'></iframe>
 
 
 <script>
@@ -1270,6 +1312,15 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			}
 		}
 // EXPORT FUNCTIONS END
+		$( "#export-wo-pb-btn" ).click( function() {
+			$( '#export_wo_pb_frame' ).attr( "src", ajaxurl );
+			$( '#export_wo_pb_form' ).attr( "action", ajaxurl );
+			$( '#export_wo_pb_form' ).find( '[name=settings]' ).val( $( '#export_job_settings' ).serialize() );
+			$( '#export_wo_pb_form' ).submit();
+
+			return false;
+		} );
+
 		$( "#export-btn, #my-quick-export-btn" ).click( function() {
 
 			data = get_data();
@@ -1357,7 +1408,8 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		}
 		
 		openFilter('my-users');
-		
+
+		openFilter('my-payments');
 
 		//for XLSX
 		$('#format_xls_use_xls_format').click(function() {
