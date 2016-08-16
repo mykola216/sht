@@ -39,7 +39,7 @@ class PHPExcel_Settings
     /**    constants */
     /**    Available Zip library classes */
     const PCLZIP     = 'PHPExcel_Shared_ZipArchive';
-    const ZIPARCHIVE = 'ZipArchive';
+    const ZIPARCHIVE = 'PHPExcel_Shared_ZipArchive';
 
     /**    Optional Chart Rendering libraries */
     const CHART_RENDERER_JPGRAPH = 'jpgraph';
