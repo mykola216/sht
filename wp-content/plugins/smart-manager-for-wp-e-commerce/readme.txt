@@ -1,11 +1,13 @@
 === Smart Manager for WooCommerce & WPeC ===
 Contributors: storeapps, niravmehta, ratnakar.dubey, Tarun.Parswani, akash123dhawade
-Donate link: http://www.storeapps.org/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CPTHCDC382KVA
+Author URI: http://www.storeapps.org/
+Plugin URI: http://www.storeapps.org/
 Tags: administration, wp e-commerce, woo commerce, woocommerce, wpec, wpsc, jigoshop, ecommerce, management, batch update, bulk edit, mass update, wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management,
 woocommerce manager, woocommerce order management, woocommerce product management, woocommerce smart manager, woocommerce store management
 Requires at least: 2.0.2
 Tested up to: 4.5.3
-Stable tag: 3.9.17
+Stable tag: 3.9.18
 License: GPLv3
 
 The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features. 
@@ -138,6 +140,13 @@ It also gives the warm feeling of supporting further development of the plugin.
 4. Batch Update (only in paid version)
 
 == Changelog ==
+
+= 3.9.18 =
+* New: Fastest access to documentation in admin panel through Quick Help widget (Pro)
+* Fix: Inline edit for coupon 'Discount Type' not working (WooCommerce)
+* Fix: Customer 'Last Order Date' doing string sort (WooCommerce)
+* Fix: Handling 'Private' & 'Scheduled' post statuses for any post type (Beta)
+* Fix: Some minor fixes
 
 = 3.9.17 =
 * Update: PHP 7.0 compatibility
@@ -671,6 +680,9 @@ It also gives the warm feeling of supporting further development of the plugin.
 * Product administration features
 
 == Upgrade Notice ==
+
+= 3.9.18 =
+New quick help widget for Pro users along with other important fixes. Recommended upgrade.
 
 = 3.9.17 =
 PHP 7 compatibility along with other important fixes. Recommended upgrade.

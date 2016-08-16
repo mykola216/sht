@@ -3,7 +3,7 @@
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
 Description: <strong>Lite Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.17
+Version: 3.9.18
 Author: Store Apps
 Author URI: http://www.storeapps.org/
 Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Store Apps All rights reserved.
@@ -28,18 +28,25 @@ function smart_activate() {
 	$index_queries = generate_db_index_queries();
 	process_db_indexes( $index_queries ['add'] );
 
+	$collate = '';
+
+	if ( $wpdb->has_cap( 'collation' ) ) {
+		$collate = $wpdb->get_charset_collate();
+	}
+
 	$sm_advanced_search_temp = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sm_advanced_search_temp` (
 					  `product_id` bigint(20) unsigned NOT NULL default '0',
 					  `flag` bigint(20) unsigned NOT NULL default '0',
-					  `cat_flag` bigint(20) unsigned NOT NULL default '0') ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
+					  `cat_flag` bigint(20) unsigned NOT NULL default '0') $collate;";
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sm_advanced_search_temp );
 
-	// Redirect to SM 
-	if (!is_network_admin()) {
-		add_option( '_sm_activation_redirect', 'pending' );	
-	}
+
+	// Redirect to welcome screen
+    if ( ! is_network_admin() && ! isset( $_GET['activate-multi'] ) ) {
+        set_transient( '_sm_activation_redirect', 1, 30 );
+    }
 }
 
 /**
@@ -111,19 +118,18 @@ add_action( 'plugins_loaded', 'sm_upgrade' );
 //function to handle inclusion of the SA upgrade file
 function sm_upgrade() {
 	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
-		if ( !class_exists( 'Store_Apps_Upgrade_1_1' ) ) {
-	        require_once 'pro/class-storeapps-upgrade-v-1-1.php';
+		if ( !class_exists( 'Store_Apps_Upgrade_1_2' ) ) {
+	        require_once 'pro/class-storeapps-upgrade-v-1-2.php';
 	    }
 
 		$sku = SM_SKU;
 		$prefix = SM_PREFIX;
 		$plugin_name = SM_PLUGIN_NAME;
 		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
-		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade_1_1( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade_1_2( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
 
 		//filters for handling quick_help_widget
-		add_filter( $prefix . '_is_page_for_notifications', 'sm_quick_help_widget_pages' );
-		add_filter( $prefix . '_ig_modify_remote_params', 'sm_quick_help_widget_params' );
+		add_filter( 'sa_active_plugins_for_quick_help', 'sm_quick_help_widget', 10, 2 );
 	}
 }
 
@@ -160,22 +166,17 @@ function smart_manager_get_data() {
 }
 
 // function to handle the display of quick help widget
-function sm_quick_help_widget_pages() {
+function sm_quick_help_widget( $active_plugins, $upgrader ) {
 	
 	if ( isset($_GET['page']) && ($_GET['page'] == "smart-manager-woo" || $_GET['page'] == "smart-manager-wpsc" || ( !empty($_GET['sm_beta']) && $_GET['sm_beta'] == 1 ) || $_GET['page'] == "smart-manager-settings")) {
-		return true;
-	}
-
-	return false;
+		$active_plugins[SM_SKU] = 'smart-manager';
+	} elseif ( array_key_exists( SM_SKU, $active_plugins ) ) {
+        unset( $active_plugins[SM_SKU] );
+    }
+        
+    return $active_plugins;
 }
 
-// function to modify quick help widget params
-function sm_quick_help_widget_params( $params ) {
-	
-	$params['kb_slug'] = 'smart-manager';
-
-	return $params;
-}
 
 /*
 * Function to to handle media links on plugin page

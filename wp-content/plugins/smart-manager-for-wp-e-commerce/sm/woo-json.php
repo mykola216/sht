@@ -1362,7 +1362,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                         ORDER BY posts.post_date DESC SEPARATOR ',' ) AS all_id,
                                GROUP_CONCAT(postmeta2.meta_value 
                                              ORDER BY posts.post_date DESC SEPARATOR ',' ) AS order_total,     
-                                        date_format(max(posts.post_date),'%b %e %Y, %r') AS date,
+                                        date_format(max(posts.post_date),'%Y-%m-%d, %r') AS date,
                                count(postmeta1.post_id) as count,
                                sum(postmeta2.meta_value) as total
                             
@@ -1393,7 +1393,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                     ORDER BY posts.post_date DESC SEPARATOR ',' ) AS all_id,
                            GROUP_CONCAT(postmeta2.meta_value 
                                          ORDER BY posts.post_date DESC SEPARATOR ',' ) AS order_total,     
-                                    date_format(max(posts.post_date),'%b %e %Y, %r') AS date,
+                                    date_format(max(posts.post_date),'%Y-%m-%d, %r') AS date,
                            count(postmeta1.post_id) as count,
                            sum(postmeta2.meta_value) as total
                            
@@ -1465,13 +1465,12 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
 
             // $orderby_cond = (!empty($max_ids)) ? "ORDER BY FIND_IN_SET(posts.ID,'$max_id')" : "ORDER BY posts.ID";
 
-
             $customers_query = "SELECT SQL_CALC_FOUND_ROWS
                                      DISTINCT(GROUP_CONCAT( postmeta.meta_value
                                      ORDER BY postmeta.meta_id SEPARATOR '###' ) )AS meta_value,
                                      GROUP_CONCAT(distinct postmeta.meta_key
                                      ORDER BY postmeta.meta_id SEPARATOR '###' ) AS meta_key,
-                                     date_format(max(posts.post_date),'%b %e %Y, %r') AS date,
+                                     date_format(max(posts.post_date),'%Y-%m-%d, %r') AS date,
                                      posts.ID AS id
 
                                     FROM {$wpdb->prefix}posts AS posts
@@ -1679,8 +1678,8 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
         }
 
         $select_query = "SELECT SQL_CALC_FOUND_ROWS posts.ID as id,
-                                posts.post_excerpt as customer_provided_note,
-                                date_format(posts.post_date,'%b %e %Y, %r') AS date,
+                                posts.post_excerpt as customer_provided_note,                                
+                                date_format(posts.post_date,'%Y-%m-%d, %r') AS date,
                                 GROUP_CONCAT( postmeta.meta_value 
                                 ORDER BY postmeta.meta_id
                                 SEPARATOR '###' ) AS meta_value,

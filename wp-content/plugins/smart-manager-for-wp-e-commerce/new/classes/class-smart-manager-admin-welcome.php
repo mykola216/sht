@@ -142,12 +142,12 @@ class Smart_Manager_Admin_Welcome {
             	add_thickbox();
         	}
 
-            if ( ! method_exists( 'Store_Apps_Upgrade_1_1', 'support_ticket_content' ) ) return;
+            if ( ! method_exists( 'Store_Apps_Upgrade_1_2', 'support_ticket_content' ) ) return;
 
             $plugin_data = get_plugin_data( self::$plugin_file );
             $license_key = get_site_option( self::$prefix.'_license_key' );
 
-            Store_Apps_Upgrade_1_1::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
+            Store_Apps_Upgrade_1_2::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
     }
 
 	/**
@@ -470,13 +470,13 @@ class Smart_Manager_Admin_Welcome {
 	 * Sends user to the welcome page on first activation.
 	 */
 	public function smart_manager_welcome() {
-		
-		if( !get_option( '_sm_activation_redirect' ) ) {
+
+		if ( ! get_transient( '_sm_activation_redirect' ) ) {
 			return;
 		}
 		
 		// Delete the redirect transient
-		delete_option( '_sm_activation_redirect' );
+		delete_transient( '_sm_activation_redirect' );
 
 		if( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			wp_redirect( admin_url( 'edit.php?post_type=product&page=smart-manager-woo&landing-page=sm-about' ) );

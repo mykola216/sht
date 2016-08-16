@@ -540,7 +540,6 @@ if (WPSC_RUNNING === true) {
 	$coupon_details['title'] = 'Coupons';
 	$coupon_details['column'] = $couponfield_names;
 
-
 	$user_defined_fields['coupon_dashbd'] = $coupon_details;
 
 	$encodedcouponfields = json_encode ( $user_defined_fields );
@@ -1094,10 +1093,10 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 				$products_search_cols [$index]['values'][] = array( 'key' => $type->slug, 'value' => __($type->name,$sm_text_domain));
 			}
 		}
+
+	add_filter('sm_product_columns','sm_product_columns_filter',10,1);
+
 }
-
-add_filter('sm_product_columns','sm_product_columns_filter',10,1);
-
 
 
 $encoded_categories = json_encode ( $categories );
@@ -1163,6 +1162,8 @@ function sm_product_columns_filter($attr) {
 																			WHERE post_status = 'trash'
 																				AND post_parent = 0) ) )";
 	$max_id = $wpdb->get_var($query_max_id);
+
+	$max_id = ( ! empty( $max_id ) ) ? $max_id : 0;
 
 	$postmeta_fields_ignored_cond = (!empty($meta_key_ignored)) ? "AND {$wpdb->prefix}postmeta.meta_key NOT IN ('".implode("','",$meta_key_ignored)."')" : '';
 	$postmeta_fields_meta_value_cond = "AND {$wpdb->prefix}postmeta.meta_value != ''

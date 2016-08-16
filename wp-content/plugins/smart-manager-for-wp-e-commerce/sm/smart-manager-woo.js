@@ -4116,10 +4116,10 @@ var showCustomerDetails = function(record,rowIndex){
 									mode: 'local',
 									store: new Ext.data.ArrayStore({
 												id: 0,
-												fields: ['id','name'],
+												fields: ['value','name'],
 												data: select
 											}),
-									valueField: 'name',
+									valueField: 'value',
 									displayField: 'name'
 								});
         	} else {
@@ -4496,7 +4496,7 @@ var showCustomerDetails = function(record,rowIndex){
 		[
 			{name:'id',type:'string'},   //DataType set to string for Sequential Orders compatibility
 			{name:'display_id',type:'string'},   //DataType set to string for Sequential Orders compatibility
-			{name:'date',type:'date'},
+			{name:'date',type:'string'},
 			{name:'name',type:'string'},
 			{name:'_order_total', type:'float'},
 			{name:'details', type:'string'},

@@ -167,7 +167,9 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 						$temp ['type'] = 'list';
 						$temp ['values'] = array('publish' => __('Publish', Smart_Manager::$text_domain),
 												 'pending' => __('Pending Review', Smart_Manager::$text_domain),
-												 'draft' => __('Draft', Smart_Manager::$text_domain));
+												 'draft' => __('Draft', Smart_Manager::$text_domain),
+												 'private' => __('Private', Smart_Manager::$text_domain),
+												 'future' => __('Scheduled', Smart_Manager::$text_domain));
 					}
 
 					if ( $field_nm == 'ID' || $field_nm == 'post_title' || $field_nm == 'post_date' || $field_nm == 'post_name'
