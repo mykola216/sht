@@ -1332,7 +1332,7 @@ class FUE_AJAX {
         $data       = FUE_Transients::get_transient( 'fue_manual_email_'. $key );
         $recipients = FUE_Transients::get_transient( 'fue_manual_email_recipients_'. $key );
 
-        if ( !$data ) {
+        if ( ! $data || ! $recipients ) {
             self::send_response( array( 'error' => 'Data could not be loaded' ) );
         }
 
@@ -1407,6 +1407,10 @@ class FUE_AJAX {
 
         $emails_per_batch       = get_option( 'fue_emails_per_batch', 100 );
         $email_batch_interval   = get_option( 'fue_batch_interval', 10 );
+
+	    if ( ! $data || ! $recipients ) {
+		    self::send_response( array( 'error' => 'Data could not be loaded' ) );
+	    }
 
         if ( $cmd == 'start' ) {
             $batches = ceil( count( $recipients ) / $emails_per_batch );
@@ -2475,6 +2479,12 @@ class FUE_AJAX {
 
                 foreach ( $email_id as $id ) {
                     $email  = new FUE_Email( $id );
+
+	                // skip emails that aren't active
+	                if ( $email->status != FUE_Email::STATUS_ACTIVE ) {
+		                continue;
+	                }
+
                     $orders = $wc_importer->get_order_ids_matching_email( $email );
 
                     if ( !empty( $orders ) ) {
@@ -2957,14 +2967,17 @@ class FUE_AJAX {
 
         $first_name = !empty( $_POST['first_name'] ) ? $_POST['first_name'] : '';
         $last_name  = !empty( $_POST['last_name'] ) ? $_POST['last_name'] : '';
+	    $email      = sanitize_email( $_POST['email'] );
 
-        WC()->session->set( 'wc_guest_email', sanitize_email( $_POST['email'] ) );
+        WC()->session->set( 'wc_guest_email', $email );
         WC()->session->set( 'wc_guest_name', array($first_name, $last_name) );
 
-
+	    // copy what's currently in WC's cart to our cart table
         FUE_Addon_Woocommerce_Cart::clone_cart();
 
-        Follow_Up_Emails::instance()->fue_wc->wc_scheduler->queue_cart_emails( WC()->cart->get_cart(), 0, $_POST['email'] );
+	    foreach ( WC()->cart->get_cart() as $cart_item ) {
+		    Follow_Up_Emails::instance()->fue_wc->wc_scheduler->queue_cart_emails( WC()->cart->get_cart(), 0, $email, $cart_item['product_id'] );
+	    }
     }
 
     /**

@@ -82,7 +82,7 @@ class FUE_Admin_Actions {
             if ( $email_batch_enabled && count( $recipients ) > $emails_per_batch ) {
                 $key = $args['email_id'] .'-'. time();
 
-                FUE_Transients::set_transient( 'fue_manual_email_recipients_'. $key, $recipients, 86400 );
+                FUE_Transients::set_transient( 'fue_manual_email_recipients_'. $key, $recipients, 86400, 250 );
                 unset( $args['recipients'] );
                 FUE_Transients::set_transient( 'fue_manual_email_'. $key, $args, 86400 );
 
@@ -94,7 +94,7 @@ class FUE_Admin_Actions {
                 if ( count( $recipients ) > 50 ) {
                     $key = $args['email_id'] .'-'. time();
 
-                    FUE_Transients::set_transient( 'fue_manual_email_recipients_'. $key, $recipients, 86400 );
+                    FUE_Transients::set_transient( 'fue_manual_email_recipients_'. $key, $recipients, 86400, 250 );
 
                     unset( $args['recipients'] );
                     FUE_Transients::set_transient( 'fue_manual_email_'. $key, $args, 86400 );

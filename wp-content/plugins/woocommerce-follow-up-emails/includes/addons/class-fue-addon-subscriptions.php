@@ -59,6 +59,7 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
                 add_filter( 'fue_wc_get_orders_for_email', array($v2, 'get_orders_for_email'), 10, 2 );
                 add_filter( 'fue_wc_filter_orders_for_email', array($v2, 'filter_orders_for_email'), 10, 2 );
                 add_filter( 'fue_wc_import_insert', array($v2, 'add_subscription_id_to_meta'), 1, 2 );
+                add_filter( 'fue_wc_import_insert', array($v2, 'set_followup_send_date'), 2, 2 );
 
                 // listen for payment failures
                 add_action( 'woocommerce_subscription_payment_failed', array($v2, 'payment_failed_for_subscription') );

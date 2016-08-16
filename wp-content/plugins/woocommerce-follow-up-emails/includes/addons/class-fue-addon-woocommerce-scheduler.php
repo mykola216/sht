@@ -555,15 +555,12 @@ class FUE_Addon_Woocommerce_Scheduler {
      * @param int $added_product
      */
     public function queue_cart_emails( $cart, $user_id = 0, $user_email = '', $added_product = null ) {
-        $cart_session = array();
         $cart_emails    = array();
         $always_prods   = array();
         $always_cats    = array();
         $email_created  = false;
 
-        if ( $user_id ) {
-            $cart_session = FUE_Addon_Woocommerce_Cart::get_user_cart_session( $user_id );
-        }
+	    $cart_session = FUE_Addon_Woocommerce_Cart::get_user_cart_session( $user_id );
 
         if ( !$user_email ) {
             $user_email = '';
@@ -831,6 +828,13 @@ class FUE_Addon_Woocommerce_Scheduler {
                     if ( $this->is_product_or_category_excluded( $added_product, null, null, $email ) ) {
                         continue;
                     }
+                } else {
+	                // if no $added_product is specified, make sure there are no excluded products in the cart
+	                foreach ( $cart as $item ) {
+		                if ( $this->is_product_or_category_excluded( $item['product_id'], null, null, $email ) ) {
+			                continue 2;
+		                }
+	                }
                 }
 
                 if ( $this->exclude_customer_based_on_purchase_history( $customer, $email ) ) {
@@ -850,9 +854,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             }
         }
 
-        if ( $user_id ) {
-            update_user_meta( $user_id, '_wcfue_cart_emails', $cart_session );
-        }
+	    FUE_Addon_Woocommerce_Cart::set_user_cart_session( $user_id, $cart_session );
     }
 
     /**

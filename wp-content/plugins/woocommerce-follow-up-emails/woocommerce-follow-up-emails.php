@@ -3,29 +3,14 @@
   * Plugin Name: Follow-Up Emails
   * Plugin URI: http://www.woothemes.com/products/follow-up-emails/
   * Description: Automate your email marketing, and create scheduled newletters to drive customer engagement for WordPress, WooCommerce, and Sensei.
-  * Version: 4.4.14
-  * Author: 75nineteen Media LLC
-  * Author URI: http://www.75nineteen.com
+  * Version: 4.4.16
+  * Author: WooThemes
+  * Author URI: http://www.woocommerce.com
   * Text domain: follow_up_emails
-
-  * Copyright 2016 75nineteen Media LLC.  (email : scott@75nineteen.com)
-  * 
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  * 
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  * 
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
   */
-
+  
 /** Path and URL constants **/
-define( 'FUE_VERSION', '4.4.14' );
+define( 'FUE_VERSION', '4.4.16' );
 define( 'FUE_KEY', 'aHR0cDovLzc1bmluZXRlZW4uY29tL2Z1ZS5waH' );
 define( 'FUE_FILE', __FILE__ );
 define( 'FUE_URL', plugins_url('', __FILE__) );

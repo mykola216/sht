@@ -76,8 +76,11 @@ class FUE_Addon_WooCommerce_Order_Importer {
     }
 
     public function filter_orders( $data ) {
-
         $email = new FUE_Email( $data['email_id'] );
+
+	    if ( $email->status != FUE_Email::STATUS_ACTIVE ) {
+		    return array( $email->id => array() );
+	    }
 
         if ( $email->type == 'storewide' ) {
             $data['orders'] = $this->filter_storewide_orders( $data['orders'], $email );
@@ -180,13 +183,6 @@ class FUE_Addon_WooCommerce_Order_Importer {
                     $imported[] = array(
                         'id'        => $insert['order_id'],
                         'status'    => 'success'
-                    );
-                } else {
-                    $failures++;
-                    $imported[] = array(
-                        'id'        => $insert['order_id'],
-                        'status'    => 'failed',
-                        'reason'    => sprintf( __('Importing failed. Could not load order (#%d)', 'follow_up_emails'), $insert['order_id'] )
                     );
                 }
             }

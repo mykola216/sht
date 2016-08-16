@@ -1,5 +1,14 @@
 *** WooCommerce Follow-Up Emails ***
 
+2016.08.15 - version 4.4.16
+ * Bug fix: Check for, and reduce, the length of the transient for manual emails recipients
+
+2016.07.26 - version 4.4.15
+ * Bug fix: Fix importer issue related to subscription emails
+ * Bug fix: Skip importing of emails that are not currently active
+ * Bug fix: Added excluded products check for cart emails when logging in through the checkout page
+ * Bug fix: When importing followups for subscriptions, use the start date for followups with the subs_activated trigger and the end date for the subs_expired trigger
+
 2016.05.18 - version 4.4.14
  * Added: WooCommerce 2.6 compatibility support
  * Bug fix: Tweak for customer emails trigger - after purchased more than once

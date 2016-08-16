@@ -1421,6 +1421,56 @@ class FUE_Addon_Subscriptions_V2 {
     }
 
     /**
+     * Set the correct send date when importing subscription follow-ups
+     *
+     * @param array         $insert
+     * @param FUE_Email     $followup
+     * @return array
+     */
+	public static function set_followup_send_date( $insert, $followup ) {
+        if ( $followup->is_type( 'subscription' ) ) {
+            if ( empty( $insert['meta']['subs_key'] ) ) {
+                return $insert;
+			}
+
+			$subscription = wcs_get_subscription( $insert['meta']['subs_key'] );
+
+	        switch ( $followup->trigger ) {
+		        case 'subs_activated':
+					$trigger_date = $subscription->get_date( 'start', 'site' );
+			        break;
+
+		        case 'subs_expired':
+				case 'subs_before_expire':
+					$trigger_date = $subscription->get_date( 'end', 'site' );
+			        break;
+
+		        case 'subs_before_expire':
+			        $trigger_date = $subscription->get_date( 'end', 'site' );
+			        break;
+
+		        default:
+			        $trigger_date = 0;
+			        break;
+	        }
+
+	        if ( ! $trigger_date ) {
+		        $insert = false;
+	        } else {
+		        if ( $followup->trigger == 'subs_before_expire' ) {
+			        $diff = FUE_Sending_Scheduler::get_time_to_add( $followup->interval, $followup->interval_duration );
+			        $trigger_timestamp = strtotime( $trigger_date ) - $diff;
+			        $insert['send_on'] = $trigger_timestamp;
+		        } else {
+			        $insert['send_on'] = $followup->get_send_timestamp( $trigger_date );
+		        }
+	        }
+		}
+
+        return $insert;
+	}
+
+    /**
      * Send an email notification when a subscription payment fails
      * @param WC_Subscription $subscription
      */

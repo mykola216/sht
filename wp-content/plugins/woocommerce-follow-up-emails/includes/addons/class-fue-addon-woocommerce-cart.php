@@ -462,6 +462,20 @@ class FUE_Addon_Woocommerce_Cart {
         return apply_filters( 'fue_wc_cart_status', $status, $user_id, $email );
     }
 
+	/**
+	 * Set the cart session for a user. This prevents sending duplicate cart emails to the same customer.
+	 *
+	 * @param int   $user_id
+	 * @param array $cart_session
+	 */
+	public static function set_user_cart_session( $user_id = 0, $cart_session ) {
+		if ( $user_id ) {
+			update_user_meta( $user_id, '_wcfue_cart_emails', $cart_session );
+		} else {
+			WC()->session->set( '_wcfue_cart_emails', $cart_session );
+		}
+	}
+
     /**
      * Get the stored cart session for a user
      *
@@ -473,7 +487,11 @@ class FUE_Addon_Woocommerce_Cart {
      * @return array
      */
     public static function get_user_cart_session( $user_id ) {
-        $cart_session = get_user_meta( $user_id, '_wcfue_cart_emails', true );
+	    if ( $user_id ) {
+		    $cart_session = get_user_meta( $user_id, '_wcfue_cart_emails', true );
+	    } else {
+		    $cart_session = WC()->session->get( '_wcfue_cart_emails', array() );
+	    }
 
         if (! $cart_session ) {
             $cart_session = array();
