@@ -1,0 +1,11 @@
+.fc_rating_score, .fc_rating_reviews, .fc_rating_best {
+	font-weight: bold!important;
+}
+
+.widget_fcr_widget ul {
+    list-style: none;
+ }
+ 
+ .widget_fcr_widget li {
+     margin-bottom: 25px;
+  }
