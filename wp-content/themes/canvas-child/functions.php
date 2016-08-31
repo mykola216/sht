@@ -1,5 +1,7 @@
 <?php defined( 'ABSPATH' ) || die();
 
+//libxml_use_internal_errors(true);
+
 // Find modules in perent and child themes
 if ( is_child_theme() ) {
 	$child_theme_modules =  glob( STYLESHEETPATH . '/modules/*' , GLOB_ONLYDIR );
