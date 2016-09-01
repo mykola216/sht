@@ -63,6 +63,12 @@
 				<td colspan="2" bgcolor="#abc"><strong>Slider module</strong></td>
 			</tr>
 			<tr valign="top">
+				<th scope="row">The slider title</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[slider_title]" value="<?php echo $st_options['slider_title']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row">The slider shortcode</th>
 				<td>
 					<input type="text" name="steigerhouttrend_options[slider_shortcode]" value="<?php echo $st_options['slider_shortcode']; ?>" />

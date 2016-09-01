@@ -15,7 +15,7 @@ global $st_options;
 
 <div id="slider">
 	<div class="caption">
-		<h2><?php _e('Scaffold wood furniture', 'woothemes'); ?></h2>
+		<h2><?php echo esc_html( $st_options['slider_title'] ); ?></h2>
 		<a href="/shop" class="button orange-button"><?php _e('All scaffold wood articles', 'woothemes'); ?></a>
 	</div>
 

@@ -36,6 +36,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 				'working_time'          => 'ma-vr: 09.00-17.00u, za: 09.00-16.00u. Klantenservice 24/7',
 				'home_band_text'        => 'Absolute kwaliteit van uit eigen fabriek en nergens goedkoper',
 				'home_band_logo'        => '/wp-content/uploads/2014/12/logo-loodsxl.png',
+				'slider_title'          => 'Slider Title',
 				'slider_shortcode'      => '[metaslider id=2130]',
 				'conversion_id'         => '976593826',
 				'subslider_text1'       => '100% kwaliteit uit eigen fabriek',
@@ -116,6 +117,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 	public function validate_options( $options ) {
 		$options['show_usps_sidebar']     = empty( $options['show_usps_sidebar'] ) ? 'off' : 'on';
 		$options['working_time']          = wp_filter_nohtml_kses( $options['working_time'] );
+		$options['slider_title']          = wp_filter_nohtml_kses( $options['slider_title'] );
 		$options['slider_shortcode']      = wp_filter_nohtml_kses( $options['slider_shortcode'] );
 		$options['conversion_id']         = wp_filter_nohtml_kses( $options['conversion_id'] ) ;
 		$options['facebook_url']          = wp_filter_nohtml_kses( $options['facebook_url']) ;
