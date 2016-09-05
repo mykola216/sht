@@ -195,6 +195,18 @@ body.archive .widget.woocommerce_products_of_the_day{
     /*height: 234px;*/
     /*overflow: auto;*/
 }
+body.archive .widget.woocommerce_products_of_the_day li {
+    clear: left;
+    overflow: hidden;
+    zoom: 1;
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #e6e6e6;}
+body.archive .widget.woocommerce_products_of_the_day li:last-child{
+    border-bottom: 0;}
+.widget ul.product_list_widget li a {
+    display: block;
+    padding-left: 0; }
 body.archive .widget.woocommerce_products_of_the_day .widgettitle{
     margin-bottom: 1em;
     padding-bottom: 5px;
