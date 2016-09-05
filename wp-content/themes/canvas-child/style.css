@@ -188,7 +188,7 @@ body.archive .woocommerce-ordering{
 }
 body.archive .widget.woocommerce_products_of_the_day{
     float: right !important;
-    margin: 0 0 5px 5px;
+    margin: 0 0 5px 20px;
     width: 40% !important;
     /*padding: 0 0 5px 5px;*/
     /*border: 3px solid #72afb8;*/
@@ -199,11 +199,7 @@ body.archive .widget.woocommerce_products_of_the_day li {
     clear: left;
     overflow: hidden;
     zoom: 1;
-    margin-bottom: 2em;
-    padding-bottom: 1em;
-    border-bottom: 1px solid #e6e6e6;}
-body.archive .widget.woocommerce_products_of_the_day li:last-child{
-    border-bottom: 0;}
+    margin-bottom: 0.5em;}
 .widget ul.product_list_widget li a {
     display: block;
     padding-left: 0; }
