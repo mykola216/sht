@@ -20,6 +20,7 @@
 #slider ul {
 	display: block;
 	margin: 10px 0;
+	padding-top: 10px;
 	text-align: center;
 }
 #slider ul a {
@@ -32,7 +33,7 @@
 	line-height: 14px;
 	max-width: 24%;
 	text-align: left;
-	text-transform: uppercase;
+	text-transform: capitalize;
 	vertical-align: top;
 }
 #slider ul div {
@@ -41,6 +42,7 @@
 	width: 40px;
 	height: 34px;
 	margin-left: 20px;
+	margin-top: -7px;
 }
 #slider ul .custom1 {
 	margin-left: 0px;
