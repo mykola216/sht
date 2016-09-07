@@ -8,9 +8,22 @@ Template:       canvas
 Version:        0.1.0
 */
 
-.button {
-    text-transform: capitalize !important;
+/* Capitalize first-letter for ".button" */
+a.button,
+.button span,
+.button.wc-backward{
+    text-transform: lowercase !important;
 }
+a.button:first-letter,
+.button span:first-letter,
+.button.wc-backward:first-letter {
+    text-transform: uppercase !important;
+}
+input.button,
+.button span{
+    text-transform: initial !important;
+}
+
 #navigation {
     margin: 0;
     z-index: 8000;
