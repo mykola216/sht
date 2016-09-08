@@ -3,9 +3,9 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
-new Cookie_Notice_Update( $cookie_notice );
+new Cookie_Notice_Upgrade( $cookie_notice );
 
-class Cookie_Notice_Update {
+class Cookie_Notice_Upgrade {
 
 	private $defaults;
 

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookie Notice
 Description: Cookie Notice allows you to elegantly inform users that your site uses cookies and to comply with the EU cookie law regulations.
-Version: 1.2.35
+Version: 1.2.36.1
 Author: dFactory
 Author URI: http://www.dfactory.eu/
 Plugin URI: http://www.dfactory.eu/plugins/cookie-notice/
@@ -34,7 +34,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/update.php' );
  * Cookie Notice class.
  *
  * @class Cookie_Notice
- * @version	1.2.35
+ * @version	1.2.36.1
  */
 class Cookie_Notice {
 
@@ -70,7 +70,7 @@ class Cookie_Notice {
 			'translate'						=> true,
 			'deactivation_delete'			=> 'no'
 		),
-		'version'							=> '1.2.35'
+		'version'							=> '1.2.36.1'
 	);
 	private $positions 			= array();
 	private $styles 			= array();
@@ -172,21 +172,54 @@ class Cookie_Notice {
 		if ( $this->options['general']['translate'] === true ) {
 			$this->options['general']['translate'] = false;
 
-			$this->options['general']['message_text'] = esc_textarea( __( 'We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it.', 'cookie-notice' ) );
-			$this->options['general']['accept_text'] = sanitize_text_field( __( 'Ok', 'cookie-notice' ) );
-			$this->options['general']['refuse_text'] = sanitize_text_field( __( 'No', 'cookie-notice' ) );
-			$this->options['general']['see_more_opt']['text'] = sanitize_text_field( __( 'Read more', 'cookie-notice' ) );
+			$this->options['general']['message_text'] = __( 'We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it.', 'cookie-notice' );
+			$this->options['general']['accept_text'] = __( 'Ok', 'cookie-notice' );
+			$this->options['general']['refuse_text'] = __( 'No', 'cookie-notice' );
+			$this->options['general']['see_more_opt']['text'] = __( 'Read more', 'cookie-notice' );
 
 			update_option( 'cookie_notice_options', $this->options['general'] );
 		}
 
+		// WPML >= 3.2
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) && version_compare( ICL_SITEPRESS_VERSION, '3.2', '>=' ) ) {
+			$this->register_wpml_strings();
 		// WPML and Polylang compatibility
-		if ( function_exists( 'icl_register_string' ) ) {
+		} elseif ( function_exists( 'icl_register_string' ) ) {
 			icl_register_string( 'Cookie Notice', 'Message in the notice', $this->options['general']['message_text'] );
 			icl_register_string( 'Cookie Notice', 'Button text', $this->options['general']['accept_text'] );
 			icl_register_string( 'Cookie Notice', 'Refuse button text', $this->options['general']['refuse_text'] );
 			icl_register_string( 'Cookie Notice', 'Read more text', $this->options['general']['see_more_opt']['text'] );
 			icl_register_string( 'Cookie Notice', 'Custom link', $this->options['general']['see_more_opt']['link'] );
+		}
+	}
+
+	/**
+	 * Register WPML (>= 3.2) strings if needed.
+	 *
+	 * @return	void
+	 */
+	private function register_wpml_strings() {
+		global $wpdb;
+
+		// prepare strings
+		$strings = array(
+			'Message in the notice'	=> $this->options['general']['message_text'],
+			'Button text'			=> $this->options['general']['accept_text'],
+			'Refuse button text'	=> $this->options['general']['refuse_text'],
+			'Read more text'		=> $this->options['general']['see_more_opt']['text'],
+			'Custom link'			=> $this->options['general']['see_more_opt']['link']
+		);
+
+		// get query results
+		$results = $wpdb->get_col( $wpdb->prepare( "SELECT name FROM " . $wpdb->prefix . "icl_strings WHERE context = %s", 'Cookie Notice' ) );
+
+		// check results
+		foreach( $strings as $string => $value ) {
+			// string does not exist?
+			if ( ! in_array( $string, $results, true ) ) {
+				// register string
+				do_action( 'wpml_register_single_string', 'Cookie Notice', $string, $value );
+			}
 		}
 	}
 
@@ -606,7 +639,17 @@ class Cookie_Notice {
 				$input['see_more_opt']['id'] = ( $input['see_more'] === 'yes' ? (int) $input['see_more_opt']['id'] : 'empty' );
 
 			$input['translate'] = false;
-			
+
+			// WPML >= 3.2
+			if ( defined( 'ICL_SITEPRESS_VERSION' ) && version_compare( ICL_SITEPRESS_VERSION, '3.2', '>=' ) ) {
+				do_action( 'wpml_register_single_string', 'Cookie Notice', 'Message in the notice', $input['message_text'] );
+				do_action( 'wpml_register_single_string', 'Cookie Notice', 'Button text', $input['accept_text'] );
+				do_action( 'wpml_register_single_string', 'Cookie Notice', 'Refuse button text', $input['refuse_text'] );
+				do_action( 'wpml_register_single_string', 'Cookie Notice', 'Read more text', $input['see_more_opt']['text'] );
+
+				if ( $input['see_more_opt']['link_type'] === 'custom' )
+					do_action( 'wpml_register_single_string', 'Cookie Notice', 'Custom link', $input['see_more_opt']['link'] );
+			}
 		} elseif ( isset( $_POST['reset_cookie_notice_options'] ) ) {
 			
 			$input = $this->defaults['general'];
@@ -623,8 +666,15 @@ class Cookie_Notice {
 	 */
 	public function add_cookie_notice() {
 		if ( ! $this->cookie_setted() ) {
+			// WPML >= 3.2
+			if ( defined( 'ICL_SITEPRESS_VERSION' ) && version_compare( ICL_SITEPRESS_VERSION, '3.2', '>=' ) ) {
+				$this->options['general']['message_text'] = apply_filters( 'wpml_translate_single_string', $this->options['general']['message_text'], 'Cookie Notice', 'Message in the notice' );
+				$this->options['general']['accept_text'] = apply_filters( 'wpml_translate_single_string', $this->options['general']['accept_text'], 'Cookie Notice', 'Button text' );
+				$this->options['general']['refuse_text'] = apply_filters( 'wpml_translate_single_string', $this->options['general']['refuse_text'], 'Cookie Notice', 'Refuse button text' );
+				$this->options['general']['see_more_opt']['text'] = apply_filters( 'wpml_translate_single_string', $this->options['general']['see_more_opt']['text'], 'Cookie Notice', 'Read more text' );
+				$this->options['general']['see_more_opt']['link'] = apply_filters( 'wpml_translate_single_string', $this->options['general']['see_more_opt']['link'], 'Cookie Notice', 'Custom link' );
 			// WPML and Polylang compatibility
-			if ( function_exists( 'icl_t' ) ) {
+			} elseif ( function_exists( 'icl_t' ) ) {
 				$this->options['general']['message_text'] = icl_t( 'Cookie Notice', 'Message in the notice', $this->options['general']['message_text'] );
 				$this->options['general']['accept_text'] = icl_t( 'Cookie Notice', 'Button text', $this->options['general']['accept_text'] );
 				$this->options['general']['refuse_text'] = icl_t( 'Cookie Notice', 'Refuse button text', $this->options['general']['refuse_text'] );
@@ -659,7 +709,7 @@ class Cookie_Notice {
 				</div>
 			</div>';
 
-			echo apply_filters( 'cn_cookie_notice_output', $output );
+			echo apply_filters( 'cn_cookie_notice_output', $output, $options );
 		}
 	}
 

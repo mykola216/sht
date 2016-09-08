@@ -45,9 +45,8 @@
 
 		var cnTime		= new Date(),
 			cnLater		= new Date(),
-			cnDomNode	= $( '#cookie-notice' );
-		
-		self = this;
+			cnDomNode	= $( '#cookie-notice' ),
+			cnSelf		= this;
 
 		// set expiry time in seconds
 		cnLater.setTime( parseInt( cnTime.getTime() ) + parseInt( cnArgs.cookieTime ) * 1000 );
@@ -67,14 +66,14 @@
 		// hide message container
 		if ( cnArgs.hideEffect === 'fade' ) {
 			cnDomNode.fadeOut( 300, function () {
-				self.removeCookieNotice();
+				cnSelf.removeCookieNotice();
 			} );
 		} else if ( cnArgs.hideEffect === 'slide' ) {
 			cnDomNode.slideUp( 300, function () {
-				self.removeCookieNotice();
+				cnSelf.removeCookieNotice();
 			} );
 		} else {
-			self.removeCookieNotice();
+			cnSelf.removeCookieNotice();
 		}
 	};
 
