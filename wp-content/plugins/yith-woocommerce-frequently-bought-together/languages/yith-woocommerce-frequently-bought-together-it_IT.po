@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: YITH WooCommerce Frequently Bought Together\n"
-"POT-Creation-Date: 2016-04-27 15:44+0200\n"
-"PO-Revision-Date: 2016-04-27 15:44+0200\n"
+"POT-Creation-Date: 2016-08-16 17:07+0200\n"
+"PO-Revision-Date: 2016-08-16 17:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: YIThemes <plugins@yithemes.com>\n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 "X-Poedit-KeywordsList: __ ;_e;_n:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
@@ -286,7 +286,7 @@ msgstr ""
 
 #: ../templates/admin/premium.php:338
 msgid "Products to add to cart"
-msgstr ""
+msgstr "Prodotti da aggiungere al carrello"
 
 #: ../templates/admin/premium.php:341
 #, php-format
@@ -296,6 +296,11 @@ msgid ""
 "of the plugin goes beyond this problem by giving users the possibility to "
 "%1$sadd to cart only the products they prefer%2$s."
 msgstr ""
+"Fra tutti i prodotti consigliati, può capitare che alcuni non siano fra "
+"quelli che i tuoi utenti pensavano di acquistare e quindi che non vogliano "
+"aggiungerli al carrello. La versione premium del plugin risolve questo "
+"problema dando agli utenti la possibilità di %1$saggiungere al carrello solo "
+"i prodotti che desiderano%2$s."
 
 #: ../templates/yith-wfbt-form.php:44
 msgid "This Product"
