@@ -56,8 +56,7 @@ function link_to_wishlist_page_8ZRH37( $widget_content ) {
 	$wishlist_meta = YITH_WCWL()->get_wishlist_detail_by_token( $wishlist_id );
 	$widget_content = sprintf(
 		'<a href="%s" id="cart-widget-wishlist-link">%s</a>%s',
-		//YITH_WCWL()->get_wishlist_url(),
-		YITH_WCWL()->get_wishlist_url( 'view' . '/' . $wishlist_meta['wishlist_token'] ),
+		YITH_WCWL()->get_wishlist_url( 'view' . ( $wishlist_meta['is_default'] != 1 ? '/' . $wishlist_meta['wishlist_token'] : '' ) ),
 		__('Wishlist', 'yith-woocommerce-wishlist'),
 		$widget_content
 	);
