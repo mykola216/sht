@@ -11,7 +11,6 @@
                 var oldVal = $(this).val();
                 var newVal = oldVal.slice(0,1).toUpperCase() + oldVal.slice(1).toLowerCase();
                 $(this).val(newVal);
-                console.log('newVal', newVal);
             }
             else if (!$(this).is('.wc-backward')) {
                 $(this).wrapInner('<span/>');

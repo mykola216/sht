@@ -1287,7 +1287,7 @@ if ( ! class_exists( 'YITH_WCWL' ) ) {
 
 			if( $product->is_type( 'simple' ) && get_option( 'yith_wcwl_redirect_cart' ) == 'yes' ){
 				if( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) && yith_wcwl_is_wishlist() ){
-					$url = add_query_arg( 'add-to-cart', $product->id, WC()->cart->get_cart_url() );
+					//$url = add_query_arg( 'add-to-cart', $product->id, WC()->cart->get_cart_url() );
 				}
 			}
 
