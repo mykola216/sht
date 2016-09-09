@@ -16,5 +16,13 @@
                 $(this).wrapInner('<span/>');
             }
         });
+
+        /* Replace protocol in URL from https: to http: for thumbnails in widget Product Of The Day*/
+        $('.woocommerce_products_of_the_day').find('img.wp-post-image').each(function () {
+            var newSrc, newSrcSet;
+            newSrc = $(this).attr('src').replace('https://', 'http://');
+            newSrcSet = $(this).attr('srcset').replace('https://', 'http://');
+            $(this).attr('src', newSrc).attr('srcset', newSrcSet);
+        });
     });// DOM ready
 })(jQuery);
