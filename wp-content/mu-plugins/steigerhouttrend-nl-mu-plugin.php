@@ -21,7 +21,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 	private function __construct() {
 		add_action( 'admin_init', array( $this, 'init_options' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
-		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'woocommerce_available_payment_gateways' ) );
+		//add_filter( 'woocommerce_available_payment_gateways', array( $this, 'woocommerce_available_payment_gateways' ) );
 		add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'add_mailchimp_subscribe_checkbox' ) );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'mailchimp_subscribe'), 1, 2 );
 		add_action( 'woo_head', array( $this, 'ec_integration' ), 0 );
