@@ -370,17 +370,6 @@ ul.products li.product:nth-child(2n) > a >img {
 }
 /* Minicart - end */
 
-/* Checkout*/
-.payment_methods li.not-allowed,
-.payment_methods li.not-allowed p,
-.payment_methods li.not-allowed label,
-.payment_methods li.not-allowed input{
-    color:#AAA;
-    cursor: not-allowed;
-    text-decoration: line-through;
-}
-/* Checkout -end*/
-
 @media (max-width: 768px){
     body.archive .widget.woocommerce_products_of_the_day{
         clear: both !important;

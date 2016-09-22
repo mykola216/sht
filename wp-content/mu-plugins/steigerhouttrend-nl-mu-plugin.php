@@ -21,7 +21,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 	private function __construct() {
 		add_action( 'admin_init', array( $this, 'init_options' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
-		//add_filter( 'woocommerce_available_payment_gateways', array( $this, 'woocommerce_available_payment_gateways' ) );
+		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'woocommerce_available_payment_gateways' ) );
 		add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'add_mailchimp_subscribe_checkbox' ) );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'mailchimp_subscribe'), 1, 2 );
 		add_action( 'woo_head', array( $this, 'ec_integration' ), 0 );
@@ -160,17 +160,10 @@ class Steigerhouttrend_Nl_MU_Plugin {
 		$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
 		$chosen_shipping_method = $chosen_shipping_methods[0];
 		$methods_to_check = array(
-	//		'local_delivery',
-			'flat_rate:rembours-inclusief-standaard-bezorging',
-			'flat_rate:rembours-inclusief-uitgebreide-bezorging'
+			'flat_rate:6',
+			'flat_rate:7'
 		);
-		if ( in_array( $chosen_shipping_method, $methods_to_check ) ) {
-			foreach ( $gateways as $gateway => $value ) {
-				if( 'cod' != $gateway ) {
-					unset( $gateways[ $gateway ] );
-				}
-			}
-		} else {
+		if ( !in_array( $chosen_shipping_method, $methods_to_check ) ) {
 			unset( $gateways['cod'] );
 		}
 
