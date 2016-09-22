@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Output a single payment method
@@ -21,11 +22,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
-$methods_to_check = array('flat_rate:7', 'flat_rate:8');
-$is_allowed_method = ($gateway->id == 'cod') ? !in_array($chosen_shipping_methods[0], $methods_to_check) : true;
+$shipping_methods_to_check = array('flat_rate:6', 'flat_rate:7');
+
+$is_payment_method_to_check = ($gateway->id == 'cod') ? true : false;
+$is_allowed_payment_method = in_array($chosen_shipping_methods[0], $shipping_methods_to_check);
+
+$checked = true;
+$disabled = false;
+$hidden = '';
+$payment_method_classes = '';
+
+if ($is_payment_method_to_check && !$is_allowed_payment_method) {
+	$checked = false;
+	$disabled = true;
+	$hidden = 'hidden';
+	$payment_method_classes = 'not-allowed';
+}
 ?>
-<li class="wc_payment_method payment_method_<?php echo $gateway->id; ?> <?php echo (!$is_allowed_method) ? 'not-allowed' : ''; ?>" <?php echo (!$is_allowed_method) ? 'hidden' : ''; ?>>
-	<input id="payment_method_<?php echo $gateway->id; ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php if ($is_allowed_method) checked( $gateway->chosen, true ); ?> <?php disabled( !$is_allowed_method ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
+<li class="wc_payment_method payment_method_<?php echo $gateway->id; ?> <?php echo $payment_method_classes; ?>" <?php echo $hidden; ?>>
+	<input id="payment_method_<?php echo $gateway->id; ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php if ($checked) checked( $gateway->chosen, true ); ?> <?php disabled( $disabled, true ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
 
 	<label for="payment_method_<?php echo $gateway->id; ?>">
 		<?php echo $gateway->get_title(); ?> <?php echo $gateway->get_icon(); ?>
