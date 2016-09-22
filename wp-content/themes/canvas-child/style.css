@@ -370,6 +370,12 @@ ul.products li.product:nth-child(2n) > a >img {
 }
 /* Minicart - end */
 
+/* Checkout */
+.payment_methods li:first-child:last-child input[name="payment_method"] {
+    display: inline-block !important;
+}
+/* Checkout - end*/
+
 @media (max-width: 768px){
     body.archive .widget.woocommerce_products_of_the_day{
         clear: both !important;

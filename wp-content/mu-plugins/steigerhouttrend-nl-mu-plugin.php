@@ -163,8 +163,16 @@ class Steigerhouttrend_Nl_MU_Plugin {
 			'flat_rate:6',
 			'flat_rate:7'
 		);
-		if ( !in_array( $chosen_shipping_method, $methods_to_check ) ) {
-			unset( $gateways['cod'] );
+
+		if ( in_array( $chosen_shipping_method, $methods_to_check ) ) {
+			foreach ( $gateways as $gateway => $value ) {
+				if ( 'cod' != $gateway ) {
+					unset( $gateways[ $gateway ] );
+				}
+			}
+		}
+		else {
+				unset( $gateways['cod'] );
 		}
 
 		return $gateways;
