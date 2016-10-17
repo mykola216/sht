@@ -34,7 +34,7 @@ class Mollie_API_Client
 	/**
 	 * Version of our client.
 	 */
-	const CLIENT_VERSION = "1.6.4";
+	const CLIENT_VERSION = "1.7.1";
 
 	/**
 	 * Endpoint of the remote API.
@@ -247,7 +247,7 @@ class Mollie_API_Client
 	{
 		$api_key = trim($api_key);
 
-		if (!preg_match('/^(live|test)_\w+$/', $api_key))
+		if (!preg_match('/^(live|test)_\w{30,}$/', $api_key))
 		{
 			throw new Mollie_API_Exception("Invalid API key: '{$api_key}'. An API key must start with 'test_' or 'live_'.");
 		}
@@ -342,6 +342,7 @@ class Mollie_API_Client
 		curl_setopt($this->ch, CURLOPT_URL, $url);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, 10);
+		curl_setopt($this->ch, CURLOPT_ENCODING, "");
 
 		$user_agent = join(' ', $this->version_strings);
 
