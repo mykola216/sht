@@ -1,12 +1,12 @@
-#AMP Toolbox - Accelerated Mobile Pages
+#AMP for WP - Accelerated Mobile Pages
 The Must have AMP plugin for WordPress. Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site. More details on https://wordpress.org/plugins/accelerated-mobile-pages/ & http://AMPforWP.com
 
-=== AMP Toolbox - Accelerated Mobile Pages ===
+=== AMP for WP - Accelerated Mobile Pages ===
 Contributors: mohammed_kaludi, ahmedkaludi
-Tags: AMP, accelerated mobile pages, mobile, amp project, google amp, amp wp, google
+Tags: AMP, accelerated mobile pages, mobile, amp project, google amp, amp wp, google, plugin
 Requires at least: 3.0
 Tested up to: 4.6.1
-Stable tag: 0.8.5
+Stable tag: 0.8.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ The Must have AMP plugin for WordPress. Automatically add Accelerated Mobile Pag
 == Description ==
 Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site. AMP WP is a plugin that needs to no configuration, just activate it and you are done.
 
-[What's New in Version 0.8.5?](http://ampforwp.com/new/) | [Priority Support](http://ampforwp.com/priority-support/) | [View Demo and Screenshot of the plugin](http://ahmedkaludi.com/accelerated-mobile-pages/)
+[What's New in Version 0.8.5?](http://ampforwp.com/new/) | [Priority Support](http://ampforwp.com/priority-support/) | [View Demo](http://ampforwp.com/demo/) | [Screenshots](https://wordpress.org/plugins/accelerated-mobile-pages/screenshots/) 
 
 [youtube https://www.youtube.com/watch?v=zzRy6Q_VGGc]
 
@@ -112,6 +112,23 @@ Please check if you have "Pretty Permalinks" enabled. If not then activate it. F
 
 
 == Changelog ==
+= 0.8.5.3 =
+* Canonical issue fixed for Post
+
+= 0.8.5.2 =
+* Canonical issue fixed for FrontPage
+
+= 0.8.5.1 =
+* Proper Details at http://ampforwp.com/new/
+* Validation issue fixed: 'Value' tag
+* Validation issue fixed: The attribute 'contenteditable' may not appear in tag 'a'.
+* Validation issue fixed: Table markup 
+* Validation issue fixed: nowrap and misc tags
+* New Relic Support
+* Tags on off option
+* Canonical and correct AMP html Redirect issues Solved
+* NextGEN Gallery Validation Support Added
+
 = 0.8.5 =
 * Proper Details at http://ampforwp.com/the-0-4-compatibility/
 * AMP 0.4 Compatibility Check
