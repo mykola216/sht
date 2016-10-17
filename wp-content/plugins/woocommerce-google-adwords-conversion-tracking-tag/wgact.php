@@ -5,7 +5,7 @@
  * Description:  Google AdWords dynamic conversion value tracking for WooCommerce.
  * Author:       Wolf+Bär GmbH
  * Author URI:   https://wolfundbaer.ch
- * Version:      1.3.3
+ * Version:      1.3.5
  * License:      GPLv2 or later
  * Text Domain:  woocommerce-google-adwords-conversion-tracking-tag
  **/
@@ -39,20 +39,9 @@ class WGACT {
 		// Load textdomain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-		// insert the conversion code only for visitors of the site
-		add_action( 'plugins_loaded', array( $this, 'run_conversion_pixel_for_visitor' ) );
+		// add the Google AdWords tag to the thankyou part of the page within the body tags
+		add_action( 'woocommerce_thankyou', array( $this, 'GoogleAdWordsTag' ) );
 
-	}
-
-	// only run the conversion code for visitors, not for the admin or shop managers
-	public function run_conversion_pixel_for_visitor() {
-
-		// don't load the pixel if a shop manager oder the admin is logged in
-		if ( ! current_user_can( 'edit_others_pages' ) ) {
-
-			// add the Google AdWords tag to the thankyou part of the page within the body tags
-			add_action( 'woocommerce_thankyou', array( $this, 'GoogleAdWordsTag' ) );
-		}
 	}
 
 	// Load text domain function
@@ -222,24 +211,43 @@ class WGACT {
 
 		$order_total = apply_filters( 'wgact_conversion_value_filter', $order_total, $order );
 
+		?>
+
+
+		<!-- START Google Code for Sales (AdWords) Conversion Page -->
+		<?php
+
 		// Only run conversion script if the payment has not failed. (has_status('completed') is too restrictive)
 		// And use the order meta to check if the conversion code has already run for this order ID. If yes, don't run it again.
-		if ( ! $order->has_status( 'failed' ) && ( ( get_post_meta( $order_id, '_WGACT_conversion_pixel_fired', true ) != "true" ) ) ) {
+		// Also don't run the pixel if an admin or shop manager is logged in.
+		if ( ! $order->has_status( 'failed' ) && ( ( get_post_meta( $order_id, '_WGACT_conversion_pixel_fired', true ) != "true" ) ) && ! current_user_can( 'edit_others_pages' ) ) {
 			?>
-
-			<!-- START Google Code for Sales (AdWords) Conversion Page -->
 
 			<div style="display:inline;">
 				<img height="1" width="1" style="border-style:none;" alt=""
 				     src="//www.googleadservices.com/pagead/conversion/<?php echo $conversion_id; ?>/?value=<?php echo $order_total; ?>&amp;currency_code=<?php echo $order->get_order_currency(); ?>&amp;label=<?php echo $conversion_label; ?>&amp;guid=ON&amp;oid=<?php echo $order_id; ?>&amp;script=0"/>
 			</div>
 
-			<!-- END Google Code for Sales (AdWords) Conversion Page -->
 
 			<?php
 			// Set the order ID meta after the conversion code has run once.
 			update_post_meta( $order_id, '_WGACT_conversion_pixel_fired', 'true' );
+		} else {
+
+			?>
+
+			<!-- The AdWords pixel has not been inserted. Possible reasons: -->
+			<!--    You are logged into WooCommerce as admin or shop manager. -->
+			<!--    The order payment has failed. -->
+			<!--    The pixel has already been fired. To prevent double counting the pixel is not being fired again. -->
+
+			<?php
 		} // end if order status
+
+		?>
+
+		<!-- END Google Code for Sales (AdWords) Conversion Page -->
+		<?php
 	}
 }
 

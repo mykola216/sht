@@ -3,8 +3,8 @@ Contributors: alekv
 Donate link: http://www.wolfundbaer.ch/donations/
 Tags: woocommerce, woocommerce conversion tracking, google adwords, adwords, conversion, conversion value, conversion tag, conversion pixel, conversion value tracking, conversion tracking, conversion tracking adwords, conversion tracking pixel, conversion tracking script, track conversions, tracking code manager
 Requires at least: 3.1
-Tested up to: 4.5.3
-Stable tag: 1.3.3
+Tested up to: 4.6.1
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,9 +60,14 @@ Please post your problem in the WGACT Support forum: http://wordpress.org/suppor
 You can send the link to the front page of your shop too if you think it would be of help.
 
 == Screenshots ==
+1. Settings page
 
 == Changelog ==
 
+= 1.3.5 =
+* Fix: Fixed a syntax error that caused issues on some installations.
+= 1.3.4 =
+* Tweak: Added some text output to make debugging for users easier.
 = 1.3.3 =
 * Tweak: Refurbishment of the settings page
 = 1.3.2 =
