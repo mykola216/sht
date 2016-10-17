@@ -25,7 +25,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 <form method="post" id="export_job_settings">
 
 	<div id="my-left" style="float: left; width: 49%; max-width: 500px;">
-		<?php if ( $mode == 'profiles' ): ?>
+		<?php if ( $mode === $WC_Order_Export::EXPORT_PROFILE ): ?>
 			<div class="my-block">
 				<div style="display: inline;">
 					<span class="wc-oe-header"><?php _e( 'Title', 'woocommerce-order-export' ) ?></span>
@@ -40,7 +40,13 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			</div>
 			<hr>
 		<?php endif; ?>
-		<?php if ( $mode == 'cron' ): ?>
+		<?php if ( $mode === $WC_Order_Export::EXPORT_SCHEDULE ): ?>
+			<div class="my-block">
+				<div style="display: inline;">
+					<span class="wc-oe-header"><?php _e( 'Title', 'woocommerce-order-export' ) ?></span>
+					<input type=text  style="width: 90%;" name="settings[title]" value='<?php echo ( isset( $settings[ 'title' ] ) ? $settings[ 'title' ] : '' ) ?>'>
+				</div>
+			</div>
 			<div id="my-shedule-days" class="my-block">
 				<div class="wc-oe-header"><?php _e( 'Schedule', 'woocommerce-order-export' ) ?></div>
 				<div id="d-schedule-1">
@@ -81,20 +87,17 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							<select name="settings[schedule][run_at]" style="width: 80px">
 								<?php
 								for ( $i = 0; $i <= 23; $i++ ) :
-									$time	 = ( $i < 10 ? '0' : '') . "$i:00";
-									$time30	 = ( $i < 10 ? '0' : '') . "$i:30";
+									$h = ($i < 10) ? '0'.$i : $i;
+									
+									for($m =0; $m<60;$m+=5) :
+										$time	 = "$h:" . ( $m<10 ? "0".$m : $m );
 									?>
-
 									<option <?php echo (isset( $settings[ 'schedule' ][ 'run_at' ] ) and $time == $settings[ 'schedule' ][ 'run_at' ]) ? 'selected' : '' ?>>
 										<?php
 										echo $time;
 										?>
 									</option>
-									<option <?php echo (isset( $settings[ 'schedule' ][ 'run_at' ] ) and $time30 == $settings[ 'schedule' ][ 'run_at' ]) ? 'selected' : '' ?>>
-										<?php
-										echo $time30;
-										?>
-									</option>
+									<?php endfor; ?>
 								<?php endfor; ?>
 							</select>
 						</label>
@@ -157,6 +160,11 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<label>
 					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'last_quarter')) ? 'checked' : '' ?> value="last_quarter" >
 					<?php _e( 'Last quarter', 'woocommerce-order-export' ) ?>		
+				</label>
+				<br>				
+				<label>
+					<input type="radio" name="settings[export_rule]" class="width-100" <?php echo (isset( $settings[ 'export_rule' ] ) && ($settings[ 'export_rule' ] == 'this_year')) ? 'checked' : '' ?> value="this_year" >
+					<?php _e( 'This year', 'woocommerce-order-export' ) ?>		
 				</label>
 				<br>				
 				<label>
@@ -296,7 +304,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 
 	<div id="my-right" style="float: left; width: 48%; margin: 0px 10px; max-width: 500px;">
-		<?php if ( $mode == 'cron' ): ?>
+		<?php if ( $mode === $WC_Order_Export::EXPORT_SCHEDULE ): ?>
 			<div id="my-shedule-destination" class="my-block">
 				<div class="wc-oe-header"><?php _e( 'Destination', 'woocommerce-order-export' ) ?></div>
 
@@ -482,7 +490,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-order" hidden="hidden">
 				<span class="wc-oe-header"><?php _e( 'Order Statuses', 'woocommerce-order-export' ) ?></span>
-				<select id="statuses" name="settings[statuses][]" multiple="multiple" style="width: 100%">
+				<select id="statuses" name="settings[statuses][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php foreach ( wc_get_order_statuses() as $i => $status ) { ?>
 						<option value="<?php echo $i ?>" <?php if ( in_array( $i, $settings[ 'statuses' ] ) ) echo 'selected'; ?>><?php echo $status ?></option>
 					<?php } ?>
@@ -506,7 +514,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 				<button id="add_custom_fields" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
 				<br>
-				<select id="custom_fields_check" multiple name="settings[order_custom_fields][]" style="width: 100%;">
+				<select id="custom_fields_check" multiple name="settings[order_custom_fields][]" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'order_custom_fields' ] )
 						foreach ( $settings[ 'order_custom_fields' ] as $prod ) {
@@ -528,7 +536,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<div id="my-products" hidden="hidden">
 				<div><input type="hidden" name="settings[all_products_from_order]" value="0"/><label><input type="checkbox" name="settings[all_products_from_order]" value="1" <?php checked($settings[ 'all_products_from_order' ]) ?> /> <?php _e( 'Export all products from a order', 'woocommerce-order-export' ) ?></label></div>
 				<span class="wc-oe-header"><?php _e( 'Product categories', 'woocommerce-order-export' ) ?></span>
-				<select id="product_categories" name="settings[product_categories][]" multiple="multiple" style="width: 100%">
+				<select id="product_categories" name="settings[product_categories][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'product_categories' ] )
 						foreach ( $settings[ 'product_categories' ] as $cat ) {
@@ -539,7 +547,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				</select>
 
 				<span class="wc-oe-header"><?php _e( 'Vendor/creator', 'woocommerce-order-export' ) ?></span>
-				<select id="product_vendors" name="settings[product_vendors][]" multiple="multiple" style="width: 100%">
+				<select id="product_vendors" name="settings[product_vendors][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'product_vendors' ] )
 						foreach ( $settings[ 'product_vendors' ] as $user_id ) {
@@ -551,7 +559,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 				<span class="wc-oe-header"><?php _e( 'Product', 'woocommerce-order-export' ) ?></span>
 
-				<select id="products" name="settings[products][]" multiple="multiple" style="width: 100%;">
+				<select id="products" name="settings[products][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'products' ] )
 						foreach ( $settings[ 'products' ] as $prod ) {
@@ -579,7 +587,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 				<button id="add_attributes" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
 				<br>
-				<select id="attributes_check" multiple name="settings[product_attributes][]" style="width: 100%;">
+				<select id="attributes_check" multiple name="settings[product_attributes][]" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'product_attributes' ] )
 						foreach ( $settings[ 'product_attributes' ] as $prod ) {
@@ -598,7 +606,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				=
 				<input type=text id="text_taxonomies" value=''> <button id="add_taxonomies" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
 				<br>
-				<select id="taxonomies_check" multiple name="settings[product_taxonomies][]" style="width: 100%;">
+				<select id="taxonomies_check" multiple name="settings[product_taxonomies][]" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'product_taxonomies' ] )
 						foreach ( $settings[ 'product_taxonomies' ] as $prod ) {
@@ -614,11 +622,11 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<br>
 
 		<div class="my-block">
-			<span class="my-hide-next "><?php _e( 'Filter by users/roles', 'woocommerce-order-export' ) ?>
+			<span class="my-hide-next "><?php _e( 'Filter by customers', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-users" hidden="hidden">
 				<span class="wc-oe-header"><?php _e( 'User roles', 'woocommerce-order-export' ) ?></span>
-				<select id="user_roles" name="settings[user_roles][]" multiple="multiple" style="width: 100%">
+				<select id="user_roles" name="settings[user_roles][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php
 					global $wp_roles;
 					foreach ( $wp_roles->role_names as $k => $v ) { ?>
@@ -627,7 +635,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				</select>
 
 				<span class="wc-oe-header"><?php _e( 'User names', 'woocommerce-order-export' ) ?></span>
-				<select id="user_names" name="settings[user_names][]" multiple="multiple" style="width: 100%">
+				<select id="user_names" name="settings[user_names][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'user_names' ] )
 						foreach ( $settings[ 'user_names' ] as $user_id ) {
@@ -647,7 +655,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-payments" hidden="hidden">
 				<span class="wc-oe-header"><?php _e( 'Payment Methods', 'woocommerce-order-export' ) ?></span>
-				<select id="payment_methods" name="settings[payment_methods][]" multiple="multiple" style="width: 100%">
+				<select id="payment_methods" name="settings[payment_methods][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php foreach ( WC()->payment_gateways->payment_gateways() as $gateway ) { ?>
 						<option value="<?php echo $gateway->id ?>" <?php if ( in_array( $gateway->id, $settings[ 'payment_methods' ] ) ) echo 'selected'; ?>><?php echo $gateway->get_title() ?></option>
 					<?php } ?>
@@ -677,7 +685,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 				<button id="add_locations" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
 				<br>
-				<select id="locations_check" multiple name="settings[shipping_locations][]" style="width: 100%;">
+				<select id="locations_check" multiple name="settings[shipping_locations][]" style="width: 100%; max-width: 25%;">
 					<?php
 					if ( $settings[ 'shipping_locations' ] )
 						foreach ( $settings[ 'shipping_locations' ] as $location ) {
@@ -1315,7 +1323,11 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		$( "#export-wo-pb-btn" ).click( function() {
 			$( '#export_wo_pb_frame' ).attr( "src", ajaxurl );
 			$( '#export_wo_pb_form' ).attr( "action", ajaxurl );
+			var $obj = $( '[name=settings\\[format_csv_linebreak\\]]');
+			var val  = $obj.val();
+			$obj.val(val.replace(/\\/g, '\\\\'));
 			$( '#export_wo_pb_form' ).find( '[name=settings]' ).val( $( '#export_job_settings' ).serialize() );
+			$obj.val(val);
 			$( '#export_wo_pb_form' ).submit();
 
 			return false;
@@ -1364,7 +1376,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			return false;
 		} );
 		$( "#save-btn" ).click( function() {
-			if ( ( mode == 'profiles' ) && ( !$( "[name='settings[title]']" ).val() ) ) {
+			if ( ( mode == '<?php echo $WC_Order_Export::EXPORT_PROFILE; ?>' ) && ( !$( "[name='settings[title]']" ).val() ) ) {
 				alert( "Title is empty!" );
 				$( "[name='settings[title]']" ).focus();
 				return false;
@@ -1387,9 +1399,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			var data = $( '#export_job_settings' ).serialize()
 			data = data + "&action=order_exporter&method=save_settings&mode=" + mode + "&id=" + job_id;
 			$.post( ajaxurl, data, function( response ) {
-				if ( mode == 'cron' ) {
+				if ( mode == '<?php echo $WC_Order_Export::EXPORT_SCHEDULE; ?>' ) {
 					document.location = '<?php echo admin_url( 'admin.php?page=wc-order-export&tab=schedules&save=y' ) ?>';
-				} else if ( mode == 'profiles' ) {
+				} else if ( mode == '<?php echo $WC_Order_Export::EXPORT_PROFILE; ?>' ) {
 					document.location = '<?php echo admin_url( 'admin.php?page=wc-order-export&tab=profiles&save=y' ) ?>';
 				}
 				else {

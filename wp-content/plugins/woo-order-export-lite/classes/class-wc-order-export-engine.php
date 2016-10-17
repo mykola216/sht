@@ -4,7 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class WC_Order_Export_Engine {
-
+	public static $current_job_settings = '';
+	public static $current_job_build_mode = '';
 	//
 	public static function export( $settings, $filepath ) {
 		$export_type = strtolower( $settings['destination']['type'] );
@@ -18,8 +19,9 @@ class WC_Order_Export_Engine {
 		$exporter = new $class( $settings['destination'] );
 
 		$filename = self::make_filename( $settings['export_filename'] );
-
-		echo $exporter->run_export( $filename, $filepath );
+		$custom_export = apply_filters('woe_custom_export_to_'.$export_type,false, $filename, $filepath, $exporter);
+		if( !$custom_export )
+			echo $exporter->run_export( $filename, $filepath );
 	}
 
 	public static function make_filename( $mask ) {
@@ -132,6 +134,11 @@ class WC_Order_Export_Engine {
 		$filename = ''
 	) {
 		global $wpdb;
+		
+		//for hooks
+		self::$current_job_settings = $settings;
+		self::$current_job_build_mode = $make_mode;
+		
 		if ( $output_mode == 'browser' ) {
 			$filename = 'php://output';
 			while ( @ob_end_clean() ) {
@@ -245,13 +252,17 @@ class WC_Order_Export_Engine {
 
 		WC_Order_Export_Data_Extractor::prepare_for_export();
 		foreach ( $order_ids as $order_id ) {
+			do_action( "woe_order_export_started", $order_id);
 			$rows = WC_Order_Export_Data_Extractor::fetch_order_data( $order_id, $labels, $format, $filters_active,
 				$csv_max, $export, $get_coupon_meta, $static_vals, $options );
 			foreach ( $rows as $row ) {
 				$row=apply_filters( "woe_fetch_order_row", $row, $order_id);
-				if ($row)
+				if ($row) {
 					$formater->output( $row );
+					do_action( "woe_order_row_exported", $row, $order_id);
+				}	
 			}
+			do_action( "woe_order_exported", $order_id);
 		}
 		if ( $make_mode != 'partial' OR $format == 'xls' ) {
 			$formater->finish();
@@ -262,6 +273,11 @@ class WC_Order_Export_Engine {
 
 	public static function build_file_full( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		global $wpdb;
+		
+		//for hooks
+		self::$current_job_settings = $settings;
+		self::$current_job_build_mode = 'full';
+		
 		$filename = ( ! empty( $filename ) ? $filename : self::tempnam( sys_get_temp_dir(), $settings['format'] ) );
 
 
@@ -350,13 +366,17 @@ class WC_Order_Export_Engine {
 
 		WC_Order_Export_Data_Extractor::prepare_for_export();
 		foreach ( $order_ids as $order_id ) {
+			do_action( "woe_order_export_started", $order_id);
 			$rows = WC_Order_Export_Data_Extractor::fetch_order_data( $order_id, $labels, $format, $filters_active,
 				$csv_max, $export, $get_coupon_meta, $static_vals, $options );
 			foreach ( $rows as $row ) {
 				$row=apply_filters( "woe_fetch_order_row", $row, $order_id);
-				if ($row)
+				if ($row) {
 					$formater->output( $row );
+					do_action( "woe_order_row_exported", $row, $order_id);
+				}	
 			}
+			do_action( "woe_order_exported", $order_id);
 		}
 
 		$formater->finish();

@@ -7,11 +7,13 @@ class WOE_Formatter_Json extends WOE_Formatter {
 	var $prev_added = false;
 
 	public function start( $data = '' ) {
+		parent::start( $data );
 		$start_text  = "[" ;
 		fwrite( $this->handle, apply_filters( "woe_json_start_text", $start_text) );
 	}
 
 	public function output( $rec ) {
+		parent::output( $rec );
 		if ( $this->prev_added ) {
 			fwrite( $this->handle, "," );
 		}

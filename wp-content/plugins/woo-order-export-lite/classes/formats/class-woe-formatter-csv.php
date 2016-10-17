@@ -25,6 +25,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 	public function start( $data = '' ) {
 		$data = apply_filters( "woe_csv_header_filter", $data );
 		$this->encode_array( $data );
+		parent::start( $data );
 		
 		if ( $this->settings['add_utf8_bom'] ) {
 			fwrite( $this->handle, chr( 239 ) . chr( 187 ) . chr( 191 ) );
@@ -34,7 +35,8 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 			if ( $this->mode == 'preview' ) {
 				$this->rows[] = $data;
 			} else {
-				fputcsv( $this->handle, $data, self::$delimiter );
+				if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $data, self::$delimiter ) )
+					fputcsv( $this->handle, $data, self::$delimiter );
 			}
 		}
 	}
@@ -56,6 +58,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 
 	public function output( $rec ) {
 		$this->encode_array( $rec );
+		parent::output( $rec );
 
 		if ( $this->has_output_filter ) {
 			$rec = apply_filters( "woe_csv_output_filter", $rec, $rec );
@@ -64,7 +67,8 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 		if ( $this->mode == 'preview' ) {
 			$this->rows[] = $rec;
 		} else {
-			fputcsv( $this->handle, $rec, self::$delimiter);
+			if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $rec, self::$delimiter ) )
+				fputcsv( $this->handle, $rec, self::$delimiter);
 		}
 	}
 

@@ -30,6 +30,7 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 
 	public function start( $data = '' ) {
 		$data = apply_filters( "woe_xls_header_filter", $data );
+		parent::start( $data );
 		
 		if ( ! $this->settings['display_column_names'] OR ! $data ) {
 			return;
@@ -69,6 +70,7 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 	}
 
 	public function output( $rec ) {
+		parent::output( $rec );
 		if ( $this->has_output_filter ) {
 			$rec = apply_filters( "woe_xls_output_filter", $rec, $rec );
 		}

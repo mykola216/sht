@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WOE_Formatter_Xml extends WOE_Formatter {
 
 	public function start( $data = '' ) {
+		parent::start( $data );
 		fwrite( $this->handle, '<?xml version="1.0" encoding="UTF-8"?>' . "\n" );
 		if(@$this->settings['prepend_raw_xml'])
 			fwrite( $this->handle, $this->settings['prepend_raw_xml'] . "\n" );
@@ -13,6 +14,7 @@ class WOE_Formatter_Xml extends WOE_Formatter {
 	}
 
 	public function output( $rec ) {
+		parent::output( $rec );
 		$xml = new SimpleXMLElement( "<" . $this->settings['order_tag'] . "></" . $this->settings['order_tag'] . ">" );
 
 		$labels = $this->labels['order'];
@@ -32,12 +34,13 @@ class WOE_Formatter_Xml extends WOE_Formatter {
 				foreach ( $value as $child_elements ) {
 					$child = $childs->addChild( $child_tag ); // add nested Product
 					foreach ( $child_elements as $field_child => $value_child ) {
-						if( isset( $child_labels[ $field_child ] ) )
-							$child->$child_labels[ $field_child ] = $value_child;
+						if( isset( $child_labels[ $field_child ] ) ) {
+							$child->addChild( $child_labels[ $field_child ], $value_child );
+						}	
 					}
 				}
 			} else {
-				$xml->$labels[ $field ] = $value;
+				$xml->addChild( $labels[ $field ] , $value );
 			}
 		}
 

@@ -3,7 +3,7 @@ Contributors: algolplus
 Donate link: http://algolplus.com/plugins/
 Tags: woocommerce,export,order,xls,csv,xml,woo export lite,export orders,orders export,csv export,xml export,xls export
 Requires at least: 4.2.4
-Tested up to: 4.5
+Tested up to: 4.6
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,24 +50,29 @@ Please create a topic in the "Support" section with any ideas or suggestions for
 
 
 == Installation ==
+
 = Automatic Installation =
 Go to Wordpress dashboard, click  Plugins / Add New  , type 'order export lite' and hit Enter.
 Install and activate plugin, visit WooCommerce > Export Orders.
+
 = Manual Installation =
 [Please, visit the link and follow the instructions](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation)
 
 == Frequently Asked Questions ==
 
-= Progress bar does nothing after 100% for XLS format =
+= Plugin produces unreadable XLS file =
+The theme or another plugin outputs some lines. Usually, there are extra empty lines at the end of functions.php(in active theme).
 
-PHP must be compiled with option  --enable-zip
+= Progress bar does nothing after 100% for XLS format =
+PHP must be compiled with option  --enable-zip . 
 
 = I am exporting the Orders data with its individual Products/Items as separate rows. But the Product rows don't seem to have rest of order details included. =
-
 You should mark checkbox "Populate other columns if products exported as rows" for selected format ( CSV or XLS)
 
-= Can I request any new feature ? =
+= When exporting .csv containing european special characters , I want to open this csv in Excel without extra actions =
+You  should open tab "CSV" and setup ISO-8859-1 as codepage.
 
+= Can I request any new feature ? =
 Yes, you can email a request to aprokaev@gmail.com. We intensively develop this plugin.
 
 == Screenshots ==
@@ -80,6 +85,14 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 6. You can select orders to export.
 
 == Changelog ==
+
+= 1.2.2 - 2016-09-28 =
+* Added column "Product Shipping Class"
+* Added column "Download Url"
+* Added column "Item Seller"
+* Fixed bug in field "Line w/o tax" (if price doesn't include tax)
+* Fixed bug in XML format  (for PHP7)
+* A lot of new filters/hooks added
 
 = 1.2.1 - 2016-08-12 =
 * New filter by Payment Method

@@ -4,8 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class WC_Order_Export_Data_Extractor {
+	static $users;
 	static $statuses;
 	static $countries;
+	static $prices_include_tax;
+	static $current_order;
 
 	/*unused ?
 	// Data for FILTERS
@@ -189,6 +192,7 @@ class WC_Order_Export_Data_Extractor {
 			'line_id'     => array( 'label' => 'Item #', 'checked' => 1 ),
 			'sku'         => array( 'label' => 'SKU', 'checked' => 1 ),
 			'name'        => array( 'label' => 'Name', 'checked' => 1 ),
+			'seller'      => array( 'label' => 'Item Seller', 'checked' => 1 ),
 			'qty'         => array( 'label' => 'Quantity', 'checked' => 1 ),
 			'item_price'  => array( 'label' => 'Item Cost', 'checked' => 1 ),
 			'price'       => array( 'label' => 'Product Current Price', 'checked' => 0 ),
@@ -203,6 +207,8 @@ class WC_Order_Export_Data_Extractor {
 			'length'      => array( 'label' => 'Length', 'checked' => 0 ),
 			'height'      => array( 'label' => 'Height', 'checked' => 0 ),
 			'weight'      => array( 'label' => 'Weight', 'checked' => 0 ),
+			'download_url' => array( 'label' => 'Download Url', 'checked' => 0 ),
+			'product_shipping_class' => array( 'label' => 'Product Shipping Class', 'checked' => 1 ),
 		);
 
 		foreach ( $map as $key => $value ) {
@@ -802,7 +808,7 @@ class WC_Order_Export_Data_Extractor {
 		$_time = current_time( "timestamp", 0 );
 		
 		//skip rules if data range defined
-		if( ! isset($settings[ 'export_rule' ]) OR $settings['from_date'] OR $settings['to_date'])
+		if( ! isset($settings[ 'export_rule' ])/* OR $settings['from_date'] OR $settings['to_date']*/ )
 			$settings[ 'export_rule' ] = '';
 			
 		switch ( $settings[ 'export_rule' ] ) {
@@ -848,6 +854,10 @@ class WC_Order_Export_Data_Extractor {
 				$where[]	 = "orders.post_" . $settings[ 'export_rule_field' ] . ">='$quarter_start 00:00:00'";
 				$where[]	 = "orders.post_" . $settings[ 'export_rule_field' ] . "<='$quarter_end 23:59:59'";
 				break;			
+			case "this_year":
+				$year_start  = date( 'Y-01-01', $_time );
+				$where[]	 = "orders.post_" . $settings[ 'export_rule_field' ] . ">='$year_start 00:00:00'";
+				break;			
 			case "custom":
 				if ( isset( $settings[ 'export_rule_custom' ] ) && ($settings[ 'export_rule_custom' ]) ) {
 					$day_start	 = date( 'Y-m-d', strtotime( date( 'Y-m-d', $_time ) . ' -' . intval( $settings[ 'export_rule_custom' ] ) . ' days' ) );
@@ -865,7 +875,7 @@ class WC_Order_Export_Data_Extractor {
 
 		$sql = "SELECT ID as order_id FROM {$wpdb->posts} AS orders
 			{$left_join_order_meta}
-			WHERE orders.post_type='shop_order' AND $order_sql $order_meta_where $order_items_where";
+			WHERE orders.post_type='shop_order' AND orders.post_parent=0 AND $order_sql $order_meta_where $order_items_where";
 		//die($sql);
 		return $sql;
 	}
@@ -1014,8 +1024,10 @@ class WC_Order_Export_Data_Extractor {
 	}
 
 	public static function prepare_for_export() {
+		self::$users     = self::get_users();
 		self::$statuses  = wc_get_order_statuses();
 		self::$countries = WC()->countries->countries;
+		self::$prices_include_tax = get_option('woocommerce_prices_include_tax') == 'yes' ? true : false;
 	}
 
 	public static function get_max_order_items( $type, $ids ) {
@@ -1077,6 +1089,7 @@ class WC_Order_Export_Data_Extractor {
 				}
 
 				if ( isset( $filters_active[ $field ] ) ) {
+					$row[ $field ] = apply_filters( "woe_get_order_coupon_value_{$field}", $row[ $field ], $order, $item );
 					$row[ $field ] = apply_filters( "woe_get_order_coupon_{$format}_value_{$field}", $row[ $field ], $order, $item );
 				}
                 
@@ -1092,6 +1105,16 @@ class WC_Order_Export_Data_Extractor {
 	}
 
 
+	/**
+	 * @param WC_Order $order
+	 * @param $labels
+	 * @param $format
+	 * @param $filters_active
+	 * @param $static_vals
+	 * @param $export_only_products
+	 *
+	 * @return array
+	 */
 	public static function fetch_order_products( $order, $labels, $format, $filters_active, $static_vals , $export_only_products ) {
 		$products = array();
 		$i = 0;
@@ -1101,12 +1124,16 @@ class WC_Order_Export_Data_Extractor {
 				continue;
 			$i++;
 			$product   = $order->get_product_from_item( $item );
+			do_action( "woe_get_order_product", $product );
 			$item_meta = $order->get_item_meta( $item_id );
+			do_action( "woe_get_order_product_item_meta", $item_meta );
 			$row       = array();
 			foreach ( $labels as $field => $label ) {
 				if ( strpos( $field, '__' ) !== false && $taxonomies = wc_get_product_terms( $item['product_id'],
 						substr( $field, 2 ), array( 'fields' => 'names' ) )
 				) {
+					$row[ $field ] = implode( ', ', $taxonomies );
+				} else if ( $field == 'product_shipping_class' && $taxonomies = wc_get_product_terms( $item['product_id'], $field, array( 'fields' => 'names' ) ) ) {
 					$row[ $field ] = implode( ', ', $taxonomies );
 				} elseif ( isset( $item_meta[ $field ] ) ) {
 					$row[ $field ] = $item_meta[ $field ][0];
@@ -1115,6 +1142,12 @@ class WC_Order_Export_Data_Extractor {
 					$row[ $field ] = $item_meta[ "_" . $field ][0];
 				} elseif ( $field == 'name' ) {
 					$row['name'] = $item["name"];
+				} elseif ( $field == 'seller' ) {
+					$row[ $field ] = '';
+					if ( ! empty( self::$users[ $product->post->post_author ] ) ) {
+						$user          = self::$users[ $product->post->post_author ];
+						$row[ $field ] = $user->display_name;
+					}
 				} elseif ( $field == 'type' ) {
 					$row['type'] = $product->product_type;
 				} elseif ( $field == 'tags' ) {
@@ -1136,11 +1169,21 @@ class WC_Order_Export_Data_Extractor {
 					}
 					$row['category'] = join( ",", $row['category'] );// hierarhy ???
 				} elseif ( $field == 'line_no_tax' ) {
-					$row['line_no_tax'] = $item_meta["_line_total"][0] - $item_meta["_line_tax"][0];
+					$row['line_no_tax'] = self::$prices_include_tax? ($item_meta["_line_total"][0] - $item_meta["_line_tax"][0]) : $item_meta["_line_total"][0];
 				} elseif ( $field == 'line_id' ) {
 					$row[ $field ] = $i;
 				} elseif ( $field == 'item_price' ) {
 					$row[ $field ] = $order->get_item_total( $item, false, true ); // YES we have to calc item price
+				} elseif ( $field == 'download_url' ) {
+					$row[ $field ] = '';
+					if ( $product->is_downloadable() ) {
+						$files = get_post_meta( $product->id, '_downloadable_files', true );
+						$links = array();
+						foreach ( $files as $file ) {
+							$links[] = $file['file'];
+						}
+						$row[ $field ] = implode( "\n", $links );
+					}
 				} elseif ( isset( $static_vals[ $field ] ) ) {
 					$row[ $field ] = $static_vals[ $field ];
 				} else {
@@ -1151,6 +1194,7 @@ class WC_Order_Export_Data_Extractor {
 						$row[ $field ]  = $product->get_attribute( $field );
 				}
 				if ( isset($row[ $field ] ) ) {
+					$row[ $field ] = apply_filters( "woe_get_order_product_value_{$field}", $row[ $field ] , $order, $item, $product);
 					$row[ $field ] = apply_filters( "woe_get_order_product_{$format}_value_{$field}", $row[ $field ] , $order, $item, $product);
 				}
 			}
@@ -1187,7 +1231,7 @@ class WC_Order_Export_Data_Extractor {
 		}
 
 		// take order 
-		$order = new WC_Order( $order_id );
+		self::$current_order = $order = new WC_Order( $order_id );
 
 		if ( $export['products'] OR isset( $labels['order']['count_unique_products'] ) OR isset( $labels['order']['total_weight_items'] ) ) {
 			$temp = $labels['products'];
@@ -1322,6 +1366,7 @@ class WC_Order_Export_Data_Extractor {
 				if ( in_array( $field, $date_fields ) ) {
 					$row[ $field ] = self::try_to_convert_date_to_format( $row[ $field ], $date_format );
 				}
+				$row[ $field ] = apply_filters( "woe_get_order_value_{$field}", $row[ $field ] , $order);
 				$row[ $field ] = apply_filters( "woe_get_order_{$format}_value_{$field}", $row[ $field ] , $order);
 			}
 		}
@@ -1429,5 +1474,20 @@ class WC_Order_Export_Data_Extractor {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return WP_User[]
+	 */
+	public static function get_users() {
+		$ret = array();
+
+		$users = get_users();
+
+		foreach ( $users as $key => $user ) {
+			$ret[ $user->ID ] = $user;
+		}
+
+		return $ret;
 	}
 }

@@ -16,6 +16,10 @@ class WC_Order_Export_Admin {
 	public $url_plugin;
 	public $path_plugin;
 
+	const EXPORT_NOW      = 'now';
+	const EXPORT_PROFILE  = 'profiles';
+	const EXPORT_SCHEDULE = 'cron';
+
 	public function __construct() {
 		$this->url_plugin         = dirname( plugin_dir_url( __FILE__ ) ) . '/';
 		$this->path_plugin        = dirname( plugin_dir_path( __FILE__ ) ) . '/';
@@ -40,6 +44,9 @@ class WC_Order_Export_Admin {
 		add_action('admin_notices', array( $this,'export_orders_bulk_action_notices'));
 		
 		//add_action('init', array( $this,'install')); //debug 
+		//if ( ! wp_get_schedule( 'wc_export_cron_global' ) ) {
+		//	wp_schedule_event( time(), 'wc_export_5min_global', 'wc_export_cron_global' );
+		//}
 	}
 	
 	public function test() {
@@ -103,7 +110,7 @@ class WC_Order_Export_Admin {
 				end( $all_jobs );
 				$next_id = key( $all_jobs ) + 1;
 				$this->render( 'settings-form', array(
-					'mode'            => 'cron',
+					'mode'            => self::EXPORT_SCHEDULE,
 					'id'              => $next_id,
 					'WC_Order_Export' => $this,
 					'ajaxurl'         => $ajaxurl,
@@ -119,7 +126,7 @@ class WC_Order_Export_Admin {
 				$clone = isset( $_REQUEST[ 'clone' ] ) ? $_REQUEST[ 'clone' ] : '';
 								
 				if ( $clone ) {
-					$schedule_id = $this->clone_export_settings( "cron", $schedule_id );
+					$schedule_id = $this->clone_export_settings( self::EXPORT_SCHEDULE, $schedule_id );
 				}
 
 				if ( $schedule_id ) {
@@ -130,7 +137,7 @@ class WC_Order_Export_Admin {
 						'schedule'      => true,
 					);
 					$this->render( 'settings-form', array(
-						'mode'            => 'cron',
+						'mode'            => self::EXPORT_SCHEDULE,
 						'id'              => $schedule_id,
 						'WC_Order_Export' => $this,
 						'ajaxurl'         => $ajaxurl,
@@ -152,21 +159,68 @@ class WC_Order_Export_Admin {
 	}
 	
 	public function clone_export_settings( $mode, $id ) {
-		$name = "";
-		if ( $mode == 'cron' ) {
-			$name = $this->settings_name_cron;
-		} elseif ( $mode == 'profiles' ) {
-			$name = $this->settings_name_profiles;
-		}
-		$all_jobs				 = get_option( $name, array() );
-		end( $all_jobs );
-		$next_id				 = key( $all_jobs ) + 1;
-		
-		$settings				 = $all_jobs[ $id ];
-		$settings['title']		.= " [cloned]"; //add note
-		$all_jobs[ $next_id ]	 = $settings;
+		return $this->advanced_clone_export_settings( $id, $mode, $mode );
+	}
 
-		update_option( $name, $all_jobs );
+	public function advanced_clone_export_settings( $id, $mode_in = self::EXPORT_SCHEDULE, $mode_out = self::EXPORT_SCHEDULE ) {
+		$name_in = "";
+		if ( $mode_in == self::EXPORT_SCHEDULE ) {
+			$name_in = $this->settings_name_cron;
+		} elseif ( $mode_in == self::EXPORT_PROFILE ) {
+			$name_in = $this->settings_name_profiles;
+		}
+		$all_jobs_in = get_option( $name_in, array() );
+
+		if ( $mode_in !== $mode_out ) {
+			$name_out = "";
+			if ( $mode_out == self::EXPORT_SCHEDULE ) {
+				$name_out = $this->settings_name_cron;
+			} elseif ( $mode_out == self::EXPORT_PROFILE ) {
+				$name_out = $this->settings_name_profiles;
+			}
+
+			$all_jobs_out = get_option( $name_out, array() );
+		}
+		else {
+			$name_out     = $name_in;
+			$all_jobs_out = $all_jobs_in;
+		}
+
+		$settings           = $all_jobs_in[ $id ];
+		$settings['title'] .= " [cloned]"; //add note
+		$settings['mode']   = $mode_out;
+
+		if ( $mode_in === self::EXPORT_PROFILE && $mode_out === self::EXPORT_SCHEDULE) {
+			if ( ! isset( $settings['destination'] ) ) {
+				$settings['destination'] = array(
+					'type' => 'folder',
+					'path' => get_home_path(),
+				);
+			}
+
+			if ( ! isset( $settings['export_rule'] ) ) {
+				$settings['export_rule'] = 'last_run';
+			}
+
+			if ( ! isset( $settings['export_rule_field'] ) ) {
+				$settings['export_rule_field'] = 'date';
+			}
+
+			if ( ! isset( $settings['schedule'] ) ) {
+				$settings['schedule'] = array(
+						'type'   => 'schedule-1',
+						'run_at' => '00:00',
+				);
+			}
+
+			unset( $settings['use_as_bulk'] );
+		}
+
+		end( $all_jobs_out );
+		$next_id				  = key( $all_jobs_out ) + 1;
+		$all_jobs_out[ $next_id ] = $settings;
+
+		update_option( $name_out, $all_jobs_out );
 		return $next_id;
 	}
 
@@ -185,7 +239,7 @@ class WC_Order_Export_Admin {
 				end( $all_jobs );
 				$next_id = key( $all_jobs ) + 1;
 				$this->render( 'settings-form', array(
-					'mode'            => 'profiles',
+					'mode'            => self::EXPORT_PROFILE,
 					'id'              => $next_id,
 					'WC_Order_Export' => $this,
 					'ajaxurl'         => $ajaxurl,
@@ -200,7 +254,7 @@ class WC_Order_Export_Admin {
 				
 				$clone = isset( $_REQUEST[ 'clone' ] ) ? $_REQUEST[ 'clone' ] : '';
 				if ( $clone ) {
-					$profile_id = $this->clone_export_settings( "profiles", $profile_id );
+					$profile_id = $this->clone_export_settings( self::EXPORT_PROFILE, $profile_id );
 				}
 				if ( $profile_id ) {
 					$show = array(
@@ -210,7 +264,7 @@ class WC_Order_Export_Admin {
 						'schedule'      => false,
 					);
 					$this->render( 'settings-form', array(
-						'mode'            => 'profiles',
+						'mode'            => self::EXPORT_PROFILE,
 						'id'              => $profile_id,
 						'WC_Order_Export' => $this,
 						'ajaxurl'         => $ajaxurl,
@@ -219,6 +273,18 @@ class WC_Order_Export_Admin {
 				}
 
 				return;
+				break;
+			case 'copy_profile_to_scheduled':
+				$profile_id  = isset( $_REQUEST['profile_id'] ) ? $_REQUEST['profile_id'] : '';
+
+				$schedule_id = $this->advanced_clone_export_settings( $profile_id, self::EXPORT_PROFILE, self::EXPORT_SCHEDULE );
+
+				$url = remove_query_arg( 'profile_id' );
+				$url = add_query_arg( 'tab', 'schedules', $url );
+				$url = add_query_arg( 'wc_oe', 'edit_schedule', $url );
+				$url = add_query_arg( 'schedule_id', $schedule_id, $url );
+
+				wp_redirect( $url );
 				break;
 			case 'delete_profile':
 				$profile_id = isset( $_REQUEST['profile_id'] ) ? $_REQUEST['profile_id'] : '';
@@ -232,9 +298,9 @@ class WC_Order_Export_Admin {
 	}
 
 	public function get_export_settings( $mode, $id = 0 ) {
-		if ( $mode == 'now' OR ! $id ) {
+		if ( $mode == self::EXPORT_NOW OR ! $id ) {
 			$settings = get_option( $this->settings_name_now, array() );
-		} elseif ( $mode == 'cron' ) {
+		} elseif ( $mode == self::EXPORT_SCHEDULE ) {
 			$all_jobs = get_option( $this->settings_name_cron, array() );
 			if ( isset( $all_jobs[ $id ] ) ) {
 				$settings = $all_jobs[ $id ];
@@ -242,7 +308,7 @@ class WC_Order_Export_Admin {
 				$settings = array();
 			}
 		}
-		elseif ( $mode == 'profiles' ) {
+		elseif ( $mode == self::EXPORT_PROFILE ) {
 			$all_jobs = get_option( $this->settings_name_profiles, array() );
 			if ( isset( $all_jobs[ $id ] ) ) {
 				$settings = $all_jobs[ $id ];
@@ -252,6 +318,7 @@ class WC_Order_Export_Admin {
 		}
 
 		$defaults = array(
+			'mode'                                           => $mode,
 			'statuses'                                       => array(),
 			'from_date'                                      => '',
 			'to_date'                                        => '',
@@ -319,9 +386,9 @@ class WC_Order_Export_Admin {
 
 	public function save_export_settings( $mode, $id, $options ) {
 
-		if ( $mode == 'now' ) {
+		if ( $mode == self::EXPORT_NOW ) {
 			update_option( $this->settings_name_now, $options );
-		} elseif ( $mode == 'cron' ) {
+		} elseif ( $mode == self::EXPORT_SCHEDULE ) {
 			$all_jobs = get_option( $this->settings_name_cron, array() );
 			if ( $id ) {
 				$options['schedule']['last_run'] = current_time("timestamp",0);//$all_jobs[ $id ]['schedule']['last_run'];
@@ -334,7 +401,7 @@ class WC_Order_Export_Admin {
 			}
 
 			update_option( $this->settings_name_cron, $all_jobs );
-		} elseif ( $mode == 'profiles' ) {
+		} elseif ( $mode == self::EXPORT_PROFILE ) {
 			$all_jobs = get_option( $this->settings_name_profiles, array() );
 			if ( $id ) {					
 				$all_jobs[ $id ]				 = $options;
@@ -364,7 +431,7 @@ class WC_Order_Export_Admin {
 	}
 
 	public function script_loader_src($src, $handle) {
-		if (!preg_match('/\/select2\.min\.js\?ver=[1-3]/', $src)) {
+		if (!preg_match('/\/select2\.min\.js\?ver=[1-3]/', $src) && !preg_match('/\/select2\.js/', $src)) {
 			return $src;
 		}
 	}
@@ -481,6 +548,23 @@ class WC_Order_Export_Admin {
 		return $settings;
 	}
 
+	//hook for TESTs
+	public function ajax_action_run_all_crons() {
+		set_time_limit(0);
+		do_action( 'woe_start_cron_jobs' );
+		$items = get_option( 'woocommerce-order-export-cron', array() );
+		foreach ( $items as $key => &$item ) {
+				// do cron job
+				do_action( 'woe_start_cron_job', $key, $item );
+
+				$file = WC_Order_Export_Engine::build_file_full( $item );
+				if ( $file !== false ) {
+					WC_Order_Export_Engine::export( $item, $file );
+				}
+		}
+	}
+
+	
 	public function ajax_action_save_settings() {
 		$settings = $this->make_new_settings( $_POST );
 		//print_r(array($_POST['mode'], $_POST['id'], $settings));
@@ -568,15 +652,26 @@ class WC_Order_Export_Admin {
 		$settings = $this->make_new_settings( $_POST );
 		// use unsaved settings
 
+		do_action( 'woe_start_test_job', $_POST['id'], $settings );
+
 		$file = WC_Order_Export_Engine::build_file_full( $settings, '', 1 );
-		
-		$result = WC_Order_Export_Engine::export( $settings, $file );
+
+		if ( $file !== false ) {
+			$result = WC_Order_Export_Engine::export( $settings, $file );
+		}
+		else {
+			$result = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );
+		}
+
 		echo $result;
 	}
 
 	public function ajax_action_preview() {
 		$settings = $this->make_new_settings( $_POST );
 		// use unsaved settings
+
+		do_action( 'woe_start_preview_job', $_POST['id'], $settings );
+
 		WC_Order_Export_Engine::build_file( $settings, 'preview', 'browser' );
 	}
 
@@ -686,6 +781,9 @@ class WC_Order_Export_Admin {
 		}
 			
 		file_put_contents( $filename, '' );
+
+		do_action( 'woe_start_export_job', $_POST['id'], $settings );
+
 		$total = WC_Order_Export_Engine::build_file( $settings, 'estimate', 'file', 0, 0, $filename );
 		$file_id = current_time( 'timestamp' );
 		set_transient( $this->tempfile_prefix . $file_id, $filename, 60 );
@@ -742,6 +840,8 @@ class WC_Order_Export_Admin {
 		$settings = $this->make_new_settings( $_POST['settings'] );
 		// use unsaved settings
 
+		do_action( 'woe_start_export_job', $_POST['id'], $settings );
+
 		$file = WC_Order_Export_Engine::build_file_full( $settings );
 
 		if ( $file !== false ) {
@@ -783,10 +883,16 @@ class WC_Order_Export_Admin {
 		$time = current_time("timestamp",0);
 		
 		set_time_limit(0);
+		do_action( 'woe_start_cron_jobs' );
 
 		$items = get_option( 'woocommerce-order-export-cron', array() );
 		foreach ( $items as $key => &$item ) {
-//			var_dump($file = WC_Order_Export_Engine::build_file_full( $item ));die();
+			if ( ! isset( $item['mode'] ) ) {
+				$item['mode'] = self::EXPORT_SCHEDULE;
+			}
+
+			do_action( 'woe_start_cron_job', $key, $item );
+
 			if ( isset( $item['schedule']['next_run'] ) && $item['schedule']['next_run'] <= $time ) {
 				// do cron job
 				$file = WC_Order_Export_Engine::build_file_full( $item );
@@ -848,6 +954,9 @@ class WC_Order_Export_Admin {
 			$schedules = wp_get_schedules();
 			foreach ( $schedules as $k => $v ) {
 				if ( $interval == $k ) {
+					if( isset( $v[ 'calc_method' ] ) ) {
+						$v[ 'interval' ] = call_user_func($v[ 'calc_method' ], $v[ 'interval' ]);
+					}
 					$time = strtotime( '+' . $v[ 'interval' ] . ' seconds', $now );
 					break;
 				}
@@ -875,10 +984,13 @@ class WC_Order_Export_Admin {
 			}
 
 			$items   = array();
-			$items[] = array(
-					'label' => sprintf( __( 'Export as %s', 'woocommerce-order-export' ), $settings['format'] ),
-					'value' => 'woe_export_selected_orders'
-			);
+			
+			if( ! empty($settings['format']) ) {
+				$items[] = array(
+						'label' => sprintf( __( 'Export as %s', 'woocommerce-order-export' ), $settings['format'] ),
+						'value' => 'woe_export_selected_orders'
+				);
+			}	
 
 			$all_jobs = get_option( $this->settings_name_profiles, array() );
 			foreach ( $all_jobs as $job_id => $job ) {
@@ -951,7 +1063,7 @@ class WC_Order_Export_Admin {
 					$post_ids	 = $_REQUEST[ 'post' ];
 					$sendback	 = $_REQUEST[ '_wp_http_referer' ];
 
-					$settings = $this->get_export_settings( 'profiles', $id );
+					$settings = $this->get_export_settings( self::EXPORT_PROFILE, $id );
 
 					$file	 = WC_Order_Export_Engine::build_file_full( $settings, '', 0, $post_ids );
 					$file_id = current_time( 'timestamp' );

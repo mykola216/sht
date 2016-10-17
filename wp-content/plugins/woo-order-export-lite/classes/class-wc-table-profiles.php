@@ -81,9 +81,10 @@ class WC_Table_Profiles extends WP_List_Table {
 				break;
 			//
 			case 'actions':
-				return '<div class="btn-edit button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
-				'<div class="btn-clone button-secondary" data-id="' . $item[ 'id' ] . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
-				'<div class="btn-trash button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-trash"></span></div>';
+				return '<div class="btn-edit button-secondary" data-id="'  . $item['id'] . '" title="' . __( 'Edit', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
+				'<div class="btn-clone button-secondary" data-id="'        . $item['id'] . '" title="' . __( 'Copy', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
+				'<div class="btn-to-scheduled button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Copy to Scheduled', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-migrate"></span></div>&nbsp;'.
+				'<div class="btn-trash button-secondary" data-id="'        . $item['id'] . '" title="' . __( 'Delete', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-trash"></span></div>';
 				break;
 			default:
 				return isset( $item[ $column_name ] ) ? $item[ $column_name ] : '';

@@ -65,6 +65,9 @@ class WC_Table_Schedules extends WP_List_Table {
 
 	public function get_columns() {
 		$columns                        = array();
+		$columns['id']          		= __( 'Id', 'woocommerce-order-export' );
+		$columns['title']          		= __( 'Title', 'woocommerce-order-export' );
+		$columns['format']          	= __( 'Format', 'woocommerce-order-export' );
 		$columns['recurrence']          = __( 'Recurrence', 'woocommerce-order-export' );
 		$columns['destination']         = __( 'Destination', 'woocommerce-order-export' );
 		$columns['destination_details'] = __( 'Destination Details', 'woocommerce-order-export' );
@@ -76,6 +79,9 @@ class WC_Table_Schedules extends WP_List_Table {
 
 	function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
+			case 'title':
+				return '<a href="admin.php?page=wc-order-export&tab=schedules&wc_oe=edit_schedule&schedule_id=' . $item[ 'id' ] . '">' . $item[ $column_name ] . '</a>';
+				break;
 			case 'recurrence':
 				$r = '';
 				if ( isset( $item[ 'schedule' ] ) ) {
@@ -88,6 +94,9 @@ class WC_Table_Schedules extends WP_List_Table {
 						if ( isset( $item[ 'schedule' ][ 'run_at' ] ) ) {
 							$r .= __( '  at ', 'woocommerce-order-export' ) . $item[ 'schedule' ][ 'run_at' ];
 						}
+						//nothing selected 
+						if( empty( $days ) )
+							$r = __( 'Never', 'woocommerce-order-export' );
 					} else {
 						if ( $item[ 'schedule' ][ 'interval' ] == 'first_day_month' ) {
 							$r = __( "First Day Every Month", 'woocommerce-order-export' );
@@ -143,14 +152,17 @@ class WC_Table_Schedules extends WP_List_Table {
 				$last_run = isset( $item['schedule']['last_run'] ) ? $item['schedule']['last_run'] : null;
 				if ( isset( $item['schedule']['next_run'] ) ) {
 					$next_run_local =  $item['schedule']['next_run'];
-					return date('M j Y', $next_run_local) . ' at ' . date('G:i', $next_run_local);
+					if($next_run_local)
+						return date('M j Y', $next_run_local) . ' at ' . date('G:i', $next_run_local);
+					else
+						 return __( '', 'woocommerce-order-export' );
 				} else {
-					return 'Not installed';
+					return  __( 'Not installed', 'woocommerce-order-export' );
 				}
 			case 'actions':
-				return '<div class="btn-edit button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
-				       '<div class="btn-clone button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
-					   '<div class="btn-trash button-secondary" data-id="' . $item['id'] . '"><span class="dashicons dashicons-trash"></span></div>';
+				return '<div class="btn-edit button-secondary" data-id="' . $item['id'] .  '" title="' . __( 'Edit', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
+				       '<div class="btn-clone button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Copy', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
+					   '<div class="btn-trash button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Delete', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-trash"></span></div>';
 				break;
 			default:
 
