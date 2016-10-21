@@ -239,6 +239,10 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
     clear: both;
     overflow: hidden;
 }
+.product_title,
+.widget.canvas-child-single-product{
+    margin-bottom: 15px;
+}
 /* Widgets - end */
 
 
