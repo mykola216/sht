@@ -2,7 +2,7 @@
 /*
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
-Description: <strong>Lite Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
+Description: <strong>Pro Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
 Version: 3.9.18
 Author: Store Apps
 Author URI: http://www.storeapps.org/
