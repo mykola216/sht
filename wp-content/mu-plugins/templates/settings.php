@@ -272,6 +272,18 @@
 					<input type="text" name="steigerhouttrend_options[info_block_text4]" value="<?php echo $st_options['info_block_text4']; ?>" />
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row">Show "SALE" labels only for single product page </th>
+				<td>
+					<input type="checkbox" name="steigerhouttrend_options[show_sale_label_only_sngl]" value="1" <?php checked( $st_options['show_sale_label_only_sngl'], 1 ); ?> />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Hide "SALE" labels everywhere</th>
+				<td>
+					<input type="checkbox" name="steigerhouttrend_options[hide_sale_label]" value="1" <?php checked( $st_options['hide_sale_label'], 1 ); ?> />
+				</td>
+			</tr>
 
 			<!-- Cart page -->
 			<tr>

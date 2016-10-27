@@ -333,6 +333,12 @@ ul.products li.product a span.price {
     margin: 4px 20px;
     text-align: left;
 }
+ul.products li.product a span.price del{
+    color: #666;
+    font-weight: normal;
+    font-size: 10px;
+}
+.onsale.on-single-product{}
 /* Products - end */
 
 
@@ -347,6 +353,9 @@ ul.products li.product:nth-child(2n+1) > a >img {
 ul.products li.product:nth-child(2n),
 ul.products li.product:nth-child(2n) > a >img {
     padding-right:0;
+}
+.onsale.hidden{
+    visibility: hidden;
 }
 /* Shop Catalog - end */
 

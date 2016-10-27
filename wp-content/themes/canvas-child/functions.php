@@ -61,6 +61,8 @@ add_filter( 'woo_breadcrumbs_trail', 'canvas_child_breadcrumbs_trail' );
 add_filter( 'woocommerce_cart_totals_order_total_html', 'canvas_child_cart_totals_order_total_html' );
 add_filter( 'woocommerce_get_order_item_totals', 'canvas_child_get_order_item_totals', 10, 2 );
 add_filter( 'woocommerce_cart_shipping_method_full_label', 'canvas_child_woocommerce_cart_shipping_method_full_label', 10, 2 );
+
+add_filter( 'woocommerce_sale_flash', 'canvas_child_woocommerce_sale_flash', 10, 3 );
 // Common - end
 
 
@@ -303,6 +305,29 @@ function canvas_child_woocommerce_cart_shipping_method_full_label( $label, $meth
 
 	return $label;
 
+}
+
+function canvas_child_woocommerce_sale_flash($html, $post, $product) {
+	global $post, $product, $st_options;
+	//var_dump($post->ID);
+	//var_dump(get_queried_object_id());
+	$classes = array();
+	$classes[] = 'onsale';
+	if ( is_singular('product') && $post->ID == get_queried_object_id() ) {
+		$classes[] = 'on-single-product';
+	}
+	if (!!$st_options['hide_sale_label']) {
+		if (is_singular('product') && $post->ID == get_queried_object_id() ) {
+			if (!$st_options['show_sale_label_only_sngl']) {
+				$classes[] = 'hidden';
+			}
+		}
+		else {
+			$classes[] = 'hidden';
+		}
+	}
+	$classes = implode(' ', $classes);
+	return '<span class="'. $classes . '">' . __( 'Sale!', 'woocommerce' ) . '</span>';
 }
 /******************************************************************************/
 /* Common - end                                                               */
