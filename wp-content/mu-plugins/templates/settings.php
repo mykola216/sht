@@ -40,6 +40,12 @@
 					<input  type="text" name="steigerhouttrend_options[conversion_id]" value="<?php echo $st_options['conversion_id']; ?>" />
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row">Instagram Feed ShortCode</th>
+				<td>
+					<textarea name="steigerhouttrend_options[instagram_feed_shortcode]" style="resize: both;width: 100%;"><?php echo $st_options['instagram_feed_shortcode']; ?></textarea>
+				</td>
+			</tr>
 
 			<!-- Home page band module -->
 			<tr>

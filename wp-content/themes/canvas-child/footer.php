@@ -8,10 +8,10 @@
  * @subpackage Template
  */
 
- global $woo_options;
-
- woo_footer_top();
- 	woo_footer_before();
+	global $woo_options, $st_options;
+	echo do_shortcode($st_options['instagram_feed_shortcode']);
+	woo_footer_top();
+	woo_footer_before();
 ?>
 	<footer id="footer" class="col-full">
 
