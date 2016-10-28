@@ -63,6 +63,7 @@ add_filter( 'woocommerce_get_order_item_totals', 'canvas_child_get_order_item_to
 add_filter( 'woocommerce_cart_shipping_method_full_label', 'canvas_child_woocommerce_cart_shipping_method_full_label', 10, 2 );
 
 add_filter( 'woocommerce_sale_flash', 'canvas_child_woocommerce_sale_flash', 10, 3 );
+add_filter( 'formatted_woocommerce_price', 'canvas_child_formatted_woocommerce_price', 10, 5 );
 // Common - end
 
 
@@ -146,6 +147,7 @@ function canvas_child_setup(){
 }
 
 function canvas_child_wp_enqueue_script() {
+	global $st_options;
 	$uri = get_stylesheet_directory_uri();
 
 	wp_enqueue_style( 'theme-stylesheet', get_template_directory_uri() . '/style.css', array( 'dashicons' ) );
@@ -155,8 +157,9 @@ function canvas_child_wp_enqueue_script() {
 		wp_enqueue_style( 'canvas_child_home', $uri . '/css/home.css', array( 'theme-child-style' ) );
 	} elseif ( is_single() ) {
 		wp_enqueue_style( 'canvas_child_single', $uri . '/css/single.css', array( 'theme-child-style' ) );
-		wp_enqueue_script( 'canvas_child_single',  $uri . '/js/single.js', 'jquery' );
-		wp_enqueue_script( 'canvas-child-quantity-input',  $uri . '/js/quantity-input.js', 'canvas_child_single' );
+		wp_enqueue_script( 'canvas_child_single',  $uri . '/js/single.js', array('jquery'), '001', true );
+		wp_enqueue_script( 'canvas-child-quantity-input',  $uri . '/js/quantity-input.js', array('canvas_child_single'), '001', true );
+		wp_localize_script( 'canvas_child_single', 'Localize_JS_Canvas_Child_Single', $st_options );
 	} elseif ( is_page( 'winkelwagen' ) ) {
 		wp_enqueue_style( 'canvas_child_cart', $uri . '/css/cart.css', array( 'theme-child-style' ) );
 		wp_enqueue_script( 'canvas_child_cart',  $uri . '/js/cart.js', 'jquery' );
@@ -174,7 +177,7 @@ function canvas_child_wp_enqueue_script() {
 		wp_enqueue_style( 'canvas_child_archive', $uri . '/css/archive.css', array( 'theme-child-style' ) );
 	}
 
-	wp_enqueue_script( 'canvas-child-common-js',  $uri . '/js/common.js', array('jquery') );
+	wp_enqueue_script( 'canvas-child-common-js',  $uri . '/js/common.js', array('jquery'), '001', true );
 
 	wp_enqueue_script( 'sharethis', '//w.sharethis.com/button/buttons.js' );
 }
@@ -294,6 +297,10 @@ add_filter( 'gform_replace_merge_tags', function( $text, $form, $entry, $url_enc
 	return $text;
 }, 10, 7 );
 
+
+/**
+ * Change shipping methods label.
+ */
 function canvas_child_woocommerce_cart_shipping_method_full_label( $label, $method ) {
 
 	if ( 0 == $method->cost && 'free_shipping' != $method->id ) {
@@ -307,10 +314,11 @@ function canvas_child_woocommerce_cart_shipping_method_full_label( $label, $meth
 
 }
 
+/**
+ * Custom Format of Sale label for product
+ */
 function canvas_child_woocommerce_sale_flash($html, $post, $product) {
 	global $post, $product, $st_options;
-	//var_dump($post->ID);
-	//var_dump(get_queried_object_id());
 	$classes = array();
 	$classes[] = 'onsale';
 	if ( is_singular('product') && $post->ID == get_queried_object_id() ) {
@@ -328,6 +336,19 @@ function canvas_child_woocommerce_sale_flash($html, $post, $product) {
 	}
 	$classes = implode(' ', $classes);
 	return '<span class="'. $classes . '">' . __( 'Sale!', 'woocommerce' ) . '</span>';
+}
+
+
+/**
+ * Custom Format product price
+ */
+function canvas_child_formatted_woocommerce_price($number_format, $price, $decimals, $decimal_separator, $thousand_separator) {
+	global $st_options;
+	if ($st_options['is_custom_price_format']) {
+		list($whole, $decimal_val) = explode($decimal_separator, $number_format);
+		$number_format = (absint($decimal_val)) ? $number_format : $whole . $decimal_separator . $st_options['price_decimal_zero_symb'] ;
+	}
+	return $number_format;
 }
 /******************************************************************************/
 /* Common - end                                                               */

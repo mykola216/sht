@@ -296,6 +296,18 @@
 					<input type="checkbox" name="steigerhouttrend_options[hide_sale_label]" value="1" <?php checked( $st_options['hide_sale_label'], 1 ); ?> />
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row">Apply custom price format</th>
+				<td>
+					<input type="checkbox" name="steigerhouttrend_options[is_custom_price_format]" value="1" <?php checked( $st_options['is_custom_price_format'], 1 ); ?> />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Price Decimal Symbol if decimal part is Zero.</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[price_decimal_zero_symb]" value="<?php echo $st_options['price_decimal_zero_symb']; ?>" />
+				</td>
+			</tr>
 
 			<!-- Cart page -->
 			<tr>
