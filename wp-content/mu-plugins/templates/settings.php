@@ -41,6 +41,12 @@
 				</td>
 			</tr>
 			<tr valign="top">
+				<th scope="row">Show Instagram Feed</th>
+				<td>
+					<input type="checkbox" name="steigerhouttrend_options[show_instagram_feed]" value="1" <?php checked( $st_options['show_instagram_feed'], 1 ); ?> />
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row">Instagram Feed ShortCode</th>
 				<td>
 					<textarea name="steigerhouttrend_options[instagram_feed_shortcode]" style="resize: both;width: 100%;"><?php echo $st_options['instagram_feed_shortcode']; ?></textarea>

@@ -9,7 +9,9 @@
  */
 
 	global $woo_options, $st_options;
-	echo do_shortcode($st_options['instagram_feed_shortcode']);
+
+	if ($st_options['show_instagram_feed']) echo do_shortcode($st_options['instagram_feed_shortcode']);
+
 	woo_footer_top();
 	woo_footer_before();
 ?>
