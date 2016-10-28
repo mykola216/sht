@@ -91,37 +91,58 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    /* Stylizing of Texture DropDown menu and Reformat price decimal */
+    setTimeout(function () {
+        customDecimalPart('.formattedTotalPrice');
+
+        $( "select" ).on( "selectmenuopen", function( e, ui ) {
+            var that = $(this);
+            var selectedItemID = that.siblings('.ui-selectmenu-button').attr('aria-labelledby');
+
+            customDecimalPart('#' + that.attr('id') + '-menu' + ' li', ',');
+
+            if (parseInt(Localize_JS_Canvas_Child_Single.is_animated_textural_menu)) {
+                $('#' + that.attr('id') + '-menu.behandeling').addClass('animated');
+            }
+
+            $('#' + that.attr('id') + '-menu.behandeling.animated')
+                .closest('.ui-selectmenu-menu')
+                .css({
+                     'left' : that.closest('li').offset().left + 'px',
+                    'width' : that.closest('li').width() + 'px',
+                });
+
+            $('#' + that.attr('id') + '-menu')
+                .children('li').each(function () {
+                    if (!$(this).children('span.price-value').length)
+                        $(this).wrapInner('<span class="price-value"></span>');
+                })
+                .filter('#' + selectedItemID).addClass('selectedItem');
+
+        }).on('selectmenuclose', function (e, ui) {
+            var that = $(this);
+
+            $('#' + that.attr('id') + '-menu').children('li').removeClass('selectedItem');
+
+        });
+
+    }, 100);
+
     /* Reformat price decimal part if zero */
-    if (wc_gravityforms_params) {
-        setTimeout(function () {
-
-            customDecimalPart('.formattedTotalPrice');
-
-            $( "select" ).on( "selectmenuopen", function( e, ui ) {
-                customDecimalPart('#' + $(this).attr('id') + '-menu' + ' li', ',');
-            });
-
-        }, 100);
-    }
-
     var customDecimalPart = function (selector, decimal_sep) {
-        var decimal_zero_symb = '-';
-        if (Localize_JS_Canvas_Child_Single.price_decimal_zero_symb !== undefined)
-            decimal_zero_symb = Localize_JS_Canvas_Child_Single.price_decimal_zero_symb;
+        // If dont need apply custom reformat
+        if (!parseInt(Localize_JS_Canvas_Child_Single.is_custom_price_format)) return;
+
+        // Custom symbol for zero decimal part
+        var decimal_zero_symb = (typeof Localize_JS_Canvas_Child_Single.price_decimal_zero_symb !== 'undefined') ? Localize_JS_Canvas_Child_Single.price_decimal_zero_symb : '';
 
         $(selector).not('.custom-formatted').each(function () {
-            var priceNumberParts;
             var oldPrice = $(this).text();
             var newPrice = oldPrice;
-            var woo_decimal_sep = wc_gravityforms_params.currency_format_decimal_sep;
+            var woo_decimal_sep = (typeof wc_gravityforms_params !== 'undefined') ? wc_gravityforms_params.currency_format_decimal_sep : ',';
+            var priceNumberParts = (typeof decimal_sep !== 'undefined') ? oldPrice.split(decimal_sep) : oldPrice.split(woo_decimal_sep);
 
-            if (decimal_sep !== undefined) {
-                priceNumberParts = oldPrice.split(decimal_sep);
-            }
-            else {
-                priceNumberParts = oldPrice.split(woo_decimal_sep);
-            }
-
+            // If decimal part exist and only zero
             if ( priceNumberParts[1] !== undefined && !parseInt(priceNumberParts[1]) ) {
                 priceNumberParts[1] = priceNumberParts[1].replace(/0/g, '');
                 priceNumberParts[1] = decimal_zero_symb + priceNumberParts[1];
