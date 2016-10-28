@@ -629,6 +629,26 @@ function canvas_child_woocommerce_customer_also_viewed ( $atts, $content = null 
 		}
 }
 
+
+/* Fixed if slider method is undefined */
+foreach (array( 'flex', 'coin', 'nivo', 'responsive' ) as $type) {
+	add_filter('metaslider_' . $type . '_slider_javascript_before', function ($js) {
+		$customJS = '
+			if (jQuery().flexslider === undefined) {
+				jQuery.fn.flexslider = function () {};
+			};
+		';
+		return $customJS . $js;
+	}, 9);
+}
+
+add_action('wp_head', 'canvas_child_custom_css_textural_menu');
+function canvas_child_custom_css_textural_menu() {
+	global $st_options;
+	$style = '<style>' .$st_options['custom_css_textural_menu']. '</style>';
+
+	echo $style;
+}
 /******************************************************************************/
 /* Single page - end **********************************************************/
 /******************************************************************************/

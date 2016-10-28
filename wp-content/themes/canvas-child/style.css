@@ -339,6 +339,63 @@ ul.products li.product a span.price del{
     font-size: 10px;
 }
 .onsale.on-single-product{}
+.ui-selectmenu-open{}
+.single-product .ui-selectmenu-open ul.behandeling:not(.animated) .ui-state-focus{
+    background: #dadada;
+    font-weight: normal;
+    color: #212121;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated{
+    width: 100% !important;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated li {
+    background-repeat: repeat-x !important;
+    padding-left: 25%;
+    text-shadow: none;
+    position: relative;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated li > span{
+    position:relative;
+    z-index:1;
+    left:10px;
+    color: #555;
+    -moz-transition:color 0.4s;
+    -web-kit-transition:color 0.4s;
+    transition:color 0.4s;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated li:hover > span,
+.single-product .ui-selectmenu-open ul.behandeling.animated li.selectedItem > span {
+    color: #f70;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-shadow: -1px 1px 0px #000;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated li:before{
+    content:'';
+    position:absolute;
+    width:75%;
+    height:100%;
+    top:0;
+    right:0;
+    display:block;
+    z-index:0;
+    background:#fff;
+    -moz-transition:right 0.4s;
+    -web-kit-transition:right 0.4s;
+    transition:right 0.4s;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated li:hover:before,
+.single-product .ui-selectmenu-open ul.behandeling.animated li.selectedItem:before{
+    right:-65%;
+}
+.single-product .ui-selectmenu-open ul.behandeling.animated li.selectedItem > span,
+.single-product .ui-selectmenu-open ul.behandeling.animated li.selectedItem:before{
+    -moz-transition:none;
+    -web-kit-transition:none;
+    transition:none;
+}
 /* Products - end */
 
 
