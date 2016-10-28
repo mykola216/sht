@@ -121,9 +121,9 @@ jQuery(document).ready(function ($) {
 
         }).on('selectmenuclose', function (e, ui) {
             var that = $(this);
-
             $('#' + that.attr('id') + '-menu').children('li').removeClass('selectedItem');
-
+            $('.formattedTotalPrice').removeClass('custom-formatted');
+            setTimeout( function () { customDecimalPart('.formattedTotalPrice');}, 0);
         });
 
     }, 100);
@@ -143,7 +143,7 @@ jQuery(document).ready(function ($) {
             var priceNumberParts = (typeof decimal_sep !== 'undefined') ? oldPrice.split(decimal_sep) : oldPrice.split(woo_decimal_sep);
 
             // If decimal part exist and only zero
-            if ( priceNumberParts[1] !== undefined && !parseInt(priceNumberParts[1]) ) {
+            if ( priceNumberParts[1] !== undefined && !parseInt(priceNumberParts[1]) && $.trim(priceNumberParts[1]) != decimal_zero_symb ) {
                 priceNumberParts[1] = priceNumberParts[1].replace(/0/g, '');
                 priceNumberParts[1] = decimal_zero_symb + priceNumberParts[1];
                 newPrice = priceNumberParts.join(woo_decimal_sep);
