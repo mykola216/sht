@@ -99,7 +99,8 @@ jQuery(document).ready(function ($) {
             var that = $(this);
             var selectedItemID = that.siblings('.ui-selectmenu-button').attr('aria-labelledby');
 
-            customDecimalPart('#' + that.attr('id') + '-menu' + ' li', ',');
+            if (parseInt(Localize_JS_Canvas_Child_Single.is_custom_gf_price_format))
+                customDecimalPart('#' + that.attr('id') + '-menu' + ' li', ',');
 
             if (parseInt(Localize_JS_Canvas_Child_Single.is_animated_textural_menu)) {
                 $('#' + that.attr('id') + '-menu.behandeling').addClass('animated');
