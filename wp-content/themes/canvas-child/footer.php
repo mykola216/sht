@@ -8,9 +8,9 @@
  * @subpackage Template
  */
 
-	global $woo_options, $st_options;
+	global $woo_options;
 
-	if ($st_options['show_instagram_feed']) echo do_shortcode($st_options['instagram_feed_shortcode']);
+	canvas_child_instagram_feed();
 
 	woo_footer_top();
 	woo_footer_before();

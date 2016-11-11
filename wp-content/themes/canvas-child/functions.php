@@ -329,6 +329,45 @@ function canvas_child_woocommerce_sale_flash($html, $post, $product) {
 	$classes = implode(' ', $classes);
 	return '<span class="'. $classes . '">' . __( 'Sale!', 'woocommerce' ) . '</span>';
 }
+
+function canvas_child_instagram_feed($echo = true) {
+	global $st_options;
+	$out = '';
+	$styles = '';
+
+	$styles = '
+		<style>
+			#sb_instagram #sbi_images{
+				padding-left:0 !important;
+				padding-right:0 !important;
+			}
+			#sb_instagram #sbi_images .sbi_item.sbi_type_image{
+				padding-left:5px !important;
+				padding-right:5px !important;
+			}
+			#sb_instagram #sbi_images .sbi_item.sbi_type_image:first-child{
+				padding-left:0 !important;
+			}
+			#sb_instagram #sbi_images .sbi_item.sbi_type_image:last-child{
+				padding-right:0 !important;
+			}
+		</style>';
+
+	$out .= $styles;
+
+	$is_show = $st_options['show_instagram_feed'];
+	$is_show =  $st_options['show_instagram_feed_in_product_cat'] ? $is_show && is_tax('product_cat') : $is_show ;
+
+	if ($is_show) {
+		if ($st_options['instagram_feed_title']) {
+			$out .= '<h4>' . $st_options['instagram_feed_title'] . '</h4>';
+		}
+		$out .= do_shortcode($st_options['instagram_feed_shortcode']);
+	}
+
+	if ($echo) echo $out;
+	else return $out;
+}
 /******************************************************************************/
 /* Common - end                                                               */
 /******************************************************************************/
