@@ -47,6 +47,18 @@
 				</td>
 			</tr>
 			<tr valign="top">
+				<th scope="row">Show Instagram Feed Only in Product Category</th>
+				<td>
+					<input type="checkbox" name="steigerhouttrend_options[show_instagram_feed_in_product_cat]" value="1" <?php checked( $st_options['show_instagram_feed_in_product_cat'], 1 ); ?> />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Instagram Feed Title</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[instagram_feed_title]" value="<?php echo $st_options['instagram_feed_title']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row">Instagram Feed ShortCode</th>
 				<td>
 					<textarea name="steigerhouttrend_options[instagram_feed_shortcode]" style="resize: both;width: 100%;"><?php echo $st_options['instagram_feed_shortcode']; ?></textarea>
