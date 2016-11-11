@@ -201,6 +201,9 @@ body.archive .woocommerce_ordering,
 body.archive .woocommerce-ordering{
     margin-top: 1.618em;
 }
+body.paged #main .woocommerce_products_of_the_day{
+    display:none;
+}
 body.archive .widget.woocommerce_products_of_the_day{
     float: right !important;
     margin: 0 0 5px 20px;
