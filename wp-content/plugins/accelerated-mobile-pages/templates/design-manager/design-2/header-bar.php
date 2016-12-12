@@ -2,14 +2,16 @@
   <div id="headerwrap">
       <div id="header">
           
-        <?php global $redux_builder_amp; ?>
+        <?php global $redux_builder_amp; 
+          $ampforwp_home_url = trailingslashit( get_bloginfo('url') ) . '?' . AMP_QUERY_VAR;
+        ?>
 
-        <?php if (true == ($redux_builder_amp['opt-media']['url'])) {  ?>
-          <a href="<?php bloginfo('url'); ?>">
+        <?php if ( true == ($redux_builder_amp['opt-media']['url']) ) {  ?>
+          <a href="<?php echo esc_url( $ampforwp_home_url ); ?>">
               <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="190" height="36" alt="logo" class="amp-logo"></amp-img>
           </a>
-        <?php } else {?>
-        <h1><a href="<?php bloginfo('url'); ?>"><?php bloginfo('name'); ?></a></h1>
+        <?php } else { ?>
+          <h1><a href="<?php echo esc_url( $ampforwp_home_url ); ?>"><?php bloginfo('name'); ?></a></h1>
         <?php } ?>
 
       </div>
@@ -17,10 +19,8 @@
 </header>
 
 
-
-
 <div on='tap:sidebar.toggle' role="button" tabindex="0" class="nav_container">
-	<a href="#" class="toggle-text"><?php echo $redux_builder_amp['amp-navigation-text']; ?></a>
+	<a href="#" class="toggle-text"><?php echo esc_html( $redux_builder_amp['amp-translator-navigate-text'] ); ?></a>
 </div>
 
    
