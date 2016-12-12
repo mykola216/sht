@@ -62,6 +62,8 @@ if ( ! class_exists( 'YITH_WFBT_Frontend' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 			add_action( 'woocommerce_after_single_product_summary', array( $this, 'add_bought_together_form' ), 1 );
+
+            add_shortcode( 'ywfbt_form', array( $this, 'wfbt_shortcode' ) );
 		}
 
 		/**
@@ -102,36 +104,64 @@ if ( ! class_exists( 'YITH_WFBT_Frontend' ) ) {
 
 			global $product;
 
-			// get meta for current product
-			$group  = get_post_meta( $product->id, YITH_WFBT_META, true );
-
-			if( empty( $group ) || $product->product_type == 'grouped' || $product->product_type == 'external' ) {
-				return;
-			}
-
-			$product_id = $product->id;
-
-			if( $product->product_type == 'variable' ) {
-
-				$variations = $product->get_children();
-
-				if( empty( $variations ) ) {
-					return;
-				}
-				// get first product variation
-				$product_id = array_shift( $variations );
-				$product = wc_get_product( $product_id );
-			}
-
-			$products[] = $product;
-			foreach( $group as $the_id ) {
-				$current = wc_get_product( $the_id );
-				// add to main array
-				$products[] = $current;
-			}
-
-			wc_get_template( 'yith-wfbt-form.php', array( 'products' => $products ), '', YITH_WFBT_DIR . 'templates/' );
+			echo do_shortcode( '[ywfbt_form product_id="' . $product->id . '"]' );
 		}
+
+
+        /**
+         * Frequently Bought Together Shortcode
+         *
+         * @since 1.0.5
+         * @param array $atts
+         * @return string
+         * @author Francesco Licandro
+         */
+        public function wfbt_shortcode( $atts ){
+
+            $atts = shortcode_atts(array(
+                'product_id' => 0
+            ), $atts );
+
+            extract( $atts );
+
+            $product = wc_get_product( intval( $product_id ) );
+
+            if( ! $product ) {
+                return '';
+            }
+
+            // get meta for current product
+            $group  = get_post_meta( $product->id, YITH_WFBT_META, true );
+
+            if( empty( $group ) || $product->product_type == 'grouped' || $product->product_type == 'external' ) {
+                return '';
+            }
+
+            if( $product->product_type == 'variable' ) {
+
+                $variations = $product->get_children();
+
+                if( empty( $variations ) ) {
+                    return '';
+                }
+                // get first product variation
+                $product_id = array_shift( $variations );
+                $product = wc_get_product( $product_id );
+            }
+
+            $products[] = $product;
+            foreach( $group as $the_id ) {
+                $current = wc_get_product( $the_id );
+                // add to main array
+                $products[] = $current;
+            }
+
+            ob_start();
+
+            wc_get_template( 'yith-wfbt-form.php', array( 'products' => $products ), '', YITH_WFBT_DIR . 'templates/' );
+
+            return ob_get_clean();
+        }
 	}
 }
 /**

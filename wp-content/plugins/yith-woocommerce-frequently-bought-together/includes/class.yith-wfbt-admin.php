@@ -380,7 +380,7 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 				}
 			}
 
-			wp_send_json( $found_products );
+			wp_send_json( apply_filters( 'yith_wfbt_ajax_search_product_result', $found_products ) );
 		}
 
 		/**

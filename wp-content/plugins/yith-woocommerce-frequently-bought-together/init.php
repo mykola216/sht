@@ -3,7 +3,7 @@
  * Plugin Name: YITH WooCommerce Frequently Bought Together
  * Plugin URI: https://yithemes.com/themes/plugins/yith-woocommerce-frequently-bought-together/
  * Description: YITH WooCommerce Frequently Bought Together add a box in single product page with products suggested as "frequently bought together"
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: YITHEMES
  * Author URI: https://yithemes.com/
  * Text Domain: yith-woocommerce-frequently-bought-together
@@ -11,7 +11,7 @@
  *
  * @author Yithemes
  * @package YITH WooCommerce Frequently Bought Together
- * @version 1.0.6
+ * @version 1.0.7
  */
 /*  Copyright 2015  Your Inspiration Themes  (email : plugins@yithemes.com)
 
@@ -59,7 +59,7 @@ register_activation_hook( __FILE__, 'yith_plugin_registration_hook' );
 
 
 if ( ! defined( 'YITH_WFBT_VERSION' ) ){
-	define( 'YITH_WFBT_VERSION', '1.0.6' );
+	define( 'YITH_WFBT_VERSION', '1.0.7' );
 }
 
 if ( ! defined( 'YITH_WFBT_FREE_INIT' ) ) {
@@ -98,14 +98,19 @@ if ( ! defined( 'YITH_WFBT_META' ) ) {
 	define( 'YITH_WFBT_META', '_yith_wfbt_ids' );
 }
 
+/* Plugin Framework Version Check */
+if( ! function_exists( 'yit_maybe_plugin_fw_loader' ) && file_exists( YITH_WFBT_DIR . 'plugin-fw/init.php' ) ) {
+	require_once( YITH_WFBT_DIR . 'plugin-fw/init.php' );
+}
+yit_maybe_plugin_fw_loader( YITH_WFBT_DIR  );
+
+
 function yith_wfbt_free_init() {
 
 	load_plugin_textdomain( 'yith-woocommerce-frequently-bought-together', false, dirname( plugin_basename( __FILE__ ) ). '/languages/' );
 
 	// Load required classes and functions
 	require_once('includes/class.yith-wfbt.php');
-	require_once('includes/class.yith-wfbt-admin.php');
-	require_once('includes/class.yith-wfbt-frontend.php');
 
 	// Let's start the game!
 	YITH_WFBT();

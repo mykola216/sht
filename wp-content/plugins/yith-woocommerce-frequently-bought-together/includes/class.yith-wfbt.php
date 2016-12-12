@@ -7,7 +7,6 @@
  * @version 1.0.0
  */
 
-
 if ( ! defined( 'YITH_WFBT' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -68,7 +67,10 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
 		public function __construct() {
 
 			// Class admin
-			if ( is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_REQUEST['context'] ) && $_REQUEST['context'] == 'frontend' ) ) {
+			if ( $this->is_admin() ) {
+
+			    // require admin class
+                require_once('class.yith-wfbt-admin.php');
 
 				// Load Plugin Framework
 				add_action( 'after_setup_theme', array( $this, 'plugin_fw_loader' ), 1 );
@@ -76,7 +78,9 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
 				YITH_WFBT_Admin();
 			}
 			else {
-				// frontend class
+				// require frontend class
+                require_once('class.yith-wfbt-frontend.php');
+                // the class
 				YITH_WFBT_Frontend();
 			}
 
@@ -92,12 +96,28 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
 		 * @author Andrea Grillo <andrea.grillo@yithemes.com>
 		 */
 		public function plugin_fw_loader() {
-
-			if ( ! defined( 'YIT' ) || ! defined( 'YIT_CORE_PLUGIN' ) ) {
-				require_once( YITH_WFBT_DIR . '/plugin-fw/yit-plugin.php' );
-			}
-
+            if ( ! defined( 'YIT_CORE_PLUGIN' ) ) {
+                global $plugin_fw_data;
+                if( ! empty( $plugin_fw_data ) ){
+                    $plugin_fw_file = array_shift( $plugin_fw_data );
+                    require_once( $plugin_fw_file );
+                }
+            }
 		}
+
+        /**
+         * Check if is admin
+         *
+         * @since 1.1.0
+         * @access public
+         * @author Francesco Licandro
+         * @return boolean
+         */
+        public function is_admin(){
+            $context_check = isset( $_REQUEST['context'] ) && $_REQUEST['context'] == 'frontend';
+
+            return is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX && $context_check );
+        }
 
 		/**
 		 * Add upselling group to cart
