@@ -383,7 +383,7 @@ function canvas_child_instagram_feed($echo = true) {
 	$out .= $styles;
 
 	$is_show = $st_options['show_instagram_feed'];
-	$is_show =  $st_options['show_instagram_feed_in_product_cat'] ? $is_show && is_tax('product_cat') : $is_show ;
+	$is_show =  $st_options['show_instagram_feed_in_product_cat'] ? $is_show && (is_tax('product_cat') || is_home() || is_front_page()) : $is_show ;
 
 	if ($is_show) {
 		if ($st_options['instagram_feed_title']) {
