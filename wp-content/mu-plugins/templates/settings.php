@@ -47,7 +47,7 @@
 				</td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Show Instagram Feed Only in Product Category</th>
+				<th scope="row">Show Instagram Feed Only on Home and Product Category pages</th>
 				<td>
 					<input type="checkbox" name="steigerhouttrend_options[show_instagram_feed_in_product_cat]" value="1" <?php checked( $st_options['show_instagram_feed_in_product_cat'], 1 ); ?> />
 				</td>
