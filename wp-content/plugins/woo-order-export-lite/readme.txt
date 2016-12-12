@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Easily export orders from WooCommerce to Excel/CSV/XML/Json file
 
 == Description ==
-This plugin helps you to easily **export WooCommerce order** data. 
+This plugin helps you to **easily** export WooCommerce order data. 
 
 Export any custom field assigned to orders/products/coupons is easy and you can select from various formats to export the data in such as CSV, XLS, XML and JSON.
 
@@ -60,17 +60,22 @@ Install and activate plugin, visit WooCommerce > Export Orders.
 
 == Frequently Asked Questions ==
 
-= Plugin produces unreadable XLS file =
-The theme or another plugin outputs some lines. Usually, there are extra empty lines at the end of functions.php(in active theme).
-
-= Progress bar does nothing after 100% for XLS format =
-PHP must be compiled with option  --enable-zip . 
+[Use this page to study how to extend the plugin.](http://algolplus.com/plugins/code-samples/)
 
 = I am exporting the Orders data with its individual Products/Items as separate rows. But the Product rows don't seem to have rest of order details included. =
 You should mark checkbox "Populate other columns if products exported as rows" for selected format ( CSV or XLS)
 
+= I want to add new attribute to export  =
+You should open section "Setup Fields", scroll down to field "Products", click button  "Setup Fields", click button "Add Field", select field in the dropdown, type column title and press button "Add"
+
+= Plugin produces unreadable XLS file =
+The theme or another plugin outputs some lines. Usually, there are extra empty lines at the end of functions.php(in active theme).
+
 = When exporting .csv containing european special characters , I want to open this csv in Excel without extra actions =
 You  should open tab "CSV" and setup ISO-8859-1 as codepage.
+
+= Progress bar does nothing after 100% for XLS format =
+PHP must be compiled with option  --enable-zip . 
 
 = Can I request any new feature ? =
 Yes, you can email a request to aprokaev@gmail.com. We intensively develop this plugin.
@@ -85,6 +90,31 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 6. You can select orders to export.
 
 == Changelog ==
+
+= 1.2.4 - 2016-11-15 =
+* added new filter "Item Metadata" to section "Filter by product"
+* added Chinese language. I’d like to thank user [7o599](https://wordpress.org/support/users/7o599/) 
+* added new tab "Tools" with section "export/import settings"
+* added button to hide non-selected fields
+* XML format supports custom structures (some hooks were added too)
+* fixed bug for taxonomies (we export attribute Name instead of slug now)
+* fixed bug for XLS  without header line
+* fixed bug with pagination after export (bulk action)
+* fixed bug in action "Hide unused" for products
+* fixed bug for shops having huge number of users
+* fixed bug for "&" inside XML 
+
+= 1.2.3 - 2016-10-21 =
+* Added usermeta fields to section "Add field"
+* "Press ESC to cancel export" added to progressbar 
+* Added column "State Name"
+* Added columns "Shipping Method", "Payment Method" (abbreviations)
+* Format CSV can be exported without quotes around values
+* Added checkbox to skip suborders
+* Bulk export recoded to be compatible with servers behind a Load Balancer
+* Skip root xml if it's empty
+* New filters/hooks for CSV/XML formats
+* [Code samples](http://algolplus.com/plugins/code-samples/)  added to documentation
 
 = 1.2.2 - 2016-09-28 =
 * Added column "Product Shipping Class"

@@ -310,11 +310,11 @@ input.date{
     font-size: large;
 }
 
-.select2-selection--single{
+.select2-selection-single{
     margin-bottom: 5px;
 }
 
-#select_attributes, #text_locations,#select_custom_fields{
+#select_attributes, #text_locations,#select_custom_fields, #select_itemmeta{
     width: 120px;
 }
 .dashicons{
@@ -395,4 +395,119 @@ input.date{
 
 #date_format_block select, #time_format_block select {
     width: 70%;
+}
+
+.woe-tab {
+  border: 1px solid #ccc;
+  border-top-width: 0;
+  background: #f1f1f1;
+  padding: 30px;
+}
+.woe-tab .form-group label input {
+  display: inline-block;
+  margin-top: -3px;
+}
+.woe-separator {
+  height: 1px;
+  border-top: 1px solid #ddd;
+  margin: 2em auto;
+  width: 100%;
+  clear: both;
+}
+
+#woe-admin .woe-tab {
+    margin-right: 14.16667rem;
+    border: none;
+    border-top-width: 0;
+    background: transparent;
+    padding: 0 0 3.33333rem 0;
+}
+
+#woe-admin .woe-box-main {
+    background-color: #fff;
+    padding: 1.66667rem 1.66667rem 0 1.66667rem;
+}
+
+#woe-admin .woe-input-simple textarea {
+    width: 100%;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #c7dff3;
+    background-color: #c7dff3;
+    padding: 0.41667rem 0.66667rem;
+    transition: border-color 100ms, background-color 250ms;
+}
+#woe-admin .woe-input-simple textarea:focus {
+    background-color: #003553;
+    color: #fff;
+}
+#woe-admin .tools-textarea {
+    width: 66.66667%;
+}
+#woe-admin .woe-input-simple input, #woe-admin .woe-select input, #woe-admin .woe-input-simple textarea, #woe-admin .woe-select textarea, .woe-calendar-wrapper .woe-input-simple input, .woe-calendar-wrapper .woe-select input, .woe-calendar-wrapper .woe-input-simple textarea, .woe-calendar-wrapper .woe-select textarea, #woe-admin .woe-checkbox label, #woe-admin .woe-radiobox label, #woe-admin .woe-switch label, #woe-admin .woe-select.woe-select-info-label .woe-label-big label, .woe-calendar-wrapper .woe-select.woe-select-info-label #woe-admin .woe-label-big label, .woe-calendar-wrapper .woe-checkbox label, .woe-calendar-wrapper .woe-radiobox label, .woe-calendar-wrapper .woe-switch label, .woe-calendar-wrapper .woe-select.woe-select-info-label .woe-label-big label, #woe-admin .woe-checkbutton input + label, .woe-calendar-wrapper .woe-checkbutton input + label, #woe-admin .col-time, .woe-calendar-wrapper .col-time, #woe-admin .woe-box-title, .woe-calendar-wrapper .woe-box-title, .select2-container.select2-container-woe .select2-selection-single, .select2-container.select2-container-woe .select2-selection-multiple {
+  font-family: "Open sans", serif;
+  font-size: 0.83333rem;
+  line-height: 1.41667rem;
+  line-height: 1.41667rem; }
+  @media only screen and (min-width: 768px) {
+    #woe-admin .woe-input-simple input, #woe-admin .woe-select input, #woe-admin .woe-input-simple textarea, #woe-admin .woe-select textarea, .woe-calendar-wrapper .woe-input-simple input, .woe-calendar-wrapper .woe-select input, .woe-calendar-wrapper .woe-input-simple textarea, .woe-calendar-wrapper .woe-select textarea, #woe-admin .woe-checkbox label, #woe-admin .woe-radiobox label, #woe-admin .woe-switch label, #woe-admin .woe-select.woe-select-info-label .woe-label-big label, .woe-calendar-wrapper .woe-select.woe-select-info-label #woe-admin .woe-label-big label, .woe-calendar-wrapper .woe-checkbox label, .woe-calendar-wrapper .woe-radiobox label, .woe-calendar-wrapper .woe-switch label, .woe-calendar-wrapper .woe-select.woe-select-info-label .woe-label-big label, #woe-admin .woe-checkbutton input + label, .woe-calendar-wrapper .woe-checkbutton input + label, #woe-admin .col-time, .woe-calendar-wrapper .col-time, #woe-admin .woe-box-title, .woe-calendar-wrapper .woe-box-title, .select2-container.select2-container-woe .select2-selection-single, .select2-container.select2-container-woe .select2-selection-multiple {
+      font-size: 1rem; } }
+
+#woe-admin .woe-input-simple label, #woe-admin .woe-select label, .woe-calendar-wrapper .woe-input-simple label, .woe-calendar-wrapper .woe-select label, #woe-admin .woe-fake-label, .woe-calendar-wrapper .woe-fake-label, #woe-admin .woe-btn-big, #woe-admin p.submit, #woe-admin .woe-btn-big input, #woe-admin p.submit input, #woe-admin .woe-btn-big button, #woe-admin p.submit button, .woe-calendar-wrapper .woe-btn-big, .woe-calendar-wrapper p.submit, .woe-calendar-wrapper .woe-btn-big input, .woe-calendar-wrapper p.submit input, .woe-calendar-wrapper .woe-btn-big button, .woe-calendar-wrapper p.submit button, #woe-admin .woe-box-maininfo p, .woe-calendar-wrapper .woe-box-maininfo p, #woe-admin .woe-box-title span, .woe-calendar-wrapper .woe-box-title span, #woe-admin .woe-box-info .woe-box-info-content, .woe-calendar-wrapper .woe-box-info .woe-box-info-content, #woe-admin .woe-box-info .woe-box-info-content h5, .woe-calendar-wrapper .woe-box-info .woe-box-info-content h5, #woe-admin .woe-message, .woe-calendar-wrapper .woe-message, .select2-container.select2-container-woe .select2-dropdown, .select2-container.select2-container-woe .select2-search-dropdown .select2-search__field {
+  font-family: "Open sans", serif;
+  font-size: 0.75rem;
+  font-weight: normal;
+  line-height: 1.16667rem; }
+
+#woe-admin .woe-input-simple p, #woe-admin .woe-checkbox p, #woe-admin .woe-radiobox p, #woe-admin .woe-switch p, #woe-admin .woe-select p, .woe-calendar-wrapper .woe-input-simple p, .woe-calendar-wrapper .woe-checkbox p, .woe-calendar-wrapper .woe-radiobox p, .woe-calendar-wrapper .woe-switch p, .woe-calendar-wrapper .woe-select p, #woe-admin .woe-btn-medium, #woe-admin .nav-tab-wrapper .nav-tab,
+#woe-admin h2.nav-tab-wrapper .nav-tab, .woe-calendar-wrapper .nav-tab-wrapper #woe-admin .nav-tab, #woe-admin .woe-admin-nav a, .woe-calendar-wrapper .woe-admin-nav #woe-admin a, #woe-admin .woe-btn-medium input, #woe-admin .nav-tab-wrapper .nav-tab input, .woe-calendar-wrapper .nav-tab-wrapper #woe-admin .nav-tab input, #woe-admin .woe-admin-nav a input, .woe-calendar-wrapper .woe-admin-nav #woe-admin a input, #woe-admin .woe-btn-medium button, #woe-admin .nav-tab-wrapper .nav-tab button, .woe-calendar-wrapper .nav-tab-wrapper #woe-admin .nav-tab button, #woe-admin .woe-admin-nav a button, .woe-calendar-wrapper .woe-admin-nav #woe-admin a button, .woe-calendar-wrapper .woe-btn-medium, .woe-calendar-wrapper .nav-tab-wrapper .nav-tab,
+.woe-calendar-wrapper h2.nav-tab-wrapper .nav-tab, .woe-calendar-wrapper .woe-admin-nav a, .woe-calendar-wrapper .woe-btn-medium input, .woe-calendar-wrapper .nav-tab-wrapper .nav-tab input, .woe-calendar-wrapper .woe-admin-nav a input, .woe-calendar-wrapper .woe-btn-medium button, .woe-calendar-wrapper .nav-tab-wrapper .nav-tab button, .woe-calendar-wrapper .woe-admin-nav a button, #woe-admin .woe-btn-small, .woe-calendar-wrapper .woe-btn-small, #woe-admin .woe-btn-small-round, .woe-calendar-wrapper .woe-btn-small-round, #woe-admin .woe-box-maininfo, .woe-calendar-wrapper .woe-box-maininfo {
+  font-family: "Open sans", serif;
+  font-size: 0.66667rem;
+  line-height: 0.91667rem; }
+
+#woe-admin .woe-box-maininfo p, #woe-admin .woe-box-title span, #woe-admin .woe-box-info .woe-box-info-content, .woe-calendar-wrapper .woe-box-info .woe-box-info-content, #woe-admin .woe-box-info .woe-box-info-content h5, .woe-calendar-wrapper .woe-box-info .woe-box-info-content h5 {
+  color: #444; }
+
+#woe-admin .woe-input-simple p {
+    color: #888;
+    font-weight: 400;
+    padding: 0.41667rem 0.66667rem;
+    margin: 0;
+}
+
+#woe-admin .woe-input-simple {
+    padding-bottom: 15px;
+}
+#woe-admin .woe-input-simple input, #woe-admin .woe-select input, #woe-admin .woe-input-simple textarea, #woe-admin .woe-select textarea {
+  color: #003553; }
+
+#woe-admin .woe-input-simple input:focus, #woe-admin .woe-select input:focus, #woe-admin .woe-input-simple textarea:focus, #woe-admin .woe-select textarea:focus {
+  color: #0C6EB6; }
+
+.woe-btn-tools {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: not-allowed;
+    opacity: 0.65;
+    background-color: #fff;
+    border-color: #ccc;
+    margin-bottom: 10px;
 }

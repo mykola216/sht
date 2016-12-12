@@ -136,6 +136,73 @@ function bind_events() {
         }
     });
 
+    jQuery( '#itemmeta' ).change( function() {
+
+        jQuery( '#select_itemmeta' ).attr( 'disabled', 'disabled' );
+        var data = {
+            'item': jQuery( this ).val(),
+            method: "get_products_itemmeta_values",
+            action: "order_exporter"
+        };
+
+        jQuery.post( ajaxurl, data, function( response ) {
+            jQuery( '#select_itemmeta' ).remove();
+            if ( response ) {
+                var options = '';
+                jQuery.each( response, function( index, value ) {
+                    options += '<option>' + value + '</option>';
+                } );
+                jQuery( '<select id="select_itemmeta" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_itemmeta' ) );
+            }
+            else {
+                jQuery( '<input type="text" id="select_itemmeta" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_itemmeta' ) );
+            }
+        }, 'json' );
+    } );
+    
+    jQuery( '#add_itemmeta' ).click( function() {
+
+        var val = !jQuery( "#select_itemmeta" ).is(':disabled') ? jQuery( "#select_itemmeta" ).val() : jQuery( "#text_itemmeta" ).val();
+        var val2 = jQuery( '#itemmeta' ).val();
+        var val_op = jQuery( '#itemmeta_compare' ).val();
+        if ( val != null && val2 != null && val.length && val2.length ) {
+            val = val2 + ' ' + val_op + ' ' + val;
+
+            var f = true;
+            jQuery( '#itemmeta_check' ).next().find( 'ul li' ).each( function() {
+                if ( jQuery( this ).attr( 'title' ) == val ) {
+                    f = false;
+                }
+            } );
+
+            if ( f ) {
+
+                jQuery( '#itemmeta_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
+                jQuery( '#itemmeta_check' ).select2();
+
+                jQuery( '#itemmeta_check option' ).each( function() {
+                    jQuery( '#itemmeta_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
+                } );
+
+                jQuery( "input#select_itemmeta" ).val( '' );
+            }
+        }
+
+        return false;
+    } );
+
+    jQuery( '#itemmeta_compare').change(function() {
+        var val_op = jQuery( '#itemmeta_compare' ).val();
+        if ( 'LIKE' === val_op ) {
+            jQuery( "#select_itemmeta" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#text_itemmeta" ).css('display', 'inline' ).attr( 'disabled', false );
+        }
+        else {
+            jQuery( "#select_itemmeta" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#text_itemmeta" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+        }
+    });
+    
     jQuery( '#add_taxonomies' ).click( function() {
 
         var val = jQuery( "#text_taxonomies" ).val();
@@ -198,12 +265,12 @@ function bind_events() {
 			jQuery( '#colname_custom_field' ).focus();
             return false
         }
-        if ( !value )
+        /*if ( !value )
         {
             alert( 'empty Value' );
 			jQuery( '#value_custom_field' ).focus();
             return false
-        }
+        }*/
         add_custom_field( jQuery( "#order_fields" ), 'orders', output_format, colname, value );
         reset_field_contorls();
         return false;
@@ -242,8 +309,9 @@ function bind_events() {
             jQuery( '#select_custom_meta_products' ).html( options );
         }
         else {
-            var data = jQuery( '#export_job_settings' ).serialize()
-            data = data + "&action=order_exporter&method=get_used_custom_products_meta";
+            jQuery('#modal-manage-products').html(jQuery('#TB_ajaxContent').html());
+            var data = jQuery( '#export_job_settings' ).serialize();
+            data = data + "&action=order_exporter&method=get_used_custom_products_meta&mode=" + mode + "&id=" + job_id;
 
             jQuery.post( ajaxurl, data, function( response ) {
                 if ( response ) {
@@ -254,6 +322,7 @@ function bind_events() {
                     jQuery( '#select_custom_meta_products' ).html( options );
                 }
             }, 'json' );
+            jQuery('#modal-manage-products').html('');
         }
     });
 
@@ -420,7 +489,18 @@ function add_custom_field( to, index_p, format, colname, value ) {
     value   = escapeStr(value);
     colname = escapeStr(colname);
     
-    var count = ( jQuery( 'input[name*=' + index_p + '\\[label\\]\\[custom_field]' ) ).length;
+    var arr = jQuery( 'input[name*=' + index_p + '\\[label\\]\\[custom_field]' );
+    var count = arr.length;
+    
+    var max = 0;
+    for(var i=0; i<count; i++) {
+        var n = parseInt(arr[i].name.replace('orders[label][custom_field_', '').replace(']',''));
+        if(n > max) {
+            max = n;
+        }
+    }
+    count = max+1;
+
 //    console.log( to, index_p, format, colname, value );
     var row = '<li class="mapping_row segment_modal_' + index_p + '">\
                                                         <div class="mapping_col_1">\
@@ -471,6 +551,10 @@ function select2_inits()
         width: 150
     } );
     jQuery( "#attributes_check" ).select2();
+    jQuery( "#itemmeta" ).select2( {
+        width: 220
+    } );
+    jQuery( "#itemmeta_check" ).select2();
 
     jQuery( "#custom_fields" ).select2( {
         width: 150

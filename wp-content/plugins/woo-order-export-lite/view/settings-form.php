@@ -243,6 +243,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<input type=checkbox name="settings[format_csv_add_utf8_bom]" value=1 <?php if ( @$settings[ 'format_csv_add_utf8_bom' ] ) echo 'checked'; ?>  > <?php _e( 'Output utf-8 BOM', 'woocommerce-order-export' ) ?><br>
 				<input type=checkbox name="settings[format_csv_display_column_names]" value=1 <?php if ( @$settings[ 'format_csv_display_column_names' ] ) echo 'checked'; ?>  >  <?php _e( 'Output column titles as first line', 'woocommerce-order-export' ) ?><br>
 				<input type=checkbox name="settings[format_csv_populate_other_columns_product_rows]" value=1 <?php if ( @$settings[ 'format_csv_populate_other_columns_product_rows' ] ) echo 'checked'; ?>  >  <?php _e( 'Populate other columns if products exported as rows', 'woocommerce-order-export' ) ?><br>
+				<?php _e( 'Enclosure', 'woocommerce-order-export' ) ?> <input type=text name="settings[format_csv_enclosure]" value='<?php echo $settings[ 'format_csv_enclosure' ] ?>' size=1>
 				<?php _e( 'Field Delimiter', 'woocommerce-order-export' ) ?> <input type=text name="settings[format_csv_delimiter]" value='<?php echo $settings[ 'format_csv_delimiter' ] ?>' size=1>
 				<?php _e( 'Line Break', 'woocommerce-order-export' ) ?><input type=text name="settings[format_csv_linebreak]" value='<?php echo $settings[ 'format_csv_linebreak' ] ?>' size=4><br>
 				<?php if ( function_exists( 'iconv' ) ): ?>
@@ -481,6 +482,15 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<textarea rows=5 id='test_reply' style="overflow: auto; width:100%" wrap='off'></textarea>
 				</div>
 
+				<div class="clear"></div>
+				<br/>
+				<div id="extend_desstination">
+					<div>
+						<label>
+							<input name="settings[destination][separate_files]" type="checkbox" value="1" <?php echo $WC_Order_Export->get_value( $settings, "[destination][separate_files]" ) ? 'checked' : ''; ?>><?php _e( 'Make separate file for each order', 'woocommerce-order-export' ) ?>
+						</label>
+					</div>
+				</div>
 			</div>
 			<br>
 		<?php endif; ?>
@@ -489,6 +499,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<span class="my-hide-next "><?php _e( 'Filter by order', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-order" hidden="hidden">
+				<div><input type="hidden" name="settings[skip_suborders]" value="0"/><label><input type="checkbox" name="settings[skip_suborders]" value="1" <?php checked($settings[ 'skip_suborders' ]) ?> /> <?php _e( "Don't export child orders", 'woocommerce-order-export' ) ?></label></div>
 				<span class="wc-oe-header"><?php _e( 'Order Statuses', 'woocommerce-order-export' ) ?></span>
 				<select id="statuses" name="settings[statuses][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php foreach ( wc_get_order_statuses() as $i => $status ) { ?>
@@ -595,7 +606,34 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							<option selected value="<?php echo $prod; ?>"> <?php echo $prod; ?></option>
 						<?php } ?>
 				</select>
+                
+                <span class="wc-oe-header"><?php _e( 'Item Meta Data', 'woocommerce-order-export' ) ?></span>
+				<br>
+				<select id="itemmeta" style="width: auto;">
+					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_itemmeta() as $attr_name ) { ?>
+						<option><?php echo $attr_name; ?></option>
+					<?php } ?>
+				</select>
 
+				<select id="itemmeta_compare" class="select_compare">
+					<option>=</option>
+					<option>&lt;&gt;</option>
+					<option>LIKE</option>
+				</select>
+
+				<input type="text" id="text_itemmeta" disabled style="display: none;">
+
+				<button id="add_itemmeta" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
+				<br>
+				<select id="itemmeta_check" multiple name="settings[product_itemmeta][]" style="width: 100%; max-width: 25%;">
+					<?php
+					if ( $settings[ 'product_itemmeta' ] )
+						foreach ( $settings[ 'product_itemmeta' ] as $prod ) {
+							?>
+							<option selected value="<?php echo $prod; ?>"> <?php echo $prod; ?></option>
+						<?php } ?>
+				</select>
+           
 				<span class="wc-oe-header"><?php _e( 'Product Taxonomies', 'woocommerce-order-export' ) ?></span>
 				<br>
 				<select id="taxonomies" style="width: auto;">
@@ -744,6 +782,11 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<button  id='orders_add_custom_meta' class='button-secondary'><?php _e( 'Add Field', 'woocommerce-order-export' ) ?></button>
 					<br><br>
 					<button  id='orders_add_custom_field' class='button-secondary'><?php _e( 'Add Static Field', 'woocommerce-order-export' ) ?></button>
+                    <br></br>
+                    <button  id='hide_unchecked' class='button-secondary'>
+                        <span  style="padding:0px;"><?php _e( 'Hide Unused', 'woocommerce-order-export' ) ?></span>
+                        <span style="padding:0px;display:none"><?php _e( 'Show Unused', 'woocommerce-order-export' ) ?></span>
+                    </button>
 				</div>
 			</div>
 			<div id='fields' style='display:none;'>
@@ -770,6 +813,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			<input type="submit" id='export-btn' class="button-secondary" value="<?php _e( 'Export', 'woocommerce-order-export' ) ?>" />
 			<input type="submit" id='export-wo-pb-btn' class="button-secondary" value="<?php _e( 'Export [w/o progressbar]', 'woocommerce-order-export' ) ?>" />
 		<div id="progress_div" style="display: none;">
+			<h1><?php _e( "Press 'Esc' to cancel the export", 'woocommerce-order-export' ) ?></h1>
 			<div id="progressBar"><div></div></div>
 		</div>
 		<div id="background"></div>
@@ -808,7 +852,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				$( '#d-schedule-2 select' ).attr( 'disabled', false )
 				$( '#d-schedule-2 input:not(input[type=radio]) ' ).attr( 'disabled', false )
 			}
-		} )
+		} );
 		$( '#schedule-1' ).change()
 		$( '.wc_oe-select-interval' ).change( function() {
 			var interval = $( this ).val()
@@ -817,7 +861,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			} else {
 				$( '#custom_interval' ).hide()
 			}
-		} )
+		} );
 		$( '.wc_oe-select-interval' ).change()
 
 		$( '.output_destination' ).click( function() {
@@ -836,8 +880,15 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					$( this ).next().addClass( 'ui-icon-triangle-1-n' );
 				}
 			}
-		} )
-
+		} );
+        var is_unchecked_shown = true;
+        $('#hide_unchecked').on('click', function(e) {
+            e.preventDefault();
+            is_unchecked_shown = !is_unchecked_shown;
+            $("#order_fields li input:checkbox:not(:checked)").closest('.mapping_row').toggle(is_unchecked_shown);
+            $('#hide_unchecked span').toggle();
+        });
+        
 		function my_hide( item ) {
 			if ( $( item ).is( ':hidden' ) ) {
 				$( item ).show();
@@ -1085,6 +1136,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 		bind_events();
 		jQuery( '#attributes' ).change();
+		jQuery( '#itemmeta' ).change();
 		jQuery( '#custom_fields' ).change();
 		jQuery( '#shipping_locations' ).change();
 //		jQuery( '#' + output_format + '_options' ).show();
@@ -1096,7 +1148,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 		jQuery( "#sort_products" ).sortable()/*.disableSelection()*/;
 		jQuery( "#sort_coupons" ).sortable()/*.disableSelection()*/;
-		jQuery( "#order_fields" ).sortable()/*.disableSelection()*/;
+		jQuery( "#order_fields" ).sortable({ scroll: true, scrollSensitivity: 100, scrollSpeed: 100 });/*.disableSelection()*/;
 
 
 		/*jQuery('#btn_modal_manage_products').click(function(){
@@ -1206,7 +1258,12 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				var id = 'output_preview';
 				if ( output_format == 'XLS' || output_format == 'CSV' )
 					id = 'output_preview_csv';
-				jQuery( '#' + id ).html( response );
+				if ( output_format == 'JSON' || output_format == 'XML' ) {
+					jQuery( '#' + id ).text( response );
+				}
+				else {
+					jQuery( '#' + id ).html( response );
+				}
 				jQuery( '#' + id ).show();
 			}
 			, "html"
@@ -1241,6 +1298,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		}
 
 		function get_all( start, percent, method ) {
+			if (window.cancelling) {
+				return;
+			}
 
 			progress( parseInt( percent, 10 ), jQuery( '#progressBar' ) );
 
@@ -1303,6 +1363,38 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 		function waitingDialog() {
 			jQuery( "#background" ).addClass( "loading" );
+			jQuery( '#wpbody-content' ).keydown(function(event) {
+				if ( event.keyCode == 27 ) {
+					if (!window.cancelling) {
+						event.preventDefault();
+						window.cancelling = true;
+
+						jQuery.ajax( {
+							type: "post",
+							data: {
+								action: 'order_exporter',
+								method: 'cancel_export',
+								file_id: window.file_id,
+							},
+							cache: false,
+							url: ajaxurl,
+							dataType: "json",
+							error: function( xhr, status, error ) {
+								alert( xhr.responseText );
+								progress( 100, jQuery( '#progressBar' ) );
+							},
+							success: function( response ) {
+								progress( 100, jQuery( '#progressBar' ) );
+							}
+						} );
+
+						window.count = 0;
+						window.file_id = '';
+						jQuery( '#wpbody-content' ).off('keydown');
+					}
+					return false;
+				}
+			});
 		}
 		function closeWaitingDialog() {
 			jQuery( "#background" ).removeClass( "loading" );
@@ -1334,6 +1426,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		} );
 
 		$( "#export-btn, #my-quick-export-btn" ).click( function() {
+			window.cancelling = false;
 
 			data = get_data();
 

@@ -7,10 +7,11 @@ class WOE_Formatter_Xml extends WOE_Formatter {
 
 	public function start( $data = '' ) {
 		parent::start( $data );
-		fwrite( $this->handle, '<?xml version="1.0" encoding="UTF-8"?>' . "\n" );
+		fwrite( $this->handle, apply_filters( "woe_xml_output_header", '<?xml version="1.0" encoding="UTF-8"?>') . "\n" );
 		if(@$this->settings['prepend_raw_xml'])
 			fwrite( $this->handle, $this->settings['prepend_raw_xml'] . "\n" );
-		fwrite( $this->handle, "<" . $this->settings['root_tag'] . ">\n" );
+		if($this->settings['root_tag'])	
+			fwrite( $this->handle, "<" . $this->settings['root_tag'] . ">\n" );
 	}
 
 	public function output( $rec ) {
@@ -57,7 +58,8 @@ class WOE_Formatter_Xml extends WOE_Formatter {
 	}
 
 	public function finish( $data = '' ) {
-		fwrite( $this->handle, "</" . $this->settings['root_tag'] . ">\n" );
+		if($this->settings['root_tag'])	
+			fwrite( $this->handle, "</" . $this->settings['root_tag'] . ">\n" );
 		if(@$this->settings['append_raw_xml'])
 			fwrite( $this->handle, $this->settings['append_raw_xml'] . "\n" );
 		parent::finish();

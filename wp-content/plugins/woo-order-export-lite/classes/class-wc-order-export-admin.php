@@ -9,6 +9,7 @@ class WC_Order_Export_Admin {
 	var $settings_name_cron = 'woocommerce-order-export-cron';
 	var $settings_name_profiles = 'woocommerce-order-export-profiles';
 	var $cron_process_option = 'woocommerce-order-export-cron-do';
+	var $activation_notice_option = 'woocommerce-order-export-activation-notice-shown';
 	var $tempfile_prefix = 'woocommerce-order-file-';
 	var $step = 30;
 	public static $formats = array( 'XLS', 'CSV', 'XML', 'JSON' );
@@ -19,6 +20,8 @@ class WC_Order_Export_Admin {
 	const EXPORT_NOW      = 'now';
 	const EXPORT_PROFILE  = 'profiles';
 	const EXPORT_SCHEDULE = 'cron';
+	
+	var $methods_allowed_for_guests;
 
 	public function __construct() {
 		$this->url_plugin         = dirname( plugin_dir_url( __FILE__ ) ) . '/';
@@ -34,24 +37,25 @@ class WC_Order_Export_Admin {
 				add_filter( 'script_loader_src', array( $this, 'script_loader_src' ), 10, 2 );
 			}
 			add_action( 'wp_ajax_order_exporter', array( $this, 'ajax_gate' ) );
+			
+			//Add custom bulk export action in Woocomerce orders Table
+			add_action('admin_footer-edit.php',  array( $this,'export_orders_bulk_action'));
+			add_action('load-edit.php', array( $this,'export_orders_bulk_action_process'));
+			add_action('admin_notices', array( $this,'export_orders_bulk_action_notices'));
+			//do once 
+			if( !get_option( $this->activation_notice_option ) ) 
+				add_action('admin_notices', array( $this,'display_plugin_activated_message'));
 		}
 		add_filter( 'cron_schedules', array( $this, 'create_custom_schedules' ), 10, 1 );
 		add_action( 'wc_export_cron_global', array( $this, 'wc_export_cron_global_f' ) );
 		
-		//Add custom bulk export action in Woocomerce orders Table
-		add_action('admin_footer-edit.php',  array( $this,'export_orders_bulk_action'));
-		add_action('load-edit.php', array( $this,'export_orders_bulk_action_process'));
-		add_action('admin_notices', array( $this,'export_orders_bulk_action_notices'));
 		
-		//add_action('init', array( $this,'install')); //debug 
-		//if ( ! wp_get_schedule( 'wc_export_cron_global' ) ) {
-		//	wp_schedule_event( time(), 'wc_export_5min_global', 'wc_export_cron_global' );
-		//}
+		//for direct calls
+		add_action( 'wp_ajax_order_exporter_run', array( $this, 'ajax_gate_guest' ) );
+		add_action( 'wp_ajax_nopriv_order_exporter_run', array( $this, 'ajax_gate_guest' ) );
+		$this->methods_allowed_for_guests = array('run_cron_jobs','run_one_job');
 	}
 	
-	public function test() {
-		$this->wc_export_cron_global_f();
-	}
 	
 	public function install() {
 		//wp_clear_scheduled_hook( "wc_export_cron_global" ); //debug 
@@ -65,9 +69,19 @@ class WC_Order_Export_Admin {
 			update_option( $this->settings_name_profiles, $profiles);
 		}	
 	}
+	
+	public function display_plugin_activated_message() {
+		?>
+		<div class="notice notice-success is-dismissible">
+        <p><?php _e( 'Advanced Orders Export For WooCommerce  is available <a href="admin.php?page=wc-order-export">on this page</a>.', 'woocommerce-order-export' ); ?></p>
+		</div>
+		<?php
+		update_option( $this->activation_notice_option, true );
+	}
 
 	public function uninstall() {
 		wp_clear_scheduled_hook( "wc_export_cron_global" );
+		delete_option( $this->activation_notice_option );
 	}
 
 	function load_textdomain() {
@@ -93,6 +107,10 @@ class WC_Order_Export_Admin {
 
 	public function render_tab_export() {
 		$this->render( 'export', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'WC_Order_Export' => $this ) );
+	}
+    
+    public function render_tab_tools() {
+		$this->render( 'tools', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'WC_Order_Export' => $this ) );
 	}
 
 	public function render_tab_schedules() {
@@ -330,12 +348,14 @@ class WC_Order_Export_Admin {
 			'product_vendors'                                => array(),
 			'products'                                       => array(),
 			'product_attributes'                             => array(),
+            'product_itemmeta'                               => array(),
 			'product_taxonomies'                             => array(),
 			'format'                                         => 'XLS',
 			'format_xls_use_xls_format'		       			 => 0,
 			'format_xls_display_column_names'                => 1,
 			'format_xls_auto_width'				             => 1,
 			'format_xls_populate_other_columns_product_rows' => 0,
+			'format_csv_enclosure'                           => '"',
 			'format_csv_delimiter'                           => ',',
 			'format_csv_linebreak'                           => '\r\n',
 			'format_csv_display_column_names'                => 1,
@@ -348,6 +368,7 @@ class WC_Order_Export_Admin {
 			'format_xml_prepend_raw_xml'                     => '',
 			'format_xml_append_raw_xml'                      => '',
 			'all_products_from_order'                        => 1,
+			'skip_suborders' 	                         => 0,
 			'date_format' 									 => 'Y-m-d',
 			'time_format' 									 => 'H:i',
 		);
@@ -377,15 +398,16 @@ class WC_Order_Export_Admin {
 	private function merge_settings_and_default(&$opt, $defaults) {
 		foreach( $defaults as $k=>$v ) {
 			//set default attribute OR add to option
-			if( isset($opt[$k]) )
-				$opt[$k]['default'] = $v['default'];
+			if( isset($opt[$k]) ) {
+				if( isset($v['default']) ) 
+					$opt[$k]['default'] = $v['default'];
+			}	
 			else
 				$opt[$k] = $v;
 		}
 	}
 
 	public function save_export_settings( $mode, $id, $options ) {
-
 		if ( $mode == self::EXPORT_NOW ) {
 			update_option( $this->settings_name_now, $options );
 		} elseif ( $mode == self::EXPORT_SCHEDULE ) {
@@ -401,6 +423,9 @@ class WC_Order_Export_Admin {
 			}
 
 			update_option( $this->settings_name_cron, $all_jobs );
+            if ( ! wp_get_schedule( 'wc_export_cron_global' ) ) {
+                wp_schedule_event( time(), 'wc_export_5min_global', 'wc_export_cron_global' );
+            }
 		} elseif ( $mode == self::EXPORT_PROFILE ) {
 			$all_jobs = get_option( $this->settings_name_profiles, array() );
 			if ( $id ) {					
@@ -467,7 +492,6 @@ class WC_Order_Export_Admin {
 	// AJAX part
 	// calls ajax_action_XXXX
 	public function ajax_gate() {
-		$url = plugins_url( '../', __FILE__ );
 		if ( isset( $_REQUEST['method'] ) ) {
 			$method = 'ajax_action_' . $_REQUEST['method'];
 			if ( method_exists( $this, $method ) ) {
@@ -476,6 +500,32 @@ class WC_Order_Export_Admin {
 		}
 		die();
 	}
+	
+	public function ajax_gate_guest() {
+		if ( isset( $_REQUEST['method'] )  AND in_array($_REQUEST['method'],$this->methods_allowed_for_guests) ) {
+			$method = $_REQUEST['method'];
+			if ( method_exists( $this, $method ) ) {
+				$this->$method();
+			}
+		}
+		die();
+	}
+	public function run_cron_jobs() {
+		$this->wc_export_cron_global_f();
+	}
+	public function run_one_job() {
+		if($_REQUEST[ 'profile' ] == 'now')
+			$settings	 = get_option( $this->settings_name_now, array() );
+		else		
+			$settings = $this->get_export_settings( self::EXPORT_PROFILE, $_REQUEST[ 'profile' ]);
+		$filename = WC_Order_Export_Engine::build_file_full( $settings );
+		if( $settings[ 'format' ] == 'XLS' AND !$settings[ 'format_xls_use_xls_format' ] )
+			$settings[ 'format' ] = 'XLSX';
+		$this->send_headers( $settings[ 'format' ]);
+		readfile( $filename );
+		unlink( $filename );
+	}
+	
 
 	private function make_new_settings( $in ) {
 		$in           = stripslashes_deep( $in );
@@ -493,6 +543,7 @@ class WC_Order_Export_Admin {
 			'user_names',
 			'payment_methods',
 			'product_attributes',
+            'product_itemmeta',
 			'product_taxonomies'
 		);
 		foreach ( $multiselects as $m_select ) {
@@ -557,10 +608,7 @@ class WC_Order_Export_Admin {
 				// do cron job
 				do_action( 'woe_start_cron_job', $key, $item );
 
-				$file = WC_Order_Export_Engine::build_file_full( $item );
-				if ( $file !== false ) {
-					WC_Order_Export_Engine::export( $item, $file );
-				}
+				$result = WC_Order_Export_Engine::build_files_and_export( $item );
 		}
 	}
 
@@ -572,6 +620,22 @@ class WC_Order_Export_Admin {
 		//_e("Settings Updated", 'woocommerce-order-export');
 	}
 
+    public function ajax_action_save_tools() {
+		$tools = json_decode(stripslashes($_POST['tools-import']), true);
+        if ($tools) {
+			$allowed_options  =  array(
+				$WC_Order_Export->settings_name_now, 
+				$WC_Order_Export->settings_name_cron,
+				$WC_Order_Export->settings_name_profiles
+			);
+            foreach ($allowed_options as $key) {
+                if ( isset($tools[$key]) ) {
+                    update_option( $key, $tools[$key] );
+                }
+            }
+        }
+	}
+    
 	public function ajax_action_get_products() {
 		global $wpdb;
 		$like     = $wpdb->esc_like( $_REQUEST['q'] );
@@ -654,14 +718,7 @@ class WC_Order_Export_Admin {
 
 		do_action( 'woe_start_test_job', $_POST['id'], $settings );
 
-		$file = WC_Order_Export_Engine::build_file_full( $settings, '', 1 );
-
-		if ( $file !== false ) {
-			$result = WC_Order_Export_Engine::export( $settings, $file );
-		}
-		else {
-			$result = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );
-		}
+		$result = WC_Order_Export_Engine::build_files_and_export( $settings, '', 1 );
 
 		echo $result;
 	}
@@ -707,6 +764,15 @@ class WC_Order_Export_Admin {
 			}
 		}
 		echo json_encode( $data );
+	}
+    
+    public function ajax_action_get_products_itemmeta_values() {
+        global $wpdb;
+
+        $meta_key_ent = htmlentities($_POST['item']);
+		$metas = $wpdb->get_col( $wpdb->prepare("SELECT DISTINCT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta where meta_key = '%s' OR meta_key='%s'", $_POST['item'], $meta_key_ent ));
+
+		echo json_encode( $metas );
 	}
 
 	public function ajax_action_get_products_shipping_values() {
@@ -803,6 +869,22 @@ class WC_Order_Export_Admin {
 		return $filename;
 	}
 
+	private function delete_temp_file() {
+		$this->start_prevent_object_cache();
+		$filename = get_transient( $this->tempfile_prefix . $_REQUEST['file_id'] );
+		if ( $filename !== false ) {
+			delete_transient( $this->tempfile_prefix . $_REQUEST['file_id'] );
+			unlink($filename);
+		}
+		$this->stop_prevent_object_cache();
+	}
+
+	public function ajax_action_cancel_export() {
+		$this->delete_temp_file();
+
+		echo json_encode( array() );
+	}
+
 	public function ajax_action_export_part() {
 		$settings = $this->make_new_settings( $_POST );
 
@@ -867,7 +949,7 @@ class WC_Order_Export_Admin {
 
 		$schedules['wc_export_5min_global'] = array(
 			'interval' => 300,
-			'display'  => 'Every 5 Minutes'
+			'display'  => 'Every 5 Minutes[exporter]'
 		);
 
 		return $schedules;
@@ -895,10 +977,7 @@ class WC_Order_Export_Admin {
 
 			if ( isset( $item['schedule']['next_run'] ) && $item['schedule']['next_run'] <= $time ) {
 				// do cron job
-				$file = WC_Order_Export_Engine::build_file_full( $item );
-				if ( $file !== false ) {
-					WC_Order_Export_Engine::export( $item, $file );
-				}
+				$result = WC_Order_Export_Engine::build_files_and_export( $item );
 
 				$item['schedule']['last_run'] = $time;
 				$item['schedule']['next_run'] = self::next_event_timestamp_for_schedule( $item['schedule'] );
@@ -1031,21 +1110,7 @@ class WC_Order_Export_Admin {
 				
 				$post_ids	 = $_REQUEST[ 'post' ];
 				$sendback	 = $_REQUEST[ '_wp_http_referer' ];
-
-				$settings	 = get_option( $this->settings_name_now, array() );
-
-				$file	 = WC_Order_Export_Engine::build_file_full( $settings, '', 0, $post_ids );
-				$file_id = current_time( 'timestamp' );
-				$this->start_prevent_object_cache();
-				set_transient( $this->tempfile_prefix . $file_id, $file, 600 );
-				$this->stop_prevent_object_cache();
-				
-				if( $settings[ 'format' ] == 'XLS' AND !$settings[ 'format_xls_use_xls_format' ] )
-					$settings[ 'format' ] = 'XLSX';
-
-				// build the redirect url
-				$sendback = add_query_arg( array( 'export_filename' => $file_id, 'format' => $settings[ 'format' ], 'ids' => join( ',', $post_ids ) ), $sendback );
-
+				$sendback = add_query_arg( array( 'export_bulk_profile' => 'now', 'ids' => join( ',', $post_ids ) ), $sendback );
 				break;
 			default:
 				if ( preg_match( '/woe_export_selected_orders_profile_(\d+)/', $action, $matches ) ) {
@@ -1059,24 +1124,11 @@ class WC_Order_Export_Admin {
 
 					if ( ! isset($_REQUEST[ 'post' ] ) )
 						return;
+						
 
 					$post_ids	 = $_REQUEST[ 'post' ];
 					$sendback	 = $_REQUEST[ '_wp_http_referer' ];
-
-					$settings = $this->get_export_settings( self::EXPORT_PROFILE, $id );
-
-					$file	 = WC_Order_Export_Engine::build_file_full( $settings, '', 0, $post_ids );
-					$file_id = current_time( 'timestamp' );
-					$this->start_prevent_object_cache();
-					set_transient( $this->tempfile_prefix . $file_id, $file, 600 );
-					$this->stop_prevent_object_cache();
-
-					if( $settings[ 'format' ] == 'XLS' AND !$settings[ 'format_xls_use_xls_format' ] )
-						$settings[ 'format' ] = 'XLSX';
-
-					// build the redirect url
-					$sendback = add_query_arg( array( 'export_filename' => $file_id, 'format' => $settings[ 'format' ], 'ids' => join( ',', $post_ids ) ), $sendback );
-
+					$sendback = add_query_arg( array( 'export_bulk_profile' => $id, 'ids' => join( ',', $post_ids ) ), $sendback );
 					break;
 				}
 				return;
@@ -1086,218 +1138,39 @@ class WC_Order_Export_Admin {
 
 		exit();
 	}
+	
+	function ajax_action_export_download_bulk_file() {
+		if($_REQUEST[ 'export_bulk_profile' ] == 'now')
+			$settings	 = get_option( $this->settings_name_now, array() );
+		else		
+			$settings = $this->get_export_settings( self::EXPORT_PROFILE, $_REQUEST[ 'export_bulk_profile' ]);
+		$filename = WC_Order_Export_Engine::build_file_full( $settings, '', 0, explode(",",$_REQUEST[ 'ids' ]) );
+		if( $settings[ 'format' ] == 'XLS' AND !$settings[ 'format_xls_use_xls_format' ] )
+			$settings[ 'format' ] = 'XLSX';
+		$this->send_headers( $settings[ 'format' ]);
+		readfile( $filename );
+		unlink( $filename );
+	}
 
 	function export_orders_bulk_action_notices() {
 
 		global $post_type, $pagenow;
 
-		if ( $pagenow == 'edit.php' && $post_type == 'shop_order' && isset( $_REQUEST[ 'export_filename' ] ) ) {
-			$url = admin_url( 'admin-ajax.php' ) . "?action=order_exporter&method=export_download&format=" . $_REQUEST[ 'format' ] . "&file_id=" . $_REQUEST[ 'export_filename' ];
+		if ( $pagenow == 'edit.php' && $post_type == 'shop_order' && isset( $_REQUEST[ 'export_bulk_profile' ] ) ) {
+			$url = admin_url( 'admin-ajax.php' ) . "?action=order_exporter&method=export_download_bulk_file&export_bulk_profile=" . $_REQUEST[ 'export_bulk_profile' ] . "&ids=" . $_REQUEST[ 'ids' ];
 			//$message = sprintf( __( 'Orders exported. <a href="%s">Download report.</a>' ,'woocommerce-order-export'), $url );
 			$message = __( 'Orders exported.','woocommerce-order-export');
 
 			echo "<div class='updated'><p>{$message}</p></div><iframe width=0 height=0 style='display:none' src='$url'></iframe>";
+			
+			// must remove this arg from pagination url
+			add_filter('removable_query_args', array($this, 'fix_table_links') );
 		}
 	}
-
-//***********  EDD LICENSE FUNCTIONS BEGIN  *************************************************************************************************************************************************************************************************************************************************
-	function edd_woe_plugin_updater() {
-
-		// retrieve our license key from the DB
-		$license_key = trim( get_option( 'edd_woe_license_key' ) );
-
-		// setup the updater
-		$edd_updater = new EDD_SL_Plugin_Updater( WOE_STORE_URL, 'woocommerce-order-export/woocommerce-order-export.php', array(
-						'version' 	=> WOE_VERSION,   // current version number
-						'license' 	=> $license_key,  // license key (used get_option above to retrieve from DB)
-						'item_name' => WOE_ITEM_NAME, // name of this plugin
-						'author' 	=> WOE_AUTHOR     // author of this plugin
-				)
-		);
-
+	
+	function fix_table_links( $args ) {
+		$args[] = 'export_bulk_profile';
+		$args[] = 'ids';
+		return $args;
 	}
-
-	function edd_woe_license_menu() {
-		add_plugins_page( __( 'Advanced Order Export For WooCommerce (Pro) License', 'woocommerce-order-export' ), __( 'Advanced Order Export For WooCommerce (Pro) License', 'woocommerce-order-export' ), 'manage_options', 'woe-license', array( $this, 'edd_woe_license_page' ) );
-	}
-
-	function edd_woe_license_page() {
-		$license 	= get_option( 'edd_woe_license_key' );
-		$status 	= get_option( 'edd_woe_license_status' );
-		$error 	    = get_option( 'edd_woe_license_error' );
-		?>
-		<div class="wrap">
-		<h2><?php _e('Plugin License Options'); ?></h2>
-		<form method="post" action="options.php">
-
-			<?php settings_fields('edd_woe_license'); ?>
-
-			<table class="form-table">
-				<tbody>
-				<tr valign="top">
-					<th scope="row" valign="top">
-						<?php _e('License Key'); ?>
-					</th>
-					<td>
-						<input id="edd_woe_license_key" name="edd_woe_license_key" type="text" class="regular-text" value="<?php esc_attr_e( $license ); ?>" />
-						<label class="description" for="edd_woe_license_key"><?php _e('Enter your license key'); ?></label>
-					</td>
-				</tr>
-				<?php if( false !== $license ) { ?>
-					<tr valign="top">
-						<th scope="row" valign="top">
-							<?php _e('Activate License'); ?>
-						</th>
-						<td>
-							<?php if( $status !== false && $status == 'valid' ) { ?>
-								<span style="color:green;"><?php _e('active'); ?></span>
-								<?php wp_nonce_field( 'edd_woe_nonce', 'edd_woe_nonce' ); ?>
-								<input type="submit" class="button-secondary" name="edd_woe_license_deactivate" value="<?php _e('Deactivate License'); ?>"/>
-							<?php } else {
-								if ( ! empty( $error ) ) { ?>
-									<span style="color:red;"><?php echo $error; ?></span>
-								<?php }
-								wp_nonce_field( 'edd_woe_nonce', 'edd_woe_nonce' ); ?>
-								<input type="submit" class="button-secondary" name="edd_woe_license_activate" value="<?php _e('Activate License'); ?>"/>
-							<?php } ?>
-						</td>
-					</tr>
-				<?php } ?>
-				</tbody>
-			</table>
-			<?php submit_button(); ?>
-
-		</form>
-		<?php
-	}
-
-	function edd_woe_register_option() {
-		// creates our settings in the options table
-		register_setting('edd_woe_license', 'edd_woe_license_key', array($this, 'edd_sanitize_license') );
-	}
-
-	function edd_sanitize_license( $new ) {
-		$old = get_option( 'edd_woe_license_key' );
-		if( $old && $old != $new ) {
-			delete_option( 'edd_woe_license_status' ); // new license has been entered, so must reactivate
-		}
-		return $new;
-	}
-
-
-
-	/************************************
-	 * this illustrates how to activate
-	 * a license key
-	 *************************************/
-
-	function edd_woe_activate_license() {
-
-		// listen for our activate button to be clicked
-		if( isset( $_POST['edd_woe_license_activate'] ) ) {
-
-			// run a quick security check
-			if( ! check_admin_referer( 'edd_woe_nonce', 'edd_woe_nonce' ) )
-				return; // get out if we didn't click the Activate button
-
-			// retrieve the license from the database
-			$license = trim( $_POST['edd_woe_license_key'] );
-			update_option( 'edd_woe_license_key', $license );
-
-
-			// data to send in our API request
-			$api_params = array(
-					'edd_action'=> 'activate_license',
-					'license' 	=> $license,
-					'item_name' => urlencode( WOE_ITEM_NAME ), // the name of our product in EDD
-					'url'       => home_url()
-			);
-
-			// Call the custom API.
-			$response = wp_remote_post( WOE_STORE_URL, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
-
-			// make sure the response came back okay
-			if ( is_wp_error( $response ) )
-				return false;
-
-			// decode the license data
-			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-			// $license_data->license will be either "valid" or "invalid"
-
-			update_option( 'edd_woe_license_status', $license_data->license );
-			update_option( 'edd_woe_license_error', @$license_data->error );
-
-		}
-	}
-
-	function edd_woe_deactivate_license() {
-
-		// listen for our activate button to be clicked
-		if( isset( $_POST['edd_woe_license_deactivate'] ) ) {
-
-			// run a quick security check
-			if( ! check_admin_referer( 'edd_woe_nonce', 'edd_woe_nonce' ) )
-				return; // get out if we didn't click the Activate button
-
-			// retrieve the license from the database
-			$license = trim( get_option( 'edd_woe_license_key' ) );
-
-
-			// data to send in our API request
-			$api_params = array(
-					'edd_action'=> 'deactivate_license',
-					'license' 	=> $license,
-					'item_name' => urlencode( WOE_ITEM_NAME ), // the name of our product in EDD
-					'url'       => home_url()
-			);
-
-			// Call the custom API.
-			$response = wp_remote_post( WOE_STORE_URL, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
-
-			// make sure the response came back okay
-			if ( is_wp_error( $response ) )
-				return false;
-
-			// decode the license data
-			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-			// $license_data->license will be either "deactivated" or "failed"
-			if( $license_data->license == 'deactivated' )
-				delete_option( 'edd_woe_license_status' );
-				delete_option( 'edd_woe_license_error' );
-
-		}
-	}
-
-	function edd_woe_check_license() {
-
-		global $wp_version;
-
-		$license = trim( get_option( 'edd_woe_license_key' ) );
-
-		$api_params = array(
-				'edd_action' => 'check_license',
-				'license' => $license,
-				'item_name' => urlencode( WOE_ITEM_NAME ),
-				'url'       => home_url()
-		);
-
-		// Call the custom API.
-		$response = wp_remote_post( WOE_STORE_URL, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
-
-		if ( is_wp_error( $response ) )
-			return false;
-
-		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-		if( $license_data->license == 'valid' ) {
-			echo 'valid'; exit;
-			// this license is still valid
-		} else {
-			echo 'invalid'; exit;
-			// this license is no longer valid
-		}
-	}
-//***********  EDD LICENSE FUNCTIONS END  *************************************************************************************************************************************************************************************************************************************************
 }

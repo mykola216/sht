@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class WOE_Formatter_Csv extends WOE_Formatter {
+	public static $enclosure = '';
 	public static $linebreak = '';
 	public static $delimiter = '';
 	public static $encoding  = '';
@@ -12,6 +13,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 	public function __construct( $mode, $filename, $settings, $format, $labels ) {
 		parent::__construct( $mode, $filename, $settings, $format, $labels );
 		
+		self::$enclosure = $this->convert_literals( $this->settings['enclosure'] );
 		self::$linebreak = $this->convert_literals( $this->settings['linebreak'] );
 		self::$delimiter = $this->convert_literals( $this->settings['delimiter'] );
 		self::$encoding  = isset( $this->settings['encoding'] ) ? $this->settings['encoding'] : '';
@@ -35,8 +37,13 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 			if ( $this->mode == 'preview' ) {
 				$this->rows[] = $data;
 			} else {
-				if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $data, self::$delimiter ) )
-					fputcsv( $this->handle, $data, self::$delimiter );
+				if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $data, self::$delimiter, self::$linebreak, self::$enclosure ) ) {
+					if ( self::$enclosure !== '' ) {
+						fputcsv( $this->handle, $data, self::$delimiter, self::$enclosure );
+					} else {
+						fwrite( $this->handle, implode( self::$delimiter, $data ) . self::$linebreak );
+					}
+				}
 			}
 		}
 	}
@@ -67,8 +74,13 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 		if ( $this->mode == 'preview' ) {
 			$this->rows[] = $rec;
 		} else {
-			if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $rec, self::$delimiter ) )
-				fputcsv( $this->handle, $rec, self::$delimiter);
+			if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $rec, self::$delimiter, self::$enclosure ) ) {
+				if ( self::$enclosure !== '' ) {
+					fputcsv( $this->handle, $rec, self::$delimiter, self::$enclosure );
+				} else {
+					fwrite( $this->handle, implode( self::$delimiter, $rec ) . self::$linebreak );
+				}
+			}
 		}
 	}
 
