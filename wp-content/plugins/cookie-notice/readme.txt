@@ -3,8 +3,8 @@ Contributors: dfactory
 Donate link: http://www.dfactory.eu/
 Tags: cookie, cookies, notice, notification, notify, cookie, cookie compliance, cookie law, eu cookie, privacy, privacy directive, consent, Bootstrap
 Requires at least: 3.3
-Tested up to: 4.6
-Stable tag: 1.2.36.1
+Tested up to: 4.7
+Stable tag: 1.2.37
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 
@@ -59,6 +59,10 @@ No questions yet.
 1. screenshot-1.png
 
 == Changelog ==
+
+= 1.2.37 =
+* Tweak: Add aria landmark role="banner"
+* Tweak: Extend cn_cookie_notice_args with button class
 
 = 1.2.36.1 =
 * Fix: Repository upload issue with 1.2.36
@@ -211,5 +215,6 @@ Initial release
 
 == Upgrade Notice ==
 
-= 1.2.36.1 =
-* Fix: Repository upload issue with 1.2.36
+= 1.2.37 =
+* Tweak: Add aria landmark role="banner"
+* Tweak: Extend cn_cookie_notice_args with button class
