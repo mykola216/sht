@@ -194,20 +194,21 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
         
 
         //Code to get the taxonomy id for 'simple' product_type
-        $query_taxonomy_id = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
+        $query_taxonomy_ids = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
                                     FROM {$wpdb->prefix}terms as terms
                                         JOIN {$wpdb->prefix}term_taxonomy as taxonomy ON (taxonomy.term_id = terms.term_id)
                                     WHERE taxonomy.taxonomy = 'product_type'
-                                        AND terms.slug = 'variable'";
-        $variable_taxonomy_id = $wpdb->get_var( $query_taxonomy_id );
+                                        AND terms.slug IN ('variable', 'variable-subscription')"; //added support for handling subscription
+        $variable_taxonomy_ids = $wpdb->get_col( $query_taxonomy_ids );
 
-        if ( !empty($variable_taxonomy_id) ) {
+
+        if ( !empty($variable_taxonomy_ids) ) {
             $query_post_parent_not_variable = "SELECT distinct products.post_parent 
                                         FROM {$wpdb->prefix}posts as products 
                                         WHERE NOT EXISTS (SELECT * 
                                                             FROM {$wpdb->prefix}term_relationships 
                                                             WHERE object_id = products.post_parent
-                                                                AND term_taxonomy_id = ".$variable_taxonomy_id.") 
+                                                                AND term_taxonomy_id IN (". implode(",",$variable_taxonomy_ids) ."))
                                           AND products.post_parent > 0 
                                           AND products.post_type = 'product_variation'";
             $results_post_parent_not_variable = $wpdb->get_col( $query_post_parent_not_variable );
@@ -965,7 +966,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
 
 
                         //Code to handle condition if the ids of previous cond are present in temp table
-                        if (($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_posts_search))) {
+                        if ( ($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_posts_search)) ) {
                             $posts_advanced_search_from = " JOIN {$wpdb->base_prefix}sm_advanced_search_temp
                                                                 ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.id)";
 
@@ -986,14 +987,21 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                         $index++;
                     }
 
+
+                    //condition for handling ANDing with att and other fields
+                    if ( !empty( $advanced_search_query_string['cond_terms'] ) || !empty( $advanced_search_query_string['cond_postmeta'] ) ) {
+                        $child_where_cond = " WHERE {$wpdb->prefix}posts.id IN (SELECT product_id FROM {$wpdb->base_prefix}sm_advanced_search_temp ) ";
+                    }
+
                     //Query to get the variations of the parent product in result set
                     $query_posts_search = "REPLACE INTO {$wpdb->base_prefix}sm_advanced_search_temp
                                                     (SELECT DISTINCT {$wpdb->prefix}posts.id ,". $index_search_string .", 0
                                                     FROM {$wpdb->prefix}posts 
                                                         JOIN {$wpdb->base_prefix}sm_advanced_search_temp 
-                                                            ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.post_parent)
-                                                    WHERE {$wpdb->base_prefix}sm_advanced_search_temp.cat_flag = 999
-                                                        AND {$wpdb->base_prefix}sm_advanced_search_temp.flag = ".$index_search_string.")";
+                                                            ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.post_parent
+                                                                AND {$wpdb->base_prefix}sm_advanced_search_temp.cat_flag = 999
+                                                                AND {$wpdb->base_prefix}sm_advanced_search_temp.flag = ".$index_search_string.")
+                                                    ". $child_where_cond .")";
                     $result_posts_search = $wpdb->query ( $query_posts_search );
 
                     //Query to delete the unwanted post_ids
@@ -3013,7 +3021,10 @@ function woo_insert_update_data($post) {
 
 
                 //Setting the product type
-                wp_set_object_terms($post_id, $product_type, 'product_type');
+                if( $obj->post_parent == 0 ) { //condition for avoiding updation of variations
+                    wp_set_object_terms($post_id, $product_type, 'product_type');    
+                }
+                
 
                 array_push ( $result ['productId'], $post_id );
                 foreach ($post_meta_key as $object) {

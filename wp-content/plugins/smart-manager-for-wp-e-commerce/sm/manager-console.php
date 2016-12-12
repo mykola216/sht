@@ -1181,6 +1181,7 @@ function sm_product_columns_filter($attr) {
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE ':%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '.%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '\%'
+										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE 'free-%'
 										$postmeta_fields_ignored_cond
 										$postmeta_fields_meta_value_cond
 										)
@@ -1201,6 +1202,7 @@ function sm_product_columns_filter($attr) {
 		}		
 	}
 
+	//added 'free' condition for one of the clients
 	$product_meta_fields_query = "SELECT DISTINCT {$wpdb->prefix}postmeta.meta_key,
 									{$wpdb->prefix}postmeta.meta_value
 								FROM {$wpdb->prefix}postmeta 
@@ -1211,6 +1213,7 @@ function sm_product_columns_filter($attr) {
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE ':%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '.%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '\%'
+										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE 'free-%'
 										$postmeta_fields_ignored_cond
 										)
 								GROUP BY {$wpdb->prefix}postmeta.meta_key";
@@ -1306,7 +1309,7 @@ function sm_product_columns_filter($attr) {
 	$attr['other_meta']['colType']='custom_column';
 	$attr['other_meta']['dataType']='string';
 	$attr['other_meta']['actionType']='setStrActions';
-	
+
 	return $attr;
 }
 
@@ -1397,11 +1400,11 @@ if (WOO_RUNNING === true) {
 	var sm_dimensions_decimal_precision 	=  '".$sm_dimensions_decimal_precision."';";	//Decimal Precision for Dimensions fields 
 	
 
-if ( MULTISITE == 1 ) {
-	echo "
-	var uploadBlogsDir      =  '" . UPLOADBLOGSDIR . "';
-	var uploads        		=  '" . UPLOADS . "';";
-}
+// if ( MULTISITE == 1 ) {
+// 	echo "
+// 	var uploadBlogsDir      =  '" . UPLOADBLOGSDIR . "';
+// 	var uploads        		=  '" . UPLOADS . "';";
+// }
 	
 if (WPSC_RUNNING === true) {
 	echo "
