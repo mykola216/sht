@@ -220,25 +220,6 @@ class Pronamic_WP_Pay_Admin_GatewayPostType {
 	//////////////////////////////////////////////////
 
 	/**
-	 * Maybe set the default gateway.
-	 *
-	 * @param int $post_id
-	 */
-	private function maybe_set_default_gateway( $post_id ) {
-		// Don't set the default gateway if the post is not published.
-		if ( 'publish' !== get_post_status( $post_id ) ) {
-			return;
-		}
-
-		// Don't set the default gateway if there is already a published gateway set.
-		if ( 'publish' === get_post_status( get_option( 'pronamic_pay_config_id' ) ) ) {
-			return;
-		}
-
-		update_option( 'pronamic_pay_config_id', $post_id );
-	}
-
-	/**
 	 * When the post is saved, saves our custom data.
 	 *
 	 * @param int $post_id The ID of the post being saved.
@@ -257,8 +238,6 @@ class Pronamic_WP_Pay_Admin_GatewayPostType {
 		}
 
 		/* OK, its safe for us to save the data now. */
-		$this->maybe_set_default_gateway( $post_id );
-
 		$fields = $this->admin->gateway_settings->get_fields();
 
 		$definition = array(
@@ -378,5 +357,30 @@ class Pronamic_WP_Pay_Admin_GatewayPostType {
 		);
 
 		return $messages;
+	}
+
+	/**
+	 * Get capabilities for this post type.
+	 *
+	 * @return array
+	 */
+	public static function get_capabilities() {
+		return array(
+			'edit_post'              => 'manage_options',
+			'read_post'              => 'manage_options',
+			'delete_post'            => 'manage_options',
+			'edit_posts'             => 'manage_options',
+			'edit_others_posts'      => 'manage_options',
+			'publish_posts'          => 'manage_options',
+			'read_private_posts'     => 'manage_options',
+			'read'                   => 'manage_options',
+			'delete_posts'           => 'manage_options',
+			'delete_private_posts'   => 'manage_options',
+			'delete_published_posts' => 'manage_options',
+			'delete_others_posts'    => 'manage_options',
+			'edit_private_posts'     => 'manage_options',
+			'edit_published_posts'   => 'manage_options',
+			'create_posts'           => 'manage_options',
+		);
 	}
 }

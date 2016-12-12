@@ -7,7 +7,8 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.2.2
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_WooCommerce_CreditCardGateway extends Pronamic_WP_Pay_Extensions_WooCommerce_Gateway {
 	/**
@@ -20,7 +21,7 @@ class Pronamic_WP_Pay_Extensions_WooCommerce_CreditCardGateway extends Pronamic_
 	//////////////////////////////////////////////////
 
 	/**
-	 * Constructs and initialize an iDEAL gateway
+	 * Constructs and initialize an Credit Card gateway
 	 */
 	public function __construct() {
 		$this->id             = self::ID;
@@ -28,7 +29,29 @@ class Pronamic_WP_Pay_Extensions_WooCommerce_CreditCardGateway extends Pronamic_
 		$this->payment_method = Pronamic_WP_Pay_PaymentMethods::CREDIT_CARD;
 
 		parent::__construct();
+
+		// Recurring subscription payments
+		$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->config_id );
+
+		if ( $gateway && $gateway->supports( 'recurring_credit_card' ) ) {
+			// @since unreleased
+			$this->supports = array(
+				'products',
+				'subscriptions',
+				'subscription_cancellation',
+				'subscription_reactivation',
+				'subscription_suspension',
+			);
+
+			// Handle subscription payments
+			add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'process_subscription_payment' ), 10, 2 );
+
+			// Add mandate notice to gateway description
+			add_filter( 'woocommerce_gateway_description', array( $this, 'gateway_description' ), 10, 2 );
+		}
 	}
+
+	//////////////////////////////////////////////////
 
 	/**
 	 * Initialise form fields
@@ -39,5 +62,38 @@ class Pronamic_WP_Pay_Extensions_WooCommerce_CreditCardGateway extends Pronamic_
 		$this->form_fields['enabled']['label']       = __( 'Enable Credit Card', 'pronamic_ideal' );
 		$this->form_fields['description']['default'] = '';
 		$this->form_fields['icon']['default']        = plugins_url( 'images/credit-card/wc-icon.png', Pronamic_WP_Pay_Plugin::$file );
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Gateway description.
+	 *
+	 * @see https://github.com/woocommerce/woocommerce/blob/v1.6.0/classes/gateways/class-wc-payment-gateway.php#L86
+	 * @since 1.2.2
+	 */
+	function gateway_description( $description, $id ) {
+		if ( self::ID !== $id ) {
+			return $description;
+		}
+
+		$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->config_id );
+
+		if ( $gateway ) {
+			$mandate = $gateway->has_valid_mandate( Pronamic_WP_Pay_PaymentMethods::CREDIT_CARD );
+
+			if ( $mandate ) {
+				$description .= '<p>';
+
+				$description .= sprintf(
+					esc_html__( 'You have given us permission on %s to use your credit card for any due amounts. This mandate will be used for your (subscription) order.', 'pronamic_ideal' ),
+					$gateway->get_first_valid_mandate_datetime( Pronamic_WP_Pay_PaymentMethods::CREDIT_CARD )
+				);
+
+				$description .= '</p>';
+			}
+		}
+
+		return $description;
 	}
 }

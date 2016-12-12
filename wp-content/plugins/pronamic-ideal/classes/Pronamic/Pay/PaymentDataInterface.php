@@ -7,6 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
+ * @version 4.4.2
  * @since 1.4.0
  */
 interface Pronamic_Pay_PaymentDataInterface {
@@ -35,4 +36,10 @@ interface Pronamic_Pay_PaymentDataInterface {
 	public function get_success_url();
 
 	public function get_error_url();
+
+	//////////////////////////////////////////////////
+	// Subscription
+	//////////////////////////////////////////////////
+
+	public function get_subscription();
 }

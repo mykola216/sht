@@ -7,7 +7,13 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 - 
 
-## [1.3.8]- 2016-07-06
+## [1.3.10] - 2016-11-16
+- Added new constant for the Maestro payment method.
+
+## [1.3.9] - 2016-10-20
+- Added some helper functions for mandates.
+
+## [1.3.8] - 2016-07-06
 - Changed order of payment methods (alphabetic).
 - Added Bancontact payment constant to payments methods getter function.
 - Added PayPal payment constant to payments methods getter function.
@@ -67,7 +73,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0
 - First release.
 
-[unreleased]: https://github.com/wp-pay/core/compare/1.3.8...HEAD
+[unreleased]: https://github.com/wp-pay/core/compare/1.3.10...HEAD
+[1.3.10]: https://github.com/wp-pay/core/compare/1.3.9...1.3.10
+[1.3.9]: https://github.com/wp-pay/core/compare/1.3.8...1.3.9
 [1.3.8]: https://github.com/wp-pay/core/compare/1.3.7...1.3.8
 [1.3.7]: https://github.com/wp-pay/core/compare/1.3.6...1.3.7
 [1.3.6]: https://github.com/wp-pay/core/compare/1.3.5...1.3.6

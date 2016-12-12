@@ -7,6 +7,24 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.5.2] - 2016-11-16
+- Simplified CSS for WordPress admin elements.
+- Enabled choice values for payment methods field.
+
+## [1.5.1] - 2016-10-28
+- Changed Gravity Forms admin menu item text 'iDEAL' to 'Payment Feeds'.
+- Changed text 'Payment Form(s)' to 'Payment Feed(s)'.
+
+## [1.5.0] - 2016-10-27
+- Return gateway if issuers are found, not only when issuers is not null.
+- Fixed adding built-in payment method twice.
+- Fixed incorrect 'field is not supported' notice by setting form ID when adding field.
+
+## [1.4.9] - 2016-10-20
+- Implemented the new `pronamic_payment_redirect_url` filter and added some early returns.
+- Fixed deprecated usage of GFUserData.
+- Refactored custom payment fields.
+
 ## [1.4.8] - 2016-07-06
 - Added support for filtering payment data with `gform_post_save`.
 
@@ -106,7 +124,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.8...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.2...HEAD
+[1.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.1...1.5.2
+[1.5.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.0...1.5.1
+[1.5.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.9...1.5.0
+[1.4.9]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.8...1.4.9
 [1.4.8]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.7...1.4.8
 [1.4.7]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.6...1.4.7
 [1.4.6]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.5...1.4.6

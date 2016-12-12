@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
-- 
+-
+
+## [1.1.9] - 2016-11-16
+- Simplified settings fields.
+
+## [1.1.8] - 2016-10-28
+- Fixed zero days private certificate validity in OpenSSL command.
+
+## [1.1.7] - 2016-10-20
+- Added `payment_status_request` feature support.
+- Removed schedule status check event, this will be part of the Pronamic iDEAL plugin.
 
 ## [1.1.6] - 2016-07-06
 - Adjusted check on required distinguished name keys/values.
@@ -45,7 +55,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-19
 - First release.
 
-[unreleased]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.6...HEAD
+[unreleased]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.9...HEAD
+[1.1.9]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.8...1.1.9
+[1.1.8]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.7...1.1.8
+[1.1.7]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.6...1.1.7
 [1.1.6]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.5...1.1.6
 [1.1.5]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.4...1.1.5
 [1.1.4]: https://github.com/wp-pay-gateways/ideal-advanced-v3/compare/1.1.3...1.1.4
