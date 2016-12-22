@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Order_Export_Engine {
 	public static $current_job_settings = '';
 	public static $current_job_build_mode = '';
+	public static $date_format;
 
 	private static $order_id = '';
 	//
@@ -47,7 +48,7 @@ class WC_Order_Export_Engine {
 	}
 	
 	public static function tempnam( $folder, $prefix ) {
-		$filename = tempnam( $folder, $prefix );
+		$filename = @tempnam( $folder, $prefix );
 		if(! $filename ) {
 			$tmp_folder = dirname( dirname ( __FILE__ ) ) . '/tmp';
 			// kill expired tmp file 
@@ -229,6 +230,12 @@ class WC_Order_Export_Engine {
 
 		return $options;
 	}
+	
+	private static function  validate_defaults( $settings ) {
+		if( empty($settings['sort_direction']) )
+			$settings['sort_direction'] = 'DESC';
+		return $settings;
+	}
 
 	public static function build_file(
 		$settings,
@@ -241,8 +248,10 @@ class WC_Order_Export_Engine {
 		global $wpdb;
 		
 		//for hooks
+		$settings = self::validate_defaults( $settings );
 		self::$current_job_settings = $settings;
 		self::$current_job_build_mode = $make_mode;
+		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
 		
 		if ( $output_mode == 'browser' ) {
 			$filename = 'php://output';
@@ -268,9 +277,9 @@ class WC_Order_Export_Engine {
 		//get IDs
 		$sql = WC_Order_Export_Data_Extractor::sql_get_order_ids( $settings );
 		if ( $make_mode == 'preview' ) {
-			$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id DESC" ). " LIMIT 3";
+			$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id " . $settings[ 'sort_direction' ] ). " LIMIT " . ($limit !== false ? $limit : 1);
 		} elseif ( $make_mode != 'estimate' ) {
-			$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id DESC" );
+			$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id " . $settings[ 'sort_direction' ] );
 		}
 
 		//UNUSED ajax get partial orders
@@ -330,10 +339,6 @@ class WC_Order_Export_Engine {
 	public static function build_file_full( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		global $wpdb;
 		
-		//for hooks
-		self::$current_job_settings = $settings;
-		self::$current_job_build_mode = 'full';
-		
 		$filename = ( ! empty( $filename ) ? $filename : self::tempnam( sys_get_temp_dir(), $settings['format'] ) );
 
 		$formater = self::init_formater( '', $settings, $filename, $labels, $static_vals );
@@ -341,7 +346,7 @@ class WC_Order_Export_Engine {
 
 		//get IDs
 		$sql = WC_Order_Export_Data_Extractor::sql_get_order_ids( $settings );
-		$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id DESC" );
+		$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id ". $settings[ 'sort_direction' ] );
 
 		if ( $limit ) {
 			$sql .= " LIMIT " . intval( $limit );
@@ -393,10 +398,6 @@ class WC_Order_Export_Engine {
 	public static function build_separate_files_and_export( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		global $wpdb;
 
-		//for hooks
-		self::$current_job_settings = $settings;
-		self::$current_job_build_mode = 'full';
-
 		$filename = ( ! empty( $filename ) ? $filename : self::tempnam( sys_get_temp_dir(), $settings['format'] ) );
 
 		self::init_labels( $settings, $labels, $static_vals );
@@ -404,7 +405,7 @@ class WC_Order_Export_Engine {
 
 		//get IDs
 		$sql = WC_Order_Export_Data_Extractor::sql_get_order_ids( $settings );
-		$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id DESC" );
+		$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id ". $settings[ 'sort_direction' ] );
 
 		if ( $limit ) {
 			$sql .= " LIMIT " . intval( $limit );
@@ -464,6 +465,12 @@ class WC_Order_Export_Engine {
 
 
 	public static function build_files_and_export( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
+		//for hooks
+		$settings = self::validate_defaults( $settings );
+		self::$current_job_settings = $settings;
+		self::$current_job_build_mode = 'full';
+		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
+
 		if (!empty($settings['destination']['separate_files'])) {
 			$result = self::build_separate_files_and_export( $settings, $filename, $limit, $order_ids );
 			if ( $result === true ) {

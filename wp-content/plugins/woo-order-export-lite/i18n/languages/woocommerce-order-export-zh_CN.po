@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woo-order-export-"
 "lite\n"
 "POT-Creation-Date: 2016-11-08 16:20+0000\n"
-"PO-Revision-Date: 2016-11-08 16:43+0000\n"
+"PO-Revision-Date: 2016-11-17 19:18+0000\n"
 "Last-Translator: 70599 <w70599@gmail.com>\n"
 "Language-Team: Chinese (China)\n"
 "Language: zh-CN\n"
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Http post"
 msgstr ""
 
-#: view/modal-controls.php:3 view/modal-controls.php:35
+#: view/modal-controls.php:3 view/modal-controls.php:35 
 #: view/settings-form.php:739
 msgid "Meta key"
 msgstr ""
@@ -80,7 +80,7 @@ msgstr "授权"
 msgid "Enter your license key"
 msgstr "请输入你的授权"
 
-#: classes/class-wc-order-export-edd.php:67
+#: classes/class-wc-order-export-edd.php:67 
 #: classes/class-wc-order-export-edd.php:79
 msgid "Activate License"
 msgstr "激活授权"
@@ -112,12 +112,12 @@ msgstr "你没有安装插件更新的权限。"
 msgid "Error"
 msgstr "错误"
 
-#: classes/class-wc-table-profiles.php:84
+#: classes/class-wc-table-profiles.php:84 
 #: classes/class-wc-table-schedules.php:163
 msgid "Edit"
 msgstr "编辑"
 
-#: classes/class-wc-table-profiles.php:85
+#: classes/class-wc-table-profiles.php:85 
 #: classes/class-wc-table-schedules.php:164
 msgid "Copy"
 msgstr "复制"
@@ -126,7 +126,7 @@ msgstr "复制"
 msgid "Copy to Scheduled"
 msgstr "复制到计划日程"
 
-#: classes/class-wc-table-profiles.php:87
+#: classes/class-wc-table-profiles.php:87 
 #: classes/class-wc-table-schedules.php:165
 msgid "Delete"
 msgstr "删除"
@@ -202,7 +202,7 @@ msgstr "你确定要<strong>克隆</strong>这个配置？"
 #: view/profiles.php:43
 msgid ""
 "Are you sure you want to COPY this profile and MOVE it to scheduled list?"
-msgstr "你确定要<strong>复制</strong>这个配置，并将它<strong>移动到</strong>计划任务列表？"
+msgstr "你确定要<strong>复制</strong>这个配置，并将它<strong>移动到</strong>定时任务列表？"
 
 #: view/schedules.php:25
 msgid "Are you sure you want to DELETE this job?"
@@ -292,12 +292,12 @@ msgstr "Advanced Order Export For WooCommerce 专业版"
 msgid "Imported from Free version"
 msgstr "已通过免费版本导入"
 
-#: classes/class-wc-order-export-admin.php:82
+#: classes/class-wc-order-export-admin.php:82 
 #: classes/class-wc-order-export-admin.php:83
 msgid "Export Orders"
 msgstr "导出订单"
 
-#: classes/class-wc-order-export-admin.php:797
+#: classes/class-wc-order-export-admin.php:797 
 #: classes/exports/class-woe-export-email.php:17
 msgid "Can not create temporary file"
 msgstr "无法创建临时文件"
@@ -318,28 +318,28 @@ msgstr "订单已导出。"
 msgid "Wrong format"
 msgstr "格式错误"
 
-#: classes/class-wc-table-profiles.php:13
+#: classes/class-wc-table-profiles.php:13 
 #: classes/class-wc-table-schedules.php:13
 msgid "item"
 msgstr "项目"
 
-#: classes/class-wc-table-profiles.php:14
+#: classes/class-wc-table-profiles.php:14 
 #: classes/class-wc-table-schedules.php:14
 msgid "items"
 msgstr "项目"
 
 #: classes/class-wc-table-profiles.php:41
 msgid "Add Profile"
-msgstr "增加简介"
+msgstr "增加配置"
 
-#: classes/class-wc-table-profiles.php:68
+#: classes/class-wc-table-profiles.php:68 
 #: classes/class-wc-table-schedules.php:70 view/settings-form.php:216
 msgid "Format"
 msgstr "格式"
 
 #: classes/class-wc-table-profiles.php:69
 msgid "Profile"
-msgstr "简介"
+msgstr "配置"
 
 #: classes/class-wc-table-profiles.php:70
 msgid "From Date"
@@ -349,7 +349,7 @@ msgstr "起始日期"
 msgid "To Date"
 msgstr "终止日期"
 
-#: classes/class-wc-table-profiles.php:72
+#: classes/class-wc-table-profiles.php:72 
 #: classes/class-wc-table-schedules.php:75 view/settings-form.php:772
 msgid "Actions"
 msgstr "动作"
@@ -358,7 +358,7 @@ msgstr "动作"
 msgid "Add Schedule"
 msgstr "追加定期任务"
 
-#: classes/class-wc-table-schedules.php:69 view/settings-form.php:31
+#: classes/class-wc-table-schedules.php:69 view/settings-form.php:31 
 #: view/settings-form.php:46
 msgid "Title"
 msgstr "标题"
@@ -423,7 +423,7 @@ msgstr "发给："
 msgid "can not open for output"
 msgstr "无法打开输出项目"
 
-#: classes/formats/class-woe-formatter-csv.php:92
+#: classes/formats/class-woe-formatter-csv.php:92 
 #: classes/formats/class-woe-formatter-xls.php:93
 msgid "<td colspan=10><b>No results</b></td>"
 msgstr "<td colspan=10><b>没有结果</b></td>"
@@ -434,7 +434,7 @@ msgstr "订单"
 
 #: view/export.php:7
 msgid "Export Now"
-msgstr "现在导出"
+msgstr "快速导出"
 
 #: view/main.php:8
 msgid "Settings saved"
@@ -446,17 +446,17 @@ msgstr "导出"
 
 #: view/main.php:12
 msgid "Profiles"
-msgstr "简介"
+msgstr "配置"
 
 #: view/main.php:13
 msgid "Scheduled Exports"
-msgstr "计划导出任务"
+msgstr "定时导出任务"
 
 #: view/modal-controls.php:5 view/modal-controls.php:37
 msgid "All meta"
 msgstr "全部 meta"
 
-#: view/modal-controls.php:6 view/modal-controls.php:38
+#: view/modal-controls.php:6 view/modal-controls.php:38 
 #: view/settings-form.php:750
 msgid "Hide unused"
 msgstr "隐藏未使用"
@@ -469,23 +469,23 @@ msgstr "或者"
 msgid "Taxonomy"
 msgstr "分类"
 
-#: view/modal-controls.php:19 view/modal-controls.php:25
-#: view/modal-controls.php:42 view/modal-controls.php:48
+#: view/modal-controls.php:19 view/modal-controls.php:25 
+#: view/modal-controls.php:42 view/modal-controls.php:48 
 #: view/settings-form.php:747 view/settings-form.php:758
 msgid "Column Name"
 msgstr "列名"
 
-#: view/modal-controls.php:21 view/modal-controls.php:44
+#: view/modal-controls.php:21 view/modal-controls.php:44 
 #: view/settings-form.php:773
 msgid "Add Field"
 msgstr "增加字段"
 
-#: view/modal-controls.php:26 view/modal-controls.php:49
+#: view/modal-controls.php:26 view/modal-controls.php:49 
 #: view/settings-form.php:759
 msgid "Value"
 msgstr "值"
 
-#: view/modal-controls.php:28 view/modal-controls.php:51
+#: view/modal-controls.php:28 view/modal-controls.php:51 
 #: view/settings-form.php:775
 msgid "Add Static Field"
 msgstr "增加固定字段"
@@ -698,7 +698,7 @@ msgstr "Email 正文"
 msgid "Edit Email Body"
 msgstr "设置 Email 正文"
 
-#: view/settings-form.php:386 view/settings-form.php:436
+#: view/settings-form.php:386 view/settings-form.php:436 
 #: view/settings-form.php:455 view/settings-form.php:474
 msgid "Test"
 msgstr "测试"
@@ -779,7 +779,7 @@ msgstr "商品类目"
 
 #: view/settings-form.php:562
 msgid "Product"
-msgstr "商品"
+msgstr "商品名"
 
 #: view/settings-form.php:574
 msgid "Product Attributes"
@@ -787,7 +787,7 @@ msgstr "商品属性"
 
 #: view/settings-form.php:628
 msgid "Product Taxonomies"
-msgstr "商品分类"
+msgstr "商品类型"
 
 #: view/settings-form.php:657
 msgid "User roles"

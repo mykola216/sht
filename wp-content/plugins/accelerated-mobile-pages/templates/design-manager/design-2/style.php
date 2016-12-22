@@ -1,5 +1,8 @@
 <?php global $redux_builder_amp; ?>
 <?php
+add_action( 'amp_post_template_head', function() {
+    remove_action( 'amp_post_template_head', 'amp_post_template_add_fonts' );
+}, 9 );
 add_action('amp_post_template_css', 'ampforwp_additional_style_input_2');
 
 function ampforwp_additional_style_input_2( $amp_template ) {
@@ -317,6 +320,9 @@ h1.amp-wp-title {
 .single-post .post-pagination-meta{
     min-height:auto
 }
+.single-post .ampforwp-social-icons{
+    display:inline-block
+}
 .post-pagination-meta .amp-wp-tax-category,
 .post-title-meta .amp-wp-tax-tag {
     display : none;
@@ -348,6 +354,15 @@ li.amp-wp-tax-category {
 
 .amp-wp-content amp-img {
     max-width: 100%;
+}
+figure{
+    margin: 0;
+}
+figcaption{
+    font-size: 11px;
+    margin-bottom: 11px;
+    background: #eee;
+    padding: 6px 8px;
 }
 .amp-wp-byline amp-img {
     display: none;
@@ -389,6 +404,18 @@ main .amp-wp-content.featured-image-content {
 	margin-bottom: 0;
 	box-shadow: none
 }
+.amp-wp-content.post-pagination-meta{
+    max-width: 1030px;    
+}
+.single-post .ampforwp-social-icons.ampforwp-social-icons-wrapper {
+    display: block;
+    margin: 2em auto 0.9em auto ;
+    max-width: 1030px;
+}
+.amp-wp-article-header.amp-wp-article-category.ampforwp-meta-taxonomy {
+    margin: 10px auto;
+    max-width: 1030px;
+}
 
 /* Related Posts */
 main .amp-wp-content.relatedpost {
@@ -396,7 +423,7 @@ main .amp-wp-content.relatedpost {
 	box-shadow: none;
 	max-width: 1030px;
     padding:0px 0 0 0;
-    margin:1.8em 0px 1.5em 0px
+    margin:1.8em auto 1.5em auto
 }
 .related_posts h3, .comments_list h3{
     font-size: 14px;
@@ -514,12 +541,13 @@ main .amp-wp-content.comments_list {
 }
 
 /* ADS */
-.amp_ad_1{
-    margin-top: -15px;
-    margin-bottom:10px
+.amp_home_body .amp_ad_1{
+    margin-top: 10px;
+    margin-bottom: -20px;
 }
 .single-post .amp_ad_1{
-    margin-top:0
+    margin-top: 10px;
+    margin-bottom: -20px;
 }
 .amp-ad-4{
     margin-top:10px;
@@ -739,8 +767,9 @@ amp-user-notification button {
 }
 <?php if( $redux_builder_amp['enable-single-social-icons'] == true )  { ?>
     .single-post footer {
-        padding-bottom: 40px;
+        padding-bottom: 60px;
     }
+.amp-ad-2{ margin-bottom: 50px; }
 <?php } ?>
 /**/
 .alignleft{
@@ -775,6 +804,7 @@ amp-user-notification button {
 	.amp-wp-article-content img {
 	    max-width: 100%;
 	}
+
 
 
 

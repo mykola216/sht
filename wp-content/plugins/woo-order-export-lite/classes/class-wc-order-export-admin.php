@@ -59,15 +59,7 @@ class WC_Order_Export_Admin {
 	
 	public function install() {
 		//wp_clear_scheduled_hook( "wc_export_cron_global" ); //debug 
-		wp_schedule_event( time(), 'wc_export_5min_global', 'wc_export_cron_global' );
-		
-		$profiles = get_option( $this->settings_name_profiles, array() );
-		$free_job = get_option( $this->settings_name_now, array() );
-		if(empty( $profiles )  AND !empty( $free_job ) ) {
-			$free_job['title'] = __('Imported from Free version', 'woocommerce-order-export' );
-			$profiles[1] = $free_job;
-			update_option( $this->settings_name_profiles, $profiles);
-		}	
+		wp_schedule_event( time(), 'wc_export_1min_global', 'wc_export_cron_global' );
 	}
 	
 	public function display_plugin_activated_message() {
@@ -188,7 +180,11 @@ class WC_Order_Export_Admin {
 			$name_in = $this->settings_name_profiles;
 		}
 		$all_jobs_in = get_option( $name_in, array() );
-
+		
+		//new settings
+		$settings           = $all_jobs_in[ $id ];
+		$settings['mode']   = $mode_out;
+		
 		if ( $mode_in !== $mode_out ) {
 			$name_out = "";
 			if ( $mode_out == self::EXPORT_SCHEDULE ) {
@@ -202,11 +198,9 @@ class WC_Order_Export_Admin {
 		else {
 			$name_out     = $name_in;
 			$all_jobs_out = $all_jobs_in;
+			$settings['title'] .= " [cloned]"; //add note
 		}
 
-		$settings           = $all_jobs_in[ $id ];
-		$settings['title'] .= " [cloned]"; //add note
-		$settings['mode']   = $mode_out;
 
 		if ( $mode_in === self::EXPORT_PROFILE && $mode_out === self::EXPORT_SCHEDULE) {
 			if ( ! isset( $settings['destination'] ) ) {
@@ -312,6 +306,16 @@ class WC_Order_Export_Admin {
 				}
 				break;
 		}
+		
+		//code to copy default settings as profile
+		$profiles = get_option( $this->settings_name_profiles, array() );
+		$free_job = get_option( $this->settings_name_now, array() );
+		if(empty( $profiles )  AND !empty( $free_job ) ) {
+			$free_job['title'] = __('Copied from "Export Now"', 'woocommerce-order-export' );
+			$profiles[1] = $free_job;
+			update_option( $this->settings_name_profiles, $profiles);
+		}	
+		
 		$this->render( 'profiles', array( 'ajaxurl' => $ajaxurl, 'WC_Order_Export' => $this ) );
 	}
 
@@ -371,6 +375,7 @@ class WC_Order_Export_Admin {
 			'skip_suborders' 	                         => 0,
 			'date_format' 									 => 'Y-m-d',
 			'time_format' 									 => 'H:i',
+			'sort_direction'                                 => 'DESC',
 		);
 
 		if ( ! isset( $settings['format'] ) ) {
@@ -424,7 +429,7 @@ class WC_Order_Export_Admin {
 
 			update_option( $this->settings_name_cron, $all_jobs );
             if ( ! wp_get_schedule( 'wc_export_cron_global' ) ) {
-                wp_schedule_event( time(), 'wc_export_5min_global', 'wc_export_cron_global' );
+                wp_schedule_event( time(), 'wc_export_1min_global', 'wc_export_cron_global' );
             }
 		} elseif ( $mode == self::EXPORT_PROFILE ) {
 			$all_jobs = get_option( $this->settings_name_profiles, array() );
@@ -624,9 +629,9 @@ class WC_Order_Export_Admin {
 		$tools = json_decode(stripslashes($_POST['tools-import']), true);
         if ($tools) {
 			$allowed_options  =  array(
-				$WC_Order_Export->settings_name_now, 
-				$WC_Order_Export->settings_name_cron,
-				$WC_Order_Export->settings_name_profiles
+				$this->settings_name_now, 
+				$this->settings_name_cron,
+				$this->settings_name_profiles
 			);
             foreach ($allowed_options as $key) {
                 if ( isset($tools[$key]) ) {
@@ -645,6 +650,7 @@ class WC_Order_Export_Admin {
                 LEFT JOIN  " . $wpdb->posts . " AS att ON post.ID=att.post_parent AND att.post_type='attachment'
                 WHERE       post.post_title LIKE '%{$like}%'
                 AND         post.post_type = 'product'
+                AND         post.post_status <> 'trash'
                 GROUP BY    post.ID
                 ORDER BY    post.post_title              
                 LIMIT 0,5  
@@ -653,8 +659,10 @@ class WC_Order_Export_Admin {
 		foreach ( $products as $key => $product ) {
 			if ( $product->photo_id ) {
 				$photo                       = wp_get_attachment_image_src( $product->photo_id, 'thumbnail' );
-				$products[ $key ]->photo_url = $photo[0]; //debug
+				$products[ $key ]->photo_url = $photo[0];
 			}
+			else
+				unset( $products[ $key ]->photo_url );
 		}
 		echo json_encode( $products );
 	}
@@ -729,7 +737,16 @@ class WC_Order_Export_Admin {
 
 		do_action( 'woe_start_preview_job', $_POST['id'], $settings );
 
-		WC_Order_Export_Engine::build_file( $settings, 'preview', 'browser' );
+		WC_Order_Export_Engine::build_file( $settings, 'preview', 'browser', 0, $_POST['limit'] );
+	}
+
+	public function ajax_action_estimate() {
+		$settings = $this->make_new_settings( $_POST );
+		// use unsaved settings
+
+		$total = WC_Order_Export_Engine::build_file( $settings, 'estimate', 'file', 0, 0, 'test' );
+
+		echo json_encode( array( 'total' => $total ) );
 	}
 
 	public function ajax_action_get_order_custom_fields_values() {
@@ -923,6 +940,10 @@ class WC_Order_Export_Admin {
 		// use unsaved settings
 
 		do_action( 'woe_start_export_job', $_POST['id'], $settings );
+		
+		// custom export worked for plain 
+		if( apply_filters( 'woe_plain_export_custom_func', false, $_POST['id'], $settings ) )
+			return ;
 
 		$file = WC_Order_Export_Engine::build_file_full( $settings );
 
@@ -950,6 +971,10 @@ class WC_Order_Export_Admin {
 		$schedules['wc_export_5min_global'] = array(
 			'interval' => 300,
 			'display'  => 'Every 5 Minutes[exporter]'
+		);
+		$schedules['wc_export_1min_global'] = array(
+			'interval' => 60,
+			'display'  => 'Every 1 Minute[exporter]'
 		);
 
 		return $schedules;

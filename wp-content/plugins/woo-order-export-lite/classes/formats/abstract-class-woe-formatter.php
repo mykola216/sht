@@ -37,4 +37,8 @@ abstract class WOE_Formatter {
 		do_action("woe_formatter_finish");
 		do_action("woe_formatter_" .$this->format. "_finished");
 	}
+
+	public function truncate() {
+		ftruncate( $this->handle, 0 );
+	}
 }

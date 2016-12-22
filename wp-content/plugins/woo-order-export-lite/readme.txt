@@ -3,7 +3,7 @@ Contributors: algolplus
 Donate link: http://algolplus.com/plugins/
 Tags: woocommerce,export,order,xls,csv,xml,woo export lite,export orders,orders export,csv export,xml export,xls export
 Requires at least: 4.2.4
-Tested up to: 4.6
+Tested up to: 4.7
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -91,18 +91,32 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 
 == Changelog ==
 
+= 1.2.5 - 2016-12-21 =
+* Button "Preview" displays estimation (# of orders in exported file)
+* User can change number of orders in "Preview"
+* Orders can be sorted by "Order Id" in descending/ascending direction
+* Added column "Image Url" for products (featured image)
+* Fixed bug, **the plugin exported deleted orders!**
+* Fixed bug, autocomplete displayed deleted products in filter "Product"
+* Fixed bug, filter "category" and filter "Attribute" work together for variations
+* Fixed bug, import settings didn't work correcty
+* Suppress useless warning if the plugin can't create file in system "/tmp" folder
+* New filters/hooks for products/coupons/vendors
+* New filters/hooks for XLS format
+* Russian/Chinise translations were updated
+
 = 1.2.4 - 2016-11-15 =
-* added new filter "Item Metadata" to section "Filter by product"
-* added Chinese language. I’d like to thank user [7o599](https://wordpress.org/support/users/7o599/) 
-* added new tab "Tools" with section "export/import settings"
-* added button to hide non-selected fields
+* Added new filter "Item Metadata" to section "Filter by product"
+* Added Chinese language. I’d like to thank user [7o599](https://wordpress.org/support/users/7o599/) 
+* Added new tab "Tools" with section "export/import settings"
+* Added button to hide non-selected fields
 * XML format supports custom structures (some hooks were added too)
-* fixed bug for taxonomies (we export attribute Name instead of slug now)
-* fixed bug for XLS  without header line
-* fixed bug with pagination after export (bulk action)
-* fixed bug in action "Hide unused" for products
-* fixed bug for shops having huge number of users
-* fixed bug for "&" inside XML 
+* Fixed bug for taxonomies (we export attribute Name instead of slug now)
+* Fixed bug for XLS  without header line
+* Fixed bug with pagination after export (bulk action)
+* Fixed bug in action "Hide unused" for products
+* Fixed bug for shops having huge number of users
+* Fixed bug for "&" inside XML 
 
 = 1.2.3 - 2016-10-21 =
 * Added usermeta fields to section "Add field"

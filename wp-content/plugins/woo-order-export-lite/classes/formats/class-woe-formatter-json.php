@@ -54,7 +54,7 @@ class WOE_Formatter_Json extends WOE_Formatter {
 		}
 
 		if ( $this->has_output_filter ) {
-			$json = apply_filters( "woe_json_output_filter", $json, $rec );
+			$json = apply_filters( "woe_json_output_filter", $json, $rec_out);
 		}
 		fwrite( $this->handle, $json );
 
