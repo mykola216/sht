@@ -301,8 +301,15 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				</div>
 			</div>
 		</div>
+		<br/>
+		<div id="my-sort" class="my-block">
+		<?php _e( 'Sort orders by "Order Id" in  ', 'woocommerce-order-export' ) ?>
+		<select name="settings[sort_direction]">
+			<option value='DESC' <?php echo selected( @$settings[ 'sort_direction' ], 'DESC') ?> ><?php _e( 'Descending', 'woocommerce-order-export' ) ?></option>
+			<option value='ASC'  <?php echo selected( @$settings[ 'sort_direction' ], 'ASC') ?> ><?php _e( 'Ascending', 'woocommerce-order-export' ) ?></option>
+		</select><?php _e( ' order', 'woocommerce-order-export' ) ?>
+		</div>
 	</div>
-
 
 	<div id="my-right" style="float: left; width: 48%; margin: 0px 10px; max-width: 500px;">
 		<?php if ( $mode === $WC_Order_Export::EXPORT_SCHEDULE ): ?>
@@ -556,7 +563,6 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							<option selected value="<?php echo $cat_term->term_id ?>"> <?php echo $cat_term->name; ?></option>
 						<?php } ?>
 				</select>
-
 				<span class="wc-oe-header"><?php _e( 'Vendor/creator', 'woocommerce-order-export' ) ?></span>
 				<select id="product_vendors" name="settings[product_vendors][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php
@@ -567,6 +573,8 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							<option selected value="<?php echo $user_id ?>"> <?php echo $user->display_name; ?></option>
 						<?php } ?>
 				</select>
+				
+                <?php do_action("woe_settings_filter_by_product_after_vendors", $settings); ?>
 
 				<span class="wc-oe-header"><?php _e( 'Product', 'woocommerce-order-export' ) ?></span>
 
@@ -807,18 +815,27 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 	</div>
 	<p class="submit">
-		<input type="submit" id='preview-btn' class="button-secondary" value="<?php _e( 'Preview', 'woocommerce-order-export' ) ?>" />
+		<input type="submit" id='preview-btn' class="button-secondary preview-btn" data-limit="5" value="<?php _e( 'Preview', 'woocommerce-order-export' ) ?>" />
 		<input type="submit" id='save-btn' class="button-primary" value="<?php _e( 'Save Settings', 'woocommerce-order-export' ) ?>" />
 		<?php if ( $show[ 'export_button' ] ) { ?>
 			<input type="submit" id='export-btn' class="button-secondary" value="<?php _e( 'Export', 'woocommerce-order-export' ) ?>" />
 			<input type="submit" id='export-wo-pb-btn' class="button-secondary" value="<?php _e( 'Export [w/o progressbar]', 'woocommerce-order-export' ) ?>" />
+		<?php } ?>
+		<span id="preview_actions" class="hide">
+			<strong id="output_preview_total"><?php _e( 'Export total: ', 'woocommerce-order-export' ); ?><span></span><?php _e( ' orders', 'woocommerce-order-export' ) ?></strong>
+			<?php _e( 'Export view', 'woocommerce-order-export' ); ?>
+			<?php foreach( array( 5, 10, 25, 50 ) as $n ): ?>
+				<button class="button-secondary preview-btn" data-limit="<?php echo $n; ?>"><?php echo $n; ?></button>
+			<?php endforeach ?>
+		</span>
+	</p>
+	<?php if ( $show[ 'export_button' ] ) { ?>
 		<div id="progress_div" style="display: none;">
 			<h1><?php _e( "Press 'Esc' to cancel the export", 'woocommerce-order-export' ) ?></h1>
 			<div id="progressBar"><div></div></div>
 		</div>
 		<div id="background"></div>
 	<?php } ?>
-</p>
 
 </form>
 <textarea rows=10 id='output_preview' style="overflow: auto;" wrap='off'></textarea> 
@@ -1250,26 +1267,40 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 
 
-		$( "#preview-btn" ).click( function() {
-			jQuery( '#output_preview, #output_preview_csv' ).hide();
-			var data = $( '#export_job_settings' ).serialize()
-			data = data + "&action=order_exporter&method=preview&mode=" + mode + "&id=" + job_id;
-			$.post( ajaxurl, data, function( response ) {
-				var id = 'output_preview';
-				if ( output_format == 'XLS' || output_format == 'CSV' )
-					id = 'output_preview_csv';
-				if ( output_format == 'JSON' || output_format == 'XML' ) {
-					jQuery( '#' + id ).text( response );
-				}
-				else {
-					jQuery( '#' + id ).html( response );
-				}
-				jQuery( '#' + id ).show();
-			}
-			, "html"
-				);
+		$( ".preview-btn" ).click( function() {
+			preview(jQuery(this).attr('data-limit'));
 			return false;
 		} );
+
+		function preview(size) {
+			jQuery( '#output_preview, #output_preview_csv' ).hide();
+			var data = $( '#export_job_settings' ).serialize();
+			var estimate_data = data + "&action=order_exporter&method=estimate&mode=" + mode + "&id=" + job_id;
+			$.post( ajaxurl, estimate_data, function( response ) {
+						if ( response.total !== undefined ) {
+							jQuery( '#output_preview_total' ).find( 'span' ).html( response.total );
+							jQuery( '#preview_actions' ).removeClass( 'hide' );
+						}
+					}, "json"
+			);
+
+			data = data + "&action=order_exporter&method=preview&limit="+size+"&mode=" + mode + "&id=" + job_id;
+			$.post( ajaxurl, data, function( response ) {
+						var id = 'output_preview';
+						if ( output_format == 'XLS' || output_format == 'CSV' )
+							id = 'output_preview_csv';
+						if ( output_format == 'JSON' || output_format == 'XML' ) {
+							jQuery( '#' + id ).text( response );
+						}
+						else {
+							jQuery( '#' + id ).html( response );
+						}
+						jQuery( '#' + id ).show();
+						window.scrollTo( 0, document.body.scrollHeight );
+					}
+					, "html"
+			);
+		}
 // EXPORT FUNCTIONS
 		function get_data() {
 			var data = $( '#export_job_settings' ).serializeArray()

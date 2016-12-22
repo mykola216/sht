@@ -25,6 +25,10 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 			$this->objPHPExcel->setActiveSheetIndex( 0 );
 			
 			$this->last_row = $this->objPHPExcel->getActiveSheet()->getHighestRow();
+			
+			//fix bug,  row=1  if we have 0 records
+			if( $this->last_row == 1  AND $this->objPHPExcel->getActiveSheet()->getHighestColumn() == "A" )
+				$this->last_row = 0;
 		}
 	}
 
@@ -32,39 +36,35 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 		$data = apply_filters( "woe_xls_header_filter", $data );
 		parent::start( $data );
 		
-		if ( ! $this->settings['display_column_names'] OR ! $data ) {
-			return;
-		}
-
 		if ( $this->mode == 'preview' ) {
 			$this->rows[] = $data;
 			return;
 		}
 
-		foreach ( $data as $pos => $text ) {
-			$this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow( $pos, $this->last_row, $text );
+		if ( $this->settings['display_column_names'] AND $data ) {
+			$this->last_row++;
+			foreach ( $data as $pos => $text ) {
+				$this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow( $pos, $this->last_row, $text );
+			}
+
+			//make first bold
+			$last_column = $this->objPHPExcel->getActiveSheet()->getHighestDataColumn();
+			$this->objPHPExcel->getActiveSheet()->getStyle( "A1:" + $last_column + "1" )->getFont()->setBold( true );
+
+			//freeze
+			$this->objPHPExcel->getActiveSheet()->freezePane( 'A2' );
 		}
-		//make first bold
-		$last_column = $this->objPHPExcel->getActiveSheet()->getHighestDataColumn();
-		$this->objPHPExcel->getActiveSheet()->getStyle( "A1:" + $last_column + "1" )->getFont()->setBold( true );
 
 		//rename 
 		$this->objPHPExcel->getActiveSheet()->setTitle( __( 'Orders', 'woocommerce-order-export' ) );
 
-		//adjust width for all columns
-		$max_columns = PHPExcel_Cell::columnIndexFromString( $last_column );
-		foreach ( range( 0, $max_columns ) as $col ) {
-			$this->objPHPExcel->getActiveSheet()->getColumnDimensionByColumn( $col )->setAutoSize( true );
-		}
-
-		//freeze
-		$this->objPHPExcel->getActiveSheet()->freezePane( 'A2' );
-		
 		// right-to-left worksheet?
 		if( $this->settings['direction_rtl'] )
 			$this->objPHPExcel->getActiveSheet()->setRightToLeft(true);
 		
-		//save only header on init 
+		do_action ( 'woe_xls_print_header', $this->objPHPExcel, $this );
+
+		//save only header or empty file on init 
 		$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 		$objWriter->save( $this->filename );
 	}
@@ -72,7 +72,9 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 	public function output( $rec ) {
 		parent::output( $rec );
 		if ( $this->has_output_filter ) {
-			$rec = apply_filters( "woe_xls_output_filter", $rec, $rec );
+			$rec = apply_filters( "woe_xls_output_filter", $rec, $this );
+			if( !$rec )
+				return;
 		}
 
 		if ( $this->mode == 'preview' ) {
@@ -123,5 +125,11 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 			$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 			$objWriter->save( $this->filename );
 		}
+	}
+
+	public function truncate() {
+		$this->objPHPExcel->disconnectWorksheets();
+		$this->objPHPExcel->createSheet();
+		$this->last_row = 0;
 	}
 }

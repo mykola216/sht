@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: WooCommerce Order Export\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-07 11:50+0000\n"
-"PO-Revision-Date: 2016-11-07 12:35+0000\n"
-"Last-Translator: wordpress <wp-irfan@test.com>\n"
+"PO-Revision-Date: 2016-11-23 18:38+0000\n"
+"Last-Translator: wordpress <wordpress@wordpress.com>\n"
 "Language-Team: Russian\n"
 "Language: ru-RU\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
@@ -529,7 +529,7 @@ msgstr "Заказы"
 
 #: view/export.php:7
 msgid "Export Now"
-msgstr "Экпорт"
+msgstr "Экспорт"
 
 #: view/main.php:8
 msgid "Settings saved"
@@ -537,7 +537,7 @@ msgstr "Настройки сохранены"
 
 #: view/main.php:11 view/settings-form.php:799
 msgid "Export"
-msgstr "Экпорт"
+msgstr "Экспорт"
 
 #: view/main.php:13
 msgid "Scheduled Exports"
@@ -808,7 +808,7 @@ msgstr "Адрес доставки"
 
 #: view/settings-form.php:733
 msgid "Set up fields to export "
-msgstr "Настроить поля для экпорта"
+msgstr "Настроить поля для экспорта"
 
 #: view/settings-form.php:761
 msgid "Confirm"

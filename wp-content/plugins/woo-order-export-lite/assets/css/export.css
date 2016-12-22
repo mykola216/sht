@@ -511,3 +511,19 @@ input.date{
     border-color: #ccc;
     margin-bottom: 10px;
 }
+
+#my-sort select {
+    width: 30%;
+}
+#my-sort {
+    font-weight: bold;
+}
+
+#output_preview_total {
+    margin-left: 40px;
+    margin-right: 30px;
+}
+
+.hide {
+    display: none !important;
+}
