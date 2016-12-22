@@ -3,7 +3,7 @@
 Plugin Name: Accelerated Mobile Pages
 Plugin URI: https://wordpress.org/plugins/accelerated-mobile-pages/
 Description: AMP for WP - Accelerated Mobile Pages for WordPress
-Version: 0.9
+Version: 0.9.1.2.1
 Author: Ahmed Kaludi, Mohammed Kaludi
 Author URI: http://ampforwp.com/
 Donate link: https://www.paypal.me/Kaludi/5
@@ -26,7 +26,7 @@ add_action( 'init', 'ampforwp_add_custom_post_support',11);
 
 define('AMPFORWP_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
 define('AMPFORWP_IMAGE_DIR',plugin_dir_url(__FILE__).'images');
-define('AMPFORWP_VERSION','0.8.9');
+define('AMPFORWP_VERSION','0.9.1.2');
 
 /*
  * Load Files only in the backend
@@ -56,7 +56,7 @@ if ( is_admin() ) {
 						if(is_plugin_active( 'amp/amp.php' )){
 							$actions = array_merge( $actions, $settings );
 						}else{
-						$please_activate_parent_plugin = array('Please Activate Parent plugin' => '<a href="'.get_admin_url() .'plugins.php?page=tgmpa-install-plugins">' . __('Please Activate Parent plugin', 'ampforwp') . '</a>');
+						$please_activate_parent_plugin = array('Please Activate Parent plugin' => '<a href="'.get_admin_url() .'plugin-install.php?s=amp&tab=search&type=term">' . __('Please Activate Parent plugin', 'ampforwp') . '</a>');
 						$actions = array_merge( $please_activate_parent_plugin,$actions );
 					}
 					}

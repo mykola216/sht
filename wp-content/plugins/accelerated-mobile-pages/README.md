@@ -2,12 +2,12 @@
 The Must have AMP plugin for WordPress. Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site. More details on https://wordpress.org/plugins/accelerated-mobile-pages/ & http://AMPforWP.com
 
 === AMP for WP - Accelerated Mobile Pages ===
-Contributors: mohammed_kaludi, ahmedkaludi
+Contributors: mohammed_kaludi, ahmedkaludi, ampforwp
 Tags: AMP, accelerated mobile pages, mobile, amp project, google amp, amp wp, google, plugin
 Donate link: https://www.paypal.me/Kaludi/5
 Requires at least: 3.0
-Tested up to: 4.6.1
-Stable tag: 0.9
+Tested up to: 4.7
+Stable tag: 0.9.1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,17 +18,29 @@ Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on
 
 [What's New in this Version?](http://ampforwp.com/new/) | [Priority Support](http://ampforwp.com/priority-support/) | [View Demo](http://ampforwp.com/demo/?amp) | [Screenshots](https://wordpress.org/plugins/accelerated-mobile-pages/screenshots/) | [Community](http://ampforwp.com/community/)
 
-[youtube https://www.youtube.com/watch?v=zzRy6Q_VGGc]
 
-**Features:**
+> <strong>Extensions</strong><br>
+> Some useful extensions to extend AMP features, check [AMP Adsense Support](https://ampforwp.com/advanced-amp-ads/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin), [Custom Post Type Support](https://ampforwp.com/custom-post-type/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) and [DoubleClick Support](https://ampforwp.com/doubleclick-for-publishers/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin). To view more, go to our [Extensions page](https://ampforwp.com/extensions/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin).
+>
+> <strong>Premium Support</strong><br>
+> We try our best to provide support on WordPress.org forums. However, One-on-one email support is available to people who bought the [Priority Support](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) only.
+>	
+> <strong>Bug Reports</strong><br>
+> Bug reports for AMP for WP are [welcomed on GitHub](https://github.com/ahmedkaludi/Accelerated-Mobile-Pages). Please note GitHub is _not_ a support forum, and issues that aren't properly qualified as bugs will be closed.
 
-* NEW - Drag & Drop Page builder Added
-* NEW - 2 Designs Added
+
+= Features: =
+
+* NEW - DoubleClick Support 
+* NEW - Custom Post Type Support 
+* NEW - Star Ratings  
+* NEW - Drag & Drop Page builder Added 
+* NEW - 2 Designs Added 
 * NEW - 100% Yoast SEO support on AMP pages
-* NEW - AMP WooCommerce Support
-* NEW - Switch on/off Support for Pages on AMP
-* NEW - Translation Panel & RTL
-* NEW - Internal AMP linking - You can browse AMP pages internally
+* AMP WooCommerce Support 
+* Switch on/off Support for Pages on AMP
+* Translation Panel & RTL
+* Internal AMP linking - You can browse AMP pages internally
 * Related posts below the post
 * Recent Comments list
 * Automatically integrate AMP to your website.
@@ -58,7 +70,11 @@ Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on
 * Piwik & Segment.com Support
 * Great Support & Active Development.
 
-**NOTE:** Next Update of this plugin will be released by end of October 2016.
+[youtube https://www.youtube.com/watch?v=zzRy6Q_VGGc]
+
+
+**NOTE:** Next Update of this plugin will be released by end of Dec 2016.
+
 
 **[JOIN CHAT GROUP COMMUNITY](http://ampforwp.com/community/)**: Purpose of this group is to get proper suggestions and feedback from plugin users and the community so that we can make the plugin even better.
 
@@ -124,6 +140,56 @@ Please check if you have "Pretty Permalinks" enabled. If not then activate it. F
 
 
 == Changelog ==
+
+= 0.9.1.2 [20th December 2016] =
+* Proper Details at http://ampforwp.com/new/
+* DoubleClick Support
+* Custom Post Type Support
+* Ratings Support
+* Comments Gaping fix
+* Custom Excerpt code
+* Better Compatibility with Yoast SEO plugin
+* AMP Validation error in Design 1 Fixed
+* Proper Homepage title & Description with Yoast SEO plugin issue fixed
+* Design -1 Excerpt too big for mobile devices, Fixed
+* Advertisement support on Design 1
+* Link to Tags & Categories were having some issues.
+* AMP looking bad on big devices
+* AMP validation Improvement: Lightbox plugins compatibility
+* Huge Progress in AMP Validation Errors: Strip unwanted codes and tags from wp_footer for better compatibility with Plugins
+* Page Performance: Removed default Google font loading
+* Page Performance: DNS Prefetch tag added for faster DNS Handshake
+
+= 0.9.1 [16th December 2016] =
+* Proper Details at http://ampforwp.com/new/
+* PHP7 Compatibility
+* Pagination URLs (Prev & Next) was going to 404 ( #244 | #251 )
+* Custom CSS not working in Design one (#249)
+* Enhanced the translation panel by adding Textarea from Redux, which means that we're able to allow HTML in footer like before (#260)
+* How to remove “Powered by WordPress” from Design-1 of AMP ( #264 )
+* Non-amp Homepage support added (#267)
+* using get_avatar() (#259)
+* Validation issue fixed: The attribute 'rel' may not appear in tag 'div' (#268)
+* Validation Issue fixed: Script Tag removed from the content.
+* Featured image in Design 1 in single #261
+* After Fresh installation - a save is required Fixed
+* Excerpt length controlled
+* Design One has thumbnails on the Homepage
+* Non-AMP link goes to the wrong page, issue fixed.
+* Archive pages were broken, fixed.
+* Option to Enable & Disable the Next/Previous links in Single
+* WhatsApp sharing not working, issue fixed.
+* Category Taxonomy has extra ':' in the word.
+* The word 'Ago' is now translatable.
+* Yoast SEO with AMP compatibility issue fixed.
+* Several Minor Polishing in the code
+* Footer Ad gets covered by Sticky Social Icons (#269)
+* Smaller image size when “image caption” is used in Design-2 (#263)
+* Footer ad with Sticky Social bar issue fix
+* Checked with WordPress 4.7
+* Ad #1 was messing up with the title, issue fixed.
+* Compatibility improved with AMP WooCommerce.
+
 = 0.9 =
 * Proper Details at http://ampforwp.com/amp-pagebuilder/
 * Drag & Drop Page builder Added: You can easily modify the look of the AMP page using this feature

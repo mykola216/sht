@@ -3,6 +3,7 @@
 <html amp>
 <head>
 	<meta charset="utf-8">
+    <link rel="dns-prefetch" href="https://cdn.ampproject.org">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 
@@ -11,7 +12,7 @@
 	<?php do_action( 'amp_post_template_css', $this ); ?>
 	</style>
 </head>
-<body>
+<body class="amp_home_body">
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 
 <?php do_action( 'ampforwp_after_header', $this ); ?>
@@ -42,7 +43,7 @@
 				<?php
 
 				if(has_excerpt()){
-					$content = the_excerpt();
+					$content = get_the_excerpt();
 				}else{
 					$content = get_the_content();
 				}
@@ -50,9 +51,8 @@
 		        <p><?php echo wp_trim_words( $content , '15' ); ?></p>
 
 		    </div>
-		    <div class="cb"></div>
-
-		</div>
+            <div class="cb"></div>
+	</div>
 
 	<?php endwhile;  ?>
 
@@ -65,7 +65,6 @@
 
 			<div class="clearfix"></div>
 		</div>
-
 	</div>
 
 	<?php endif; ?>
@@ -73,4 +72,5 @@
 <?php $this->load_parts( array( 'footer' ) ); ?>
 <?php do_action( 'amp_post_template_footer', $this ); ?>
 </body>
+
 </html>

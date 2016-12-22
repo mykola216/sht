@@ -22,10 +22,10 @@
 										$tag_ids = array();
 										foreach($ampforwp_tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
 										$args=array(
-										   'tag__and' => $tag_ids,
+										   'tag__in' => $tag_ids,
 										    'post__not_in' => array($post->ID),
 										    'posts_per_page'=> 3,
-										    'caller_get_posts'=>1
+										    'caller_get_posts'=>1,
 										);
 					}
 			}//end of block for tags
@@ -55,7 +55,7 @@
 								                <div class="related_link">
 								                    <a href="<?php echo esc_url( $related_post_permalink ); ?>"><?php the_title(); ?></a>
 								                    <?php if(has_excerpt()){
-																			$content = the_excerpt();
+																			$content = get_the_excerpt();
 																		}else{
 																			$content = get_the_content();
 																		}

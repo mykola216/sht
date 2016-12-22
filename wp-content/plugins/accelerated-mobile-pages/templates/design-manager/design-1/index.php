@@ -3,6 +3,7 @@
 <html amp <?php echo AMP_HTML_Utils::build_attributes_string( $this->get( 'html_tag_attributes' ) ); ?>>
 <head>
 	<meta charset="utf-8">
+    <link rel="dns-prefetch" href="https://cdn.ampproject.org">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 	<style amp-custom>
@@ -22,25 +23,45 @@
 			<?php
 				if ( have_posts() ) :
 		    while ( have_posts() ) : the_post(); ?>
-	        <div class="amp-wp-content amp-wp-article-header">
+	        <div class="amp-wp-content amp-wp-article-header amp-loop-list">
 
-	            <h1 class="amp-wp-title">
-	                <?php  $ampforwp_post_url = get_permalink(); ?>
-	                <a href="<?php  echo trailingslashit($ampforwp_post_url) . AMP_QUERY_VAR ;?>"><?php the_title() ?></a>
-	            </h1>
+	        <h1 class="amp-wp-title">
+	            <?php  $ampforwp_post_url = get_permalink(); ?>
+	            <a href="<?php  echo trailingslashit($ampforwp_post_url) . AMP_QUERY_VAR ;?>"><?php the_title() ?></a>
+	        </h1>
 
-	            <div class="amp-wp-meta">
-	                <?php  $this->load_parts( apply_filters( 'amp_post_template_meta_parts', array( 'meta-author', 'meta-time' ) ) ); ?>
-	            </div>
 
-	            <?php
+
+
+					<div class="amp-wp-content-loop">
+						<div class="amp-wp-meta">
+	              <?php  $this->load_parts( apply_filters( 'amp_post_template_meta_parts', array( 'meta-author', 'meta-time' ) ) ); ?>
+	          </div>
+
+
+						<?php if ( has_post_thumbnail() ) { ?>
+							<?php
+							$thumb_id = get_post_thumbnail_id();
+							$thumb_url_array = wp_get_attachment_image_src($thumb_id, 'thumbnail', true);
+							$thumb_url = $thumb_url_array[0];
+							?>
+							<div class="home-post-image">
+								<a href="<?php  echo trailingslashit($ampforwp_post_url) . AMP_QUERY_VAR ;?>">
+									<amp-img src=<?php echo $thumb_url ?> width=100 height=75></amp-img>
+								</a>
+							</div>
+						<?php } ?>
+						<?php
 							if(has_excerpt()){
-								$content = the_excerpt();
+								$content = get_the_excerpt();
 							}else{
 								$content = get_the_content();
 							}
-							?>
-	                <p><?php echo wp_trim_words( $content , '50'); ?></p>
+						?>
+	          <p><?php echo wp_trim_words( $content , '20'); ?></p>
+
+					</div>
+
 	        </div>
 		    <?php endwhile;  ?>
 
@@ -59,6 +80,7 @@
 	<?php do_action('ampforwp_post_after_design_elements') ?>
 
 </article>
+
 
 
 <?php $this->load_parts( array( 'footer' ) ); ?>
