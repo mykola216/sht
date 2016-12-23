@@ -67,6 +67,8 @@ class Steigerhouttrend_Nl_MU_Plugin {
 				'info_block_text2'      => 'Binnen 7 dagen bezorgd voor slechts €59. Uiteraard leveren we altijd op afspraak. Montage en etage leveringen zijn ook mogelijk.',
 				'info_block_text3'      => 'Zonder afspraak is het mogelijk om de showroom te bezoeken. Heb je advies nodig bij je bestelling? Bel onze klantenservice 050 3642594 of mail info@steigerhouttrend.nl',
 				'info_block_text4'      => 'Bij Steigerhouttrend maken we alle meubels op bestelling. We leveren maatwerk.',
+				'read_more_text'      => 'Read More',
+				'hide_more_text'      => 'Hide',
 				'coupon_btn_text'       => 'Kortingsbon invullen',
 			);
 			$sliding_child_options = get_option( 'sliding_child_options' );
@@ -150,6 +152,8 @@ class Steigerhouttrend_Nl_MU_Plugin {
 		$options['info_block_text2']      = wp_filter_nohtml_kses( $options['info_block_text2'] );
 		$options['info_block_text3']      = wp_filter_nohtml_kses( $options['info_block_text3'] );
 		$options['info_block_text4']      = wp_filter_nohtml_kses( $options['info_block_text4'] );
+		$options['read_more_text']      = wp_filter_nohtml_kses( $options['read_more_text'] );
+		$options['hide_more_text']      = wp_filter_nohtml_kses( $options['hide_more_text'] );
 		$options['coupon_btn_text']       = wp_filter_nohtml_kses( $options['coupon_btn_text'] );
 
 		return $options;

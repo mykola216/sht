@@ -73,8 +73,10 @@ add_action( 'woo_main_before', 'canvas_child_home' );
 
 
 // Archive page
-add_action( 'woocommerce_archive_description', 'canvas_child_archive_description_sidebar', 20 );
+//add_action( 'woocommerce_archive_description', 'canvas_child_archive_description_sidebar', 20 );
 add_action( 'woocommerce_archive_description', 'canvas_child_after_main_content_sidebar', 1);
+remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
+add_action( 'woocommerce_archive_description', 'canvas_child_taxonomy_archive_description', 10 );
 //add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
 // Archive - end
 
@@ -427,8 +429,35 @@ function canvas_child_archive_description_sidebar() {
 function canvas_child_after_main_content_sidebar () {
 	dynamic_sidebar('canvas_child_after_main_content');
 }
+function canvas_child_taxonomy_archive_description() {
+	global $st_options;
 
+	ob_start();
+	canvas_child_archive_description_sidebar();
+	$archive_description_sidebar =  ob_get_clean();
 
+	if ( is_tax( array( 'product_cat', 'product_tag' ) ) && 0 === absint( get_query_var( 'paged' ) ) ) {
+		$description = wc_format_content( term_description() ) . $archive_description_sidebar;
+		if ( $description ) {
+			if (wp_is_mobile()) {
+				$description_html =
+				'<div class="description-wrapper">
+					<div class="term-description full-content closed" data-offset="10">' . $description . '</div>
+						<button
+						class="button more read-more"
+						data-target=".term-description"
+						data-label-read-more="' . $st_options['read_more_text'] . '"
+						data-label-hide-more="' . $st_options['hide_more_text'] . '" >
+						' . $st_options['read_more_text'] . '
+					</button>
+				</div>';
+			} else {
+				$description_html = '<div class="term-description">' . $description . '</div>';
+			}
+			echo $description_html;
+		}
+	}
+}
 /******************************************************************************/
 /* Archive page - end *********************************************************/
 /******************************************************************************/

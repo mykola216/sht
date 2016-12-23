@@ -68,29 +68,6 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    /* Single product description */
-    var $productDescription = $('#product-description');
-    $productDescription.on('click', '.more', function () {
-        $(this).siblings('.full-content').toggleClass('opened').toggleClass('closed');
-
-        $(this).toggleClass('read-more').toggleClass('hide-more');
-        if ($(this).hasClass('read-more')) {
-            $(this).text($(this).attr('data-label-read-more'));
-        }
-        if ($(this).hasClass('hide-more')) {
-            $(this).text($(this).attr('data-label-hide-more'));
-        }
-
-        $(this).closest("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").toggleClass("float");
-    });
-    $productDescription.closest("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").addClass("float");
-    $productDescription.find(".full-content.closed").each(function () {
-        var newHieght = 100 + $(this).children().first().height();
-        $(this).css({
-            'height': newHieght + 'px'
-        });
-    });
-
     /* Stylizing of Texture DropDown menu and Reformat price decimal */
     setTimeout(function () {
         customDecimalPart('.formattedTotalPrice');

@@ -20,7 +20,8 @@ a.button:first-letter,
     text-transform: uppercase !important;
 }
 input.button,
-.button span{
+.button span,
+.button.more{
     text-transform: initial !important;
 }
 
@@ -551,13 +552,13 @@ ul.products li.product:nth-child(2n) > a >img {
     clear: both;
 }
 
-#product-description .more{
+.description-wrapper .more{
     position: relative;
     cursor: pointer;
-    margin: 20px 0 0 0;
+    margin: 10px 0;
     display: block !important;
 }
-#product-description .more::before{
+.description-wrapper .more::before{
     /*content: "+";*/
     /*display: block;*/
     position: relative;
@@ -568,32 +569,32 @@ ul.products li.product:nth-child(2n) > a >img {
     font-size: 1.2em;
     font-weight: bold;
 }
-#product-description .read-more::before{
+.description-wrapper .read-more::before{
     content: "+";
 }
-#product-description .hide-more::before{
+.description-wrapper .hide-more::before{
     content: "-";
 }
-#product-description .hide-more{
+.description-wrapper .hide-more{
     /*background: #ffab23 !important;*/
 }
-#product-description .full-content{
+.description-wrapper .full-content{
     position: relative;
     overflow: hidden;
 }
-#product-description .full-content.opened{
+.description-wrapper .full-content.opened{
     height: auto !important;
 }
-#product-description .full-content.closed{
+.description-wrapper .full-content.closed{
     height: 255px;
 }
-#product-description .full-content.closed::after{
+.description-wrapper .full-content.closed::after{
     position:absolute;
     bottom:0;
     content:'';
     display:block;
     width:100%;
-    height: 30px;
+    height: 75px;
     background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
     background: -o-linear-gradient(bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
     background: -ms-linear-gradient(bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);

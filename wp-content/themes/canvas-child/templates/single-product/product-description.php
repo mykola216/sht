@@ -11,14 +11,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="product-description">
-	<div class="full-content closed">
+<?php global $st_options; ?>
+
+<div id="product-description" class="description-wrapper">
+	<div id="product-description-content" class="full-content closed" data-offset="100">
 		<?php the_content(); ?>
 	</div>
 	<button
 		class="button more read-more"
-		data-label-read-more="<?php _e('Read more', 'woocommerce'); ?>"
-		data-label-hide-more="<?php _e('Verbergen', 'woocommerce'); ?>" >
-		<?php _e('Read more', 'woocommerce'); ?>
+		data-target="#product-description-content"
+		data-label-read-more="<?php echo $st_options['read_more_text']; ?>"
+		data-label-hide-more="<?php echo $st_options['hide_more_text']; ?>" >
+		<?php echo $st_options['read_more_text']; ?>
 	</button>
 </div>

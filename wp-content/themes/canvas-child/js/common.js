@@ -32,5 +32,32 @@
                 $(this).attr('srcset', newSrcSet);
             }
         });
+
+        /* Single Product description and Category description */
+        var $description = $('.description-wrapper');
+        $description.on('click', '.more', function () {
+            $(this).parent().find($(this).data('target')).toggleClass('opened').toggleClass('closed');
+
+            $(this).toggleClass('read-more').toggleClass('hide-more');
+
+            if ($(this).hasClass('read-more')) {
+                $(this).text($(this).attr('data-label-read-more'));
+            }
+
+            if ($(this).hasClass('hide-more')) {
+                $(this).text($(this).attr('data-label-hide-more'));
+            }
+
+            $(this).closest('body.single-product').find("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").toggleClass("float");
+        });
+        $description.closest('body.single-product').find("#main").find(".yith-wfbt-section, .customer_also_viewed, .related.products").addClass("float");
+        $description.find(".full-content.closed").each(function () {
+            var offset = $(this).data('offset') || 100;
+            var newHeight = +offset + $(this).children().first().height();
+            $(this).css({
+                'height': newHeight + 'px'
+            });
+        });
+
     });// DOM ready
 })(jQuery);
