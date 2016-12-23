@@ -1,5 +1,5 @@
 <?php
-$pattern = '/^\/wp-content\/uploads\/(\d{4}\/\d{2})\/(.+\.jpg)$/i';
+$pattern = '/^\/wp-content\/uploads\/(\d{4}\/\d{2})\/(.+\.(?:jpg|png))$/i';
 if ( preg_match( $pattern, $_SERVER['REQUEST_URI'], $matches ) ) {
 	$request_file_name = untrailingslashit( ABSPATH ) . $matches[0];
 	if ( file_exists( $request_file_name ) ) {
