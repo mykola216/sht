@@ -93,11 +93,12 @@ add_action( 'woocommerce_single_product_summary', 'canvas_child_single_product_s
 add_action( 'woocommerce_single_product_summary', 'canvas_child_single_product_summary_after', 99 );
 add_action( 'woocommerce_after_add_to_cart_form', 'canvas_child_shipping_terms' );
 add_action( 'gform_post_submission_4', 'canvas_child_gform_post_submission_4' );
+add_action( 'template_redirect', 'canvas_child_track_product_view', 30 );
 
 add_filter( 'woocommerce_product_tabs', 'canvas_child_product_tabs', 90 );
 add_filter( 'gform_product_field_types', 'canvas_child_field_types' );
+add_filter("gform_currencies", "canvas_child_gform_update_currency");
 
-add_action( 'template_redirect', 'canvas_child_track_product_view', 30 );
 
 if (function_exists('YITH_WFBT_Frontend')) {
 	remove_action( 'woocommerce_after_single_product_summary', array( YITH_WFBT_Frontend(), 'add_bought_together_form' ), 1 );
@@ -577,13 +578,37 @@ function canvas_child_gform_post_submission_4( $args ) {
 	file_get_contents( $url, false, $context );
 }
 
-/*
- *
- */
+
+
 function canvas_child_field_types( $field_types ) {
 	$field_types[] = 'select';
 
 	return $field_types;
+}
+
+
+
+function canvas_child_gform_update_currency($currencies) {
+	$currencies['EUR'] = array(
+		"name" => __("Euro", "gravityforms"),
+		"symbol_left" => ' €',
+		"symbol_right" => "",
+		"symbol_padding" => " ",
+		"thousand_separator" => ',',
+		"decimal_separator" => '.',
+		//"decimals" => 2
+	);
+	$currencies['USD'] = array(
+		"name" => __("Euro", "gravityforms"),
+		"symbol_left" => ' €',
+		"symbol_right" => "",
+		"symbol_padding" => " ",
+		"thousand_separator" => ',',
+		"decimal_separator" => '.',
+		//"decimals" => 2
+	);
+
+	return $currencies;
 }
 
 
