@@ -119,7 +119,7 @@ jQuery(document).ready(function ($) {
             var newPrice = oldPrice;
             var woo_decimal_sep = (typeof wc_gravityforms_params !== 'undefined') ? wc_gravityforms_params.currency_format_decimal_sep : ',';
             var priceNumberParts = (typeof decimal_sep !== 'undefined') ? oldPrice.split(decimal_sep) : oldPrice.split(woo_decimal_sep);
-console.log(priceNumberParts);
+
             // If decimal part exist and only zero
             if ( priceNumberParts[1] !== undefined && !parseInt(priceNumberParts[1]) && $.trim(priceNumberParts[1]) != decimal_zero_symb ) {
                 priceNumberParts[1] = priceNumberParts[1].replace(/0/g, '');
