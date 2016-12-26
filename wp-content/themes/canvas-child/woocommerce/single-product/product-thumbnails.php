@@ -65,7 +65,7 @@ if ( $attachment_ids ) {
 
 			$loop++;
 		}
-
+		do_action('woocommerce_after_single_product_thumbnail_loop');
 	?></div>
 	<?php
 }
