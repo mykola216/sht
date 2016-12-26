@@ -602,7 +602,8 @@ ul.products li.product:nth-child(2n) > a >img {
 }
 
 /**** Single Product ****/
-.single-product .summary .stock{
+.single-product .summary .stockб,
+.single-product ul.products .product-excerpt{
     display: none;
 }
 /**** /Single Product ****/
