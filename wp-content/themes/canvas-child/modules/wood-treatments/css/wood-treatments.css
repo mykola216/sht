@@ -5,6 +5,11 @@
     font: normal normal bold 14px Verdana, sans-serif;
     margin-bottom: 10px;
 }
+.woocommerce .images .wood-treatments-img{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px;
+}
 
 /* значек выпадающего списка в select */
 .ui-icon-triangle-1-s {

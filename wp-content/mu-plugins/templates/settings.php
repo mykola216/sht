@@ -297,6 +297,18 @@
 				</td>
 			</tr>
 			<tr valign="top">
+				<th scope="row">Wood Treatments Title</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[wood_treatments_title]" value="<?php echo $st_options['wood_treatments_title']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Wood Treatments Image URL</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[wood_treatments_img_url]" value="<?php echo $st_options['wood_treatments_img_url']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row">Read More button text</th>
 				<td>
 					<input type="text" name="steigerhouttrend_options[read_more_text]" value="<?php echo $st_options['read_more_text']; ?>" />
