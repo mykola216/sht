@@ -610,6 +610,7 @@ ul.products li.product:nth-child(2n) > a >img {
     float: none !important;
     display: inline-block;
     vertical-align: top;
+    width: 30% !important;
 }
 /**** /Single Product ****/
 
