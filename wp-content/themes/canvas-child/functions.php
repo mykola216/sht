@@ -99,7 +99,7 @@ add_filter( 'gform_product_field_types', 'canvas_child_field_types' );
 
 add_action( 'template_redirect', 'canvas_child_track_product_view', 30 );
 
-remove_action( 'woocommerce_after_single_product_summary', array( 'YITH_WFBT_Frontend', 'add_bought_together_form' ), 1 );
+remove_action( 'woocommerce_after_single_product_summary', array( YITH_WFBT_Frontend(), 'add_bought_together_form' ), 1 );
 add_action( 'woocommerce_after_single_product', array( 'YITH_WFBT_Frontend', 'add_bought_together_form' ), 1 );
 
 remove_action("woocommerce_after_single_product", "zwt_woocommerce_customer_also_viewed");
