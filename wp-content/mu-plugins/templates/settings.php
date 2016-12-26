@@ -297,6 +297,12 @@
 				</td>
 			</tr>
 			<tr valign="top">
+				<th scope="row">Facebook Comments Numbers</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[fb_comments_number]" value="<?php echo $st_options['fb_comments_number']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row">Wood Treatments Title</th>
 				<td>
 					<input type="text" name="steigerhouttrend_options[wood_treatments_title]" value="<?php echo $st_options['wood_treatments_title']; ?>" />
