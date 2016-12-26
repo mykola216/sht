@@ -97,7 +97,7 @@ add_action( 'template_redirect', 'canvas_child_track_product_view', 30 );
 
 add_filter( 'woocommerce_product_tabs', 'canvas_child_product_tabs', 90 );
 add_filter( 'gform_product_field_types', 'canvas_child_field_types' );
-add_filter("gform_currencies", "canvas_child_gform_update_currency");
+//add_filter("gform_currencies", "canvas_child_gform_update_currency");
 
 
 if (function_exists('YITH_WFBT_Frontend')) {
