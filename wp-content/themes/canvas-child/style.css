@@ -606,6 +606,11 @@ ul.products li.product:nth-child(2n) > a >img {
 .single-product ul.products .product-excerpt{
     display: none;
 }
+.woocommerce .images .thumbnails a {
+    float: none !important;
+    display: inline-block;
+    vertical-align: top;
+}
 /**** /Single Product ****/
 
 .widget404.woocommerce.widget_product_search {
