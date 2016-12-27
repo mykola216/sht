@@ -242,7 +242,19 @@ function canvas_child_cart_totals_order_total_html( $value ) {
  * Modify breadcrumbs.
  */
 function canvas_child_breadcrumbs_trail( $trail ) {
-	unset( $trail['post_type_archive_link'] );
+	//unset( $trail['post_type_archive_link'] );
+	$count = count( $trail );
+	foreach ( $trail as $index => $value ) {
+		if ( ! in_array( $index, array(0, 'post_type_archive_link', $count-3, 'trail_end') ) ) {
+			unset( $trail[ $index ] );
+		} elseif ( 'post_type_archive_link' === $index ) {
+			$trail['post_type_archive_link'] = str_replace(
+				__( 'Products', 'woocommerce' ),
+				__( 'All Products', 'woocommerce' ),
+				$value
+			);
+		}
+	}
 	return $trail;
 }
 
