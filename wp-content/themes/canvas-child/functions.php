@@ -78,6 +78,7 @@ add_action( 'woocommerce_archive_description', 'canvas_child_after_main_content_
 remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
 add_action( 'woocommerce_archive_description', 'canvas_child_taxonomy_archive_description', 10 );
 //add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
+add_filter( 'amp_post_template_file', 'canvas_child_amp_custom_template', 20, 3 );
 // Archive - end
 
 
@@ -448,6 +449,41 @@ function canvas_child_taxonomy_archive_description() {
 			echo $description_html;
 		}
 	}
+}
+function canvas_child_amp_custom_template( $file, $type, $post ) {
+	// Custom Homepage and Archive file
+	global $redux_builder_amp;
+
+	$ampforwp_design_selector = $redux_builder_amp ? $redux_builder_amp['amp-design-selector'] : 2;
+
+	if ($redux_builder_amp['amp-frontpage-select-option'] == 0) {
+		if ( is_home() || is_archive() ) {
+			if ( 'single' === $type ) {
+				$file = get_stylesheet_directory() . '/amp/templates/design-manager/design-'. $ampforwp_design_selector .'/index.php';
+			}
+		}
+	}
+	elseif ($redux_builder_amp['amp-frontpage-select-option'] == 1) {
+		if ( is_home() ) {
+			if ( 'single' === $type ) {
+				$file = AMPFORWP_PLUGIN_DIR . '/templates/design-manager/design-'. $ampforwp_design_selector .'/frontpage.php';
+			}
+		}
+		if ( is_archive() ) {
+			if ( 'single' === $type ) {
+				$file = get_stylesheet_directory() . '/amp/templates/design-manager/design-'. $ampforwp_design_selector .'/index.php';
+			}
+		}
+
+	}
+	// Custom Single file
+	if ( is_single() || is_page() ) {
+		if('single' === $type && !('product' === $post->post_type )) {
+			$file = AMPFORWP_PLUGIN_DIR . '/templates/design-manager/design-'. $ampforwp_design_selector .'/single.php';
+		}
+	}
+
+	return $file;
 }
 /******************************************************************************/
 /* Archive page - end *********************************************************/
