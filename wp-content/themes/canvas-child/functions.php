@@ -207,6 +207,12 @@ function canvas_child_register_sidebars() {
 		'before_widget' => '<div id="%1$s" class="widget canvas_child_after_main_content %2$s">',
 		'after_widget' => '</div>',
 	) );
+	register_sidebar( array(
+		'name' => 'Before Footer Top',
+		'id' => 'canvas_child_before_footer_top',
+		'before_widget' => '<div id="%1$s" class="widget canvas_child_before_footer_top %2$s">',
+		'after_widget' => '</div>',
+	) );
 }
 
 /**
@@ -237,6 +243,16 @@ function canvas_child_cart_totals_order_total_html( $value ) {
 	$value .= ' ' . sprintf( __( '(Includes %s)', 'woocommerce' ), __( 'VAT', 'woocommerce' ) );
 
 	return $value;
+}
+
+
+/**
+ * Add shortcode for 'before_footer_top' widget area
+ */
+add_shortcode('before_footer_top_widget_area', 'canvas_child_before_footer_top_widget_area');
+function canvas_child_before_footer_top_widget_area() {
+	if ( is_active_sidebar( 'canvas_child_before_footer_top' ) )
+		dynamic_sidebar( 'canvas_child_before_footer_top' );
 }
 
 /**
