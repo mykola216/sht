@@ -788,19 +788,21 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         overflow: auto;*/
 }
 .widget_recently_viewed_products .product_list_widget > li {
+    box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
-    width: 12%;
-    padding: 0 2.5% 2%;
+    width: 16.3%;
+    padding: 0 0.5% 2%;
     margin: 0 !important;
 }
 .widget_recently_viewed_products .product_list_widget > li > a > img.wp-post-image{
     float: none;
     display: block;
     margin: 0 auto .5em;
-    width: 94%;
-    padding: 3%;
+    width: 100%;
+    padding: 0;
     height: auto;
+    border:none;
 }
 .widget_recently_viewed_products .product_list_widget > li > a > .product-title{
 /*    font-weight: bold;
@@ -835,6 +837,11 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 .widget_recently_viewed_products .product_list_widget > li > ins{
     text-decoration:none;
 }
+@media (max-width: 900px) {
+    .widget_recently_viewed_products .product_list_widget > li{
+        width:16%;
+    }
+}
 @media (min-width: 761px) {
     .widget_recently_viewed_products{
         /*height:50%;*/
@@ -843,7 +850,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         /*top:50%;*/
     }
     .widget_recently_viewed_products .product_list_widget > li{
-        width:12%;
+        /*width:15%;*/
     }
     .widget_recently_viewed_products .product_list_widget > li:nth-child(6n+1){
         padding-left:0;
@@ -854,7 +861,9 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 }
 @media (min-width: 321px) and (max-width: 760px) {
     .widget_recently_viewed_products .product_list_widget > li{
-        width:20%;
+        width:49.5%;
+        padding-left:0;
+        padding-right:0;
     }
     .widget_recently_viewed_products .product_list_widget > li:nth-child(4n+1){
         padding-left:0;
@@ -865,7 +874,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 }
 @media (max-width: 320px) {
     .widget_recently_viewed_products .product_list_widget > li{
-        width:45%;
+        width:100%;
     }
     .widget_recently_viewed_products .product_list_widget > li:nth-child(2n+1){
         padding-left:0;
