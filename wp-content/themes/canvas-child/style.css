@@ -859,7 +859,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         padding-right:0;
     }
 }
-@media (min-width: 321px) and (max-width: 760px) {
+@media (min-width: 381px) and (max-width: 760px) {
     .widget_recently_viewed_products .product_list_widget > li{
         width:49.5%;
         padding-left:0;
@@ -872,7 +872,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         padding-right:0;
     }
 }
-@media (max-width: 320px) {
+@media (max-width: 380px) {
     .widget_recently_viewed_products .product_list_widget > li{
         width:100%;
     }
