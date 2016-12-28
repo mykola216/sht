@@ -444,6 +444,18 @@ ul.products li.product:nth-child(2n) > a >img {
 }
 /* Minicart - end */
 
+/* Cart */
+body.woocommerce-cart .cross-sells .yith-wcwl-add-to-wishlist-loop {
+    display: none;
+}
+body.woocommerce-cart .cross-sells ul.products li.product a span.price {
+    margin-left: 0;
+}
+.cart-collaterals .cart_totals .includes_tax{
+    font-size: 0.85em;
+}
+/* Cart - end*/
+
 /* Checkout */
 .payment_methods li:first-child:last-child input[name="payment_method"] {
     display: inline-block !important;

@@ -58,7 +58,7 @@ add_action( 'woocommerce_after_shop_loop_item', 'canvas_child_product_excerpt', 
 
 add_filter( 'wp_nav_menu_items', 'canvas_child_add_home_menu_items' );
 add_filter( 'woo_breadcrumbs_trail', 'canvas_child_breadcrumbs_trail' );
-add_filter( 'woocommerce_cart_totals_order_total_html', 'canvas_child_cart_totals_order_total_html' );
+//add_filter( 'woocommerce_cart_totals_order_total_html', 'canvas_child_cart_totals_order_total_html' );
 add_filter( 'woocommerce_get_order_item_totals', 'canvas_child_get_order_item_totals', 10, 2 );
 add_filter( 'woocommerce_cart_shipping_method_full_label', 'canvas_child_woocommerce_cart_shipping_method_full_label', 10, 2 );
 
