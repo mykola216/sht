@@ -1,0 +1,29 @@
+.edit-tags-php.taxonomy-category .wp-list-table thead #thumb,
+.edit-tags-php.taxonomy-product_cat .wp-list-table thead #thumb{
+    width: auto;
+    word-wrap: normal;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+.edit-tags-php.taxonomy-category .wp-list-table thead #name,
+.edit-tags-php.taxonomy-product_cat .wp-list-table thead #name{
+    width: 15%;
+}
+.edit-tags-php.taxonomy-category .wp-list-table thead #slug,
+.edit-tags-php.taxonomy-product_cat .wp-list-table thead #slug{
+    width: 10%;
+}
+.edit-tags-php.taxonomy-category .wp-list-table thead #description,
+.edit-tags-php.taxonomy-product_cat .wp-list-table thead #description{
+    width: 40%;
+}
+
+.edit-tags-php.taxonomy-category .wp-list-table tbody td.column-thumb,
+.edit-tags-php.taxonomy-product_cat .wp-list-table tbody td.column-thumb{
+    padding-left: 0;
+    padding-right: 0;
+}
+.edit-tags-php.taxonomy-category .wp-list-table tbody td.column-thumb img,
+.edit-tags-php.taxonomy-product_cat .wp-list-table tbody td.column-thumb img{
+    width: 100%;
+}
