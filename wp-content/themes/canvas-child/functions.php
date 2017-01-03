@@ -48,6 +48,7 @@ remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_ad
 add_action('after_setup_theme', 'canvas_child_setup');
 
 add_action( 'wp_enqueue_scripts', 'canvas_child_wp_enqueue_script' );
+add_action( 'admin_enqueue_scripts', 'canvas_child_admin_enqueue_script' );
 
 add_action( 'widgets_init', 'canvas_child_register_sidebars' );
 
@@ -150,6 +151,13 @@ function canvas_child_setup(){
 	load_theme_textdomain( 'woocommerce', get_stylesheet_directory() );
 
 	add_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
+}
+
+function canvas_child_admin_enqueue_script() {
+	$uri = get_stylesheet_directory_uri();
+	if (!wp_is_mobile()) {
+		wp_enqueue_style( 'canvas_child_admin', $uri . '/css/admin-custom.css' );
+	}
 }
 
 function canvas_child_wp_enqueue_script() {
