@@ -330,7 +330,8 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
         // GROUP_CONCAT(distinct wtr.term_taxonomy_id order by wtr.object_id SEPARATOR ' #sm# ') AS term_taxonomy_id,
 
         $post_meta_select = (!empty($_POST['func_nm']) && $_POST['func_nm'] == 'exportCsvWoo') ? ", GROUP_CONCAT({$wpdb->prefix}postmeta.meta_key order by {$wpdb->prefix}postmeta.meta_id SEPARATOR ' #sm# ') AS prod_othermeta_key
-                     , GROUP_CONCAT({$wpdb->prefix}postmeta.meta_value order by {$wpdb->prefix}postmeta.meta_id SEPARATOR ' #sm# ') AS prod_othermeta_value" : "";
+                     , GROUP_CONCAT(IFNULL({$wpdb->prefix}postmeta.meta_value, '-') order by {$wpdb->prefix}postmeta.meta_id SEPARATOR ' #sm# ') AS prod_othermeta_value" : "";
+
 
         $select = "SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.id,
                     {$wpdb->prefix}posts.post_title,
@@ -908,6 +909,13 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                         $cond_postmeta_col_name1 = (!empty($cond_postmeta_col_name[$index])) ? trim($cond_postmeta_col_name[$index]) : '';
                         $cond_postmeta_col_value1 = (!empty($cond_postmeta_col_value[$index])) ? trim($cond_postmeta_col_value[$index]) : '';
                         $cond_postmeta_operator1 = (!empty($cond_postmeta_operator[$index])) ? trim($cond_postmeta_operator[$index]) : '';
+
+                        if( $cond_postmeta_col_name1 == '_regular_price' || $cond_postmeta_col_name1 == '_sale_price' ) {
+                           $cond_postmeta .= "AND wp_postmeta.post_id NOT IN (SELECT post_parent 
+                                                                              FROM {$wpdb->prefix}posts
+                                                                              WHERE post_type IN ('product', 'product_variation')
+                                                                                AND post_parent > 0)";
+                        }
 
                         $cond_postmeta_custom_att = ( $cond_postmeta_col_name1 == '_product_attributes' ) ? " OR (wp_postmeta.meta_key LIKE 'attribute%' AND wp_postmeta.meta_value ". $cond_postmeta_operator1 ." '%". $cond_postmeta_col_value1 ."%')" : '';
 
@@ -3334,9 +3342,9 @@ if (isset ( $_POST ['cmd'] ) && $_POST ['cmd'] == 'dupData') {
             if ($post->post_parent == 0) {
                 
                 if ($woo_dup_obj instanceof WC_Admin_Duplicate_Product) {
-                    $post_data[] = $new_id = $woo_dup_obj -> duplicate_product($post,0,'publish');
+                    $post_data[] = $new_id = $woo_dup_obj -> duplicate_product($post,0,$post->post_status);
                 } else {
-                    $post_data [] = $new_id = woocommerce_create_duplicate_from_product($post,0,'publish');
+                    $post_data [] = $new_id = woocommerce_create_duplicate_from_product($post,0,$post->post_status);
                 }
 
                 //Code for updating the post name

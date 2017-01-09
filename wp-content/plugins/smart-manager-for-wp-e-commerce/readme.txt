@@ -6,8 +6,8 @@ Plugin URI: http://www.storeapps.org/
 Tags: administration, wp e-commerce, woo commerce, woocommerce, wpec, wpsc, jigoshop, ecommerce, management, batch update, bulk edit, mass update, wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management,
 woocommerce manager, woocommerce order management, woocommerce product management, woocommerce smart manager, woocommerce store management
 Requires at least: 2.0.2
-Tested up to: 4.6.1
-Stable tag: 3.9.19
+Tested up to: 4.7
+Stable tag: 3.9.20
 License: GPLv3
 
 The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features. 
@@ -140,6 +140,14 @@ It also gives the warm feeling of supporting further development of the plugin.
 4. Batch Update (only in paid version)
 
 == Changelog ==
+
+= 3.9.20 (05.01.2017) =
+* Fix: Illegal mix of collation for utf8mb4_unicode_520_ci issue
+* Fix: Call to undefined function 'date_diff()' for PHP < 5.3
+* Fix: Advanced Search not returning proper results when searching for 'Price' and 'Sale Price' columns in some cases (WooCommerce)
+* Fix: Duplicated Products having 'post_status' set to 'publish' when duplicating using Smart Manager (WooCommerce)
+* Fix: Products Export CSV returning most of the columns as blank (WooCommerce)
+* Fix: Some minor fixes
 
 = 3.9.19 =
 * Fix: Subscription variations not getting displayed in Smart Manager (WooCommerce)
@@ -689,6 +697,9 @@ It also gives the warm feeling of supporting further development of the plugin.
 * Product administration features
 
 == Upgrade Notice ==
+
+= 3.9.20 =
+Fixes related to illegal mix of collations, advanced search related fixes along with other important fixes. Recommended upgrade.
 
 = 3.9.19 =
 Fixes related to subscription variations not getting displayed, category counts not getting updated along with other important fixes. Recommended upgrade.
