@@ -2,10 +2,10 @@
 Contributors: lucasstark
 Tags: woocommerce, gravity forms
 Requires at least: 3.0
-Tested up to: 4.5
-Stable tag: 2.10.7
+Tested up to: 4.7.0
+Stable tag: 3.0.0
 
-WooCommerce Gravity Forms.  This add-on requires Gravity Forms 1.6 or later.  
+WooCommerce Gravity Forms.  This add-on requires Gravity Forms
 
 
 == Installation ==
@@ -36,7 +36,7 @@ This add-on supports both standard data collection fields ( such as a text box )
 If you are building a Gravity Form that includes pricing fields, you can add the css class of hidden-total to the total field on the gravity form to hide this line item.  WooCommerce-Gravity Forms includes a built in function that will display the total of the customizations selected on the gravity form when a user is adding the item to their cart. 
 
 -- WooCommerce --
-WooCommerce 1.4 or greater is required. 
+WooCommerce 2.4 or greater is required, WooCommerce 2.7 or greater is recommended.
 
 Grouped products are not supported.
 

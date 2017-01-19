@@ -77,7 +77,7 @@ class WC_GFPA_Cart {
 			}
 
 			$cart_item['data']->adjust_price( $total );
-			$cart_item['_gform_total'] = $total;
+
 			error_reporting( $err_level );
 		}
 
@@ -323,11 +323,14 @@ class WC_GFPA_Cart {
 
 				$gravity_form_data = $cart_item['_gravity_form_data'];
 				$form_meta         = RGFormsModel::get_form_meta( $gravity_form_data['id'] );
-				$form_meta = gf_apply_filters( array( 'gform_pre_render',  $gravity_form_data['id'] ), $form_meta );
+				$form_meta         = gf_apply_filters( array(
+					'gform_pre_render',
+					$gravity_form_data['id']
+				), $form_meta );
 				if ( ! empty( $form_meta ) ) {
-					$lead       = $cart_item['_gravity_form_lead'];
+					$lead = $cart_item['_gravity_form_lead'];
 					//We reset the lead id to disable caching of the gravity form value by gravity forms.
-                    //This cache causes issues with multipule cart line items each with their own form.
+					//This cache causes issues with multipule cart line items each with their own form.
 					$lead['id'] = uniqid() . time() . rand();
 
 					$products       = $this->get_product_fields( $form_meta, $lead );
