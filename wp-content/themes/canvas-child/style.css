@@ -52,7 +52,10 @@ input.button,
     padding: 0;
 }
 
-
+body.home .product-excerpt,
+body.archive .product-excerpt{
+    display: none !important;
+}
 .product-excerpt {
     color: #555;
     text-align: left;
