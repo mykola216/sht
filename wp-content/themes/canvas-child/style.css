@@ -34,7 +34,7 @@ input.button,
 }
 /* Actions menu item */
 #main-nav li:nth-child(2) a {
-    color: #f70;
+    /*color: #f70;*/
 }
 #wrapper {
     padding-bottom: 0;
