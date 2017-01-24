@@ -37,6 +37,13 @@ jQuery(document).ready(function ($) {
     });
     /* Kussens color picker - end */
 
+    /* Replace mailchimp checkbox */
+    $('#auto_mailchimp_subscribe')
+        .siblings('.gform_wrapper')
+        .find('input[value="send_a_copy"]')
+        .closest('li')
+        .append($('#auto_mailchimp_subscribe'));
+
     /* Request for a custom product was sent successfully */
     jQuery(document).on( 'gform_confirmation_loaded', function( e, id ) {
         if(4===id) {
