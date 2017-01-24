@@ -22,6 +22,9 @@ global $st_options;
         <?php
             gravity_form(4, $display_title=false, $display_description=false, $display_inactive=false, $field_values=null, $ajax=true);
         ?>
+        <div id="auto_mailchimp_subscribe">
+            <?php do_action('auto_mailchimp_subscribe'); ?>
+        </div>
     </div>
 </div>
 
