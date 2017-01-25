@@ -465,6 +465,13 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 }
 /* Checkout - end*/
 
+/* Copntact Form */
+#contact-page ol.forms li.inline input#sendCopy,
+#contact-page ol.forms li.inline input[type="checkbox"]{
+    margin-left: 0;
+}
+/* Copntact Form - END */
+
 @media (max-width: 768px){
     body.archive .widget.woocommerce_products_of_the_day{
         clear: both !important;
@@ -558,6 +565,11 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         float: left;
         width: 58%;
         clear: none !important;
+    }
+
+    #contact-page ol.forms li.inline input#sendCopy,
+    #contact-page ol.forms li.inline input[type="checkbox"]{
+        margin-left: 100px;
     }
 }
 
