@@ -669,6 +669,22 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 #field_169_7 input {
     width: 100%;
 }
+body #wrapper #content .button.gform_button_select_files{
+    border-radius: 3px;
+    border: 1px solid #ff7700 !important;
+    background: white;
+    color: #ff7700 !important;
+    display: inline-block;
+    font-size: 14px;
+    margin: 0px;
+    padding: 5px;
+    text-decoration: none;
+}
+body #wrapper #content .button.gform_button_select_files:hover,
+body #wrapper #content .button.gform_button_select_files:focus{
+    background: #ff7700;
+    color: #fff !important;
+}
 #gforms_confirmation_message_169 {
     background-color: green !important;
     color: white;
