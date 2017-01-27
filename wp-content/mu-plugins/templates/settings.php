@@ -380,6 +380,17 @@
 					<input type="text" name="steigerhouttrend_options[coupon_btn_text]" value="<?php echo $st_options['coupon_btn_text']; ?>" />
 				</td>
 			</tr>
+
+			<!-- Shop page -->
+			<tr>
+				<td colspan="2" bgcolor="#abc"><strong>Shop page</strong></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Page Title in browser tab</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[shop_page_browser title]" value="<?php echo $st_options['shop_page_browser title']; ?>" />
+				</td>
+			</tr>
 		</table>
 
 		<p class="submit">
