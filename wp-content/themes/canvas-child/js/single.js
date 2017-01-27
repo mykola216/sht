@@ -1,26 +1,39 @@
 jQuery(document).ready(function ($) {
     /* Product summary tabs */
-    $( '#product-summary-tabs' ).on( 'init', function() {
-        var id = ( '#tab-2' === window.location.hash ? '#tab-2' : '#tab-1' );
+    var tabsID = ['#tab-1', '#tab-2'];
+    var productTabSelector = '#product-summary-tabs';
 
-        $( 'ul > li.tab', this ).removeClass( 'active' );
-        $( 'div.panel', this ).hide();
+    var toggleTabs = function (wrapTabSelector, tabID) {
+        var wrapTabSelector = wrapTabSelector || productTabSelector;
 
-        $( 'a[href$="' + id + '"]', this ).closest( 'li.tab' ).addClass( 'active' );
-        $( id ).show();
+        $(wrapTabSelector).find( 'ul > li.tab' ).removeClass( 'active' );
+        $(wrapTabSelector).find( 'div.panel' ).hide();
+
+        $(wrapTabSelector).find( 'a[href$="' + tabID + '"]' ).closest( 'li.tab' ).addClass( 'active' );
+        $(tabID).show();
+    };
+
+    $( productTabSelector ).on( 'init', function() {
+        var id = ( tabsID.indexOf(window.location.hash) != -1 ) ? window.location.hash : '#tab-1';
+
+        toggleTabs(productTabSelector, id);
 
         document.body.scrollTop = document.documentElement.scrollTop = 0;
     }).on( 'click', 'ul > li.tab a', function( e ) {
         e.preventDefault();
-        var hash = ( '#tab-2' === $(this).attr('href') ? '#tab-2' : '' );
-        if (hash === window.location.hash) {
+        var id = $(this).attr('href');
+        var hash = ( tabsID.indexOf(id) != -1 ) ? id : '#tab-1';
+
+        if (hash == window.location.hash) {
             return false;
-        } else if ( '#tab-2' === hash ) {
-            window.location.hash = hash;
-            window.location.reload();
-        } else {
-            window.location.href = window.location.origin + window.location.pathname;
         }
+
+        if (window.location.hash || id != '#tab-1') {
+            window.location.hash = hash;
+        }
+
+        toggleTabs(productTabSelector, id);
+
     }).trigger( 'init' );
     /* Product summary tabs - end */
 
