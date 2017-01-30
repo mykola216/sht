@@ -24,6 +24,15 @@ input.button,
 .button.more{
     text-transform: initial !important;
 }
+a.print-button {
+    background: url("./images/print-icon.png") no-repeat !important;
+    width: 50px !important;
+    height: 50px;
+    color: transparent !important;
+    border: none !important;
+    float: right;
+    margin-bottom: 5px;
+}
 
 #navigation {
     margin: 0;
@@ -912,5 +921,43 @@ body #wrapper #content .button.gform_button_select_files:focus{
     }
     .widget_recently_viewed_products .product_list_widget > li:nth-child(2n){
         padding-right:0;
+    }
+}
+@media print {
+    body.canvas_child_print_button .print-button,
+    body.canvas_child_print_button .breadcrumbs,
+
+    body.canvas_child_print_button > *:not(#wrapper),
+    body.canvas_child_print_button > #wrapper > *:not(#inner-wrapper),
+    body.canvas_child_print_button > #wrapper > #inner-wrapper > *:not(#content),
+    body.canvas_child_print_button > #wrapper > #inner-wrapper .entry > *:not(.woocommerce),
+
+    body.canvas_child_print_button table .product-remove,
+    body.canvas_child_print_button table .product-add-to-cart,
+    body.canvas_child_print_button table > tfoot,
+
+    body.canvas_child_print_button.woocommerce-cart .cart-collaterals,
+    body.canvas_child_print_button.woocommerce-cart table.cart tbody tr:not(.cart_item) {
+        display: none !important;
+    }
+
+    body.canvas_child_print_button .woocommerce table .product-thumbnail,
+    body.canvas_child_print_button .woocommerce table .product-price {
+        display: table-cell !important;
+    }
+
+    body.canvas_child_print_button table,
+    body.canvas_child_print_button table th,
+    body.canvas_child_print_button table td,
+    body.canvas_child_print_button table tr {
+        border: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+    body.canvas_child_print_button .woocommerce table,
+    body.canvas_child_print_button .woocommerce table th,
+    body.canvas_child_print_button .woocommerce table td{
+        border: 1px solid #eee !important;
     }
 }
