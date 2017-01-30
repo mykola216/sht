@@ -65,6 +65,8 @@ add_filter( 'woocommerce_cart_shipping_method_full_label', 'canvas_child_woocomm
 
 add_filter( 'woocommerce_sale_flash', 'canvas_child_woocommerce_sale_flash', 10, 3 );
 add_filter( 'formatted_woocommerce_price', 'canvas_child_formatted_woocommerce_price', 10, 5 );
+
+add_filter( 'yith_wcwl_email_share_subject', 'canvas_child_yith_wcwl_email_share_subject', 10);
 // Common - end
 
 
@@ -425,6 +427,13 @@ function canvas_child_instagram_feed($echo = true) {
 
 	if ($echo) echo $out;
 	else return $out;
+}
+
+function canvas_child_yith_wcwl_email_share_subject ($subject) {
+	global $st_options;
+	$subject = $st_options['wishlist_email_subject'];
+	$subject = $subject ? $subject : sprintf(__('U heeft een verlanglijst van %1$s ontvangen', 'canvas_child'), get_bloginfo('name'));
+	return $subject;
 }
 /******************************************************************************/
 /* Common - end                                                               */

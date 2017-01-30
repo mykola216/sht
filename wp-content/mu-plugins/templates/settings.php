@@ -380,6 +380,24 @@
 					<input type="text" name="steigerhouttrend_options[coupon_btn_text]" value="<?php echo $st_options['coupon_btn_text']; ?>" />
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row">Email Table Header <p class="description">(in send_me_cart_items Action)</p></th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[send_me_cart_items_table_header]" value="<?php echo $st_options['send_me_cart_items_table_header']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Email Subject <p class="description">(in send_me_cart_items Action)</p></th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[send_me_cart_items_subject]" value="<?php echo $st_options['send_me_cart_items_subject']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Email Subject <p class="description">(in wishlist email Action)</p></th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[wishlist_email_subject]" value="<?php echo $st_options['wishlist_email_subject']; ?>" />
+				</td>
+			</tr>
 
 			<!-- Shop page -->
 			<tr>
