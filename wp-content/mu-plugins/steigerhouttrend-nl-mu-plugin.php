@@ -102,8 +102,8 @@ class Steigerhouttrend_Nl_MU_Plugin {
 	// Add menu page
 	public function add_options_page() {
 		add_options_page(
-			'steigerhouttrend.nl Site Options',
-			'steigerhouttrend.nl Site Options',
+			get_bloginfo('name') . ' Site Options',
+			get_bloginfo('name') . ' Site Options',
 			'manage_options',
 			'steigerhouttrend_options',
 			array( $this, 'output_options_page' )
