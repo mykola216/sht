@@ -67,6 +67,9 @@ add_filter( 'woocommerce_sale_flash', 'canvas_child_woocommerce_sale_flash', 10,
 add_filter( 'formatted_woocommerce_price', 'canvas_child_formatted_woocommerce_price', 10, 5 );
 
 add_filter( 'yith_wcwl_email_share_subject', 'canvas_child_yith_wcwl_email_share_subject', 10);
+
+add_action( 'yith_wcwl_before_wishlist', 'display_print_button');
+add_action( 'woocommerce_before_cart', 'display_print_button');
 // Common - end
 
 
@@ -429,12 +432,27 @@ function canvas_child_instagram_feed($echo = true) {
 	else return $out;
 }
 
-function canvas_child_yith_wcwl_email_share_subject ($subject) {
+function canvas_child_yith_wcwl_email_share_subject($subject) {
 	global $st_options;
 	$subject = $st_options['wishlist_email_subject'];
 	$subject = $subject ? $subject : sprintf(__('U heeft een verlanglijst van %1$s ontvangen', 'canvas_child'), get_bloginfo('name'));
 	return $subject;
 }
+
+function print_button() {
+	$id = get_queried_object_id();
+	$link = home_url('/index.php?task=productprint&pid='.$id); //sets the URL for the post page
+	$nonced_url = wp_nonce_url($link, $id); /*** adds a nonce to the URL ***/
+?>
+	<a href="<?php print $nonced_url; ?>" class="button print-button"  target="_blank" rel="nofollow" onclick="document.body.classList.add('canvas_child_print_button');window.print();">Print</a>
+<?php
+}
+
+function display_print_button() {
+	print_button();
+}
+
+
 /******************************************************************************/
 /* Common - end                                                               */
 /******************************************************************************/
