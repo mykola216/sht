@@ -444,7 +444,7 @@ function print_button() {
 	$link = home_url('/index.php?task=productprint&pid='.$id); //sets the URL for the post page
 	$nonced_url = wp_nonce_url($link, $id); /*** adds a nonce to the URL ***/
 ?>
-	<a href="<?php print $nonced_url; ?>" class="button print-button"  target="_blank" rel="nofollow" onclick="document.body.classList.add('canvas_child_print_button');window.print();">Print</a>
+	<a href="<?php print $nonced_url; ?>" class="button print-button"  target="_blank" rel="nofollow" onclick="document.body.classList.add('canvas_child_print_button');window.print();return false;">Print</a>
 <?php
 }
 
