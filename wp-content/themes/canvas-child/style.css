@@ -432,6 +432,9 @@ ul.products li.product:nth-child(2n) > a >img {
 .onsale.hidden{
     visibility: hidden;
 }
+.woocommerce-result-count{
+    display: none;
+}
 /* Shop Catalog - end */
 
 
