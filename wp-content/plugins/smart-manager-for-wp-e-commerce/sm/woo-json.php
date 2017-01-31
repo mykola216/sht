@@ -194,21 +194,20 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
         
 
         //Code to get the taxonomy id for 'simple' product_type
-        $query_taxonomy_ids = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
+        $query_taxonomy_id = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
                                     FROM {$wpdb->prefix}terms as terms
                                         JOIN {$wpdb->prefix}term_taxonomy as taxonomy ON (taxonomy.term_id = terms.term_id)
                                     WHERE taxonomy.taxonomy = 'product_type'
-                                        AND terms.slug IN ('variable', 'variable-subscription')"; //added support for handling subscription
-        $variable_taxonomy_ids = $wpdb->get_col( $query_taxonomy_ids );
+                                        AND terms.slug = 'variable'";
+        $variable_taxonomy_id = $wpdb->get_var( $query_taxonomy_id );
 
-
-        if ( !empty($variable_taxonomy_ids) ) {
+        if ( !empty($variable_taxonomy_id) ) {
             $query_post_parent_not_variable = "SELECT distinct products.post_parent 
                                         FROM {$wpdb->prefix}posts as products 
                                         WHERE NOT EXISTS (SELECT * 
                                                             FROM {$wpdb->prefix}term_relationships 
                                                             WHERE object_id = products.post_parent
-                                                                AND term_taxonomy_id IN (". implode(",",$variable_taxonomy_ids) ."))
+                                                                AND term_taxonomy_id = ".$variable_taxonomy_id.") 
                                           AND products.post_parent > 0 
                                           AND products.post_type = 'product_variation'";
             $results_post_parent_not_variable = $wpdb->get_col( $query_post_parent_not_variable );
@@ -330,8 +329,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
         // GROUP_CONCAT(distinct wtr.term_taxonomy_id order by wtr.object_id SEPARATOR ' #sm# ') AS term_taxonomy_id,
 
         $post_meta_select = (!empty($_POST['func_nm']) && $_POST['func_nm'] == 'exportCsvWoo') ? ", GROUP_CONCAT({$wpdb->prefix}postmeta.meta_key order by {$wpdb->prefix}postmeta.meta_id SEPARATOR ' #sm# ') AS prod_othermeta_key
-                     , GROUP_CONCAT(IFNULL({$wpdb->prefix}postmeta.meta_value, '-') order by {$wpdb->prefix}postmeta.meta_id SEPARATOR ' #sm# ') AS prod_othermeta_value" : "";
-
+                     , GROUP_CONCAT({$wpdb->prefix}postmeta.meta_value order by {$wpdb->prefix}postmeta.meta_id SEPARATOR ' #sm# ') AS prod_othermeta_value" : "";
 
         $select = "SELECT SQL_CALC_FOUND_ROWS {$wpdb->prefix}posts.id,
                     {$wpdb->prefix}posts.post_title,
@@ -910,13 +908,6 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                         $cond_postmeta_col_value1 = (!empty($cond_postmeta_col_value[$index])) ? trim($cond_postmeta_col_value[$index]) : '';
                         $cond_postmeta_operator1 = (!empty($cond_postmeta_operator[$index])) ? trim($cond_postmeta_operator[$index]) : '';
 
-                        if( $cond_postmeta_col_name1 == '_regular_price' || $cond_postmeta_col_name1 == '_sale_price' ) {
-                           $cond_postmeta .= "AND wp_postmeta.post_id NOT IN (SELECT post_parent 
-                                                                              FROM {$wpdb->prefix}posts
-                                                                              WHERE post_type IN ('product', 'product_variation')
-                                                                                AND post_parent > 0)";
-                        }
-
                         $cond_postmeta_custom_att = ( $cond_postmeta_col_name1 == '_product_attributes' ) ? " OR (wp_postmeta.meta_key LIKE 'attribute%' AND wp_postmeta.meta_value ". $cond_postmeta_operator1 ." '%". $cond_postmeta_col_value1 ."%')" : '';
 
                         $postmeta_search_result_flag = ( $index == (sizeof($cond_postmeta_array) - 1) ) ? ', '.$index_search_string : ', 0';
@@ -974,7 +965,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
 
 
                         //Code to handle condition if the ids of previous cond are present in temp table
-                        if ( ($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_posts_search)) ) {
+                        if (($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_posts_search))) {
                             $posts_advanced_search_from = " JOIN {$wpdb->base_prefix}sm_advanced_search_temp
                                                                 ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.id)";
 
@@ -995,21 +986,14 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                         $index++;
                     }
 
-
-                    //condition for handling ANDing with att and other fields
-                    if ( !empty( $advanced_search_query_string['cond_terms'] ) || !empty( $advanced_search_query_string['cond_postmeta'] ) ) {
-                        $child_where_cond = " WHERE {$wpdb->prefix}posts.id IN (SELECT product_id FROM {$wpdb->base_prefix}sm_advanced_search_temp ) ";
-                    }
-
                     //Query to get the variations of the parent product in result set
                     $query_posts_search = "REPLACE INTO {$wpdb->base_prefix}sm_advanced_search_temp
                                                     (SELECT DISTINCT {$wpdb->prefix}posts.id ,". $index_search_string .", 0
                                                     FROM {$wpdb->prefix}posts 
                                                         JOIN {$wpdb->base_prefix}sm_advanced_search_temp 
-                                                            ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.post_parent
-                                                                AND {$wpdb->base_prefix}sm_advanced_search_temp.cat_flag = 999
-                                                                AND {$wpdb->base_prefix}sm_advanced_search_temp.flag = ".$index_search_string.")
-                                                    ". $child_where_cond .")";
+                                                            ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.post_parent)
+                                                    WHERE {$wpdb->base_prefix}sm_advanced_search_temp.cat_flag = 999
+                                                        AND {$wpdb->base_prefix}sm_advanced_search_temp.flag = ".$index_search_string.")";
                     $result_posts_search = $wpdb->query ( $query_posts_search );
 
                     //Query to delete the unwanted post_ids
@@ -3029,10 +3013,7 @@ function woo_insert_update_data($post) {
 
 
                 //Setting the product type
-                if( $obj->post_parent == 0 ) { //condition for avoiding updation of variations
-                    wp_set_object_terms($post_id, $product_type, 'product_type');    
-                }
-                
+                wp_set_object_terms($post_id, $product_type, 'product_type');
 
                 array_push ( $result ['productId'], $post_id );
                 foreach ($post_meta_key as $object) {
@@ -3342,9 +3323,9 @@ if (isset ( $_POST ['cmd'] ) && $_POST ['cmd'] == 'dupData') {
             if ($post->post_parent == 0) {
                 
                 if ($woo_dup_obj instanceof WC_Admin_Duplicate_Product) {
-                    $post_data[] = $new_id = $woo_dup_obj -> duplicate_product($post,0,$post->post_status);
+                    $post_data[] = $new_id = $woo_dup_obj -> duplicate_product($post,0,'publish');
                 } else {
-                    $post_data [] = $new_id = woocommerce_create_duplicate_from_product($post,0,$post->post_status);
+                    $post_data [] = $new_id = woocommerce_create_duplicate_from_product($post,0,'publish');
                 }
 
                 //Code for updating the post name

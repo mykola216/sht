@@ -2,11 +2,11 @@
 /*
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
-Description: <strong>Lite Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.20
+Description: <strong>Pro Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
+Version: 3.9.18
 Author: Store Apps
 Author URI: http://www.storeapps.org/
-Copyright (c) 2010 - 2017 Store Apps All rights reserved.
+Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Store Apps All rights reserved.
 License: GPLv3
 Text Domain: smart-manager-for-wp-e-commerce
 Domain Path: /languages/
@@ -118,15 +118,15 @@ add_action( 'plugins_loaded', 'sm_upgrade' );
 //function to handle inclusion of the SA upgrade file
 function sm_upgrade() {
 	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
-		if ( !class_exists( 'StoreApps_Upgrade_1_4' ) ) {
-	        require_once 'pro/class-storeapps-upgrade-v-1-4.php';
+		if ( !class_exists( 'Store_Apps_Upgrade_1_2' ) ) {
+	        require_once 'pro/class-storeapps-upgrade-v-1-2.php';
 	    }
 
 		$sku = SM_SKU;
 		$prefix = SM_PREFIX;
 		$plugin_name = SM_PLUGIN_NAME;
 		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
-		$GLOBALS['smart_manager_upgrade'] = new StoreApps_Upgrade_1_4( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade_1_2( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
 
 		//filters for handling quick_help_widget
 		add_filter( 'sa_active_plugins_for_quick_help', 'sm_quick_help_widget', 10, 2 );
@@ -437,22 +437,22 @@ function sm_add_plugin_style_script() {
 			add_option('sm_lite_activation_date',$sm_lite_activation_date);
 		}
 
-		$date_diff = floor(( strtotime($current_wp_date) - strtotime( $sm_lite_activation_date ) ) / (3600 * 24) );
+		$date_diff = date_diff( date_create($sm_lite_activation_date),date_create($current_wp_date) );
 
 		$sm_resp_msg = '<b>'. __('Congratulations!!!', 'smart-manager') .'</b> ' . __('Kindly check your mail to avail the discount', 'smart-manager') ;
 		$sm_promo_cond = __('*Only For Today*', 'smart-manager');
 		$sm_promo_hide_msg = __('No, I don\'t like offers...', 'smart-manager');
 
-		if ( $date_diff == 0 ) {
+		if ( $date_diff->days == 0 ) {
 			$sm_promo_msg = '<b>'. __('Big Savings!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('20% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
 			$sm_klawoo_list_id = 'OFvZfJBDn4FLsDOz3Ulpww';
-		} else if ( $date_diff == 1 ) {
+		} else if ( $date_diff->days == 1 ) {
 			$sm_promo_msg = '<b>'. __('Missed yesterday?', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' .  __('15% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager');
 			$sm_klawoo_list_id = '0mHi7635Zb4L2vN7hmngdYDQ';
-		} else if ( $date_diff == 2 ) {
+		} else if ( $date_diff->days == 2 ) {
 			$sm_promo_msg = '<b>'. __('Last chance!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('10% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
 			$sm_klawoo_list_id = 'gSlZ3HGl3OMOjE5ZEnAJUQ';
-		} else if ( $date_diff > 2 ) {
+		} else if ( $date_diff->days > 2 ) {
 			$sm_promo_msg = '<b>'. __('Sign up to get updates, insights & tips...', 'smart-manager');
 			$sm_klawoo_list_id = 'eGXNNhOHHcRHSDOv3hmSsA';
 			$sm_resp_msg = '<b>'. __('Thank you for Subscribing!!!') .'</b>';
