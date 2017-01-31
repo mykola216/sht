@@ -24,7 +24,7 @@ input.button,
 .button.more{
     text-transform: initial !important;
 }
-a.print-button {
+a.print-button/*:not(#print_button_id)*/ {
     background: url("./images/print-icon.png") no-repeat !important;
     width: 50px !important;
     height: 50px;
@@ -32,6 +32,8 @@ a.print-button {
     border: none !important;
     float: right;
     margin-bottom: 5px;
+    text-indent: -999px;
+    overflow: hidden;
 }
 
 #navigation {
@@ -937,8 +939,19 @@ body #wrapper #content .button.gform_button_select_files:focus{
     body.canvas_child_print_button table > tfoot,
 
     body.canvas_child_print_button.woocommerce-cart .cart-collaterals,
-    body.canvas_child_print_button.woocommerce-cart table.cart tbody tr:not(.cart_item) {
+    body.canvas_child_print_button.woocommerce-cart table.cart tbody tr:not(.cart_item),
+
+    body.canvas_child_print_button.single-product #main > *:not(.product):not(.product_title),
+    body.canvas_child_print_button.single-product #main .product > *:not(.images),
+    body.canvas_child_print_button.single-product #main .product .images > *:not(.woocommerce-main-image){
         display: none !important;
+    }
+
+    body.canvas_child_print_button.single-product #main .product_title,
+    body.canvas_child_print_button.single-product #main .images img{
+        text-align:center;
+        width:100% !important;
+        height:auto !important;
     }
 
     body.canvas_child_print_button .woocommerce table .product-thumbnail,
