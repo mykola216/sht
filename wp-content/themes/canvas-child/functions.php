@@ -85,7 +85,7 @@ add_action( 'woocommerce_archive_description', 'canvas_child_after_main_content_
 remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
 add_action( 'woocommerce_archive_description', 'canvas_child_taxonomy_archive_description', 10 );
 //add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
-//add_filter( 'amp_post_template_file', 'canvas_child_amp_custom_template', 20, 3 );
+add_filter( 'amp_post_template_file', 'canvas_child_amp_custom_template', 20, 3 );
 add_filter( 'woo_title', 'canvas_child_woo_title', 999, 3 );
 // Archive - end
 
