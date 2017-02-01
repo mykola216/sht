@@ -53,20 +53,20 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 	        // Code to get all the variable parent ids whose type is set to 'simple'
 
 	        //Code to get the taxonomy id for 'simple' product_type
-	        $query_taxonomy_id = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
+	        $query_taxonomy_ids = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
 	                                    FROM {$wpdb->prefix}terms as terms
 	                                        JOIN {$wpdb->prefix}term_taxonomy as taxonomy ON (taxonomy.term_id = terms.term_id)
 	                                    WHERE taxonomy.taxonomy = 'product_type'
-	                                    	AND terms.slug = 'variable'";
-	        $variable_taxonomy_id = $wpdb->get_var( $query_taxonomy_id );
+	                                    	AND terms.slug IN ('variable', 'variable-subscription')";
+	        $variable_taxonomy_ids = $wpdb->get_col( $query_taxonomy_ids );
 
-	        if ( !empty($variable_taxonomy_id) ) {
+	        if ( !empty($variable_taxonomy_ids) ) {
 	        	$query_post_parent_not_variable = "SELECT distinct products.post_parent 
 				                            FROM {$wpdb->prefix}posts as products 
 				                            WHERE NOT EXISTS (SELECT * 
 				                            					FROM {$wpdb->prefix}term_relationships 
 				                            					WHERE object_id = products.post_parent
-				                            						AND term_taxonomy_id = ".$variable_taxonomy_id.") 
+				                            						AND term_taxonomy_id IN (". implode(",",$variable_taxonomy_ids) ."))
 				                              AND products.post_parent > 0 
 				                              AND products.post_type = 'product_variation'";
 		        $results_post_parent_not_variable = $wpdb->get_col( $query_post_parent_not_variable );
@@ -218,6 +218,8 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 						$column ['values'] = array('no' => __('Do Not Allow', Smart_Manager::$text_domain),
 												   'notify' => __('Allow, but notify customer', Smart_Manager::$text_domain),
 												   'yes' => __('Allow', Smart_Manager::$text_domain));
+					} else if ($src == 'product_shipping_class') {
+						$column ['values'] = array_replace( array('' => __('No shipping class', Smart_Manager::$text_domain) ), $column ['values'] );
 					}
 				}
 			}
