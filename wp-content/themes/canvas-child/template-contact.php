@@ -18,7 +18,21 @@ $commentError = '';
 $mathCheck = '';
 
 //If the form is submitted
-if( isset( $_POST['submitted'] ) ) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = strip_tags( trim( $_POST['contactName'] ) );
+    $email = sanitize_email( trim( $_POST['email'] ) );
+    $comments = sanitize_text_field( stripslashes( trim( $_POST['comments'] ) ) );
+    $sendCopy = (boolean)$_POST['sendCopy'];
+    $subject = __( 'You emailed ', 'woothemes' ) . get_bloginfo( 'title' );
+    $emailTo = get_option( 'woo_contactform_email' );
+    $body = sprintf( __( "Name: %s \n\nEmail: %s \n\nComments: %s", 'woothemes' ), $name, $email, $comments );
+    $headers = __( 'From: ', 'woothemes' ) . "$name <$emailTo>";
+    if ( $sendCopy ) {
+        wp_mail( $email, $subject, $body, $headers );
+    }
+}
+
+/*if( isset( $_POST['submitted'] ) ) {
 
     //Check to see if the honeypot captcha field was filled in
     if( trim( $_POST['checking'] ) !== '' ) {
@@ -81,11 +95,10 @@ if( isset( $_POST['submitted'] ) ) {
 
         }
     }
-}
+}*/
 ?>
-<script type="text/javascript">
-<!--//--><![CDATA[//><!--
-jQuery(document).ready(function() {
+<!--script type="text/javascript">
+/*jQuery(document).ready(function() {
     jQuery( 'form#contactForm').submit(function() {
         jQuery( 'form#contactForm .error').remove();
         var hasError = false;
@@ -125,53 +138,52 @@ jQuery(document).ready(function() {
         return false;
 
     });
-});
-//-->!]]>
-</script>
+});*/
+</script-->
 
-   <?php woo_content_before(); ?>
-    <div id="content" class="col-full">
+<?php woo_content_before(); ?>
+<div id="content" class="col-full">
 
-        <?php
-            // Output Google Map
-            $geocoords = $woo_options['woo_contactform_map_coords'];
-            if ( '' != $geocoords ) {
-                woo_maps_contact_output( "geocoords=$geocoords" );
-                echo do_shortcode( '[divider]' );
-            }
-        ?>
+    <?php
+    // Output Google Map
+    $geocoords = $woo_options['woo_contactform_map_coords'];
+    if ( '' != $geocoords ) {
+        woo_maps_contact_output( "geocoords=$geocoords" );
+        echo do_shortcode( '[divider]' );
+    }
+    ?>
 
-        <div id="main-sidebar-container">
+    <div id="main-sidebar-container">
 
         <!-- #main Starts -->
         <?php woo_main_before(); ?>
         <section id="main">
 
-        <?php woo_loop_before(); ?>
-        <!-- Post Starts -->
-        <?php woo_post_before(); ?>
+            <?php woo_loop_before(); ?>
+            <!-- Post Starts -->
+            <?php woo_post_before(); ?>
 
             <div id="contact-page" class="page">
 
-            <?php woo_post_inside_before(); ?>
+                <?php woo_post_inside_before(); ?>
 
-            <h1 class="title"><?php the_title(); ?></h1>
+                <h1 class="title"><?php the_title(); ?></h1>
 
-            <?php if( isset( $emailSent ) && $emailSent == true ) { ?>
+                <?php if( isset( $emailSent ) && $emailSent == true ) { ?>
 
-                <p class="info"><?php _e( 'Your email was successfully sent.', 'woothemes' ); ?></p>
+                    <p class="info"><?php _e( 'Your email was successfully sent.', 'woothemes' ); ?></p>
 
-            <?php } else { ?>
+                <?php } else { ?>
 
                 <?php if ( have_posts() ) { ?>
 
                 <?php while ( have_posts() ) { the_post(); ?>
 
-                        <section class="entry">
-                            <?php the_content(); ?>
+                    <section class="entry">
+                        <?php the_content(); ?>
 
-                            <div class="location-twitter">
-                                <?php if ( isset( $woo_options['woo_contact_panel'] ) && $woo_options['woo_contact_panel'] == 'true' ) { ?>
+                        <div class="location-twitter">
+                            <?php if ( isset( $woo_options['woo_contact_panel'] ) && $woo_options['woo_contact_panel'] == 'true' ) { ?>
                                 <section id="office-location"<?php if ( ( isset($woo_options['woo_contact_subscribe_and_connect']) && $woo_options['woo_contact_subscribe_and_connect'] == 'true' ) ) { ?> class="col-left"<?php } ?>>
                                     <?php if (isset($woo_options['woo_contact_title'])) { ?><h3><?php echo stripslashes( $woo_options['woo_contact_title'] ); ?></h3><?php } ?>
                                     <ul>
@@ -180,29 +192,48 @@ jQuery(document).ready(function() {
                                         <?php if (isset($woo_options['woo_contact_fax']) && $woo_options['woo_contact_fax'] != '' ) { ?><li><?php _e('Fax:','woothemes'); ?> <?php echo $woo_options['woo_contact_fax']; ?></li><?php } ?>
                                     </ul>
                                 </section>
-                                <?php } ?>
-                                <div class="contact-social<?php if ( ( isset( $woo_options['woo_contact_panel'] ) && $woo_options['woo_contact_panel'] == 'true' ) || ( isset($woo_options['woo_contact_subscribe_and_connect']) && $woo_options['woo_contact_subscribe_and_connect'] == 'true' ) )  { ?> col-right<?php } ?>">
+                            <?php } ?>
+                            <div class="contact-social<?php if ( ( isset( $woo_options['woo_contact_panel'] ) && $woo_options['woo_contact_panel'] == 'true' ) || ( isset($woo_options['woo_contact_subscribe_and_connect']) && $woo_options['woo_contact_subscribe_and_connect'] == 'true' ) )  { ?> col-right<?php } ?>">
 
-                                    <?php if ( isset($woo_options['woo_contact_subscribe_and_connect']) && $woo_options['woo_contact_subscribe_and_connect'] == 'true' ) { woo_subscribe_connect( 'true' ); } ?>
+                                <?php if ( isset($woo_options['woo_contact_subscribe_and_connect']) && $woo_options['woo_contact_subscribe_and_connect'] == 'true' ) { woo_subscribe_connect( 'true' ); } ?>
 
-                                </div>
+                            </div>
 
-                                <div class="clear"></div>
+                            <div class="clear"></div>
 
-                                </div><!-- /.location-twitter -->
+                        </div><!-- /.location-twitter -->
 
-                        </section>
+                    </section>
 
-                    <?php if( isset( $hasError ) || isset( $captchaError ) ) { ?>
+                <?php $gf_form_id = get_post_meta(get_the_ID(), 'gf_form_id', true); ?>
+                <?php gravity_form($gf_form_id, true, false, false, null, false); ?>
+
+                    <li id="auto_mailchimp_subscribe" class="auto_mailchimp_subscribe">
+                        <label class="gfield_label"></label>
+                        <div style="overflow:hidden;"><?php do_action('auto_mailchimp_subscribe'); ?></div>
+                    </li>
+
+                    <script>
+                        (function ($) {
+                            $(function () {
+                                /* Replace mailchimp checkbox */
+                                var auto_mailchimp_subscribe;
+                                auto_mailchimp_subscribe = $('#auto_mailchimp_subscribe');
+                                auto_mailchimp_subscribe.siblings('.gform_wrapper').find('.sendCopy').before(auto_mailchimp_subscribe);
+                            });
+                        })(jQuery);
+                    </script>
+
+                    <?php /*if( isset( $hasError ) || isset( $captchaError ) ) { ?>
                         <p class="alert"><?php _e( 'There was an error submitting the form.', 'woothemes' ); ?></p>
-                    <?php } ?>
+                    <?php }*/ ?>
 
-                    <?php if ( get_option( 'woo_contactform_email' ) == '' ) { ?>
+                    <?php /*if ( get_option( 'woo_contactform_email' ) == '' ) { ?>
                         <?php echo do_shortcode( '[box type="alert"]' . __( 'Please <strong>add your e-mail</strong> in <em>Contact Page > Contact Form E-mail</em>.', 'woothemes' ) . '[/box]' );  ?>
-                    <?php } ?>
+                    <?php }*/ ?>
 
 
-                    <form action="<?php the_permalink(); ?>" id="contactForm" method="post">
+                    <!--form action="<?php the_permalink(); ?>" id="contactForm" method="post">
 
                         <ol class="forms">
                             <li><label for="contactName"><?php _e( 'Naam', 'woothemes' ); ?></label>
@@ -233,36 +264,36 @@ jQuery(document).ready(function() {
                                 <?php } ?>
                             </li>
 
-                            <li class="inline"><?php do_action('auto_mailchimp_subscribe'); ?></li>
+                            <li class="inline"><?php //do_action('auto_mailchimp_subscribe'); ?></li>
 
                             <li class="inline"><input type="checkbox" name="sendCopy" id="sendCopy" value="true"<?php if( isset( $_POST['sendCopy'] ) && $_POST['sendCopy'] == true ) { echo ' checked="checked"'; } ?> /><label for="sendCopy"><?php _e( 'Stuur een kopie van dit bericht naar je eigen emailadres', 'woothemes' ); ?></label></li>
                             <li class="screenReader"><label for="checking" class="screenReader"><?php _e( 'If you want to submit this form, do not enter anything in this field', 'woothemes' ); ?></label><input type="text" name="checking" id="checking" class="screenReader" value="<?php if( isset( $_POST['checking'] ) ) { echo esc_attr( $_POST['checking'] ); } ?>" /></li>
                             <li class="buttons"><input type="hidden" name="submitted" id="submitted" value="true" /><input class="submit button" type="submit" value="<?php esc_attr_e( 'Verzenden', 'woothemes' ); ?>" /></li>
                         </ol>
-                    </form>
+                    </form-->
 
                     <?php
-                            } // End WHILE Loop
-                        }
-                    }
-                    ?>
-                    <div class="fix"></div>
+                } // End WHILE Loop
+                }
+                }
+                ?>
+                <div class="fix"></div>
                 <?php woo_post_inside_after(); ?>
 
             </div><!-- /#contact-page -->
 
-           <?php woo_post_after(); ?>
+            <?php woo_post_after(); ?>
 
-            </section><!-- /#main -->
-            <?php woo_main_after(); ?>
+        </section><!-- /#main -->
+        <?php woo_main_after(); ?>
 
-            <?php get_sidebar(); ?>
+        <?php get_sidebar(); ?>
 
-        </div><!-- /#main-sidebar-container -->
+    </div><!-- /#main-sidebar-container -->
 
-        <?php get_sidebar( 'alt' ); ?>
+    <?php get_sidebar( 'alt' ); ?>
 
-    </div><!-- /#content -->
-    <?php woo_content_after(); ?>
+</div><!-- /#content -->
+<?php woo_content_after(); ?>
 
 <?php get_footer(); ?>
