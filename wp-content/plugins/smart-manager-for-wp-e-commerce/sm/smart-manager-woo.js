@@ -44,7 +44,7 @@ var	categories         = new Array(), //an array for category combobox in batchu
 	showOrdersView     = '',
 	countriesStore     = '',
     hidden_state       = false,
-    sm_prod_custom_cols_formatted = new Object(); // object for storing the formmated custom cols names
+    sm_prod_custom_cols_formatted = new Object(); // object for storing the formatted custom cols names
 
 
 
@@ -1160,7 +1160,6 @@ Ext.override(Ext.grid.HeaderDragZone, {
     }
 });
 
-
 //custom columns for Products Dashboard
 
 var products_columns = new Array();
@@ -1221,11 +1220,11 @@ products_columns = [editorGridSelectionModel,
 					tooltip: getText('Price'),
 					renderer: numeric_renderer(sm_amount_decimal_precision),
 		            width: 70,
-					editor: new fm.NumberField({
+		            editor: new fm.TextField({
 						allowBlank: true,
-		                allowNegative: true,
-		                width: 70,
-		                decimalPrecision:sm_amount_decimal_precision
+                        width: 70,
+                        style: 'text-align: right',
+                        maskRe: /[0-9.-]/
 					})
 				},{
 					header: SM.productsCols.salePrice.name,
@@ -1236,11 +1235,11 @@ products_columns = [editorGridSelectionModel,
 					dataIndex: SM.productsCols.salePrice.colName,
 					renderer: numeric_renderer(sm_amount_decimal_precision),
 					tooltip: getText('Sale Price'),
-					editor: new fm.NumberField({
+					editor: new fm.TextField({
 						allowBlank: true,
-						allowNegative: true,
-		                width: 70,
-		                decimalPrecision:sm_amount_decimal_precision
+                        width: 70,
+                        style: 'text-align: right',
+                        maskRe: /[0-9.-]/
 					})
 				},{
 		            header: SM.productsCols.salePriceFrom.name,
@@ -1332,11 +1331,11 @@ products_columns = [editorGridSelectionModel,
 					dataIndex: SM.productsCols.weight.colName,
 					tooltip: getText('Weight'),
 					renderer: numeric_renderer(sm_dimensions_decimal_precision),
-					editor: new fm.NumberField({
+					editor: new fm.TextField({
 						allowBlank: true,
-						allowNegative: false,
-		                width: 60,
-		                decimalPrecision:sm_dimensions_decimal_precision
+                        width: 60,
+                        style: 'text-align: right',
+                        maskRe: /[0-9.-]/
 					})
 				},{
 					header: SM.productsCols.publish.name,
@@ -1384,26 +1383,28 @@ products_columns = [editorGridSelectionModel,
 					dataIndex: SM.productsCols.height.colName,
 					tooltip: getText('Height'),		
 					renderer: numeric_renderer(sm_dimensions_decimal_precision),
-					editor: new fm.NumberField({
+					editor: new fm.TextField({
 						allowBlank: true,
-						allowNegative: false,
-						decimalPrecision:sm_dimensions_decimal_precision
+                        width: 60,
+                        style: 'text-align: right',
+                        maskRe: /[0-9.-]/
 					})
 				},{
 					header: SM.productsCols.width.name,
 					id: 'width',
 					hidden: true,
-		                        width: 60,
+		            width: 60,
 					colSpan: 2,
 					sortable: true,
 					align: 'right',
 					dataIndex: SM.productsCols.width.colName,
 					tooltip: getText('Width'),
 					renderer: numeric_renderer(sm_dimensions_decimal_precision),
-					editor: new fm.NumberField({
+					editor: new fm.TextField({
 						allowBlank: true,
-						allowNegative: false,
-						decimalPrecision:sm_dimensions_decimal_precision
+                        width: 60,
+                        style: 'text-align: right',
+                        maskRe: /[0-9.-]/
 					})
 				},{
 					header: SM.productsCols.lengthCol.name,
@@ -1416,10 +1417,11 @@ products_columns = [editorGridSelectionModel,
 					dataIndex: SM.productsCols.lengthCol.colName,
 					tooltip: getText('Length'),		
 					renderer: numeric_renderer(sm_dimensions_decimal_precision),
-					editor: new fm.NumberField({
+					editor: new fm.TextField({
 						allowBlank: true,
-						allowNegative: false,
-						decimalPrecision:sm_dimensions_decimal_precision
+                        width: 60,
+                        style: 'text-align: right',
+                        maskRe: /[0-9.-]/
 					})
 				},{
 		            header: SM.productsCols.visibility.name,
@@ -1538,19 +1540,49 @@ jQuery(function($) {
 											valueField: 'value',
 											displayField: 'name'
 										});
-        	} else if (value.dataType == "int") {
+
+        		//code for handling diff. values for variation
+        		if( value.hasOwnProperty('variation_values') ) {
+        			var select = new Array();
+	        		var temp = value.variation_values;
+					var array_index = 0;
+
+	        		$.each(temp, function(index, value) {
+			    		select [array_index] = new Array();
+			    		select [array_index][0] = index;
+			    		select [array_index][1] = value;
+			    		array_index++;
+			    	});
+
+			    	product_column.editor_variation = new Ext.form.ComboBox({
+														typeAhead: true,
+														triggerAction: 'all',
+														lazyRender:true,
+														editable: false,
+														mode: 'local',
+														store: new Ext.data.ArrayStore({
+																	id: 0,
+																	fields: ['value','name'],
+																	data: select
+																}),
+														valueField: 'value',
+														displayField: 'name'
+													});
+        		}
+
+        	} else if (value.dataType == "float") {
         		product_column.align 	=  'right';
 
         		if (decimal_precision > 0) {
         			product_column.renderer = numeric_renderer(decimal_precision);	
         		}
         		
-				product_column.editor 	= new fm.NumberField({
-											allowBlank: true,
-											allowNegative: false,
-							                width: 50,
-							                decimalPrecision:decimal_precision
-										});
+				product_column.editor 	= new fm.TextField({
+																allowBlank: true,
+										                        width: 50,
+										                        style: 'text-align: right',
+										                        maskRe: /[0-9.-]/
+															});
 
         	} else {
         		product_column.editor= new fm.TextField({ allowBlank: true, allowNegative: true});	
@@ -4811,7 +4843,7 @@ var showCustomerDetails = function(record,rowIndex){
 					descColumnIndex        	  = productsColumnModel.findColumnIndex(SM.productsCols.desc.colName),
 					addDescColumnIndex        = productsColumnModel.findColumnIndex(SM.productsCols.addDesc.colName),
                     visibilityColumnIndex     = productsColumnModel.findColumnIndex(SM.productsCols.visibility.colName),
-                    taxStatusColumnIndex      = productsColumnModel.findColumnIndex(SM.productsCols.taxStatus.colName);
+                    taxStatusColumnIndex      = productsColumnModel.findColumnIndex(SM.productsCols.taxStatus.colName),
                     productTypeColumnIndex    = productsColumnModel.findColumnIndex(SM.productsCols.product_type.colName);
 
 				if(SM.activeModule == 'Orders'){
@@ -4829,6 +4861,40 @@ var showCustomerDetails = function(record,rowIndex){
 					
 				// Show WPeC's product edit page in a Ext window instance.
 				}else if(SM.activeModule == 'Products'){
+
+					var customColIndex = 0,
+						temp = '';
+
+					//code for handling custom columns
+					for( var key in sm_prod_custom_cols_formatted ) {
+						if( SM.productsCols[key].hasOwnProperty('variation_values') ) {
+							customColIndex = productsColumnModel.findColumnIndex(SM.productsCols[key].colName);
+
+							if (columnIndex == customColIndex) {
+								if(record.get('post_parent') == 0){
+
+									if( productsColumnModel.getColumnById(customColIndex).hasOwnProperty('editable_variation')
+											&& productsColumnModel.getColumnById(customColIndex).editable_variation === true) {
+										temp = productsColumnModel.getColumnById(customColIndex).editor;
+										productsColumnModel.getColumnById(customColIndex).editor = productsColumnModel.getColumnById(customColIndex).editor_variation;
+			                            productsColumnModel.getColumnById(customColIndex).editor_variation = temp;
+			                            productsColumnModel.getColumnById(customColIndex).editable_variation = false;
+									}
+
+		                        } else {
+		                        	if( productsColumnModel.getColumnById(customColIndex).hasOwnProperty('editable_variation')
+											&& productsColumnModel.getColumnById(customColIndex).editable_variation === true) {
+										continue;
+									}
+									
+									temp = productsColumnModel.getColumnById(customColIndex).editor;
+									productsColumnModel.getColumnById(customColIndex).editor = productsColumnModel.getColumnById(customColIndex).editor_variation;
+		                            productsColumnModel.getColumnById(customColIndex).editor_variation = temp;
+		                            productsColumnModel.getColumnById(customColIndex).editable_variation = true;
+		                        }
+		                    }
+						}
+					}
 
 					if(columnIndex == editLinkColumnIndex) {
 						var productsDetailsWindow = new Ext.Window({

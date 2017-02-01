@@ -1824,7 +1824,7 @@ function batchUpdateWoo($post) {
                         }
                     }
                     
-                    
+
                     // Code for Updating the '_price' for All Products
                     if ($column_name == '_regular_price' || $column_name == '_sale_price') {
                         $simple_ids = explode (",",$product_type);
@@ -1945,7 +1945,18 @@ function batchUpdateWoo($post) {
 			$update_value = '';
 		}
 
-   
+    //code to recount the category counts
+    if( $is_category ) {
+        $product_terms = get_terms( 'product_cat', array( 'hide_empty' => false ) );
+
+        foreach ( $product_terms as $term ) {
+            $product_cats[] = $term->term_taxonomy_id;
+            $woo_product_cats[ $term->id ] = $term->parent;
+        }
+
+        wp_update_term_count( $product_cats, 'product_cat' );
+        _wc_term_recount( $woo_product_cats, get_taxonomy( 'product_cat' ), true, false );    
+    }
 
 		// Handled with a different ajax request
 	if( $radioData == 2 && $flag == 1 ){

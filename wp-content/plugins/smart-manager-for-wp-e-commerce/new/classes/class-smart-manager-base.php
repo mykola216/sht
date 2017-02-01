@@ -186,13 +186,14 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 
 			//Code to get columns from postmeta table
 
-			$post_type_cond = (is_array($this->post_type)) ? " WHERE {$wpdb->prefix}posts.post_type IN ('". implode("','", $this->post_type) ."')" : " WHERE {$wpdb->prefix}posts.post_type = '". $this->post_type ."'";
+			$post_type_cond = (is_array($this->post_type)) ? " AND {$wpdb->prefix}posts.post_type IN ('". implode("','", $this->post_type) ."')" : " AND {$wpdb->prefix}posts.post_type = '". $this->post_type ."'";
 
 			$query_postmeta_col = "SELECT DISTINCT {$wpdb->prefix}postmeta.meta_key,
 											{$wpdb->prefix}postmeta.meta_value
 										FROM {$wpdb->prefix}postmeta 
 											JOIN {$wpdb->prefix}posts ON ({$wpdb->prefix}posts.id = {$wpdb->prefix}postmeta.post_id)
-										$post_type_cond
+										WHERE {$wpdb->prefix}postmeta.meta_key NOT LIKE 'free-%'
+											$post_type_cond
 										GROUP BY {$wpdb->prefix}postmeta.meta_key";
 			$results_postmeta_col = $wpdb->get_results ($query_postmeta_col , 'ARRAY_A');
 			$num_rows = $wpdb->num_rows;
@@ -552,11 +553,11 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			$col_model = (!empty($current_store_model[$this->dashboard_key]['columns'])) ? $current_store_model[$this->dashboard_key]['columns'] : array();
 
 			//Code for getting the relevant columns
+			$data_cols_multilist = array();
 			if (!empty($col_model)) {
 
 				$data_cols = array();
 				$data_cols_serialized = array();
-				$data_cols_multilist = array();
 				$taxonomy_nm = array();
 
 				foreach ($col_model as $col) {
@@ -690,7 +691,7 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 						$taxonomy_nm = $term_obj->taxonomy;
 
 						//Code for handling multilist data
-	        			if (array_search($taxonomy_nm, $data_cols_multilist) !== false) {
+	        			if ( is_array($data_cols_multilist) && array_search($taxonomy_nm, $data_cols_multilist) !== false) {
 	        				if (empty($terms_data[$term_obj->object_id][$taxonomy_nm])) {
 	        					$terms_data[$term_obj->object_id][$taxonomy_nm] = $term_obj->name;
 	        				} else {

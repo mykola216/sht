@@ -142,12 +142,12 @@ class Smart_Manager_Admin_Welcome {
             	add_thickbox();
         	}
 
-            if ( ! method_exists( 'Store_Apps_Upgrade_1_2', 'support_ticket_content' ) ) return;
+            if ( ! method_exists( 'StoreApps_Upgrade_1_4', 'support_ticket_content' ) ) return;
 
             $plugin_data = get_plugin_data( self::$plugin_file );
             $license_key = get_site_option( self::$prefix.'_license_key' );
 
-            Store_Apps_Upgrade_1_2::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
+            StoreApps_Upgrade_1_4::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
     }
 
 	/**

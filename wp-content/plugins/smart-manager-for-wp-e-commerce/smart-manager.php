@@ -3,10 +3,10 @@
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
 Description: <strong>Pro Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.18
-Author: Store Apps
+Version: 3.9.21
+Author: StoreApps
 Author URI: http://www.storeapps.org/
-Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Store Apps All rights reserved.
+Copyright (c) 2010 - 2017 Store Apps All rights reserved.
 License: GPLv3
 Text Domain: smart-manager-for-wp-e-commerce
 Domain Path: /languages/
@@ -113,20 +113,42 @@ if (is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active( 'wp-e
 	include_once $plugin_path . '/new/classes/class-smart-manager-admin-welcome.php';
 }
 
-add_action( 'plugins_loaded', 'sm_upgrade' );
 
+add_filter( 'site_transient_update_plugins', 'sm_overwrite_site_transient',11,1);
+
+function sm_overwrite_site_transient( $plugin_info ) {
+
+	$sm_license_key = get_site_option( SM_PREFIX.'_license_key' );
+	$sm_download_url = get_site_option( SM_PREFIX.'_download_url' );
+
+	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' ) && (empty($sm_license_key) || empty($sm_download_url)) ) {
+		$plugin_base_file = plugin_basename( __FILE__ );
+
+		$live_version = get_site_option( SM_PREFIX.'_live_version' );
+        $installed_version = get_site_option( SM_PREFIX.'_installed_version' );
+
+        if (version_compare( $live_version, $installed_version, '>' )) {
+        	$plugin_info->response[$plugin_base_file]->package = '';
+        }		
+	}
+
+	return $plugin_info;
+}
+
+
+add_action( 'plugins_loaded', 'sm_upgrade' );
 //function to handle inclusion of the SA upgrade file
 function sm_upgrade() {
 	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
-		if ( !class_exists( 'Store_Apps_Upgrade_1_2' ) ) {
-	        require_once 'pro/class-storeapps-upgrade-v-1-2.php';
+		if ( !class_exists( 'StoreApps_Upgrade_1_4' ) ) {
+	        require_once 'pro/class-storeapps-upgrade-v-1-4.php';
 	    }
 
 		$sku = SM_SKU;
 		$prefix = SM_PREFIX;
 		$plugin_name = SM_PLUGIN_NAME;
 		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
-		$GLOBALS['smart_manager_upgrade'] = new Store_Apps_Upgrade_1_2( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+		$GLOBALS['smart_manager_upgrade'] = new StoreApps_Upgrade_1_4( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
 
 		//filters for handling quick_help_widget
 		add_filter( 'sa_active_plugins_for_quick_help', 'sm_quick_help_widget', 10, 2 );
@@ -343,9 +365,18 @@ function sm_add_plugin_style_script() {
 				if(isset($_GET['sm_dismiss_admin_notice']) && $_GET['sm_dismiss_admin_notice'] == '1'){
 		            update_option('sm_dismiss_admin_notice', true);
 		            wp_safe_redirect($_SERVER['HTTP_REFERER']);
-		        } else if ( !get_option('sm_dismiss_admin_notice') ) { // Code to handle SM IN App Promo
+		        }
+
+
+		        if(isset($_GET['sm_dismiss_anniversary_promo']) && $_GET['sm_dismiss_anniversary_promo'] == '1'){
+		            update_option('sm_dismiss_anniversary_promo', true);
+		            wp_safe_redirect($_SERVER['HTTP_REFERER']);
+		        } 
+
+
+		        // else if ( !get_option('sm_dismiss_admin_notice') ) { // Code to handle SM IN App Promo
 					add_action( 'admin_notices', 'sm_add_promo_notices');
-				}
+				// }
 			}
 		}
 		//wp-ajax action
@@ -420,99 +451,162 @@ function sm_add_plugin_style_script() {
 	// Function to handle SM IN App Promo
 	function sm_add_promo_notices() {
 
-		if ( empty($_GET['page']) || (!empty($_GET['page']) && $_GET['page'] != 'smart-manager-woo' && $_GET['page'] != 'smart-manager-wpsc') ) {
+		$sm_dismiss_admin_notice = get_option('sm_dismiss_admin_notice', false);
+		$sm_dismiss_anniversary_promo = get_option('sm_dismiss_anniversary_promo', false);
+
+		if( $sm_dismiss_admin_notice === true && $sm_dismiss_anniversary_promo === true ) {
 			return;
 		}
-
-		$sm_promo_msg = '';
 
 		$timezone_format = _x('Y-m-d H:i:s', 'timezone date format');
 		$current_wp_date = date_i18n($timezone_format);
 
-		$sm_lite_activation_date = get_option('sm_lite_activation_date');
+		$sm_offer_date = '2017-01-23 00:00:00';
 
-		if ( $sm_lite_activation_date === false ) {
-			
-			$sm_lite_activation_date = $current_wp_date;
-			add_option('sm_lite_activation_date',$sm_lite_activation_date);
-		}
+		$date_diff_offer = floor(( strtotime($current_wp_date) - strtotime( $sm_offer_date ) ) / (3600 * 24) );
 
-		$date_diff = date_diff( date_create($sm_lite_activation_date),date_create($current_wp_date) );
+		if( $date_diff_offer >= 0 && $date_diff_offer <= 2 && $sm_dismiss_anniversary_promo === false ) {
 
-		$sm_resp_msg = '<b>'. __('Congratulations!!!', 'smart-manager') .'</b> ' . __('Kindly check your mail to avail the discount', 'smart-manager') ;
-		$sm_promo_cond = __('*Only For Today*', 'smart-manager');
-		$sm_promo_hide_msg = __('No, I don\'t like offers...', 'smart-manager');
+			$current_url = (strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') === FALSE ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?' . $_SERVER['QUERY_STRING'];
 
-		if ( $date_diff->days == 0 ) {
-			$sm_promo_msg = '<b>'. __('Big Savings!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('20% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
-			$sm_klawoo_list_id = 'OFvZfJBDn4FLsDOz3Ulpww';
-		} else if ( $date_diff->days == 1 ) {
-			$sm_promo_msg = '<b>'. __('Missed yesterday?', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' .  __('15% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager');
-			$sm_klawoo_list_id = '0mHi7635Zb4L2vN7hmngdYDQ';
-		} else if ( $date_diff->days == 2 ) {
-			$sm_promo_msg = '<b>'. __('Last chance!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('10% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
-			$sm_klawoo_list_id = 'gSlZ3HGl3OMOjE5ZEnAJUQ';
-		} else if ( $date_diff->days > 2 ) {
-			$sm_promo_msg = '<b>'. __('Sign up to get updates, insights & tips...', 'smart-manager');
-			$sm_klawoo_list_id = 'eGXNNhOHHcRHSDOv3hmSsA';
-			$sm_resp_msg = '<b>'. __('Thank you for Subscribing!!!') .'</b>';
-			$sm_promo_cond = '';
-			$sm_promo_hide_msg = __('No, I don\'t need help...', 'smart-manager');
-		}
+			$days_remmaining = 3 - $date_diff_offer;
+			$sm_promo_cond = ($days_remmaining == 1) ? __('*Last Day Today*', 'smart-manager') : '';
 
-		if ( !empty($sm_promo_msg) ) {
+			echo '<style type="text/css">
+						.sm-promo-button {
+							background:#03a025 !important;
+							border-color:#03a025 !important;
+							color:#ffffff !important;
+							font-weight: 800;
+						}
 
-		    $current_url = (strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') === FALSE ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?' . $_SERVER['QUERY_STRING'];
+						.sm-promo-button:hover {
+							background:#00870c !important;
+							border-color:#00870c !important;
+							color:#ffffff !important;
+						}
 
-			echo '<div id="sm_promo_msg" class="updated fade" style="display:block !important;"> 
+						.sm_promo_valid_msg {
+							padding-left: 0.4rem;
+							font-size: 0.7rem;
+							font-style: italic;
+							color: #E34F4C;
+						}
+				  </style>
+				  <div id="sm_promo_msg" class="updated fade" style="display:block !important;"> 
 					<table style="width:100%;"> 
 						<tbody> 
 							<tr>
-								<td> 
-									<span class="dashicons dashicons-awards" style="font-size:3em;color:#b32727;margin-left: -0.2em;margin-right: 0.4em;margin-bottom: 0.45em;"></span> 
+								<td style="width:3rem;"> 
+									<span class="dashicons dashicons-megaphone" style="font-size:3em;color:#b32727;margin-left: -0.2em;margin-right: 0.3rem;margin-bottom: 0.45em;"></span> 
 								</td> 
-								<td id="sm_promo_msg_content" style="padding:0.5em;">
-									<div style="padding-top: 0.3em;float: left;font-size:1.1em;">'. $sm_promo_msg .'</div>
-									<form name="sm_klawoo_subscribe" action="#" method="POST" accept-charset="utf-8" style="float:left;padding-left:0.5em;">
-			                            <input class="regular-text ltr" type="text" name="email" id="email" placeholder="Email" style="width:18em;height:1.75em;"/>
-			                            <input type="hidden" name="list" value="'. $sm_klawoo_list_id .'"/>
-			                            <span id="resp_message" style="display:none;">'. $sm_resp_msg .'</span>
-			                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Subscribe" style="height:1.75em;line-height:1.6em;margin-top:0;">
-			                        </form>
-			                        <div id="sm_promo_valid_msg">'. $sm_promo_cond .'</div>
-			                        <div style="padding-top: 0.5em;font-size:0.8em;width:100%;float:left;">
-			                        	<div style="float:left;"><a href="http://www.storeapps.org/product/smart-manager" target=_storeapps> '. __( 'Learn more about Pro version', 'smart-manager' ) . '</a> ' . __( 'or take a', 'smart-manager' ) . ' <a href="http://demo.storeapps.org/?demo=sm-woo" target=_livedemo> ' . __( 'Live Demo', 'smart-manager' ) . ' </a>	</div>
-										<div style="float:right;"><a href="'.$current_url.'&sm_dismiss_admin_notice=1">'. $sm_promo_hide_msg .'</a></div>
+								<td id="sm_promo_msg_content" style="padding-left:0.5em;width:40rem;">
+									<div style="width:100%;font-size:1.3rem;padding-top: 0.4em;font-weight:bold">
+										'. __('Smart Manager\'s 6th Anniversary!!!', 'smart-manager') .'
+										<span class="sm_promo_valid_msg">'. $sm_promo_cond .'</span>
 									</div>
+									<div style="font-size:1.2em;font-weight:800;width:100%;padding-top: 0.5rem;">
+										<span style="color:#E34F4C;font-weight:bold;font-size:1.3rem;">' . __('20% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager') .'
+									</div>
+									<div style="font-size:0.8em;font-style:italic;width:100%">'. sprintf( __('BTW, even we don\'t like admin notices and this notice will automatically hide in %s. But still if you wish to hide it now, simply click ', 'smart-manager'), ( ( $days_remmaining > 1 ) ? ($days_remmaining .' '. __( 'days', 'smart-manager' )) : ($days_remmaining .' '. __( 'day', 'smart-manager' )) ) ).'<a href="'.$current_url.'&sm_dismiss_anniversary_promo=1">'. __('here', 'smart-manager') .'</a></div>
 								</td> 
+								<td>
+									<div><a href="http://www.storeapps.org/?buy-now=18694&qty=1&coupon=5884bacd63d8d&page=722&with-cart=0&utm_source=SM&utm_medium=Lite&utm_campaign=SM-6th-Anniversary" class="button sm-promo-button" target="_blank" style="line-height:0.1rem;font-size:1.1rem;padding:1.2rem;">' . __( 'Claim 20% OFF Now', 'smart-manager' ) . '</a></div>
+			                        <span style="font-size: 0.8em;padding-left: 3rem;"><a href="http://www.storeapps.org/product/smart-manager" target=_storeapps> '. __( 'Learn more', 'smart-manager' ) . '</a> ' . __( '/', 'smart-manager' ) . ' <a href="http://demo.storeapps.org/?demo=sm-woo" target=_livedemo> ' . __( 'Live Demo', 'smart-manager' ) . ' </a>	</span>
+								</td>
 							</tr>
 						</tbody> 
 					</table> 
-				</div>
-				<script type="text/javascript">
-		            jQuery(function () {
-		                jQuery("form[name=sm_klawoo_subscribe]").submit(function (e) {
-		                    e.preventDefault();
-		                    
-		                    params = jQuery("form[name=sm_klawoo_subscribe]").serializeArray();
-		                    params.push( {name: "action", value: "sm_klawoo_subscribe" });
-		                    
-		                    jQuery.ajax({
-		                        method: "POST",
-		                        type: "text",
-		                        url: "'.admin_url( 'admin-ajax.php' ).'",
-		                        data: params,
-		                        success: function(response) {
-		                        	var resp = jQuery(response);
-		                            if (resp.find("h2").text() == "You\'re subscribed!") {
-		                                jQuery("td[id=sm_promo_msg_content]").html(jQuery("form[name=sm_klawoo_subscribe]").find("#resp_message").html());
-		                                jQuery(".dashicons-awards").css("margin-right","0em");
-		                            }
-		                        }
-		                    });
-		                });
-		            });
-		        </script>';
+				</div>';
+
+		} else if ( !empty($_GET['page']) && ($_GET['page'] == 'smart-manager-woo' || $_GET['page'] == 'smart-manager-wpsc') && $sm_dismiss_admin_notice === false ) {
+			$sm_promo_msg = '';
+
+			$sm_lite_activation_date = get_option('sm_lite_activation_date');
+
+			if ( $sm_lite_activation_date === false ) {
+				
+				$sm_lite_activation_date = $current_wp_date;
+				add_option('sm_lite_activation_date',$sm_lite_activation_date);
+			}
+
+			$date_diff = floor(( strtotime($current_wp_date) - strtotime( $sm_lite_activation_date ) ) / (3600 * 24) );
+
+			$sm_resp_msg = '<b>'. __('Congratulations!!!', 'smart-manager') .'</b> ' . __('Kindly check your mail to avail the discount', 'smart-manager') ;
+			$sm_promo_cond = __('*Only For Today*', 'smart-manager');
+			$sm_promo_hide_msg = __('No, I don\'t like offers...', 'smart-manager');
+
+			if ( $date_diff == 0 ) {
+				$sm_promo_msg = '<b>'. __('Big Savings!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('20% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
+				$sm_klawoo_list_id = 'OFvZfJBDn4FLsDOz3Ulpww';
+			} else if ( $date_diff == 1 ) {
+				$sm_promo_msg = '<b>'. __('Missed yesterday?', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' .  __('15% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager');
+				$sm_klawoo_list_id = '0mHi7635Zb4L2vN7hmngdYDQ';
+			} else if ( $date_diff == 2 ) {
+				$sm_promo_msg = '<b>'. __('Last chance!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('10% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
+				$sm_klawoo_list_id = 'gSlZ3HGl3OMOjE5ZEnAJUQ';
+			} else if ( $date_diff > 2 ) {
+				$sm_promo_msg = '<b>'. __('Sign up to get updates, insights & tips...', 'smart-manager');
+				$sm_klawoo_list_id = 'eGXNNhOHHcRHSDOv3hmSsA';
+				$sm_resp_msg = '<b>'. __('Thank you for Subscribing!!!') .'</b>';
+				$sm_promo_cond = '';
+				$sm_promo_hide_msg = __('No, I don\'t need help...', 'smart-manager');
+			}
+
+			if ( !empty($sm_promo_msg) ) {
+
+			    $current_url = (strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') === FALSE ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?' . $_SERVER['QUERY_STRING'];
+
+				echo '<div id="sm_promo_msg" class="updated fade" style="display:block !important;"> 
+						<table style="width:100%;"> 
+							<tbody> 
+								<tr>
+									<td> 
+										<span class="dashicons dashicons-awards" style="font-size:3em;color:#b32727;margin-left: -0.2em;margin-right: 0.3rem;margin-bottom: 0.45em;"></span> 
+									</td> 
+									<td id="sm_promo_msg_content" style="padding:0.5em;">
+										<div style="padding-top: 0.3em;float: left;font-size:1.1em;">'. $sm_promo_msg .'</div>
+										<form name="sm_klawoo_subscribe" action="#" method="POST" accept-charset="utf-8" style="float:left;padding-left:0.5em;">
+				                            <input class="regular-text ltr" type="text" name="email" id="email" placeholder="Email" style="width:18em;height:1.75em;"/>
+				                            <input type="hidden" name="list" value="'. $sm_klawoo_list_id .'"/>
+				                            <span id="resp_message" style="display:none;">'. $sm_resp_msg .'</span>
+				                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Subscribe" style="height:1.75em;line-height:1.6em;margin-top:0;">
+				                        </form>
+				                        <div id="sm_promo_valid_msg">'. $sm_promo_cond .'</div>
+				                        <div style="padding-top: 0.5em;font-size:0.8em;width:100%;float:left;">
+				                        	<div style="float:left;"><a href="http://www.storeapps.org/product/smart-manager" target=_storeapps> '. __( 'Learn more about Pro version', 'smart-manager' ) . '</a> ' . __( 'or take a', 'smart-manager' ) . ' <a href="http://demo.storeapps.org/?demo=sm-woo" target=_livedemo> ' . __( 'Live Demo', 'smart-manager' ) . ' </a>	</div>
+											<div style="float:right;"><a href="'.$current_url.'&sm_dismiss_admin_notice=1">'. $sm_promo_hide_msg .'</a></div>
+										</div>
+									</td> 
+								</tr>
+							</tbody> 
+						</table> 
+					</div>
+					<script type="text/javascript">
+			            jQuery(function () {
+			                jQuery("form[name=sm_klawoo_subscribe]").submit(function (e) {
+			                    e.preventDefault();
+			                    
+			                    params = jQuery("form[name=sm_klawoo_subscribe]").serializeArray();
+			                    params.push( {name: "action", value: "sm_klawoo_subscribe" });
+			                    
+			                    jQuery.ajax({
+			                        method: "POST",
+			                        type: "text",
+			                        url: "'.admin_url( 'admin-ajax.php' ).'",
+			                        data: params,
+			                        success: function(response) {
+			                        	var resp = jQuery(response);
+			                            if (resp.find("h2").text() == "You\'re subscribed!") {
+			                                jQuery("td[id=sm_promo_msg_content]").html(jQuery("form[name=sm_klawoo_subscribe]").find("#resp_message").html());
+			                                jQuery(".dashicons-awards").css("margin-right","0em");
+			                            }
+			                        }
+			                    });
+			                });
+			            });
+			        </script>';
+			}
 		}
 	}
 

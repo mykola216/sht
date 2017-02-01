@@ -1018,10 +1018,24 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 
 	// if (!empty($attribute)) {
 		
+		// Code for getting the 'term_taxonomy.taxonomy' column collation
+	    $results = $wpdb->get_results( "SHOW FULL COLUMNS FROM {$wpdb->prefix}term_taxonomy", 'ARRAY_A' );
+
+	    $taxonomy_collattion = 'utf8mb4_unicode_ci';
+
+	    if( count($results) > 0 ) {
+	      foreach ( $results as $column ) {
+	          if( $column['Field'] == 'taxonomy' ) {
+	              $taxonomy_collattion = $column['Collation'];
+	              break;
+	          }
+	      }
+	    }
+
 		$query_attributes_advanced_search = "SELECT tt.term_taxonomy_id, t.name, t.slug, wat.attribute_type, tt.taxonomy
 	                FROM {$wpdb->prefix}terms as t 
 	                    JOIN {$wpdb->prefix}term_taxonomy as tt on (t.term_id = tt.term_id) 
-	                    LEFT JOIN {$wpdb->prefix}woocommerce_attribute_taxonomies as wat on (concat('pa_',wat.attribute_name) = tt.taxonomy) 
+	                    LEFT JOIN {$wpdb->prefix}woocommerce_attribute_taxonomies as wat on (concat('pa_',wat.attribute_name) COLLATE ". $taxonomy_collattion ." = tt.taxonomy COLLATE ". $taxonomy_collattion .") 
 	                WHERE tt.taxonomy LIKE 'pa_%' OR tt.taxonomy LIKE 'product_cat'
 	                GROUP BY tt.taxonomy,tt.term_taxonomy_id";
 		$results_attributes_advanced_search = $wpdb->get_results ($query_attributes_advanced_search, 'ARRAY_A');
@@ -1181,6 +1195,7 @@ function sm_product_columns_filter($attr) {
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE ':%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '.%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '\%'
+										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE 'free-%'
 										$postmeta_fields_ignored_cond
 										$postmeta_fields_meta_value_cond
 										)
@@ -1201,6 +1216,7 @@ function sm_product_columns_filter($attr) {
 		}		
 	}
 
+	//added 'free' condition for one of the clients
 	$product_meta_fields_query = "SELECT DISTINCT {$wpdb->prefix}postmeta.meta_key,
 									{$wpdb->prefix}postmeta.meta_value
 								FROM {$wpdb->prefix}postmeta 
@@ -1211,6 +1227,7 @@ function sm_product_columns_filter($attr) {
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE ':%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '.%'
 										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE '\%'
+										AND {$wpdb->prefix}postmeta.meta_key NOT LIKE 'free-%'
 										$postmeta_fields_ignored_cond
 										)
 								GROUP BY {$wpdb->prefix}postmeta.meta_key";
@@ -1283,6 +1300,11 @@ function sm_product_columns_filter($attr) {
 													'reduced-rate' => __('Reduced Rate',$sm_text_domain),
 													'zero-rate' => __('Zero Rate',$sm_text_domain));
 
+				$attr [$meta_key_index]['variation_values'] = array('same_as_parent' => __('Same as parent',$sm_text_domain),
+																	'' => __('Standard',$sm_text_domain),
+																	'reduced-rate' => __('Reduced Rate',$sm_text_domain),
+																	'zero-rate' => __('Zero Rate',$sm_text_domain));
+
 			} else if ($meta_key == '_backorders') {
 				
 				$attr [$meta_key_index]['actionType']='setStrActions';
@@ -1306,7 +1328,7 @@ function sm_product_columns_filter($attr) {
 	$attr['other_meta']['colType']='custom_column';
 	$attr['other_meta']['dataType']='string';
 	$attr['other_meta']['actionType']='setStrActions';
-	
+
 	return $attr;
 }
 
@@ -1397,11 +1419,11 @@ if (WOO_RUNNING === true) {
 	var sm_dimensions_decimal_precision 	=  '".$sm_dimensions_decimal_precision."';";	//Decimal Precision for Dimensions fields 
 	
 
-if ( MULTISITE == 1 ) {
-	echo "
-	var uploadBlogsDir      =  '" . UPLOADBLOGSDIR . "';
-	var uploads        		=  '" . UPLOADS . "';";
-}
+// if ( MULTISITE == 1 ) {
+// 	echo "
+// 	var uploadBlogsDir      =  '" . UPLOADBLOGSDIR . "';
+// 	var uploads        		=  '" . UPLOADS . "';";
+// }
 	
 if (WPSC_RUNNING === true) {
 	echo "
