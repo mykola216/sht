@@ -860,7 +860,7 @@ function canvas_child_woocommerce_before_cart() {
 	?>
 		<p>
 			Wil je een vraag stellen over artikelen, die je hebt gekozen, dan geven we graag antwoord.<br />
-			Bel onze klantenservice +31(0)502 301 066 of mail ons via <a href="http://steigerhouttrend.nl/klantenservice/contact/?utm_source=Shopping%20cart&amp;utm_medium=Link&amp;utm_campaign=Contact%2FShoppingcart">contact formulier</a>.
+			Bel onze klantenservice +31(0)502 301 066 of mail ons via <a href=<?php echo get_site_url(); ?>/klantenservice/contact/?utm_source=Shopping%20cart&amp;utm_medium=Link&amp;utm_campaign=Contact%2FShoppingcart">contact formulier</a>.
 		</p>
 	<?php
 }
