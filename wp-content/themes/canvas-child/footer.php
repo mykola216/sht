@@ -39,5 +39,13 @@
 
 <?php wp_footer(); ?>
 <?php woo_foot(); ?>
+<script type="text/javascript">
+	function buttons(){
+		var kCanonical = document.querySelector("link[rel='canonical']").href;
+		window.kCompositeSlug = kCanonical.replace('https://','http://');
+		return;
+	}
+	buttons();
+</script>
 </body>
 </html>
