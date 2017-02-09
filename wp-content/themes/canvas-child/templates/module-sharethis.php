@@ -19,12 +19,14 @@
 	<span class='st_googleplus_hcount' displayText='Google +'></span>
 </div>
 <script type="text/javascript">
-	stLight.options(
-		{
-			publisher: "c4c40d90-2189-4fa7-8b1c-192a6f2fe24f",
-			doNotHash: false,
-			doNotCopy: false,
-			hashAddressBar: false
-		}
-	);
+	if (typeof stLight != 'undefined') {
+		stLight.options(
+			{
+				publisher: "c4c40d90-2189-4fa7-8b1c-192a6f2fe24f",
+				doNotHash: false,
+				doNotCopy: false,
+				hashAddressBar: false
+			}
+		);
+	}
 </script>
