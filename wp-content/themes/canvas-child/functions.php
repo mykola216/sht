@@ -200,7 +200,7 @@ function canvas_child_wp_enqueue_script() {
 
 	wp_enqueue_script( 'canvas-child-common-js',  $uri . '/js/common.js', array('jquery'), '001', true );
 
-	wp_enqueue_script( 'sharethis', 'https://w.sharethis.com/button/buttons.js' );
+	wp_enqueue_script( 'sharethis', 'https://ws.sharethis.com/button/buttons.js' );
 	//wp_enqueue_script( 'sharethis_loader', 'https://ss.sharethis.com/loader.js', array('sharethis') );
 }
 
