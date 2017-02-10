@@ -8,11 +8,11 @@
 ?>
 <div id="social-media">
 	<?php
-		if ( is_front_page() ) {
-			echo '<span class="st_facebook_hcount" displayText="Facebook"></span>';
-		} else {
-			echo '<div class="fb-like" data-href="' . esc_attr( get_permalink() ) .'" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>';
-		}
+	if ( is_front_page() ) {
+		echo '<span class="st_facebook_hcount" displayText="Facebook" st_url="' . esc_attr( str_replace( 'https://', 'http://', site_url() ) ) .'" st_title="' . esc_attr( get_the_title() ) . '"></span>';
+	} else {
+		echo '<div class="fb-like" data-href="' . esc_attr( str_replace( 'https://', 'http://', get_permalink() ) ) .'" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>';
+	}
 	?>
 	<span class='st_pinterest_hcount' displayText='Pinterest'></span>
 	<span class='st_twitter_hcount' displayText='Tweet'></span>
