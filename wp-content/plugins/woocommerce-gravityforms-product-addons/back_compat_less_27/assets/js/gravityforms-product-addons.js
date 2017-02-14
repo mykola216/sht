@@ -180,10 +180,11 @@ function update_dynamic_price_ajax(gform_total) {
                 $form.attr('action', window.location.hash);
                 $form.trigger("submit", [true]);
             });
+
         }
     };
 
-    $(document).on('ready', function (e) {
+    $(document).ready(function (e) {
         $('form.cart').each(function (index, form) {
             var $form = $(form);
             $form.wc_gravity_form();

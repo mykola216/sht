@@ -79,10 +79,12 @@ class WC_GFPA_Main {
 
 
 		require 'inc/gravityforms-product-addons-cart.php';
+		require 'inc/gravityforms-product-addons-entry.php';
 		require 'inc/gravityforms-product-addons-display.php';
 
 		WC_GFPA_Cart::register();
 		WC_GFPA_Display::register();
+		WC_GFPA_Entry::register();
 	}
 
 	public function on_woocommerce_before_add_to_cart_form() {
@@ -231,7 +233,7 @@ class WC_GFPA_Main {
 			$product           = wc_get_product( get_the_ID() );
 			$gravity_form_data = $this->get_gravity_form_data( $post->ID );
 			if ( $gravity_form_data && is_array( $gravity_form_data ) ) {
-				//wp_enqueue_script("gforms_gravityforms", GFCommon::get_base_url() . "/js/gravityforms.js", array("jquery"), GFCommon::$version, false);
+				wp_enqueue_style( 'wc-gravityforms-product-addons', WC_GFPA_Main::plugin_url() . '/assets/css/frontend.css', null );
 
 				gravity_form_enqueue_scripts( $gravity_form_data['id'], false );
 
@@ -313,6 +315,9 @@ class WC_GFPA_Main {
 				}
 
 				if ( $enqueue ) {
+
+					wp_enqueue_style( 'wc-gravityforms-product-addons', WC_GFPA_Main::plugin_url() . '/assets/css/frontend.css', null );
+
 
 					$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 					wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.4.2' );
