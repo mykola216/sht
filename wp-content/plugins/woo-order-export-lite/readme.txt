@@ -74,9 +74,6 @@ The theme or another plugin outputs some lines. Usually, there are extra empty l
 = When exporting .csv containing european special characters , I want to open this csv in Excel without extra actions =
 You  should open tab "CSV" and setup ISO-8859-1 as codepage.
 
-= Progress bar does nothing after 100% for XLS format =
-PHP must be compiled with option  --enable-zip . 
-
 = Can I request any new feature ? =
 Yes, you can email a request to aprokaev@gmail.com. We intensively develop this plugin.
 
@@ -90,6 +87,16 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 6. You can select orders to export.
 
 == Changelog ==
+
+= 1.2.6 - 2017-02-02 =
+* Added new filter "Filter by coupons"
+* Added new filter "Shipping methods" to section "Filter by shipping"
+* Added "refund" fields for items/taxes/shipping
+* Simple products can be filtered by attributes using "Product Taxonomies"
+* Fixed bug in filtering by products ( it checked first X products only)
+* Fixed bug for filename in bulk actions
+* Kill extra lines in generated files if the theme or another plugin outputs something at top
+* XLS format doesn't require module "php-zip" now
 
 = 1.2.5 - 2016-12-21 =
 * Button "Preview" displays estimation (# of orders in exported file)

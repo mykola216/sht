@@ -33,8 +33,8 @@ class WC_Order_Export_Engine {
 			$mask_parts[ count( $mask_parts ) - 2 ] .= '-%order_id';
 			$mask       = implode( '.', $mask_parts );
 		}
-		$time = current_time( 'timestamp' ) ;
-		$subst = array(
+		$time = apply_filters( 'woe_make_filename_current_time', current_time( 'timestamp' ) );
+		$subst = apply_filters( 'woe_make_filename_replacements', array(
 			'%d' => date( 'd',$time ),
 			'%m' => date( 'm',$time ),
 			'%y' => date( 'Y',$time ),
@@ -42,9 +42,9 @@ class WC_Order_Export_Engine {
 			'%i' => date( 'i',$time ),
 			'%s' => date( 's',$time ),
 			'%order_id' => self::$order_id,
-		);
+		) );
 
-		return strtr( $mask, $subst );
+		return apply_filters( 'woe_make_filename', strtr( $mask, $subst ) );
 	}
 	
 	public static function tempnam( $folder, $prefix ) {
@@ -466,6 +466,8 @@ class WC_Order_Export_Engine {
 
 	public static function build_files_and_export( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		//for hooks
+		while ( @ob_end_clean() ) {
+		}; // remove ob_xx
 		$settings = self::validate_defaults( $settings );
 		self::$current_job_settings = $settings;
 		self::$current_job_build_mode = 'full';

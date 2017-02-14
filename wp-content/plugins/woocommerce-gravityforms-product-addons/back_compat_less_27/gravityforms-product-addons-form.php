@@ -49,7 +49,7 @@ class woocommerce_gravityforms_product_form {
 				$_POST['gform_old_submit'] = $_POST['gform_submit'];
 			}
 
-			$form = RGForms::get_form($this->form_id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex);
+			$form = GFForms::get_form($this->form_id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex);
 			
 			unset($_POST['gform_submit']);
 			$form = str_replace('</form>', '', $form);

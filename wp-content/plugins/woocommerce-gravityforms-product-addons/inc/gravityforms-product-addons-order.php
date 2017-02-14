@@ -20,7 +20,7 @@ class WC_GFPA_Order {
 		if ( is_object( $item ) ) {
 
 			$meta_to_display = array();
-			$meta_data_items = $item->get_meta_data( );
+			$meta_data_items = $item->get_meta_data();
 
 			foreach ( $meta_data_items as $meta ) {
 				if ( strpos( $meta->key, '_gf_email_hidden_' ) === 0 ) {
@@ -29,7 +29,10 @@ class WC_GFPA_Order {
 					$meta->key     = rawurldecode( (string) $meta->key );
 					$meta->value   = rawurldecode( (string) $meta->value );
 					$attribute_key = str_replace( 'attribute_', '', $meta->key );
-					$display_key   = wc_attribute_label( $attribute_key, is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : false );
+					$display_key   = wc_attribute_label( $attribute_key, is_callable( array(
+						$this,
+						'get_product'
+					) ) ? $this->get_product() : false );
 					$display_value = $meta->value;
 
 					if ( taxonomy_exists( $attribute_key ) ) {
@@ -45,7 +48,24 @@ class WC_GFPA_Order {
 						'display_key'   => apply_filters( 'woocommerce_order_item_display_meta_key', $display_key ),
 						'display_value' => apply_filters( 'woocommerce_order_item_display_meta_value', wpautop( make_clickable( $display_value ) ) ),
 					);
+				}
 
+				if ( $meta->key == '_gravity_forms_history' ) {
+					$entry_id = isset( $meta->value['_gravity_form_linked_entry_id'] ) ? $meta->value['_gravity_form_linked_entry_id'] : false;
+
+					if ( $entry_id ) {
+
+						$entry = GFAPI::get_entry( $entry_id );
+						if ( $entry ) {
+							$display_value = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . $entry['form_id'] . '&lid=' . $entry_id ) . '">' . __( 'View', 'wc_gf_addons' ) . '</a>';
+							$meta_to_display[ 'gravity_form_entry_' . $entry_id ] = (object) array(
+								'key'           => 'gravity_form_entry',
+								'value'         => $entry_id,
+								'display_key'   => apply_filters( 'woocommerce_order_item_display_meta_key', 'Form Entry' ),
+								'display_value' => apply_filters( 'woocommerce_order_item_display_meta_value', wpautop( make_clickable( $display_value ) ) ),
+							);
+						}
+					}
 
 				}
 			}
