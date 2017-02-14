@@ -65,6 +65,7 @@ class WC_Table_Schedules extends WP_List_Table {
 
 	public function get_columns() {
 		$columns                        = array();
+		$columns['active']              = __( 'Active', 'woocommerce-order-export' );
 		$columns['id']          		= __( 'Id', 'woocommerce-order-export' );
 		$columns['title']          		= __( 'Title', 'woocommerce-order-export' );
 		$columns['format']          	= __( 'Format', 'woocommerce-order-export' );
@@ -79,6 +80,9 @@ class WC_Table_Schedules extends WP_List_Table {
 
 	function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
+			case 'active':
+				return "<input type='checkbox' data-action='change-schedule-status' data-id='{$item['id']}' " . ( ! isset( $item['active'] ) || $item['active'] ? 'checked' : '' ) . "/>";
+				break;
 			case 'title':
 				return '<a href="admin.php?page=wc-order-export&tab=schedules&wc_oe=edit_schedule&schedule_id=' . $item[ 'id' ] . '">' . $item[ $column_name ] . '</a>';
 				break;
@@ -150,19 +154,24 @@ class WC_Table_Schedules extends WP_List_Table {
 //                var_dump($item);
 //                print_r($item['schedule']['last_run']);
 				$last_run = isset( $item['schedule']['last_run'] ) ? $item['schedule']['last_run'] : null;
+				$active =  ( ! isset( $item['active'] ) || $item['active'] );
+				if ( !$active )
+					return  __( 'Inactive', 'woocommerce-order-export' );
 				if ( isset( $item['schedule']['next_run'] ) ) {
 					$next_run_local =  $item['schedule']['next_run'];
 					if($next_run_local)
-						return date('M j Y', $next_run_local) . ' at ' . date('G:i', $next_run_local);
+						return gmdate('M j Y', $next_run_local) . ' at ' . gmdate('G:i', $next_run_local);
 					else
 						 return __( '', 'woocommerce-order-export' );
 				} else {
 					return  __( 'Not installed', 'woocommerce-order-export' );
 				}
 			case 'actions':
-				return '<div class="btn-edit button-secondary" data-id="' . $item['id'] .  '" title="' . __( 'Edit', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
-				       '<div class="btn-clone button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Copy', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
-					   '<div class="btn-trash button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Delete', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-trash"></span></div>';
+				return 
+					'<div class="btn-edit button-secondary" data-id="' . $item['id'] .  '" title="' . __( 'Edit', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-edit"></span></div>&nbsp;' .
+					'<div class="btn-clone button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Copy', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-admin-page"></span></div>&nbsp;'.
+					'<div class="btn-trash button-secondary" data-id="' . $item['id'] . '" title="' . __( 'Delete', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-trash"></span></div>&nbsp;&nbsp;'.
+					'<div class="btn-export button-secondary" data-id="'  . $item['id'] . '" title="' . __( 'Export', 'woocommerce-order-export' ) . '"><span class="dashicons dashicons-download"></span></div>';
 				break;
 			default:
 

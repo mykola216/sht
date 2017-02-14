@@ -15,6 +15,9 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 		parent::__construct( $mode, $filename, $settings, $format, $labels );
 
 		if ( $mode != 'preview' ) {
+			//fallback to PCLZip
+			if( !class_exists('ZipArchive') )
+				PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
 			fclose( $this->handle );
 			$this->filename = $filename;
 			if ( filesize( $this->filename ) > 0 ) {
