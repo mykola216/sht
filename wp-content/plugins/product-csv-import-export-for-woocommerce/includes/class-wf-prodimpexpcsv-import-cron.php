@@ -13,7 +13,7 @@ class WF_ProdImpExpCsv_ImportCron {
         add_action('init', array($this, 'wf_new_scheduled_import'));
         add_action('wf_woocommerce_csv_im_ex_auto_import_products', array($this, 'wf_scheduled_import_products'));
         $this->settings = get_option('woocommerce_' . WF_PROD_IMP_EXP_ID . '_settings', null);
-        $this->settings_ftp_import = get_option('wf_shipment_tracking_importer_ftp', null);
+        $this->settings_ftp_import = get_option('wf_product_import_ftp', null);
         $this->imports_enabled = FALSE;
         if (isset($this->settings['pro_auto_import']) && $this->settings['pro_auto_import'] === 'Enabled')
             $this->imports_enabled = TRUE;

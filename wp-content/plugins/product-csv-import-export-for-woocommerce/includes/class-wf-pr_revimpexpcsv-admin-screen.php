@@ -94,10 +94,9 @@ class WF_ProdReviewImpExpCsv_Admin_Screen {
 		wp_enqueue_style( 'woocommerce-product-csv-importer3', plugins_url( basename( plugin_dir_path( WF_PrRevImpExpCsv_FILE ) ) . '/styles/jquery-ui.css', basename( __FILE__ ) ), '', '1.0.0', 'screen' );
          
                     wp_enqueue_script('woocommerce-product-csv-importer2', plugins_url( basename( plugin_dir_path( WF_PrRevImpExpCsv_FILE ) ) . '/js/product-rev-csv-import-export-for-woocommerce.min.js', basename( __FILE__ ) ), '', '1.0.0', 'screen');
-       
-
-     //   wp_localize_script('woocommerce-review-csv-importer', 'woocommerce_review_csv_import_params', array('calendar_icon' => plugins_url(basename(plugin_dir_path(WF_PrRevImpExpCsv_FILE)) . '/images/calendar.png', basename(__FILE__))));
-       wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_review_csv_cron_params', array('rev_enable_ftp_ie' => '','rev_auto_export' => 'Disabled', 'rev_auto_import' => 'Disabled'));
+        wp_enqueue_script('jquery-ui-datepicker');
+         wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_review_csv_import_params', array('calendar_icon' => plugins_url(basename(plugin_dir_path(WF_PrRevImpExpCsv_FILE)) . '/images/calendar.png', basename(__FILE__))));
+        wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_review_csv_cron_params', array('rev_enable_ftp_ie' => '','rev_auto_export' => 'Disabled', 'rev_auto_import' => 'Disabled'));
 
 		 wp_enqueue_script('jquery-ui-datepicker');
 

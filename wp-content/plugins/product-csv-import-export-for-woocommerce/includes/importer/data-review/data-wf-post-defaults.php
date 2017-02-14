@@ -16,4 +16,5 @@ return array(
 	'comment_approved'		=> '',
 	'comment_parent'		=> '',
 	'user_id'				=> '',
+	'comment_alter_id'		=> '',
 );

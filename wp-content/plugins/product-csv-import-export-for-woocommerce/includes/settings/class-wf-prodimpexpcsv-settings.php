@@ -31,7 +31,7 @@ class WF_ProdImpExpCsv_Settings {
                 $pro_auto_import                            = ! empty( $_POST['pro_auto_import'] ) ? $_POST['pro_auto_import'] : 'Disabled';
                 $pro_auto_import_start_time                 = ! empty( $_POST['pro_auto_import_start_time'] ) ? $_POST['pro_auto_import_start_time'] : '';
                 $pro_auto_import_interval                   = ! empty( $_POST['pro_auto_import_interval'] ) ? $_POST['pro_auto_import_interval'] : '';
-                $auto_import_profile                        = ! empty( $_POST['pro_auto_import_profile'] ) ? $_POST['pro_auto_import_profile'] : '';
+                $pro_auto_import_profile                        = ! empty( $_POST['pro_auto_import_profile'] ) ? $_POST['pro_auto_import_profile'] : '';
                 $pro_auto_import_merge                      = ! empty( $_POST['pro_auto_import_merge'] ) ?  true : false;
 
 

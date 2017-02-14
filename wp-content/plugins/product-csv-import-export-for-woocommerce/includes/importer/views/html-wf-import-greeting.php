@@ -7,12 +7,12 @@
 	$enable_ftp_ie = '';	
 	$ftp_server_path = '';	
 	if(!empty($ftp_settings)){
-		$ftp_server = !empty($ftp_settings[ 'ftp_server' ]) ? $ftp_settings[ 'ftp_server' ] : '';
-		$ftp_user = !empty($ftp_settings[ 'ftp_user' ]) ? $ftp_settings[ 'ftp_user' ] : '';
-		$ftp_password = !empty($ftp_settings[ 'ftp_password' ]) ? $ftp_settings[ 'ftp_password' ] : '';
-		$use_ftps = !empty($ftp_settings[ 'use_ftps' ]) ? $ftp_settings[ 'use_ftps' ] : '';
-		$enable_ftp_ie = !empty($ftp_settings[ 'enable_ftp_ie' ]) ? $ftp_settings[ 'enable_ftp_ie' ] : '';
-		$ftp_server_path = !empty($ftp_settings[ 'ftp_server_path' ]) ? $ftp_settings[ 'ftp_server_path' ] : '';
+		$ftp_server = !empty($ftp_settings[ 'pro_ftp_server' ]) ? $ftp_settings[ 'pro_ftp_server' ] : '';
+		$ftp_user = !empty($ftp_settings[ 'pro_ftp_user' ]) ? $ftp_settings[ 'pro_ftp_user' ] : '';
+		$ftp_password = !empty($ftp_settings[ 'pro_ftp_password' ]) ? $ftp_settings[ 'pro_ftp_password' ] : '';
+		$use_ftps = !empty($ftp_settings[ 'pro_use_ftps' ]) ? $ftp_settings[ 'pro_use_ftps' ] : '';
+		$enable_ftp_ie = !empty($ftp_settings[ 'pro_enable_ftp_ie' ]) ? $ftp_settings[ 'pro_enable_ftp_ie' ] : '';
+		$ftp_server_path = !empty($ftp_settings[ 'pro_ftp_server_path' ]) ? $ftp_settings[ 'pro_ftp_server_path' ] : '';
 		
 	}
 

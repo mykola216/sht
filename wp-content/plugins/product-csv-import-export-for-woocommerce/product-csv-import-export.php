@@ -5,7 +5,7 @@ Plugin URI: https://www.xadapter.com/product/product-import-export-plugin-for-wo
 Description: Import and Export Products and Product Reviews From and To your WooCommerce Store.
 Author: HikeForce
 Author URI: https://www.xadapter.com/vendor/hikeforce/
-Version: 3.0.0
+Version: 3.1.2
 Text Domain: wf_csv_import_export
 */
 

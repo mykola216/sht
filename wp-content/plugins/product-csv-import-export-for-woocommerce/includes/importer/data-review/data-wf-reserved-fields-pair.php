@@ -19,7 +19,7 @@ return array(
 
                 'rating'                        => 'Rating | 1: for 1 star, 2: for 2 star,...',
                 'verified'                      => 'Verified or Not? | 1: for verified, 0: for non-verified',
-		'title'                         => 'Review title |  Review title'
-
+		'title'                         => 'Review title |  Review title',
+'comment_alter_id'              =>  'Comment Alteration ID | System generated'
     
 );

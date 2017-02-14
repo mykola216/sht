@@ -14,5 +14,5 @@ return array(
 	'comment_parent',
 	'user_id',
 	'rating',
-	'verified'
+	'verified',
 );

@@ -11,29 +11,33 @@ class WF_PrRevImpExpCsv_Exporter {
 	public static function do_export( $pr_rev_ids = array() ) {
 		global $wpdb;
 
-        if ( ! function_exists( 'get_current_screen' ) ){
-                   require_once(ABSPATH . 'wp-admin/includes/screen.php');
-        }
-        if(!empty($pr_rev_ids)){
-            $selected_pr_rev_ids = implode(', ', $pr_rev_ids);
-        }else{
-            $selected_pr_rev_ids = '';
-        }
-        
-	$export_limit                = ! empty( $_POST['limit'] ) ? intval( $_POST['limit'] ) : '';
-        $delimiter                   = ! empty( $_POST['delimiter'] ) ? $_POST['delimiter']  : ',';
-        $stars           			 = ! empty( $_POST['stars'] ) ? $_POST['stars'] : '';
-       	$owner           			 = ! empty( $_POST['owner'] ) ? $_POST['owner'] : '';
-       	$products           		 = ! empty( $_POST['products'] ) ? $_POST['products'] : '';
-       	if ( $limit > $export_limit )
+		if ( ! function_exists( 'get_current_screen' ) ){
+			require_once(ABSPATH . 'wp-admin/includes/screen.php');
+		}
+		if(!empty($pr_rev_ids)){
+			$selected_pr_rev_ids = implode(', ', $pr_rev_ids);
+		}else{
+			$selected_pr_rev_ids = '';
+		}
+
+		$export_reply				 = ! empty( $_POST['v_replycolumn'] ) ? '1' : '' ; 
+
+		$export_limit                = ! empty( $_POST['limit'] ) ? intval( $_POST['limit'] ) : '';
+		$delimiter                   = ! empty( $_POST['delimiter'] ) ? $_POST['delimiter']  : ',';
+		$stars           			 = ! empty( $_POST['stars'] ) ? $_POST['stars'] : '';
+		$owner           			 = ! empty( $_POST['owner'] ) ? $_POST['owner'] : '';
+		$products           		 = ! empty( $_POST['products'] ) ? $_POST['products'] : '';
+		$limit 						 = ! empty($limit) ? $limit : '';
+
+		if ( $limit > $export_limit )
 			$limit = $export_limit;
 
-       	$pr_rev_date_from        	 = ! empty( $_POST['pr_rev_date_from'] ) ? $_POST['pr_rev_date_from']  : date('Y-m-d 00:00', 0) ;
-        $pr_rev_date_to          	 = ! empty( $_POST['pr_rev_date_to'] ) ? $_POST['pr_rev_date_to']  : date('Y-m-d 23:59', current_time('timestamp'));
+		$pr_rev_date_from        	 = ! empty( $_POST['pr_rev_date_from'] ) ? $_POST['pr_rev_date_from']  : date('Y-m-d 00:00', 0) ;
+		$pr_rev_date_to          	 = ! empty( $_POST['pr_rev_date_to'] ) ? $_POST['pr_rev_date_to']  : date('Y-m-d 23:59', current_time('timestamp'));
 
 		$csv_columns                 = include( 'data/data-wf-post-columns-review.php' );
-       	$user_columns_name           = ! empty( $_POST['columns_name'] ) ? $_POST['columns_name'] : $csv_columns;
-       	$export_columns              = ! empty( $_POST['columns'] ) ? $_POST['columns'] : '';
+		$user_columns_name           = ! empty( $_POST['columns_name'] ) ? $_POST['columns_name'] : $csv_columns;
+		$export_columns              = ! empty( $_POST['columns'] ) ? $_POST['columns'] : '';
 
 		if ( $limit > $export_limit )
 			$limit = $export_limit;
@@ -67,20 +71,20 @@ class WF_PrRevImpExpCsv_Exporter {
 
    		// Headers
 		$all_meta_keys    = array('rating','verified' ,'title');
-                
-                
-	
+
+
+
 		$found_coupon_meta = array();
 		// Some of the values may not be usable (e.g. arrays of arrays) but the worse
         // that can happen is we get an empty column.
 		foreach ( $all_meta_keys as $meta ) {
-            if ( ! $meta ) continue;
-            if ( ! in_array( $meta, array_keys( $csv_columns ) ) && substr( (string)$meta, 0, 1 ) == '_' )
-            	continue;
-            if ( in_array( $meta, array_keys( $csv_columns ) ) )
+			if ( ! $meta ) continue;
+			if ( ! in_array( $meta, array_keys( $csv_columns ) ) && substr( (string)$meta, 0, 1 ) == '_' )
 				continue;
-            $found_coupon_meta[] = $meta;
-        }
+			if ( in_array( $meta, array_keys( $csv_columns ) ) )
+				continue;
+			$found_coupon_meta[] = $meta;
+		}
 
 		$found_coupon_meta = array_diff( $found_coupon_meta, array_keys( $csv_columns ) );
 
@@ -91,11 +95,11 @@ class WF_PrRevImpExpCsv_Exporter {
 
 		// Export header rows
 		foreach ( $csv_columns as $column => $value ) {
-                    
-                        $temp_head =    esc_attr( $user_columns_name[$column] );
-                        if (strpos($temp_head, 'yoast') === false) {
-                            $temp_head = ltrim($temp_head, '_');
-                        }
+
+			$temp_head =    esc_attr( $user_columns_name[$column] );
+			if (strpos($temp_head, 'yoast') === false) {
+				$temp_head = ltrim($temp_head, '_');
+			}
 			if ( ! $export_columns || in_array( $column, $export_columns ) ) $row[] = $temp_head;
 		}
 
@@ -109,46 +113,46 @@ class WF_PrRevImpExpCsv_Exporter {
 			}
 		}
 
-	
+		
 		$row = array_map( 'WF_PrRevImpExpCsv_Exporter::wrap_column', $row );
 		fwrite( $fp, implode( $delimiter, $row ) . "\n" );
 		unset( $row );
 		$args = apply_filters( 'product_reviews_csv_product_export_args', array(
-				    'status' => 'all',
-                                    'post_type' => 'product',
-                                    'meta_key' => 'rating',
-				    'number' => $export_limit,
-				    'date_query' => array(
-		                array(
-		                    'before' => $pr_rev_date_to,
-		                    'after' => $pr_rev_date_from,
-		                    'inclusive' => true,
-		                ),
-            		),
-				    
-				));
+			'status' => 'all',
+			'orderby' => 'comment_ID',
+			'order' => 'ASC',
+			'post_type' => 'product',
+			'meta_key' => 'rating',
+			'number' => $export_limit,
+			'date_query' => array(
+				array(
+					'before' => $pr_rev_date_to,
+					'after' => $pr_rev_date_from,
+					'inclusive' => true,
+					),
+				),
+
+			));
+		
 		if ( !empty($selected_pr_rev_ids) ) {
-                $args['comment__in'] = $selected_pr_rev_ids;
-            }
+			$args['comment__in'] = $selected_pr_rev_ids;
+		}
 		if(!empty($products))
 		{
-                    $args['post__in'] = implode(',', $products);
+			$args['post__in'] = implode(',', $products);
 		}
 		
 		if(!empty( $stars ))
 		{
-			for($i=0;$i<count($stars);$i++)
-			{
-				$args['meta_query'] = array(array('key'=>'rating','value'=>$stars[$i]));
-                        }
+			$args['meta_query'] = array(array('key'=>'rating','value'=>$stars));
 		}
 		
 		if(!empty( $owner ))
 		{
 			if($owner == 'verified'){
 				$args['meta_query'] = array(
-												array('key'=>'verified',
-													'value'=>1));
+					array('key'=>'verified',
+						'value'=>1));
 			}
 			if($owner == 'non-verified'){
 				$args['meta_query'] = array(array('key'=>'verified','value'=>0));
@@ -158,75 +162,29 @@ class WF_PrRevImpExpCsv_Exporter {
 		
 		global $wpdb;
 		
-        $comments_query = new WP_Comment_Query;
+
+		$comments_query = new WP_Comment_Query;
 		$comments = $comments_query->query( $args );
 		
 		foreach($comments as $comment)
 		{
-			$row = array();
-			$comment_ID = $comment->comment_ID;
-			$obj  = new WF_PrRevImpExpCsv_Exporter();
-			$meta_data = $obj->get_all_meta_data( $comment_ID );
-			
-			$comment->meta = new stdClass;
-			$comment->meta->rating = get_comment_meta( $comment_ID, 'rating', true );
-			$comment->meta->verified = get_comment_meta( $comment_ID, 'verified', true );
-                        $comment->meta->title = get_comment_meta( $comment_ID, 'title', true );
+			self::hf_import_to_csv($comment,$csv_columns,$export_columns,$delimiter,$fp,$comments);
 
-			
-			// Meta data
-			foreach ( $meta_data as $meta => $value ) 
+			if($export_reply === '1')
 			{
-				if ( ! $meta ) {
-					continue;
-				}
-				if ( ! in_array( $meta, array_keys( $csv_columns ) ) && substr( $meta, 0, 1 ) == '_' ) {
-					continue;
-				}
-				
+				$sub_reply = get_comments(array('parent' => $comment->comment_ID));
+				if(!empty($sub_reply)){
 
-				$meta_value = maybe_unserialize( maybe_unserialize( $value ) );
 
-				if ( is_array( $meta_value ) ) {
-					$meta_value = json_encode( $meta_value );
-				}
+					foreach ($sub_reply as $reply) {
 
-				$comment->meta->$meta = self::format_export_meta( $meta_value, $meta );
-			}
+						self::hf_import_to_csv($reply,$csv_columns,$export_columns,$delimiter,$fp,$sub_reply);
 
-			foreach ( $csv_columns as $column => $value ) {
-				if ( ! $export_columns || in_array( $column, $export_columns ) ) {
-
-					if ( isset( $comment->meta->$column ) ) {
-						$row[] = self::format_data( $comment->meta->$column );
-					} elseif ( isset( $comment->$column ) && ! is_array( $comments[0]->$column ) ) {
-						if ( $column === 'post_title' ) {
-							$row[] = sanitize_text_field( $comment->$column );
-						} else {
-							$row[] = self::format_data( $comment->$column );
-						}
-					} else {
-						$row[] = '';
 					}
+
 				}
 			}
-
 			
-			if ( ! $export_columns || in_array( 'meta', $export_columns ) ) 
-			{
-				foreach ( $found_coupon_meta as $product_meta ) 
-				{
-					if ( isset( $comment->meta->$product_meta ) ) 
-					{
-						$row[] = self::format_data( $comment->meta->$product_meta );
-					} else {
-						$row[] = '';
-					}
-				}
-			}
-			$row = array_map( 'WF_PrRevImpExpCsv_Exporter::wrap_column', $row );
-			fwrite( $fp, implode( $delimiter, $row ) . "\n" );
-			unset( $row );
 		}
 		if( $enable_ftp_ie ) {
 			if( $use_ftps ) {
@@ -254,8 +212,82 @@ class WF_PrRevImpExpCsv_Exporter {
 		fclose( $fp );
 		exit;
 	}
-        
-        
+
+	public static function hf_import_to_csv($comment,$csv_columns,$export_columns,$delimiter,$fp,$comments)
+	{
+		$row = array();
+		$comment_ID = $comment->comment_ID;
+		$obj  = new WF_PrRevImpExpCsv_Exporter();
+		$meta_data = $obj->get_all_meta_data( $comment_ID );
+
+		$comment->meta = new stdClass;
+		$comment->meta->rating = get_comment_meta( $comment_ID, 'rating', true );
+		$comment->meta->verified = get_comment_meta( $comment_ID, 'verified', true );
+		$comment->meta->title = get_comment_meta( $comment_ID, 'title', true );
+
+
+			// Meta data
+		foreach ( $meta_data as $meta => $value ) 
+		{
+			if ( ! $meta ) {
+				continue;
+			}
+			if ( ! in_array( $meta, array_keys( $csv_columns ) ) && substr( $meta, 0, 1 ) == '_' ) {
+				continue;
+			}
+
+
+			$meta_value = maybe_unserialize( maybe_unserialize( $value ) );
+
+			if ( is_array( $meta_value ) ) {
+				$meta_value = json_encode( $meta_value );
+			}
+
+			$comment->meta->$meta = self::format_export_meta( $meta_value, $meta );
+		}
+
+		foreach ( $csv_columns as $column => $value ) {
+			if ( ! $export_columns || in_array( $column, $export_columns ) ) {
+				if ($column === 'comment_alter_id') {
+					$row[] = self::format_data($comment_ID);
+				}
+
+				if ( isset( $comment->meta->$column ) ) {
+					$row[] = self::format_data( $comment->meta->$column );
+				} elseif ( isset( $comment->$column ) && ! is_array( $comments[0]->$column ) ) {
+					if ( $column === 'post_title' ) {
+						$row[] = sanitize_text_field( $comment->$column );
+					} else {
+						$row[] = self::format_data( $comment->$column );
+					}
+				} else {
+					$row[] = '';
+				}
+			}
+		}
+
+
+
+		if ( ! $export_columns || in_array( 'meta', $export_columns ) ) 
+		{
+			if(!empty($found_coupon_meta)){
+				foreach ( $found_coupon_meta as $product_meta ) 
+				{
+					if ( isset( $comment->meta->$product_meta ) ) 
+					{
+						$row[] = self::format_data( $comment->meta->$product_meta );
+					} else {
+						$row[] = '';
+					}
+				}
+			}
+		}
+		$row = array_map( 'WF_PrRevImpExpCsv_Exporter::wrap_column', $row );
+		fwrite( $fp, implode( $delimiter, $row ) . "\n" );
+		unset( $row );
+
+
+	}
 
 	/**
 	 * Format the data if required
@@ -267,21 +299,21 @@ class WF_PrRevImpExpCsv_Exporter {
 		switch ( $meta ) {
 			case '_sale_price_dates_from' :
 			case '_sale_price_dates_to' :
-				return $meta_value ? date( 'Y-m-d', $meta_value ) : '';
+			return $meta_value ? date( 'Y-m-d', $meta_value ) : '';
 			break;
 			case '_upsell_ids' :
 			case '_crosssell_ids' :
-				return implode( '|', array_filter( (array) json_decode( $meta_value ) ) );
+			return implode( '|', array_filter( (array) json_decode( $meta_value ) ) );
 			break;
 			default :
-				return $meta_value;
+			return $meta_value;
 			break;
 		}
 	}
 
 	public static function format_data( $data ) 
 	{
-        if(!is_array($data));
+		if(!is_array($data));
 		$data = (string) urldecode( $data );
 		$enc  = mb_detect_encoding( $data, 'UTF-8, ISO-8859-1', true );
 		$data = ( $enc == 'UTF-8' ) ? $data : utf8_encode( $data );
@@ -299,14 +331,14 @@ class WF_PrRevImpExpCsv_Exporter {
 
 
 
-    public static function get_all_meta_data($id)
-    {
-    	$meta_data = array();
-    	$meta_data[] = array('key'=>'rating',
-    						'value'=>get_comment_meta( $id, 'rating', true ));
-    	$meta_data[] = array('key'=>'verified',
-    						'value'=>get_comment_meta( $id, 'verified', true ));
-    	return $meta_data;
-    }
+	public static function get_all_meta_data($id)
+	{
+		$meta_data = array();
+		$meta_data[] = array('key'=>'rating',
+			'value'=>get_comment_meta( $id, 'rating', true ));
+		$meta_data[] = array('key'=>'verified',
+			'value'=>get_comment_meta( $id, 'verified', true ));
+		return $meta_data;
+	}
 }
 

@@ -1385,34 +1385,34 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
 	}
 	
 	private function handle_ftp(){
-		$enable_ftp_ie         	= !empty( $_POST['enable_ftp_ie'] ) ? true : false;
+		$enable_ftp_ie         	= !empty( $_POST['pro_enable_ftp_ie'] ) ? true : false;
 		if($enable_ftp_ie == false){ 
-                    $settings_in_db = get_option( 'wf_shipment_tracking_importer_ftp', null );
-                    $settings_in_db['enable_ftp_ie'] = false;
-                    update_option( 'wf_shipment_tracking_importer_ftp', $settings_in_db );
+                    $settings_in_db = get_option( 'wf_product_import_ftp', null );
+                    $settings_in_db['pro_enable_ftp_ie'] = false;
+                    update_option( 'wf_product_import_ftp', $settings_in_db );
                     return false;
                 }
 		
-		$ftp_server		= ! empty( $_POST['ftp_server'] ) ? $_POST['ftp_server'] : '';
-		$ftp_server_path	= ! empty( $_POST['ftp_server_path'] ) ? $_POST['ftp_server_path'] : '';
-		$ftp_user		= ! empty( $_POST['ftp_user'] ) ? $_POST['ftp_user'] : '';
-		$ftp_password           = ! empty( $_POST['ftp_password'] ) ? $_POST['ftp_password'] : '';
-		$use_ftps         	= ! empty( $_POST['use_ftps'] ) ? true : false;
+		$ftp_server		= ! empty( $_POST['pro_ftp_server'] ) ? $_POST['pro_ftp_server'] : '';
+		$ftp_server_path	= ! empty( $_POST['pro_ftp_server_path'] ) ? $_POST['pro_ftp_server_path'] : '';
+		$ftp_user		= ! empty( $_POST['pro_ftp_user'] ) ? $_POST['ftp_user'] : '';
+		$ftp_password           = ! empty( $_POST['pro_ftp_password'] ) ? $_POST['pro_ftp_password'] : '';
+		$use_ftps         	= ! empty( $_POST['pro_use_ftps'] ) ? true : false;
 		
 		
 		$settings = array();
-		$settings[ 'ftp_server' ]		= $ftp_server;
-		$settings[ 'ftp_user' ]			= $ftp_user;
-		$settings[ 'ftp_password' ]		= $ftp_password;
-		$settings[ 'use_ftps' ]			= $use_ftps;
-		$settings[ 'enable_ftp_ie' ]	= $enable_ftp_ie;
-		$settings[ 'ftp_server_path' ]	= $ftp_server_path;
+		$settings[ 'pro_ftp_server' ]		= $ftp_server;
+		$settings[ 'pro_ftp_user' ]			= $ftp_user;
+		$settings[ 'pro_ftp_password' ]		= $ftp_password;
+		$settings[ 'pro_use_ftps' ]			= $use_ftps;
+		$settings[ 'pro_enable_ftp_ie' ]	= $enable_ftp_ie;
+		$settings[ 'pro_ftp_server_path' ]	= $ftp_server_path;
 		
 		
 		$local_file = 'wp-content/plugins/product-csv-import-export-for-woocommerce/temp-import.csv';
 		$server_file = $ftp_server_path;
 					   
-		update_option( 'wf_shipment_tracking_importer_ftp', $settings );
+		update_option( 'wf_product_import_ftp', $settings );
 		
 		$ftp_conn = $use_ftps ? ftp_ssl_connect($ftp_server) : ftp_connect($ftp_server);
 		$error_message = "";
@@ -1464,7 +1464,7 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
 		$bytes      = apply_filters( 'import_upload_size_limit', wp_max_upload_size() );
 		$size       = size_format( $bytes );
 		$upload_dir = wp_upload_dir();
-                $ftp_settings = get_option( 'wf_shipment_tracking_importer_ftp');
+        $ftp_settings = get_option( 'wf_product_import_ftp');
 		include( 'views/html-wf-import-greeting.php' );
 	}
 
