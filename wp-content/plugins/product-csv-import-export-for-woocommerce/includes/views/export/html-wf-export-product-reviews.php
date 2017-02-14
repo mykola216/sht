@@ -81,16 +81,14 @@
                     <p style="font-size: 12px"><?php _e('Reviews of these users will be exported.', 'wf_csv_import_export'); ?></p>
                 </td>
             </tr>
-            <!-- <tr>
+             <tr>
                 <th>
-                    <label for="v_sortcolumn"><?php _e('Sort Columns', 'wf_csv_import_export'); ?></label>
+                    <label for="v_replycolumn"><?php _e('Export with Replies', 'wf_csv_import_export'); ?></label>
                 </th>
                 <td>
-                    <input type="text" name="sortcolumn" id="v_sortcolumn" placeholder="<?php _e('post_parent , ID', 'wf_csv_import_export'); ?>" class="input-text" />
-                    <p style="font-size: 12px"><?php _e('What columns to sort pages by, comma-separated. Accepts post_author , post_date , post_title, post_name, post_modified, menu_order, post_modified_gmt , rand , comment_count.', 'wf_csv_import_export'); ?> </p>
-                </td>
-            </tr> -->
-            <tr>
+                    <input type="checkbox" name="v_replycolumn" id="v_replycolumn" class="input-text" /><?php _e('Enable', 'wf_csv_import_export'); ?>
+                  </td>
+            </tr>             <tr>
                 <th>
                     <label for="v_delimiter"><?php _e('Delimiter', 'wf_csv_import_export'); ?></label>
                 </th>
@@ -112,9 +110,9 @@
                     </th>
                     
                     <?php foreach ($post_columns as $pkey => $pcolumn) {
-                        
+                         $ena=($pkey =='comment_alter_id')?'style="display:none;"':'';
                        ?>
-                       <tr>
+                       <tr <?php echo $ena; ?>>
                         <td>
                             <input name= "columns[<?php echo $pkey; ?>]" type="checkbox" value="<?php echo $pkey; ?>" checked>
                             <label for="columns[<?php echo $pkey; ?>]"><?php _e($pcolumn, 'wf_csv_import_export'); ?></label>

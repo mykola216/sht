@@ -13,7 +13,7 @@ class WF_PrRevImpExpCsv_ImportCron {
         add_action('init', array($this, 'wf_new_scheduled_pr_rev_import'));
         add_action('wf_pr_rev_csv_im_ex_auto_import_products', array($this, 'wf_scheduled_import_products'));
         $this->settings = get_option('woocommerce_' . WF_PROD_IMP_EXP_ID . '_settings', null);
-        $this->settings_ftp_import = get_option('wf_shipment_tracking_importer_ftp', null);
+        $this->settings_ftp_import = get_option('wf_review_import_ftp', null);
         $this->imports_enabled = FALSE;
         if (isset($this->settings['rev_auto_import']) && $this->settings['rev_auto_import'] === 'Enabled')
             $this->imports_enabled = TRUE;
@@ -67,16 +67,15 @@ class WF_PrRevImpExpCsv_ImportCron {
 
     public function wf_scheduled_import_products() {
          
-        //error_log("test run by wp-cron" , 3 , ABSPATH . '/wp-content/uploads/wc-logs/my-cron-log.txt');
+      if(!defined('WP_LOAD_IMPORTERS'))
         define( 'WP_LOAD_IMPORTERS', true );
+
         if ( ! class_exists( 'WooCommerce' ) ) :
             require  ABSPATH . 'wp-content/plugins/woocommerce/woocommerce.php';
         endif;
 
         WF_PrRevImpExpCsv_ImportCron::product_importer();
-            //echo '<pre>';print_r($GLOBALS['WF_CSV_Product_Review_Import']);exit;
         if($this->handle_ftp_for_autoimport()){
-            //echo $this->file_url;exit;
             if($this->settings['rev_auto_import_profile']!== ''){
 				$profile_array = get_option('wf_prod_review_csv_imp_exp_mapping');
 				$mapping = $profile_array[$this->settings['rev_auto_import_profile']][0];
@@ -90,9 +89,6 @@ class WF_PrRevImpExpCsv_ImportCron {
             }
         if($this->settings['rev_auto_import_merge']){ $_GET['merge'] = 1; } else { $_GET['merge'] = 0; }    
           
-        //echo wp_next_scheduled('wf_pr_rev_csv_im_ex_auto_import_products').'<br/>';
-        //echo date('Y-m-d H:i:s' , wp_next_scheduled('wf_pr_rev_csv_im_ex_auto_import_products'));
-        //echo $_GET['merge'];exit;
         
         $GLOBALS['WF_CSV_Product_Review_Import']->import_start( $this->file_url, $mapping, $start_pos, $end_pos, $eval_field );
 	$GLOBALS['WF_CSV_Product_Review_Import']->import();
@@ -121,7 +117,7 @@ class WF_PrRevImpExpCsv_ImportCron {
                 $enable_ftp_ie          = $this->settings_ftp_import['rev_enable_ftp_ie' ];
 		if(!$enable_ftp_ie) return false;
                 
-                $ftp_server             = $this->settings_ftp_import[ 'rev_ftp_server' ];
+        $ftp_server             = $this->settings_ftp_import[ 'rev_ftp_server' ];
 		$ftp_user               = $this->settings_ftp_import[ 'rev_ftp_user' ];
 		$ftp_password		= $this->settings_ftp_import[ 'rev_ftp_password' ] ;
 		$use_ftps               = $this->settings_ftp_import[ 'rev_use_ftps' ];

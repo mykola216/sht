@@ -2,7 +2,7 @@
 /**
  * WooCommerce CSV Importer class for managing parsing of CSV files.
  */
-class WF_CSV_Parser {
+class WF_CSV_Parser_Review {
 
 	var $row;
 	var $post_type;

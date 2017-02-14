@@ -23,6 +23,10 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	var $attachments     = array();
 	var $upsell_skus     = array();
 	var $crosssell_skus  = array();
+	var $cmd_type		 = '';
+	var $new_id			 = array();
+	var $parent_data	 = '';
+	var $csv_last_start	 ='';
 
 	// Results
 	var $import_results  = array();
@@ -36,6 +40,15 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$this->import_page             = 'product_reviews_csv';
 		$this->file_url_import_enabled = apply_filters( 'product_reviews_csv_product_file_url_import_enabled', true );
 	}
+	public function hf_rev_im_ex_StartSession() {
+        if (!session_id()) {
+            session_start();
+        }
+    }
+
+    public function hf_rev_im_ex_myEndSession() {
+        session_destroy();
+    }
 
 	/**
 	 * Registered callback function for the WordPress Importer
@@ -44,6 +57,8 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	 */
 	public function dispatch() {
 		global $woocommerce, $wpdb;
+ 		
+ 		add_action('init', array($this, 'hf_rev_im_ex_StartSession'), 1);
 
 		if ( ! empty( $_POST['delimiter'] ) ) {
 			$this->delimiter = stripslashes( trim( $_POST['delimiter'] ) );
@@ -513,8 +528,8 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 				$reset_action     = 'admin.php?clearmapping=1&amp;profile='.$this->profile.'&amp;import=' . $this->import_page . '&amp;step=1&amp;merge=' . ( ! empty( $_GET['merge'] ) ? 1 : 0 ) . '&amp;file_url=' . $this->file_url . '&amp;delimiter=' . $this->delimiter . '&amp;merge_empty_cells=' . $this->merge_empty_cells . '&amp;file_id=' . $this->id . '';
 				$reset_action = esc_attr(wp_nonce_url($reset_action, 'import-upload'));
 				echo '<h3>' . __( 'Columns are pre-selected using the Mapping file: "<b style="color:gray">'.$this->profile.'</b>".  <a href="'.$reset_action.'"> Delete</a> this mapping file.', 'wf_csv_import_export' ) . '</h3>';
-				$saved_mapping = $mapping_from_db[0];
-				$saved_evaluation = $mapping_from_db[1];
+				$saved_mapping = !empty($mapping_from_db[0]) ? $mapping_from_db[0] : '';
+				$saved_evaluation = !empty($mapping_from_db[1]) ? $mapping_from_db[1] : '';
 			//}	
 		}
 						
@@ -560,7 +575,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$this->log->add( 'csv-import', '---[ New Import ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory );
 		$this->log->add( 'csv-import', __( 'Parsing product reviews CSV.', 'wf_csv_import_export' ) );
 
-		$this->parser = new WF_CSV_Parser( 'product' );
+		$this->parser = new WF_CSV_Parser_Review( 'product' );
 
 		list( $this->parsed_data, $this->raw_headers, $position ) = $this->parser->parse_data( $file, $this->delimiter, $mapping, $start_pos, $end_pos, $eval_field );
 		$this->log->add( 'csv-import', __( 'Finished parsing product reviews CSV.', 'wf_csv_import_export' ) );
@@ -634,8 +649,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	public function product_review_exists( $id )
 	{
 		global $wpdb;
-	    $query = "SELECT comment_ID FROM $wpdb->comments WHERE comment_ID = $id AND comment_approved != 'trash' ";
-	    $posts_that_exist = $wpdb->get_col( $wpdb->prepare( $query ) );
+	    $posts_that_exist = $wpdb->get_col( $wpdb->prepare( "SELECT comment_ID FROM $wpdb->comments WHERE comment_ID = %d AND comment_approved != 'trash'" ,$id ) );
 	    if ( $posts_that_exist )
 	    {
         	foreach( $posts_that_exist as $post_exists )
@@ -716,7 +730,8 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			if ( ! empty( $post['comment_approved'] ) ) {
 				$postdata['comment_approved'] = $post['comment_approved'];
 			}
-                        $postdata['comment_type']  = 'review';
+                $postdata['comment_type']  = 'review';
+                
 			if ( ! empty( $post['comment_parent'] ) ) {
 				$postdata['comment_parent'] = $post['comment_parent'];
 			}
@@ -731,9 +746,39 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		} else {
             $merging = FALSE;
+
+            if($this->csv_last_start ==='')
+            {
+            	$last_cmt_id = $this->get_last_comment_id();
+            	update_option( 'xa_rev_im_ex_last_import_csv_start_col', $last_cmt_id);
+            	$this->csv_last_start = $last_cmt_id;
+            }
+
 			// Insert product
 			$this->log->add( 'csv-import', sprintf( __('> Inserting %s', 'wf_csv_import_export'), esc_html( $processing_product_id ) ), true );
 
+			 if ($post['comment_parent'] === '0') {
+                $this->parent_data = $post['comment_parent'];
+                $_SESSION['new_id'][$post['comment_alter_id']] = $this->get_last_comment_id();
+            } else {
+				if(!empty($_SESSION['new_id'][$post['comment_parent']]))
+				{
+						$this->parent_data = $_SESSION['new_id'][$post['comment_parent']];
+				}
+				else
+				{
+					$this->parent_data = $post['comment_parent'];
+				}
+                $_SESSION['new_id'][$post['comment_alter_id']] = $this->get_last_comment_id();
+            }
+
+			if ($post['comment_parent'] === '0') {
+				$this->cmd_type = 'review';
+			}
+			else
+			{
+				$this->cmd_type = '';
+			}
 			$postdata = array(
 				'comment_ID'      		=> $processing_product_id,
 				'comment_post_ID' 		=> $post['comment_post_ID'] ,
@@ -743,8 +788,8 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 				'comment_author_email'  => $post['comment_author_email'],
 				'comment_content'      	=> ( $post['comment_content'] ) ? $post['comment_content'] : sanitize_title( $comment_content ),
 				'comment_approved'    	=> ( $post['comment_approved'] ) ? $post['comment_approved'] : 0,
-                                'comment_type'  => 'review',
-				'comment_parent'     	=> $post['comment_parent'],
+                'comment_type'  => $this->cmd_type,
+				'comment_parent'     	=> $this->parent_data,
 				'user_id'      			=> $post['user_id'],
 			);
                         
@@ -771,10 +816,19 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$this->processed_posts[ intval( $processing_product_id ) ] = (int) $post_id;
 
 		if ( ! empty( $post['postmeta'] ) && is_array( $post['postmeta'] ) ) {
+		if($this->cmd_type === '')
+		{
+		update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
+		}
+		else{
+		update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
 			update_comment_meta( $post_id, 'rating',  $post['postmeta'][0]['value']  );
-			update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
                         update_comment_meta( $post_id, 'title',  $post['postmeta'][2]['value']  );
 		}
+
+	}
+			
+    update_option( 'xa_rev_im_ex_last_import_csv_end_col', $post_id);
 
 		if ( $merging ) {
 			$this->add_import_result( 'merged', 'Merge successful', $post_id );
@@ -796,7 +850,12 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			'reason'     => $reason,
 		);
 	}
-
+ public function get_last_comment_id() {
+        global $wpdb;
+        $query = "SELECT MAX(comment_ID) FROM $wpdb->comments";
+        $results = $wpdb->get_var($query);
+        return $results + 1;
+    }
 	
 
 	/**
@@ -879,34 +938,34 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	
 	
 	private function handle_ftp(){
-		$enable_ftp_ie         	= !empty( $_POST['enable_ftp_ie'] ) ? true : false;
+		$enable_ftp_ie         	= !empty( $_POST['rev_enable_ftp_ie'] ) ? true : false;
 		if($enable_ftp_ie == false){ 
-                    $settings_in_db = get_option( 'wf_shipment_tracking_importer_ftp', null );
-                    $settings_in_db['enable_ftp_ie'] = false;
-                    update_option( 'wf_shipment_tracking_importer_ftp', $settings_in_db );
+                    $settings_in_db = get_option( 'wf_review_import_ftp', null );
+                    $settings_in_db['rev_enable_ftp_ie'] = false;
+                    update_option( 'wf_review_import_ftp', $settings_in_db );
                     return false;
                 }
 		
-		$ftp_server		= ! empty( $_POST['ftp_server'] ) ? $_POST['ftp_server'] : '';
-		$ftp_server_path	= ! empty( $_POST['ftp_server_path'] ) ? $_POST['ftp_server_path'] : '';
-		$ftp_user		= ! empty( $_POST['ftp_user'] ) ? $_POST['ftp_user'] : '';
-		$ftp_password           = ! empty( $_POST['ftp_password'] ) ? $_POST['ftp_password'] : '';
-		$use_ftps         	= ! empty( $_POST['use_ftps'] ) ? true : false;
+		$ftp_server		= ! empty( $_POST['rev_ftp_server'] ) ? $_POST['rev_ftp_server'] : '';
+		$ftp_server_path	= ! empty( $_POST['rev_ftp_server_path'] ) ? $_POST['rev_ftp_server_path'] : '';
+		$ftp_user		= ! empty( $_POST['rev_ftp_user'] ) ? $_POST['rev_ftp_user'] : '';
+		$ftp_password           = ! empty( $_POST['rev_ftp_password'] ) ? $_POST['rev_ftp_password'] : '';
+		$use_ftps         	= ! empty( $_POST['rev_use_ftps'] ) ? true : false;
 		
 		
 		$settings = array();
-		$settings[ 'ftp_server' ]		= $ftp_server;
-		$settings[ 'ftp_user' ]			= $ftp_user;
-		$settings[ 'ftp_password' ]		= $ftp_password;
-		$settings[ 'use_ftps' ]			= $use_ftps;
-		$settings[ 'enable_ftp_ie' ]	= $enable_ftp_ie;
-		$settings[ 'ftp_server_path' ]	= $ftp_server_path;
+		$settings[ 'rev_ftp_server' ]		= $ftp_server;
+		$settings[ 'rev_ftp_user' ]			= $ftp_user;
+		$settings[ 'rev_ftp_password' ]		= $ftp_password;
+		$settings[ 'rev_use_ftps' ]			= $use_ftps;
+		$settings[ 'rev_enable_ftp_ie' ]	= $enable_ftp_ie;
+		$settings[ 'rev_ftp_server_path' ]	= $ftp_server_path;
 		
 		
 		$local_file = 'wp-content/plugins/product-reviews-import-export-for-woocommerce/temp-import-review.csv';
 		$server_file = $ftp_server_path;
 					   
-		update_option( 'wf_shipment_tracking_importer_ftp', $settings );
+		update_option( 'wf_review_import_ftp', $settings );
 		
 		$ftp_conn = $use_ftps ? ftp_ssl_connect($ftp_server) : ftp_connect($ftp_server);
 		$error_message = "";
@@ -948,6 +1007,9 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	// Close div.wrap
 	public function footer() {
 		echo '</div>';
+		 add_action('wp_logout', array($this, 'hf_rev_im_ex_myEndSession'));
+        add_action('wp_login', array($this, 'hf_rev_im_ex_myEndSession'));
+    
 	}
 
 	/**
@@ -958,7 +1020,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$bytes      = apply_filters( 'import_upload_size_limit', wp_max_upload_size() );
 		$size       = size_format( $bytes );
 		$upload_dir = wp_upload_dir();
-                $ftp_settings = get_option( 'wf_shipment_tracking_importer_ftp');
+                $ftp_settings = get_option( 'wf_review_import_ftp');
 		include( 'views/html-wf-import-greeting-review.php' );
 	}
 

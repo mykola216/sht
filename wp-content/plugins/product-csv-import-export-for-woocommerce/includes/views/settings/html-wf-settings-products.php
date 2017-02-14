@@ -37,7 +37,7 @@ $rev_auto_import_merge    = isset( $settings['rev_auto_import_merge'] ) ? $setti
 
 
 
-wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_product_csv_importer_params', array('pro_enable_ftp_ie' => $pro_enable_ftp_ie ,'pro_auto_export' => $pro_auto_export,'pro_auto_import' => $pro_auto_import ));
+wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_product_csv_cron_params', array('pro_enable_ftp_ie' => $pro_enable_ftp_ie ,'pro_auto_export' => $pro_auto_export,'pro_auto_import' => $pro_auto_import ));
 if ( $pro_scheduled_timestamp = wp_next_scheduled( 'wf_woocommerce_csv_im_ex_auto_export_products' ) ) {
 	$pro_scheduled_desc = sprintf( __( 'The next export is scheduled on <code>%s</code>', 'wf_csv_import_export' ), get_date_from_gmt( date( 'Y-m-d H:i:s', $pro_scheduled_timestamp ), wc_date_format() . ' ' . wc_time_format() ) );
 } else {
@@ -51,7 +51,7 @@ if ( $pro_scheduled_import_timestamp = wp_next_scheduled( 'wf_woocommerce_csv_im
 
 
 
-wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_review_csv_importer_params', array('rev_enable_ftp_ie' => $rev_enable_ftp_ie ,'rev_auto_export' => $rev_auto_export,'rev_auto_import' => $rev_auto_import ));
+wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_review_csv_cron_params', array('rev_enable_ftp_ie' => $rev_enable_ftp_ie ,'rev_auto_export' => $rev_auto_export,'rev_auto_import' => $rev_auto_import ));
 if ( $rev_scheduled_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_auto_export_products' ) ) {
 	$rev_scheduled_desc = sprintf( __( 'The next export is scheduled on <code>%s</code>', 'wf_csv_import_export' ), get_date_from_gmt( date( 'Y-m-d H:i:s', $rev_scheduled_timestamp ), wc_date_format() . ' ' . wc_time_format() ) );
 } else {
@@ -174,7 +174,7 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 							<label for="pro_auto_import_start_time"><?php _e( 'Import Start Time', 'wf_csv_import_export' ); ?></label>
 						</th>
 						<td>
-							<input type="text" name="pro_auto_import_start_time" id="pro_auto_export_start_time"  value="<?php echo $pro_auto_import_start_time; ?>"/>
+							<input type="text" name="pro_auto_import_start_time" id="pro_auto_import_start_time"  value="<?php echo $pro_auto_import_start_time; ?>"/>
 							<span class="description"><?php echo sprintf( 	__( 'Local time is <code>%s</code>.', 'wf_csv_import_export' ), date_i18n( wc_time_format() ) ) . ' ' . $pro_scheduled_import_desc; ?></span>
 							<br/>
 							<span class="description"><?php _e( '<code>Enter like 6:18pm or 12:27am</code>', 'wf_csv_import_export' ); ?></span>
@@ -329,7 +329,7 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 								<label for="rev_auto_import_start_time"><?php _e( 'Import Start Time', 'wf_csv_import_export' ); ?></label>
 							</th>
 							<td>
-								<input type="text" name="rev_auto_import_start_time" id="rev_auto_export_start_time"  value="<?php echo $rev_auto_import_start_time; ?>"/>
+								<input type="text" name="rev_auto_import_start_time" id="rev_auto_import_start_time"  value="<?php echo $rev_auto_import_start_time; ?>"/>
 								<span class="description"><?php echo sprintf( 	__( 'Local time is <code>%s</code>.', 'wf_csv_import_export' ), date_i18n( wc_time_format() ) ) . ' ' . $rev_scheduled_import_desc; ?></span>
 								<br/>
 								<span class="description"><?php _e( '<code>Enter like 6:18pm or 12:27am</code>', 'wf_csv_import_export' ); ?></span>

@@ -11,6 +11,7 @@ return apply_filters('woocommerce_csv_product_post_columns', array(
 	'post_excerpt'		=> 'post_excerpt',
 	'post_content'		=> 'post_content',
 	'post_status'		=> 'post_status',
+	'post_password'		=> 'post_password',
 	'menu_order'		=> 'menu_order',
 	'post_date'		=> 'post_date',
 	'post_author'		=> 'post_author',

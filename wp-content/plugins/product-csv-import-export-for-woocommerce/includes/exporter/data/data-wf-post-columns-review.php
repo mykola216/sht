@@ -19,5 +19,6 @@ return apply_filters('product_reviews_csv_product_post_columns', array(
     //Meta
     'rating' => 'rating',
     'verified' => 'verified',
-    'title' => 'title'
+    'title' => 'title',
+    'comment_alter_id' => 'comment_alter_id',
 ));
