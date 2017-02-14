@@ -1,7 +1,7 @@
 <?php
 /*
 * Tiny Compress Images - WordPress plugin.
-* Copyright (C) 2015-2016 Voormedia B.V.
+* Copyright (C) 2015-2017 Voormedia B.V.
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the Free
@@ -119,7 +119,7 @@ class Tiny_Notices extends Tiny_WP_Base {
 		$css = array( $klass, 'notice', 'tiny-notice' );
 		if ( ! $dismissible ) {
 			$add = '</p>';
-		} else if ( self::check_wp_version( 4.2 ) ) {
+		} elseif ( self::check_wp_version( 4.2 ) ) {
 			$add = '</p>';
 			$css[] = 'is-dismissible';
 		} else {

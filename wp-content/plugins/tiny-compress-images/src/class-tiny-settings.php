@@ -1,7 +1,7 @@
 <?php
 /*
 * Tiny Compress Images - WordPress plugin.
-* Copyright (C) 2015-2016 Voormedia B.V.
+* Copyright (C) 2015-2017 Voormedia B.V.
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the Free
@@ -56,7 +56,7 @@ class Tiny_Settings extends Tiny_WP_Base {
 					'Please register or provide an API key to start compressing images',
 					'tiny-compress-images'
 				);
-			} else if ( $this->get_api_key_pending() ) {
+			} elseif ( $this->get_api_key_pending() ) {
 				$notice_class = 'notice-warning';
 				$notice = esc_html__(
 					'Please activate your account to start compressing images',
@@ -79,9 +79,11 @@ class Tiny_Settings extends Tiny_WP_Base {
 				} else {
 					$details .= ' without curl';
 				}
-				$message = esc_html__(
-					'You are using an outdated platform (' . $details .
-					') – some features are disabled', 'tiny-compress-images'
+				$message = printf(
+					esc_html__(
+						'You are using an outdated platform (%s) – some features are disabled',
+						'tiny-compress-images'
+					), $details
 				);
 				$this->notices->show( 'deprecated', $message, 'notice-warning', false );
 			}
@@ -216,8 +218,10 @@ class Tiny_Settings extends Tiny_WP_Base {
 
 		$width  = get_option( $size . '_size_w' );
 		$height = get_option( $size . '_size_h' );
-		if ( $width && $height ) {
-			return array( $width, $height );
+
+		/* Note: dimensions might be 0 to indicate no limit. */
+		if ( $width || $height ) {
+		 	return array( $width, $height );
 		}
 
 		if ( isset( $_wp_additional_image_sizes[ $size ] ) ) {
@@ -378,11 +382,21 @@ class Tiny_Settings extends Tiny_WP_Base {
 		if ( Tiny_Image::is_original( $size ) ) {
 			$label = esc_html__( 'Original image', 'tiny-compress-images' ) . ' (' .
 				esc_html__( 'overwritten by compressed image', 'tiny-compress-images' ) . ')';
-		} else if ( Tiny_Image::is_retina( $size ) ) {
+		} elseif ( Tiny_Image::is_retina( $size ) ) {
 			$label = esc_html__( 'WP Retina 2x sizes', 'tiny-compress-images' );
 		} else {
-			$label = esc_html__( ucfirst( $size ) )
-				. ' - ' . $option['width'] . 'x' . $option['height'];
+			$width = $option['width'];
+			if ( ! $width ) {
+				$width = '?';
+			}
+
+			$height = $option['height'];
+			if ( ! $height ) {
+				$height = '?';
+			}
+
+			$label = esc_html__( ucfirst( str_replace( '_', ' ', $size ) ) )
+				. ' - ' . $width . 'x' . $height;
 		}
 		echo '<p>';
 		echo '<input type="checkbox" id="' . $id . '" name="' . $name .
@@ -411,8 +425,9 @@ class Tiny_Settings extends Tiny_WP_Base {
 				Tiny_Config::MONTHLY_FREE_COMPRESSIONS / $active_sizes_count
 			);
 			printf( wp_kses( __(
-				'With these settings you can compress ' .
-					'<strong> at least %s images </strong> for free each month.',
+				'With these settings you can compress '
+				. '<strong>at least %s images</strong>'
+				. ' for free each month.',
 				'tiny-compress-images'
 			), array( 'strong' => array() ) ), $free_images_per_month );
 
@@ -452,7 +467,7 @@ class Tiny_Settings extends Tiny_WP_Base {
 
 		echo '<p class="tiny-resize-available">';
 		echo '<input  type="checkbox" id="' . $id . '" name="' . $name .
-			'" value="on" '. $checked . '/>';
+			'" value="on" ' . $checked . '/>';
 		echo '<label for="' . $id . '">' . $label . '</label>';
 		echo '<br>';
 		echo '</p>';
@@ -518,7 +533,7 @@ class Tiny_Settings extends Tiny_WP_Base {
 		$field = sprintf( self::get_prefixed_name( 'resize_original[%s]' ), $name );
 		$settings = get_option( self::get_prefixed_name( 'resize_original' ) );
 		$value = isset( $settings[ $name ] ) ? $settings[ $name ] : '2048';
-		echo '<input type="number" id="'. $id .'" name="' . $field .
+		echo '<input type="number" id="' . $id . '" name="' . $field .
 			'" value="' . $value . '" size="5" />';
 	}
 
