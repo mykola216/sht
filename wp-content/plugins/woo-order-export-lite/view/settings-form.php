@@ -436,6 +436,11 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 								<div class=""><input name="settings[destination][ftp_passive_mode]" type="checkbox" <?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_passive_mode]" ) ? 'checked' : ''; ?>><?php _e( 'Passive mode', 'woocommerce-order-export' ) ?></div>
 							</label>
 						</div>
+						<div class="col-100pr">
+							<label>
+								<div class=""><input name="settings[destination][ftp_append_existing]" type="checkbox" <?php echo $WC_Order_Export->get_value( $settings, "[destination][ftp_append_existing]" ) ? 'checked' : ''; ?>><?php _e( 'Append to existing file(CURL is required!)', 'woocommerce-order-export' ) ?></div>
+							</label>
+						</div>
 					</div>
 					<div class="wc_oe-row">
 						<div class="col-100pr">
@@ -588,7 +593,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 						<?php } ?>
 				</select>
 
-				<span class="wc-oe-header"><?php _e( 'Product Attributes', 'woocommerce-order-export' ) ?></span>
+				<span class="wc-oe-header"><?php _e( 'Variable Product Attributes', 'woocommerce-order-export' ) ?></span>
 				<br>
 				<select id="attributes" style="width: auto;">
 					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_attributes() as $attr_id => $attr_name ) { ?>
@@ -697,6 +702,25 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		<br>
 
 		<div class="my-block">
+			<span class="my-hide-next "><?php _e( 'Filter by coupons', 'woocommerce-order-export' ) ?>
+				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
+			<div id="my-coupons" hidden="hidden">
+				<span class="wc-oe-header"><?php _e( 'Coupons', 'woocommerce-order-export' ) ?></span>
+				<select id="coupons" name="settings[coupons][]" multiple="multiple" style="width: 100%; max-width: 25%;">
+					<?php
+					if ( $settings['coupons'] )
+						foreach ( $settings['coupons'] as $coupon ) {
+							?>
+							<option selected value="<?php echo $coupon; ?>"> <?php echo $coupon; ?></option>
+						<?php } ?>
+				</select>
+			</div>
+		</div>
+
+		<br>
+		<br>
+
+		<div class="my-block">
 			<span class="my-hide-next "><?php _e( 'Filter by payment', 'woocommerce-order-export' ) ?>
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-payments" hidden="hidden">
@@ -738,6 +762,13 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							?>
 							<option selected value="<?php echo $location; ?>"> <?php echo $location; ?></option>
 						<?php } ?>
+				</select>
+
+				<span class="wc-oe-header"><?php _e( 'Shipping methods', 'woocommerce-order-export' ) ?></span>
+				<select id="shipping_methods" name="settings[shipping_methods][]" multiple="multiple" style="width: 100%; max-width: 25%;">
+					<?php foreach ( WC_Order_Export_Data_Extractor::get_shipping_methods() as $i => $title ) { ?>
+						<option value="<?php echo $i ?>" <?php if ( in_array( $i, $settings[ 'shipping_methods' ] ) ) echo 'selected'; ?>><?php echo $title ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
@@ -1538,13 +1569,13 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		openFilter('my-order');
 		
 		openFilter('my-products');
-
-		if ( $( '#my-shipping ul li:not(:first)' ).size() ) {
-			$( '#my-shipping' ).prev().click();
-		}
+		
+		openFilter('my-shipping');
 		
 		openFilter('my-users');
 
+		openFilter('my-coupons');
+		
 		openFilter('my-payments');
 
 		//for XLSX

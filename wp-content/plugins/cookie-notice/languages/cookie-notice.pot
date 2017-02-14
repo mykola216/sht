@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Cookie Notice\n"
-"POT-Creation-Date: 2016-12-07 10:49+0100\n"
+"POT-Creation-Date: 2017-02-02 14:21+0100\n"
 "PO-Revision-Date: 2015-03-24 11:30+0100\n"
 "Last-Translator: Bartosz Arendt <info@dfactory.eu>\n"
 "Language-Team: dFactory <info@dfactory.eu>\n"
@@ -121,11 +121,8 @@ msgid "Need support?"
 msgstr ""
 
 #: ../cookie-notice.php:256
-msgid "If you are having problems with this plugin, please talk about them in the"
-msgstr ""
-
-#: ../cookie-notice.php:256
-msgid "Support forum"
+#, php-format
+msgid "If you are having problems with this plugin, please browse it's <a href=\"%s\" target=\"_blank\">Documentation</a> or talk about them in the <a href=\"%s\" target=\"_blank\">Support forum</a>"
 msgstr ""
 
 #: ../cookie-notice.php:258
@@ -133,27 +130,18 @@ msgid "Do you like this plugin?"
 msgstr ""
 
 #: ../cookie-notice.php:259
-msgid "Rate it 5"
-msgstr ""
-
-#: ../cookie-notice.php:259
-msgid "on WordPress.org"
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">Rate it 5</a> on WordPress.org"
 msgstr ""
 
 #: ../cookie-notice.php:260
-msgid "Blog about it & link to the"
-msgstr ""
-
-#: ../cookie-notice.php:260
-msgid "plugin page"
+#, php-format
+msgid "Blog about it & link to the <a href=\"%s\" target=\"_blank\">plugin page</a>."
 msgstr ""
 
 #: ../cookie-notice.php:261
-msgid "Check out our other"
-msgstr ""
-
-#: ../cookie-notice.php:261
-msgid "WordPress plugins"
+#, php-format
+msgid "Check out our other <a href=\"%s\" target=\"_blank\">WordPress plugins</a>."
 msgstr ""
 
 #: ../cookie-notice.php:276
@@ -185,139 +173,146 @@ msgid "Refuse button"
 msgstr ""
 
 #: ../cookie-notice.php:298
-msgid "On scroll"
+msgid "Script blocking"
 msgstr ""
 
 #: ../cookie-notice.php:299
-msgid "Cookie expiry"
+msgid "On scroll"
 msgstr ""
 
 #: ../cookie-notice.php:300
-msgid "Script placement"
+msgid "Cookie expiry"
 msgstr ""
 
 #: ../cookie-notice.php:301
+msgid "Script placement"
+msgstr ""
+
+#: ../cookie-notice.php:302
 msgid "Deactivation"
 msgstr ""
 
-#: ../cookie-notice.php:304
+#: ../cookie-notice.php:305
 msgid "Design"
 msgstr ""
 
-#: ../cookie-notice.php:305
+#: ../cookie-notice.php:306
 msgid "Position"
 msgstr ""
 
-#: ../cookie-notice.php:306
+#: ../cookie-notice.php:307
 msgid "Animation"
 msgstr ""
 
-#: ../cookie-notice.php:307
+#: ../cookie-notice.php:308
 msgid "Button style"
 msgstr ""
 
-#: ../cookie-notice.php:308
+#: ../cookie-notice.php:309
 msgid "Colors"
 msgstr ""
 
-#: ../cookie-notice.php:322
+#: ../cookie-notice.php:323
 msgid "Enable if you want all plugin data to be deleted on deactivation."
 msgstr ""
 
-#: ../cookie-notice.php:332
+#: ../cookie-notice.php:333
 msgid "Enter the cookie notice message."
 msgstr ""
 
-#: ../cookie-notice.php:343
+#: ../cookie-notice.php:344
 msgid "The text of the option to accept the usage of the cookies and make the notification disappear."
 msgstr ""
 
-#: ../cookie-notice.php:353
+#: ../cookie-notice.php:354
 msgid "Give to the user the possibility to refuse third party non functional cookies."
 msgstr ""
 
-#: ../cookie-notice.php:358
-msgid "The text of the option to refuse the usage of the cookies. To get the cookie notice status use <code>cn_cookies_accepted()</code> function."
+#: ../cookie-notice.php:359
+msgid "The text of the option to refuse the usage of the cookies."
 msgstr ""
 
-#: ../cookie-notice.php:363
-msgid "Enter non functional cookies Javascript code here (for e.g. Google Analitycs). It will be used after cookies are accepted."
+#: ../cookie-notice.php:373
+msgid "Enter non functional cookies Javascript code here (for e.g. Google Analitycs) to be used after cookies are accepted."
 msgstr ""
 
-#: ../cookie-notice.php:389
+#: ../cookie-notice.php:373
+msgid "To get the cookie notice status use <code>cn_cookies_accepted()</code> function."
+msgstr ""
+
+#: ../cookie-notice.php:396
 msgid "Enable Read more link."
 msgstr ""
 
-#: ../cookie-notice.php:390
+#: ../cookie-notice.php:397
 #, php-format
 msgid "Need a Cookie Policy? Generate one with <a href=\"%s\" target=\"_blank\" title=\"iubenda\">iubenda</a>"
 msgstr ""
 
-#: ../cookie-notice.php:396
+#: ../cookie-notice.php:403
 msgid "The text of the more info button."
 msgstr ""
 
-#: ../cookie-notice.php:410
+#: ../cookie-notice.php:417
 msgid "Select where to redirect user for more information about cookies."
 msgstr ""
 
-#: ../cookie-notice.php:413
+#: ../cookie-notice.php:420
 msgid "-- select page --"
 msgstr ""
 
-#: ../cookie-notice.php:424
+#: ../cookie-notice.php:431
 msgid "Select from one of your site's pages"
 msgstr ""
 
-#: ../cookie-notice.php:428
+#: ../cookie-notice.php:435
 msgid "Enter the full URL starting with http://"
 msgstr ""
 
-#: ../cookie-notice.php:448
+#: ../cookie-notice.php:455
 msgid "Select the link target for more info page."
 msgstr ""
 
-#: ../cookie-notice.php:468
+#: ../cookie-notice.php:475
 msgid "The ammount of time that cookie should be stored for."
 msgstr ""
 
-#: ../cookie-notice.php:482
+#: ../cookie-notice.php:489
 msgid "Select where all the plugin scripts should be placed."
 msgstr ""
 
-#: ../cookie-notice.php:500
+#: ../cookie-notice.php:507
 msgid "Select location for your cookie notice."
 msgstr ""
 
-#: ../cookie-notice.php:519
+#: ../cookie-notice.php:526
 msgid "Cookie notice acceptance animation."
 msgstr ""
 
-#: ../cookie-notice.php:529
+#: ../cookie-notice.php:536
 msgid "Enable cookie notice acceptance when users scroll."
 msgstr ""
 
-#: ../cookie-notice.php:533
+#: ../cookie-notice.php:540
 msgid "Number of pixels user has to scroll to accept the usage of the cookies and make the notification disappear."
 msgstr ""
 
-#: ../cookie-notice.php:553
+#: ../cookie-notice.php:560
 msgid "Choose buttons style."
 msgstr ""
 
-#: ../cookie-notice.php:657
+#: ../cookie-notice.php:665
 msgid "Settings restored to defaults."
 msgstr ""
 
-#: ../cookie-notice.php:758
+#: ../cookie-notice.php:766
 msgid "Support"
 msgstr ""
 
-#: ../cookie-notice.php:777
+#: ../cookie-notice.php:785
 msgid "Settings"
 msgstr ""
 
-#: ../cookie-notice.php:811
+#: ../cookie-notice.php:819
 msgid "Are you sure you want to reset these settings to defaults?"
 msgstr ""
-

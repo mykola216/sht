@@ -164,6 +164,18 @@ class WC_Order_Export_Admin {
 					update_option( $this->settings_name_cron, $all_jobs );
 				}
 				break;
+			case 'change_status_schedule':
+				$schedule_id = isset( $_REQUEST['schedule_id'] ) ? $_REQUEST['schedule_id'] : '';
+
+				if ( $schedule_id ) {
+					$all_jobs[ $schedule_id ]['active'] = $_REQUEST['status'];
+					update_option( $this->settings_name_cron, $all_jobs );
+				}
+
+				$url = remove_query_arg( array( 'wc_oe', 'schedule_id', 'status' ) );
+
+				wp_redirect( $url );
+				break;
 		}
 		$this->render( 'schedules', array( 'ajaxurl' => $ajaxurl, 'WC_Order_Export' => $this ) );
 	}
@@ -345,9 +357,11 @@ class WC_Order_Export_Admin {
 			'from_date'                                      => '',
 			'to_date'                                        => '',
 			'shipping_locations'                             => array(),
+			'shipping_methods'                               => array(),
 			'user_roles'                                     => array(),
 			'user_names'                                     => array(),
 			'payment_methods'                                => array(),
+			'coupons'                                        => array(),
 			'product_categories'                             => array(),
 			'product_vendors'                                => array(),
 			'products'                                       => array(),
@@ -517,16 +531,19 @@ class WC_Order_Export_Admin {
 	}
 	public function run_cron_jobs() {
 		$this->wc_export_cron_global_f();
+		echo "ALL jobs completed";
 	}
 	public function run_one_job() {
-		if($_REQUEST[ 'profile' ] == 'now')
+		if( !empty( $_REQUEST[ 'schedule' ] ) )
+			$settings = $this->get_export_settings( self::EXPORT_SCHEDULE, $_REQUEST[ 'schedule' ]);
+		elseif($_REQUEST[ 'profile' ] == 'now')
 			$settings	 = get_option( $this->settings_name_now, array() );
 		else		
 			$settings = $this->get_export_settings( self::EXPORT_PROFILE, $_REQUEST[ 'profile' ]);
 		$filename = WC_Order_Export_Engine::build_file_full( $settings );
 		if( $settings[ 'format' ] == 'XLS' AND !$settings[ 'format_xls_use_xls_format' ] )
 			$settings[ 'format' ] = 'XLSX';
-		$this->send_headers( $settings[ 'format' ]);
+		$this->send_headers( $settings[ 'format' ], WC_Order_Export_Engine::make_filename( $settings['export_filename'] ) );
 		readfile( $filename );
 		unlink( $filename );
 	}
@@ -544,8 +561,10 @@ class WC_Order_Export_Admin {
 			'product_vendors',
 			'products',
 			'shipping_locations',
+			'shipping_methods',
 			'user_roles',
 			'user_names',
+			'coupons',
 			'payment_methods',
 			'product_attributes',
             'product_itemmeta',
@@ -605,7 +624,7 @@ class WC_Order_Export_Admin {
 	}
 
 	//hook for TESTs
-	public function ajax_action_run_all_crons() {
+	public function ajax_action_test_all_crons() {
 		set_time_limit(0);
 		do_action( 'woe_start_cron_jobs' );
 		$items = get_option( 'woocommerce-order-export-cron', array() );
@@ -614,6 +633,7 @@ class WC_Order_Export_Admin {
 				do_action( 'woe_start_cron_job', $key, $item );
 
 				$result = WC_Order_Export_Engine::build_files_and_export( $item );
+				echo $result;
 		}
 	}
 
@@ -680,6 +700,24 @@ class WC_Order_Export_Admin {
 					'text' => $user->display_name
 			);
 		}
+		echo json_encode( $ret );
+	}
+
+	public function ajax_action_get_coupons() {
+		global $wpdb;
+
+		$like  = $wpdb->esc_like( $_REQUEST['q'] );
+		$query = "
+                SELECT      post.post_title as id, post.post_title as text
+                FROM        " . $wpdb->posts . " as post
+                WHERE       post.post_title LIKE '%{$like}%'
+                AND         post.post_type = 'shop_coupon'
+                AND         post.post_status <> 'trash'
+                ORDER BY    post.post_title
+                LIMIT 0,10
+        ";
+		$ret = $wpdb->get_results( $query );
+
 		echo json_encode( $ret );
 	}
 
@@ -811,6 +849,8 @@ class WC_Order_Export_Admin {
 	}
 
 	public function send_headers( $format, $download_name = '') {
+		while ( @ob_end_clean() ) {
+		}; // remove ob_xx
 		switch ( $format ) {
 			case 'XLSX':
 				if( empty( $download_name ) )
@@ -994,6 +1034,9 @@ class WC_Order_Export_Admin {
 
 		$items = get_option( 'woocommerce-order-export-cron', array() );
 		foreach ( $items as $key => &$item ) {
+			if ( isset( $item['active'] ) && ! $item['active'] ) {
+				continue;
+			}
 			if ( ! isset( $item['mode'] ) ) {
 				$item['mode'] = self::EXPORT_SCHEDULE;
 			}
@@ -1026,6 +1069,7 @@ class WC_Order_Export_Admin {
 
 	public static function next_event_for_schedule_weekday( $weekdays, $runat, $timestamp = false ) {
 		$now = current_time("timestamp");
+		$diff_utc = current_time("timestamp") - current_time("timestamp",1);
 		$times = array();
 		for ( $index = 0; $index <= 7; $index ++ ) {
 			if ( in_array( date( "D", strtotime( "+{$index} day" , $now ) ), $weekdays ) ) {
@@ -1172,7 +1216,7 @@ class WC_Order_Export_Admin {
 		$filename = WC_Order_Export_Engine::build_file_full( $settings, '', 0, explode(",",$_REQUEST[ 'ids' ]) );
 		if( $settings[ 'format' ] == 'XLS' AND !$settings[ 'format_xls_use_xls_format' ] )
 			$settings[ 'format' ] = 'XLSX';
-		$this->send_headers( $settings[ 'format' ]);
+		$this->send_headers( $settings[ 'format' ], WC_Order_Export_Engine::make_filename( $settings['export_filename'] ) );
 		readfile( $filename );
 		unlink( $filename );
 	}
@@ -1197,5 +1241,13 @@ class WC_Order_Export_Admin {
 		$args[] = 'export_bulk_profile';
 		$args[] = 'ids';
 		return $args;
+	}
+	
+	function must_run_ajax_methods() {
+		// wait admin ajax!
+		if ( basename($_SERVER['SCRIPT_NAME']) != "admin-ajax.php" )
+				return false;
+		// our method MUST BE called
+		return isset($_REQUEST['action'])  AND ($_REQUEST['action'] == "order_exporter"  OR $_REQUEST['action'] == "order_exporter_run" );
 	}
 }

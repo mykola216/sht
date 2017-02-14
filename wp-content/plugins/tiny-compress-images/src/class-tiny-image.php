@@ -1,7 +1,7 @@
 <?php
 /*
 * Tiny Compress Images - WordPress plugin.
-* Copyright (C) 2015-2016 Voormedia B.V.
+* Copyright (C) 2015-2017 Voormedia B.V.
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the Free
@@ -51,7 +51,7 @@ class Tiny_Image {
 		$upload_dir = wp_upload_dir();
 		$path_prefix = $upload_dir['basedir'] . '/';
 		if ( isset( $path_info['dirname'] ) ) {
-			$path_prefix .= $path_info['dirname'] .'/';
+			$path_prefix .= $path_info['dirname'] . '/';
 		}
 
 		$filename = $path_prefix . $this->name;
@@ -416,7 +416,7 @@ class Tiny_Image {
 				GROUP BY unique_attachment_name
 				ORDER BY ID DESC";
 
-			$result = $wpdb->get_results( $query, ARRAY_A );
+			$result = $wpdb->get_results( $query, ARRAY_A ); // WPCS: unprepared SQL OK.
 		}
 
 		$stats = array();
@@ -451,6 +451,15 @@ class Tiny_Image {
 					'post_title' => $result[ $i ]['post_title'],
 				);
 			}
+		}
+
+		if ( 0 != $stats['unoptimized-library-size'] ) {
+			$stats['display-percentage'] = round(
+				100 -
+				( $stats['optimized-library-size'] / $stats['unoptimized-library-size'] * 100 ), 1
+			);
+		} else {
+			$stats['display-percentage'] = 0;
 		}
 		return $stats;
 	}

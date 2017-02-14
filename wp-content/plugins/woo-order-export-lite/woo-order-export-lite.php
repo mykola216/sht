@@ -5,7 +5,7 @@
  * Description: Ultimate plugin to export WooCommerce sales
  * Author: AlgolPlus
  * Author URI: http://algolplus.com/
- * Version: 1.2.5
+ * Version: 1.2.6
  * Text Domain: woocommerce-order-export
  * Domain Path: /i18n/languages/
  *
@@ -39,3 +39,7 @@ include 'classes/class-wc-order-export-data-extractor.php';
 $wc_order_export = new WC_Order_Export_Admin();
 register_activation_hook( __FILE__, array($wc_order_export,'install') );
 register_deactivation_hook( __FILE__, array($wc_order_export,'uninstall') );
+
+// fight with ugly themes which add empty lines
+if ( $wc_order_export->must_run_ajax_methods() AND !ob_get_level() )
+	ob_start();

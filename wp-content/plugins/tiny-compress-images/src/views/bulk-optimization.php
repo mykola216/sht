@@ -47,11 +47,13 @@ div.tiny-bulk-optimization div.dashboard div.optimize div.progressbar div.progre
 							$percentage_of_files = round( $stats['optimized-image-sizes'] / ( $stats['optimized-image-sizes'] + $stats['available-unoptimised-sizes'] ) * 100, 2 );
 						}
 						if ( 0 == $stats['uploaded-images'] + $stats['available-unoptimised-sizes'] ) {
-							esc_html_e( 'This page is designed to bulk optimize all your images. You don\'t seem to have uploaded any JPEG or PNG images yet.' );
+							esc_html_e( 'This page is designed to bulk optimize all your images.', 'tiny-compress-images' );
+							echo ' ';
+							esc_html_e( 'You do not seem to have uploaded any JPEG or PNG images yet.', 'tiny-compress-images' );
 						} elseif ( 0 == sizeof( $active_tinify_sizes ) ) {
-							esc_html_e( 'Based on your current settings, nothing will be optimized. There are no active sizes selected for optimization.' );
+							esc_html_e( 'Based on your current settings, nothing will be optimized. There are no active sizes selected for optimization.', 'tiny-compress-images' );
 						} elseif ( 0 == $stats['available-unoptimised-sizes'] ) {
-							printf( esc_html__( '%s, this is great! Your entire library is optimized!' ), $this->friendly_user_name() );
+							printf( esc_html__( '%s, this is great! Your entire library is optimized!', 'tiny-compress-images' ), $this->friendly_user_name() );
 						} elseif ( $stats['optimized-image-sizes'] > 0 ) {
 							if ( $percentage_of_files > 75 ) {
 								printf( esc_html__( '%s, you are doing great!', 'tiny-compress-images' ), $this->friendly_user_name() );
@@ -59,21 +61,19 @@ div.tiny-bulk-optimization div.dashboard div.optimize div.progressbar div.progre
 								printf( esc_html__( '%s, you are doing good.', 'tiny-compress-images' ), $this->friendly_user_name() );
 							}
 							echo ' ';
-							printf( esc_html__( '%d%% of your image library is optimized.', 'tiny-compress-images' ), $percentage_of_files );
+							printf( esc_html__( '%1$d %2$s of your image library is optimized.', 'tiny-compress-images' ), $percentage_of_files, '%' );
 							echo ' ';
-							printf( esc_html__( 'Start the bulk optimization to optimize the remainder of your library.', 'tiny-compress-images' ) );
+							printf( esc_html__( 'Start the %s to optimize the remainder of your library.', 'tiny-compress-images' ), esc_html__( 'bulk optimization', 'tiny-compress-images' ) );
 						} else {
 							esc_html_e( 'Here you can start optimizing your entire library. Press the big button to start improving your website speed instantly!', 'tiny-compress-images' );
 						}
 						?>
 					</p>
-					<p>
-						<?php
-						if ( Tiny_Settings::wr2x_active() ) {
-							esc_html_e( 'Notice that the WP Retina 2x sizes will not be compressed using this page. You will need to bulk generate the retina sizes separately from the WP Retina 2x page.', 'tiny-compress-images' );
-						}
-						?>
-					</p>
+					<?php if ( Tiny_Settings::wr2x_active() ) { ?>
+						<p>
+							<?php esc_html_e( 'Notice that the WP Retina 2x sizes will not be compressed using this page. You will need to bulk generate the retina sizes separately from the WP Retina 2x page.', 'tiny-compress-images' ); ?>
+						</p>
+					<?php } ?>
 					<table class="totals">
 						<tr>
 							<td class="item">
@@ -97,7 +97,7 @@ div.tiny-bulk-optimization div.dashboard div.optimize div.progressbar div.progre
 										<?php if ( $stats['uploaded-images'] > 0 && sizeof( $active_tinify_sizes ) > 0 && $stats['available-unoptimised-sizes'] > 0 ) { ?>
 											<p>
 												<?php
-												printf( esc_html__( 'With your current settings you can still optimize %d images sizes from your %d uploaded JPEG and PNG images.',
+												printf( esc_html__( 'With your current settings you can still optimize %1$s image sizes from your %2$s uploaded JPEG and PNG images.',
 												'tiny-compress-images'), $stats['available-unoptimised-sizes'], $stats['uploaded-images'] );
 												?>
 											</p>
@@ -122,14 +122,10 @@ div.tiny-bulk-optimization div.dashboard div.optimize div.progressbar div.progre
 											?>
 										</p>
 										<p>
-											<?php esc_html_e( 'For each uploaded image, ', 'tiny-compress-images' ) ?>
-											<strong>
-												<?php echo sizeof( $active_tinify_sizes ) ?>
-												<?php sizeof( $active_tinify_sizes ) > 1 ? esc_html_e( 'sizes', 'tiny-compress-images' ) : esc_html_e( 'size', 'tiny-compress-images' ) ?>
-											</strong>
-											<?php sizeof( $active_tinify_sizes ) > 1 ? esc_html_e( 'are compressed.', 'tiny-compress-images' ) : esc_html_e( 'is compressed.', 'tiny-compress-images' ) ?>
-											<?php esc_html_e( 'You can changed these settings', 'tiny-compress-images' ) ?>
-											<a href="/wp-admin/options-media.php#tiny-compress-images"><?php esc_html_e( 'here', 'tiny-compress-images' )?></a>.
+										<?php if ( sizeof( $active_tinify_sizes ) > 0 ) { ?>
+											<?php printf( wp_kses( _n( 'For each uploaded image <strong>%d size</strong> is compressed.', 'For each uploaded image <strong>%d sizes</strong> are compressed.', count( $active_tinify_sizes ), 'tiny-compress-images' ), array( 'strong' => array() ) ), count( $active_tinify_sizes ) ) ?>
+										<?php } ?>
+										<?php printf( wp_kses( __( 'You can change these settings %s.', 'tiny-compress-images' ), array( 'a' => array( 'href' => array() ) ) ), '<a href=' . admin_url( 'options-media.php#tiny-compress-images' ) . '>' . __( 'here', 'tiny-compress-images' ) . '</a>' )?>
 										</p>
 									</div>
 								</div>
@@ -144,15 +140,10 @@ div.tiny-bulk-optimization div.dashboard div.optimize div.progressbar div.progre
 									<div class="tooltip">
 										<span class="dashicons dashicons-info"></span>
 										<div class="tip">
-											<p>
-												<?php esc_html_e( 'If you wish to compress more than ', 'tiny-compress-images' ) ?>
-												<strong>
-													<?php echo Tiny_Config::MONTHLY_FREE_COMPRESSIONS ?>
-													<?php esc_html_e( 'image sizes', 'tiny-compress-images' ) ?>
-												</strong>
-												<?php esc_html_e( 'a month and you are still on a free account', 'tiny-compress-images' ) ?>
-												<a href="https://tinypng.com/developers"><?php esc_html_e( 'upgrade here.', 'tiny-compress-images' ) ?></a>
-											</p>
+											<p><?php
+											printf( wp_kses( __( 'If you wish to compress more than <strong>%d %s</strong> a month and you are still on a free account %s.', 'tiny-compress-images' ),
+											array( 'strong' => array(), 'a' => array( 'href' => array() ) ) ), Tiny_Config::MONTHLY_FREE_COMPRESSIONS, esc_html__( 'image sizes', 'tiny-compress-images' ), '<a href="https://tinypng.com/dashboard/developers">' . esc_html__( ' upgrade here', 'tiny-compress-images' ) . '</a>' );
+											?></p>
 										</div>
 									</div>
 								<?php } ?>

@@ -3,8 +3,8 @@ Contributors: dfactory
 Donate link: http://www.dfactory.eu/
 Tags: cookie, cookies, notice, notification, notify, cookie, cookie compliance, cookie law, eu cookie, privacy, privacy directive, consent, Bootstrap
 Requires at least: 3.3
-Tested up to: 4.7
-Stable tag: 1.2.37
+Tested up to: 4.7.2
+Stable tag: 1.2.38
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 
@@ -59,6 +59,12 @@ No questions yet.
 1. screenshot-1.png
 
 == Changelog ==
+
+= 1.2.38 =
+* Tweak: Move frontend cookie js functions before the document ready call, thanks to [fgreinus](https://github.com/fgreinus)
+* Tweak: Adjust functional javascript code handling 
+* Fix: Chhromium infinity expiration date not valid
+* Fix: Remove deprecated screen_icon() function
 
 = 1.2.37 =
 * Tweak: Add aria landmark role="banner"
@@ -215,6 +221,6 @@ Initial release
 
 == Upgrade Notice ==
 
-= 1.2.37 =
-* Tweak: Add aria landmark role="banner"
-* Tweak: Extend cn_cookie_notice_args with button class
+= 1.2.38 =
+* Tweak: Move frontend cookie js functions before the document ready call
+* Tweak: Adjust functional javascript code handling 

@@ -3,14 +3,14 @@
 /*
   Plugin Name: WooCommerce - Gravity Forms Product Add-Ons
   Plugin URI: http://woothemes.com/products/gravity-forms-add-ons/
-  Description: Allows you to use Gravity Forms on individual WooCommerce products. Requires the Gravity Forms plugin to work. Requires WooCommerce 2.3 or higher
-  Version: 3.0.0
+  Description: Allows you to use Gravity Forms on individual WooCommerce products. Requires the Gravity Forms plugin to work. Requires WooCommerce 2.5 or higher.
+  Version: 3.1.1
   Author: Lucas Stark
   Author URI: http://www.elementstark.com/
   Developer: Lucas Stark
   Developer URI: http://www.elementstark.com/
   Requires at least: 3.1
-  Tested up to: 4.7.1
+  Tested up to: 4.7.2
 
   Copyright: © 2009-2017 Lucas Stark.
   License: GNU General Public License v3.0
@@ -37,7 +37,7 @@ if ( is_woocommerce_active() ) {
 
 	function wc_gravityforms_product_addons_load_textdomain() {
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'wc_gf_addons' );
-		load_textdomain( 'wc_swatches_and_pwc_gf_addonshotos', WP_LANG_DIR . '/woocommerce/woocommerce-gravityforms-product-addons-' . $locale . '.mo' );
+		load_textdomain( 'wc_gf_addons', WP_LANG_DIR . '/woocommerce/woocommerce-gravityforms-product-addons-' . $locale . '.mo' );
 		load_plugin_textdomain( 'wc_gf_addons', false, plugin_basename( dirname( __FILE__ ) ) . '/i18n/languages' );
 	}
 

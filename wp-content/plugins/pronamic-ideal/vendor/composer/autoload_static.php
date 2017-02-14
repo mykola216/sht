@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
+class ComposerStaticInit9009232da92018c3d426861ee19e0ad4
 {
     public static $files = array (
         'ddd9d6a62b0c815095c510b8a39fd6c2' => __DIR__ . '/..' . '/wp-pay-extensions/gravityforms/src/functions.php',
@@ -140,6 +140,8 @@ class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
         'Pronamic_WP_Pay_Extensions_ClassiPress_Order' => __DIR__ . '/..' . '/wp-pay-extensions/classipress/src/Order.php',
         'Pronamic_WP_Pay_Extensions_ClassiPress_PaymentData' => __DIR__ . '/..' . '/wp-pay-extensions/classipress/src/PaymentData.php',
         'Pronamic_WP_Pay_Extensions_ClassiPress_PaymentStatuses' => __DIR__ . '/..' . '/wp-pay-extensions/classipress/src/PaymentStatuses.php',
+        'Pronamic_WP_Pay_Extensions_EDD_BankTransferGateway' => __DIR__ . '/..' . '/wp-pay-extensions/easy-digital-downloads/src/BankTransferGateway.php',
+        'Pronamic_WP_Pay_Extensions_EDD_BitcoinGateway' => __DIR__ . '/..' . '/wp-pay-extensions/easy-digital-downloads/src/BitcoinGateway.php',
         'Pronamic_WP_Pay_Extensions_EDD_CreditCardGateway' => __DIR__ . '/..' . '/wp-pay-extensions/easy-digital-downloads/src/CreditCardGateway.php',
         'Pronamic_WP_Pay_Extensions_EDD_DirectDebitGateway' => __DIR__ . '/..' . '/wp-pay-extensions/easy-digital-downloads/src/DirectDebitGateway.php',
         'Pronamic_WP_Pay_Extensions_EDD_EasyDigitalDownloads' => __DIR__ . '/..' . '/wp-pay-extensions/easy-digital-downloads/src/EasyDigitalDownloads.php',
@@ -200,7 +202,6 @@ class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
         'Pronamic_WP_Pay_Extensions_Jigoshop_IDealGateway' => __DIR__ . '/..' . '/wp-pay-extensions/jigoshop/src/IDealGateway.php',
         'Pronamic_WP_Pay_Extensions_Jigoshop_Jigoshop' => __DIR__ . '/..' . '/wp-pay-extensions/jigoshop/src/Jigoshop.php',
         'Pronamic_WP_Pay_Extensions_Jigoshop_PaymentData' => __DIR__ . '/..' . '/wp-pay-extensions/jigoshop/src/PaymentData.php',
-        'Pronamic_WP_Pay_Extensions_JobRoller_JobRoller' => __DIR__ . '/..' . '/wp-pay-extensions/jobroller/src/JobRoller.php',
         'Pronamic_WP_Pay_Extensions_MemberPress_BankTransferGateway' => __DIR__ . '/..' . '/wp-pay-extensions/memberpress/src/BankTransferGateway.php',
         'Pronamic_WP_Pay_Extensions_MemberPress_CreditCardGateway' => __DIR__ . '/..' . '/wp-pay-extensions/memberpress/src/CreditCardGateway.php',
         'Pronamic_WP_Pay_Extensions_MemberPress_DirectDebitGateway' => __DIR__ . '/..' . '/wp-pay-extensions/memberpress/src/DirectDebitGateway.php',
@@ -237,6 +238,7 @@ class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
         'Pronamic_WP_Pay_Extensions_WPeCommerce_PronamicMerchant' => __DIR__ . '/..' . '/wp-pay-extensions/wp-e-commerce/src/PronamicMerchant.php',
         'Pronamic_WP_Pay_Extensions_WPeCommerce_WPeCommerce' => __DIR__ . '/..' . '/wp-pay-extensions/wp-e-commerce/src/WPeCommerce.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_BankTransferGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/BankTransferGateway.php',
+        'Pronamic_WP_Pay_Extensions_WooCommerce_BelfiusGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/BelfiusGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_BitcoinGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/BitcoinGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_CreditCardGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/CreditCardGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_DirectDebitGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/DirectDebitGateway.php',
@@ -244,6 +246,7 @@ class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
         'Pronamic_WP_Pay_Extensions_WooCommerce_Extension' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/Extension.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_Gateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/Gateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_IDealGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/IDealGateway.php',
+        'Pronamic_WP_Pay_Extensions_WooCommerce_KbcGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/KbcGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_MaestroGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/MaestroGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_MisterCashGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/MisterCashGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_PayPalGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/PayPalGateway.php',
@@ -252,6 +255,7 @@ class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
         'Pronamic_WP_Pay_Extensions_WooCommerce_SofortGateway' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/SofortGateway.php',
         'Pronamic_WP_Pay_Extensions_WooCommerce_WooCommerce' => __DIR__ . '/..' . '/wp-pay-extensions/woocommerce/src/WooCommerce.php',
         'Pronamic_WP_Pay_FormProcessor' => __DIR__ . '/../..' . '/classes/Pronamic/WP/Pay/FormProcessor.php',
+        'Pronamic_WP_Pay_FormScripts' => __DIR__ . '/../..' . '/classes/Pronamic/WP/Pay/FormScripts.php',
         'Pronamic_WP_Pay_Gateway' => __DIR__ . '/..' . '/wp-pay/core/src/Gateway.php',
         'Pronamic_WP_Pay_GatewayConfig' => __DIR__ . '/..' . '/wp-pay/core/src/GatewayConfig.php',
         'Pronamic_WP_Pay_GatewayConfigFactory' => __DIR__ . '/..' . '/wp-pay/core/src/GatewayConfigFactory.php',
@@ -582,10 +586,10 @@ class ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit4d4e6c16eb2d82dc604bdbe51af2f38c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$classMap;
 
         }, null, ClassLoader::class);
     }
