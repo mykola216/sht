@@ -41,13 +41,13 @@
 				</td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Show Instagram Feed</th>
+				<th scope="row">Show Instagram Feed on Home</th>
 				<td>
-					<input type="checkbox" name="steigerhouttrend_options[show_instagram_feed]" value="1" <?php checked( $st_options['show_instagram_feed'], 1 ); ?> />
+					<input type="checkbox" name="steigerhouttrend_options[show_instagram_feed_in_home]" value="1" <?php checked( $st_options['show_instagram_feed_in_home'], 1 ); ?> />
 				</td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Show Instagram Feed Only on Home and Product Category pages</th>
+				<th scope="row">Show Instagram Feed on Product Category pages</th>
 				<td>
 					<input type="checkbox" name="steigerhouttrend_options[show_instagram_feed_in_product_cat]" value="1" <?php checked( $st_options['show_instagram_feed_in_product_cat'], 1 ); ?> />
 				</td>

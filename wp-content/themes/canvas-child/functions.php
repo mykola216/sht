@@ -399,8 +399,7 @@ function canvas_child_formatted_woocommerce_price($number_format, $price, $decim
 function canvas_child_instagram_feed($echo = true) {
 	global $st_options;
 	$out = '';
-	$styles = '';
-
+	$is_show = false;
 	$styles = '
 		<style>
 			#sb_instagram #sbi_images{
@@ -419,16 +418,20 @@ function canvas_child_instagram_feed($echo = true) {
 			}
 		</style>';
 
-	$out .= $styles;
+	if (is_home() || is_front_page()) {
+		$is_show = $st_options['show_instagram_feed_in_home'];
+	}
 
-	$is_show = $st_options['show_instagram_feed'];
-	$is_show =  $st_options['show_instagram_feed_in_product_cat'] ? $is_show && (is_tax('product_cat') || is_home() || is_front_page()) : $is_show ;
+	if (is_tax('product_cat')) {
+		$is_show = $st_options['show_instagram_feed_in_product_cat'];
+	}
 
 	if ($is_show) {
 		if ($st_options['instagram_feed_title']) {
-			$out .= '<h4>' . $st_options['instagram_feed_title'] . '</h4>';
+			$out = $out . '<h4>' . $st_options['instagram_feed_title'] . '</h4>';
 		}
-		$out .= do_shortcode($st_options['instagram_feed_shortcode']);
+		$out = $out . do_shortcode($st_options['instagram_feed_shortcode']);
+		$out = $styles . $out;
 	}
 
 	if ($echo) echo $out;
