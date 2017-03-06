@@ -276,17 +276,12 @@ function canvas_child_before_footer_top_widget_area() {
  * Modify breadcrumbs.
  */
 function canvas_child_breadcrumbs_trail( $trail ) {
-	//unset( $trail['post_type_archive_link'] );
 	$count = count( $trail );
 	foreach ( $trail as $index => $value ) {
-		if ( ! in_array( $index, array(0, 'post_type_archive_link', $count-3, 'trail_end') ) ) {
+		if ( ! in_array( $index, array( 0, $count-3, 'trail_end' ), true ) ) {
 			unset( $trail[ $index ] );
-		} elseif ( 'post_type_archive_link' === $index ) {
-			$trail['post_type_archive_link'] = str_replace(
-				__( 'Products', 'woocommerce' ),
-				__( 'All Products', 'woocommerce' ),
-				$value
-			);
+		} elseif ( 'trail_end' == $index && ('products' == strtolower($value) || 'producten' == strtolower($value)) ) {
+			$trail[ $index ] = 'Alle meubelen';
 		}
 	}
 	return $trail;
