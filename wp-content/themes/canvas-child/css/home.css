@@ -35,6 +35,32 @@
 	text-transform: uppercase;
 	vertical-align: top;
 }
+@media only screen and (min-width: 0px) and (max-width: 950px) {
+	#slider ul li {
+		font-size: 12px;
+		text-align: center;
+	}
+	#slider ul .custom1 {
+		margin: 0 auto !important;
+		display: block;
+		float: none;
+	}
+	#slider ul .custom2 {
+		margin: 0 auto;
+		display: block;
+		float: none;
+	}
+	#slider ul .custom3 {
+		margin: 0 auto;
+		display: block;
+		float: none;
+	}
+	#slider ul .custom4 {
+		margin: 0 auto;
+		display: block;
+		float: none;
+	}
+}
 #slider ul div {
 	background-image: url(../images/sprite-img.png);
 	float: left;
@@ -111,8 +137,6 @@
 	right: 5%;
 }
 /* Furniture production module - end */
-
-
 @media only screen and (min-width: 768px) {
 	.caption {
 		height: 32px;
@@ -156,4 +180,10 @@
 		vertical-align: middle;
 	}
 	/* Band module - end */
+}
+@media only screen and (min-width: 768px) and (max-width: 900px) {
+	.caption > h2 {
+		position: relative;
+		bottom: 15px;
+	}
 }
