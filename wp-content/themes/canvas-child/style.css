@@ -495,6 +495,17 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     }
 }
 @media only screen and (min-width: 768px) {
+    ul.nav > li > a {
+        padding-top: 1.2em !important;
+        padding-bottom: 0.8em !important;
+        height: 26px;
+        text-align: center;
+    }
+    ul.nav > li > a > span {
+        font-weight: 100 !important;
+    }
+}
+@media only screen and (min-width: 768px) {
     #header .widget_metaslider_widget > div {
         float: right;
     }
@@ -521,6 +532,12 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         width: 26px;
         height: 24px;
         padding: 0;
+    }
+    #navigation .nav li.parent > a:after {
+        display: none;
+    }
+    #navigation .cart.no-rss-link {
+        display: none;
     }
     /* nav_after module - end */
 
