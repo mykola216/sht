@@ -536,8 +536,15 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     #navigation .nav li.parent > a:after {
         display: none;
     }
-    #navigation .cart.no-rss-link {
-        display: none;
+    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a .custom-i {
+        background: url(images/ruller-pencil-icon.png);
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        background-size: contain;
+        background-repeat: no-repeat;
     }
     /* nav_after module - end */
 
