@@ -505,6 +505,17 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         font-weight: 100 !important;
     }
 }
+#navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
+    background-image: url(images/ruller-pencil-icon.png) !important;
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat !important;
+    background-color: #ff6600!important;
+    padding-left: 49px !important;
+    background-position: 15px 4px !important;
+
+}
+
 @media only screen and (min-width: 768px) {
     #header .widget_metaslider_widget > div {
         float: right;
@@ -536,17 +547,12 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     #navigation .nav li.parent > a:after {
         display: none;
     }
-    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a .custom-i {
-        background: url(images/ruller-pencil-icon.png);
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
-        width: 20px;
-        height: 20px;
-        background-size: contain;
-        background-repeat: no-repeat;
+
+    ul.nav ul {
+        width: 16em;
     }
-    /* nav_after module - end */
+
+        /* nav_after module - end */
 
 
     /* Widgets */
