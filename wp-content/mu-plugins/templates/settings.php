@@ -181,6 +181,29 @@
 				</td>
 			</tr>
 
+			<!-- Custom Category Products module -->
+			<tr>
+				<td colspan="2" bgcolor="#abc"><strong>Custom Category Products module</strong></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Module title</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[custom_cat_products_title]" value="<?php echo $st_options['custom_cat_products_title']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Category Button Label</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[custom_cat_products_btn_label]" value="<?php echo $st_options['custom_cat_products_btn_label']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Category Button URL</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[custom_cat_products_url]" value="<?php echo $st_options['custom_cat_products_url']; ?>" />
+				</td>
+			</tr>
+
 			<!-- Social media module -->
 			<tr>
 				<td colspan="2" bgcolor="#abc"><strong>Social media module</strong></td>

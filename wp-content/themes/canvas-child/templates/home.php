@@ -49,7 +49,7 @@ global $st_options;
 </div>
 
 
-	<!--Best Selling Products-->
+<!--Best Selling Products-->
 <?php
 canvas_child_top_products( array(
 	'title'   => $st_options['best_sellers_title'],
@@ -68,6 +68,37 @@ canvas_child_top_products( array(
 	))
 ));
 ?>
+
+
+<!-- Custom Category Products -->
+<?php
+$product_cat_slug = end(explode('/', trim($st_options['custom_cat_products_url'], '/')));
+//$product_cat = get_term_by( 'slug', $product_cat_slug, 'product_cat');
+//$product_cat_ID = $product_cat->term_id;
+canvas_child_top_products( array(
+	'title'   => $st_options['custom_cat_products_title'],
+	'href'    => $st_options['custom_cat_products_url'],
+	'text'    => $st_options['custom_cat_products_btn_label'],
+	'container_class' => 'custom-cat-products',
+	'columns' => 4,
+	'args'    => apply_filters( 'canvas_child_bestselling_products_args', array(
+		'ignore_sticky_posts' => 1,
+		'no_found_rows'       => 1,
+		'orderby'             => 'title',
+		'order'               => 'ASC',
+		'post_type'           => 'product',
+		'posts_per_page'      => 8,
+		'stock'               => 1,
+		'product_cat' => $product_cat_slug,
+		/*'tax_query' => array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'id',
+			'terms'    => $product_cat_ID
+		),*/
+	))
+));
+?>
+
 
 
 <!--Recent Products-->
