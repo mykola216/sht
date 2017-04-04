@@ -25,7 +25,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 		//add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'add_mailchimp_subscribe_checkbox' ) );
 		add_action( 'woocommerce_checkout_order_processed', array( $this, 'mailchimp_subscribe'), 1, 2 );
 		add_action( 'woo_head', array( $this, 'ec_integration' ), 0 );
-		add_action( 'woo_foot', array( $this, 'conversion_integration' ), 999999 );
+		//add_action( 'woo_foot', array( $this, 'conversion_integration' ), 999999 );
 		add_filter( 'woocommerce_cart_item_remove_link', array( $this, 'ec_integration_remove_from_cart' ), 10, 2 );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts') );
@@ -38,7 +38,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 				'home_band_logo'        => '/wp-content/uploads/2014/12/logo-loodsxl.png',
 				'slider_title'          => 'Slider Title',
 				'slider_shortcode'      => '[metaslider id=2130]',
-				'conversion_id'         => '976593826',
+				//'conversion_id'         => '976593826',
 				'subslider_text1'       => '100% kwaliteit uit eigen fabriek',
 				'subslider_url1'        => '/onze-fabriek/',
 				'subslider_text2'       => 'Ook voor maatwerk',
@@ -121,7 +121,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 		$options['working_time']          = wp_filter_nohtml_kses( $options['working_time'] );
 		$options['slider_title']          = wp_filter_nohtml_kses( $options['slider_title'] );
 		$options['slider_shortcode']      = wp_filter_nohtml_kses( $options['slider_shortcode'] );
-		$options['conversion_id']         = wp_filter_nohtml_kses( $options['conversion_id'] ) ;
+		//$options['conversion_id']         = wp_filter_nohtml_kses( $options['conversion_id'] ) ;
 		$options['facebook_url']          = wp_filter_nohtml_kses( $options['facebook_url']) ;
 		$options['googleplus_url']        = wp_filter_nohtml_kses( $options['googleplus_url'] );
 		$options['instagram_url']         = wp_filter_nohtml_kses( $options['instagram_url'] );
