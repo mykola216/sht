@@ -24,9 +24,11 @@ $products = new WP_Query( $args );
 
 $woocommerce_loop['columns'] = $columns;
 
+$container_class = $container_class ? $container_class : 'recent' ;
+
 if ( $products->have_posts() ) : ?>
 
-	<div class="recent products">
+	<div class="products <?php echo $container_class; ?>">
 
 		<div class="caption">
 			<h2><?php echo esc_html( $title ); ?></h2>
