@@ -505,18 +505,26 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         font-weight: 100 !important;
     }
 }
+@media (max-width: 767px) {
+    ul.nav > li > a {
+        font-weight: 700;
+        font-size: 16px;
+    }
+}
 #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
     background-image: url(images/ruller-pencil-icon.png) !important;
     display: inline-block;
     vertical-align: middle;
     background-repeat: no-repeat !important;
-    background-color: #ff6600!important;
     padding-left: 49px !important;
     background-position: 15px 4px !important;
-
+    margin-bottom: -1px;
 }
 
 @media only screen and (min-width: 768px) {
+    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
+        background-color: #999!important;
+    }
     #header .widget_metaslider_widget > div {
         float: right;
     }
@@ -552,7 +560,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         width: 16em;
     }
 
-        /* nav_after module - end */
+    /* nav_after module - end */
 
 
     /* Widgets */
@@ -880,9 +888,9 @@ body #wrapper #content .button.gform_button_select_files:focus{
     border:none;
 }
 .widget_recently_viewed_products .product_list_widget > li > a > .product-title{
-/*    font-weight: bold;
-    font-size: 1.2em;
-    line-height: 1.2em;*/
+    /*    font-weight: bold;
+        font-size: 1.2em;
+        line-height: 1.2em;*/
     color: rgba(34, 34, 34, 1);
     font: normal bold 14px Verdana, sans-serif;
     text-align: left;
