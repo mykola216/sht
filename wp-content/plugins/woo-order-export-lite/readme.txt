@@ -60,7 +60,9 @@ Install and activate plugin, visit WooCommerce > Export Orders.
 
 == Frequently Asked Questions ==
 
-[Use this page to study how to extend the plugin.](http://algolplus.com/plugins/code-samples/)
+Need help ? Create ticket in [helpdesk system](https://algolplus.freshdesk.com). Don't forget to attach your settings or some screenshots. It will significantly reduce reply time :)
+
+Check [some snippets](https://algolplus.com/plugins/snippets-plugins/) for popular plugins or review  [this page](https://algolplus.com/plugins/code-samples/) to study how to extend the plugin.
 
 = I am exporting the Orders data with its individual Products/Items as separate rows. But the Product rows don't seem to have rest of order details included. =
 You should mark checkbox "Populate other columns if products exported as rows" for selected format ( CSV or XLS)
@@ -87,6 +89,24 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 6. You can select orders to export.
 
 == Changelog ==
+
+= 1.3.0 - 2017-04-11 =
+* The plugin is compatible with Woocommerce 3.0
+* Display warning message if user interface fails to load
+* Update Select2.js to fix some user interface problems
+* Fixed fields "Order Tax" and "Subtotal" (uses Woocommerce functions to format it)
+
+= 1.2.7 - 2017-03-17 =
+* Portuguese and French translations were added. Thanks to contributors!
+* Added new field "Order amount without tax"
+* Added new product field "Quantity (- Refund)"
+* Added tab "Help"
+* Added some UI hooks
+* Fixed bug in filter by Taxonomies
+* Fixed bug in filter by Shipping Methods (disabled for Woocommerce earlier than  2.6)
+* Fixed field "State Full Name" (html entities removed)
+* Skip **deleted products** during export
+* Removed word "hack" from PHPExcel source
 
 = 1.2.6 - 2017-02-02 =
 * Added new filter "Filter by coupons"
@@ -135,7 +155,7 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 * Bulk export recoded to be compatible with servers behind a Load Balancer
 * Skip root xml if it's empty
 * New filters/hooks for CSV/XML formats
-* [Code samples](http://algolplus.com/plugins/code-samples/)  added to documentation
+* [Code samples](https://algolplus.com/plugins/code-samples/)  added to documentation
 
 = 1.2.2 - 2016-09-28 =
 * Added column "Product Shipping Class"

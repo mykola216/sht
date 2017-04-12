@@ -23,7 +23,10 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 
 <?php include 'modal-controls.php'; ?>
 <form method="post" id="export_job_settings">
-
+	<?php if ( $mode !== $WC_Order_Export::EXPORT_NOW ): ?>
+		<div style="width: 100%;">&nbsp;</div>
+	<?php endif; ?>
+	
 	<div id="my-left" style="float: left; width: 49%; max-width: 500px;">
 		<?php if ( $mode === $WC_Order_Export::EXPORT_PROFILE ): ?>
 			<div class="my-block">
@@ -845,6 +848,8 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		</div>
 
 	</div>
+     <?php do_action("woe_settings_above_buttons", $settings); ?>
+	<div id=JS_error_onload style='color:red;font-size: 120%;'><?php echo sprintf(__( "If you see this message, user interface won't work correctly!<br>There is a JS error (<a target=blank href='%s'>read here</a> how to view it). Probably, it's a conflict with another plugin or active theme.", 'woocommerce-order-export' ) , "https://codex.wordpress.org/Using_Your_Browser_to_Diagnose_JavaScript_Errors#Step_3:_Diagnosis"); ?></div>
 	<p class="submit">
 		<input type="submit" id='preview-btn' class="button-secondary preview-btn" data-limit="5" value="<?php _e( 'Preview', 'woocommerce-order-export' ) ?>" />
 		<input type="submit" id='save-btn' class="button-primary" value="<?php _e( 'Save Settings', 'woocommerce-order-export' ) ?>" />
@@ -1565,7 +1570,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 			}, "json" );
 			return false;
 		} );
-
+		
 		openFilter('my-order');
 		
 		openFilter('my-products');
@@ -1582,5 +1587,8 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		$('#format_xls_use_xls_format').click(function() {
 			change_filename_ext();
 		});
+		
+		// this line must be last , we don't have any errors
+		jQuery('#JS_error_onload').hide();
 	} );
 </script>
