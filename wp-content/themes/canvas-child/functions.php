@@ -71,6 +71,8 @@ add_filter( 'yith_wcwl_email_share_subject', 'canvas_child_yith_wcwl_email_share
 add_action( 'yith_wcwl_before_wishlist', 'display_print_button');
 add_action( 'woocommerce_before_cart', 'display_print_button');
 add_action( 'woocommerce_single_product_summary', 'display_print_button', 12);
+
+add_filter( 'woocommerce_defer_transactional_emails', '__return_false' );
 // Common - end
 
 
