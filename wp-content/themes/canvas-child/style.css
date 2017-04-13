@@ -333,14 +333,17 @@ ul.products li.product a img {
     box-sizing: border-box;
     padding: 4px;
 }
+ul.products li.product a h2,
 ul.products li.product a h3 {
     color: #343434;
     font: normal bold 14px Verdana, sans-serif;
     text-align: left;
 }
+ul.products li.product a h2:hover,
 ul.products li.product a h3:hover {
     text-decoration: underline;
 }
+ul.products li.product a h2 mark,
 ul.products li.product a h3 mark {
     background-color: inherit;
     font-weight: bold;
