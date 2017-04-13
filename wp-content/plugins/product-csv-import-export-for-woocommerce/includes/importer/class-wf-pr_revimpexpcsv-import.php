@@ -36,7 +36,14 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	 */
 	public function __construct() {
 
-		$this->log                     = new WC_Logger();
+		if(WC()->version < '2.7.0'){
+			$this->log                     = new WC_Logger();
+
+		}else
+		{
+			$this->log                     = wc_get_logger();
+
+		}
 		$this->import_page             = 'product_reviews_csv';
 		$this->file_url_import_enabled = apply_filters( 'product_reviews_csv_product_file_url_import_enabled', true );
 	}
@@ -45,7 +52,17 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
             session_start();
         }
     }
-
+    public function hf_log_data_change ($content = 'csv-import',$data='')
+	{
+		if (WC()->version < '2.7.0')
+		{
+			$this->log->add($content,$data);
+		}else
+		{
+			$context = array( 'source' => $content );
+			$this->log->log("debug", $data ,$context);
+		}
+	}
     public function hf_rev_im_ex_myEndSession() {
         session_destroy();
     }
@@ -546,8 +563,8 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		wp_suspend_cache_invalidation( true );
 
-		$this->log->add( 'csv-import', '---' );
-		$this->log->add( 'csv-import', __( 'Processing product reviews.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'csv-import', '---' );
+		$this->hf_log_data_change( 'csv-import', __( 'Processing product reviews.', 'wf_csv_import_export' ) );
 		foreach ( $this->parsed_data as $key => &$item ) {
 
 			$product = $this->parser->parse_product_review( $item, 0 );
@@ -558,7 +575,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 			unset( $item, $product );
 		}
-		$this->log->add( 'csv-import', __( 'Finished processing product reviews.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'csv-import', __( 'Finished processing product reviews.', 'wf_csv_import_export' ) );
 		wp_suspend_cache_invalidation( false );
 	}
 
@@ -568,17 +585,22 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	 * @param string $file Path to the CSV file for importing
 	 */
 	public function import_start( $file, $mapping, $start_pos, $end_pos, $eval_field ) {
-
-		$memory    = size_format( woocommerce_let_to_num( ini_get( 'memory_limit' ) ) );
-		$wp_memory = size_format( woocommerce_let_to_num( WP_MEMORY_LIMIT ) );
-
-		$this->log->add( 'csv-import', '---[ New Import ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory );
-		$this->log->add( 'csv-import', __( 'Parsing product reviews CSV.', 'wf_csv_import_export' ) );
+		if(WC()->version < '2.7.0')
+		{
+			$memory    = size_format( woocommerce_let_to_num( ini_get( 'memory_limit' ) ) );
+			$wp_memory = size_format( woocommerce_let_to_num( WP_MEMORY_LIMIT ) );
+		}else{
+			$memory    = size_format( wc_let_to_num( ini_get( 'memory_limit' ) ) );
+			$wp_memory = size_format( wc_let_to_num( WP_MEMORY_LIMIT ) );
+		}
+		
+		$this->hf_log_data_change( 'csv-import', '---[ New Import ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory );
+		$this->hf_log_data_change( 'csv-import', __( 'Parsing product reviews CSV.', 'wf_csv_import_export' ) );
 
 		$this->parser = new WF_CSV_Parser_Review( 'product' );
 
 		list( $this->parsed_data, $this->raw_headers, $position ) = $this->parser->parse_data( $file, $this->delimiter, $mapping, $start_pos, $end_pos, $eval_field );
-		$this->log->add( 'csv-import', __( 'Finished parsing product reviews CSV.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'csv-import', __( 'Finished parsing product reviews CSV.', 'wf_csv_import_export' ) );
 
 		unset( $import_data );
 
@@ -676,14 +698,14 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		if ( ! empty( $processing_product_id ) && isset( $this->processed_posts[ $processing_product_id ] ) ) {
 			$this->add_import_result( 'skipped', __( 'Product review already processed', 'wf_csv_import_export' ), $processing_product_id  );
-			$this->log->add( 'csv-import', __('> Post ID already processed. Skipping.', 'wf_csv_import_export'), true );
+			$this->hf_log_data_change( 'csv-import', __('> Post ID already processed. Skipping.', 'wf_csv_import_export'), true );
 			unset( $post );
 			return;
 		}
 
 		if ( ! empty ( $post['post_status'] ) && $post['post_status'] == 'auto-draft' ) {
 			$this->add_import_result( 'skipped', __( 'Skipping auto-draft', 'wf_csv_import_export' ), $processing_product_id );
-			$this->log->add( 'csv-import', __('> Skipping auto-draft.', 'wf_csv_import_export'), true );
+			$this->hf_log_data_change( 'csv-import', __('> Skipping auto-draft.', 'wf_csv_import_export'), true );
 			unset( $post );
 			return;
 		}
@@ -694,7 +716,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
                                 
                 $usr_msg = 'Product review skipped.'; 
                 $this->add_import_result( 'skipped', __( $usr_msg, 'wf_csv_import_export' ), $processing_product_id );
-				$this->log->add( 'csv-import', sprintf( __('> &#8220;%s&#8221;'.$usr_msg, 'wf_csv_import_export'), esc_html($processing_product_title) ), true );
+				$this->hf_log_data_change( 'csv-import', sprintf( __('> &#8220;%s&#8221;'.$usr_msg, 'wf_csv_import_export'), esc_html($processing_product_title) ), true );
 				unset( $post );
 				return;
 			}
@@ -706,7 +728,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			// Only merge fields which are set
 			$post_id = $processing_product_id;
 
-			$this->log->add( 'csv-import', sprintf( __('> Merging post ID %s.', 'wf_csv_import_export'), $post_id ), true );
+			$this->hf_log_data_change( 'csv-import', sprintf( __('> Merging post ID %s.', 'wf_csv_import_export'), $post_id ), true );
 
 			if ( ! empty( $post['comment_post_ID'] ) ) {
 				$postdata['comment_post_ID'] = $post['comment_post_ID'];
@@ -755,7 +777,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
             }
 
 			// Insert product
-			$this->log->add( 'csv-import', sprintf( __('> Inserting %s', 'wf_csv_import_export'), esc_html( $processing_product_id ) ), true );
+			$this->hf_log_data_change( 'csv-import', sprintf( __('> Inserting %s', 'wf_csv_import_export'), esc_html( $processing_product_id ) ), true );
 
 			 if ($post['comment_parent'] === '0') {
                 $this->parent_data = $post['comment_parent'];
@@ -798,13 +820,13 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			if ( is_wp_error( $post_id ) ) {
 
 				$this->add_import_result( 'failed', __( 'Failed to import product review', 'wf_csv_import_export' ), $processing_product_id);
-				$this->log->add( 'csv-import', sprintf( __( 'Failed to import product review &#8220;%s&#8221;', 'wf_csv_import_export' ), esc_html($processing_product_title) ) );
+				$this->hf_log_data_change( 'csv-import', sprintf( __( 'Failed to import product review &#8220;%s&#8221;', 'wf_csv_import_export' ), esc_html($processing_product_title) ) );
 				unset( $post );
 				return;
 
 			} else {
 
-				$this->log->add( 'csv-import', sprintf( __('> Inserted - post ID is %s.', 'wf_csv_import_export'), $post_id ) );
+				$this->hf_log_data_change( 'csv-import', sprintf( __('> Inserted - post ID is %s.', 'wf_csv_import_export'), $post_id ) );
 
 			}
 		}
@@ -832,10 +854,10 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		if ( $merging ) {
 			$this->add_import_result( 'merged', 'Merge successful', $post_id );
-			$this->log->add( 'csv-import', sprintf( __('> Finished merging post ID %s.', 'wf_csv_import_export'), $post_id ) );
+			$this->hf_log_data_change( 'csv-import', sprintf( __('> Finished merging post ID %s.', 'wf_csv_import_export'), $post_id ) );
 		} else {
 			$this->add_import_result( 'imported', 'Import successful', $post_id );
-			$this->log->add( 'csv-import', sprintf( __('> Finished importing post ID %s.', 'wf_csv_import_export'), $post_id ) );
+			$this->hf_log_data_change( 'csv-import', sprintf( __('> Finished importing post ID %s.', 'wf_csv_import_export'), $post_id ) );
 		}
 		unset( $post );
 	}
@@ -979,6 +1001,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 				$error_message = "Not able to login \n";
 			}
 		}
+		ftp_pasv($ftp_conn, TRUE);
 		if(empty($error_message)){
 
                 if (ftp_get($ftp_conn, ABSPATH.$local_file, $server_file, FTP_BINARY)) {

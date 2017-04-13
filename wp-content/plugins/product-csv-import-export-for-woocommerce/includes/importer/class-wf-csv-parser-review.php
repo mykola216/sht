@@ -167,12 +167,12 @@ class WF_CSV_Parser_Review {
 
 			$product['merging'] = true;
 
-			$WF_CSV_Product_Review_Import->log->add( 'csv-import', sprintf( __('> Row %s - preparing for merge.', 'wf_csv_import_export'), $this->row ) );
+			$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', sprintf( __('> Row %s - preparing for merge.', 'wf_csv_import_export'), $this->row ) );
 
 			// Required fields
 			if ( ! $post_id ) {
 
-				$WF_CSV_Product_Review_Import->log->add( 'csv-import', __( '> > Cannot merge without id. Importing instead.', 'wf_csv_import_export') );
+				$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', __( '> > Cannot merge without id. Importing instead.', 'wf_csv_import_export') );
 
 				$merging = false;
 			} else {
@@ -189,14 +189,14 @@ class WF_CSV_Parser_Review {
 					    WHERE $wpdb->comments = $post_id");
 					$found_product_id = $wpdb->get_var($db_query);
 					if ( ! $found_product_id ) {
-						$WF_CSV_Product_Review_Import->log->add( 'csv-import', sprintf(__( '> > Skipped. Cannot find product reviews with ID %s. Importing instead.', 'wf_csv_import_export'), $item['ID']) );
+						$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', sprintf(__( '> > Skipped. Cannot find product reviews with ID %s. Importing instead.', 'wf_csv_import_export'), $item['ID']) );
 						$merging = false;
 
 					} else {
 
 						$post_id = $found_product_id;
 
-						$WF_CSV_Product_Review_Import->log->add( 'csv-import', sprintf(__( '> > Found product reviews with ID %s.', 'wf_csv_import_export'), $post_id) );
+						$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', sprintf(__( '> > Found product reviews with ID %s.', 'wf_csv_import_export'), $post_id) );
 					}
 				}
 				$product['merging'] = true;
@@ -206,17 +206,17 @@ class WF_CSV_Parser_Review {
 		if ( ! $merging ) {
 
 			$product['merging'] = false;
-			$WF_CSV_Product_Review_Import->log->add( 'csv-import', sprintf( __('> Row %s - preparing for import.', 'wf_csv_import_export'), $this->row ) );
+			$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', sprintf( __('> Row %s - preparing for import.', 'wf_csv_import_export'), $this->row ) );
 
 			// Required fields
 			if ( $item['comment_content'] === '')
 			{
-				$WF_CSV_Product_Review_Import->log->add( 'csv-import', __( '> > Skipped. No comment content set for new product reviews.', 'wf_csv_import_export') );
+				$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', __( '> > Skipped. No comment content set for new product reviews.', 'wf_csv_import_export') );
 				return new WP_Error( 'parse-error', __( 'No comment content set for new product reviews.', 'wf_csv_import_export' ) );
 			}
             if ( $item['comment_post_ID'] === '' )
             {
-				$WF_CSV_Product_Review_Import->log->add( 'csv-import', __( '> > Skipped. No post(product) id found, for which new comment is to be imported', 'wf_csv_import_export') );
+				$WF_CSV_Product_Review_Import->hf_log_data_change( 'csv-import', __( '> > Skipped. No post(product) id found, for which new comment is to be imported', 'wf_csv_import_export') );
                 return new WP_Error( 'parse-error', __( 'No post(product) id found, for which new comment is to be imported.', 'wf_csv_import_export' ) );
 			}
 

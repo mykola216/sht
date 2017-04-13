@@ -194,7 +194,7 @@ class WF_PrRevImpExpCsv_Exporter {
 				$ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
 			}
 			$login = ftp_login($ftp_conn, $ftp_user, $ftp_password);
-
+			ftp_pasv($ftp_conn, TRUE);
 			// upload file
 			if (ftp_put($ftp_conn, $file, $file, FTP_ASCII)) {
 				$wf_product_review_ie_msg = 1;

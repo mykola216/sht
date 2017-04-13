@@ -65,42 +65,42 @@
 							<table class="form-table">
 								<tr>
 									<th>
-										<label for="enable_ftp_ie"><?php _e( 'Enable FTP import/export',  'wf_csv_import_export' ); ?></label>
+										<label for="pro_enable_ftp_ie"><?php _e( 'Enable FTP import/export',  'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
-										<input type="checkbox" name="enable_ftp_ie" id="enable_ftp_ie" class="checkbox" <?php checked( $enable_ftp_ie, 1 ); ?> />
+										<input type="checkbox" name="pro_enable_ftp_ie" id="pro_enable_ftp_ie" class="checkbox" <?php checked( $enable_ftp_ie, 1 ); ?> />
 									</td>
 								</tr>
 								<tr>
 									<th>
-										<label for="ftp_server"><?php _e( 'FTP Server Host/IP', 'wf_csv_import_export' ); ?></label>
+										<label for="pro_ftp_server"><?php _e( 'FTP Server Host/IP', 'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
-										<input type="text" name="ftp_server" id="ftp_server" placeholder="<?php _e('XXX.XXX.XXX.XXX', 'wf_csv_import_export'); ?>" value="<?php echo $ftp_server; ?>" class="input-text" />
+										<input type="text" name="pro_ftp_server" id="pro_ftp_server" placeholder="<?php _e('XXX.XXX.XXX.XXX', 'wf_csv_import_export'); ?>" value="<?php echo $ftp_server; ?>" class="input-text" />
 									</td>
 								</tr>
 								<tr>
 									<th>
-										<label for="ftp_user"><?php _e( 'FTP User Name', 'wf_csv_import_export' ); ?></label>
+										<label for="pro_ftp_user"><?php _e( 'FTP User Name', 'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
-										<input type="text" name="ftp_user" id="ftp_user" placeholder="" value="<?php echo $ftp_user; ?>" class="input-text" />
+										<input type="text" name="pro_ftp_user" id="pro_ftp_user" placeholder="" value="<?php echo $ftp_user; ?>" class="input-text" />
 									</td>
 								</tr>
 								<tr>
 									<th>
-										<label for="ftp_password"><?php _e( 'FTP Password', 'wf_csv_import_export' ); ?></label>
+										<label for="pro_ftp_password"><?php _e( 'FTP Password', 'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
-										<input type="password" name="ftp_password" id="ftp_password" placeholder="" value="<?php echo $ftp_password; ?>" class="input-text" />
+										<input type="password" name="pro_ftp_password" id="pro_ftp_password" placeholder="" value="<?php echo $ftp_password; ?>" class="input-text" />
 									</td>
 								</tr>
 								<tr>
 									<th>
-										<label for="ftp_server_path"><?php _e( 'FTP Server Path', 'wf_csv_import_export' ); ?></label>
+										<label for="pro_ftp_server_path"><?php _e( 'FTP Server Path', 'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
-										<input type="text" name="ftp_server_path" id="ftp_server_path" placeholder="" value="<?php echo $ftp_server_path; ?>" class="input-text" />
+										<input type="text" name="pro_ftp_server_path" id="pro_ftp_server_path" placeholder="" value="<?php echo $ftp_server_path; ?>" class="input-text" />
 									</td>
 								</tr>
 								
@@ -109,7 +109,7 @@
 										<label for="use_ftps"><?php _e( 'Use FTPS', 'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
-										<input type="checkbox" name="use_ftps" id="use_ftps" class="checkbox" <?php checked( $use_ftps, 1 ); ?> />
+										<input type="checkbox" name="pro_use_ftps" id="pro_use_ftps" class="checkbox" <?php checked( $use_ftps, 1 ); ?> />
 									</td>
 								</tr>
 							</table>
