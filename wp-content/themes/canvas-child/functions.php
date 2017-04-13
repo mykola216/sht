@@ -86,6 +86,8 @@ remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_
 add_action( 'woocommerce_archive_description', 'canvas_child_taxonomy_archive_description', 10 );
 //add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
 add_filter( 'amp_post_template_file', 'canvas_child_amp_custom_template', 20, 3 );
+add_filter( 'ampforwp_query_args', 'canvas_child_ampforwp_query_args' );
+add_action( 'amp_post_template_css', 'canvas_child_amp_post_template_css' );
 add_filter( 'woo_title', 'canvas_child_woo_title', 999, 3 );
 // Archive - end
 
@@ -558,6 +560,61 @@ function canvas_child_amp_custom_template( $file, $type, $post ) {
 	}
 
 	return $file;
+}
+
+function canvas_child_ampforwp_query_args($args) {
+	$args['posts_per_page'] = get_option('posts_per_page');
+	if (is_page()) {
+		$args['post_type'] = 'page';
+	}
+	if (is_singular('product')) {
+		$args['post_type'] = 'product';
+	}
+	if (is_archive()) {
+		$args['post_type'] = 'product';
+	}
+	if (is_tax('product_cat')) {
+		$args['post_type'] = 'product';
+		$args['tax_query'] = array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'id',
+				'terms'    => array( get_queried_object_id() ), // ID of current cat
+			),
+		);
+	}
+	return $args;
+}
+
+function canvas_child_amp_post_template_css($amp_tpl_obj) {
+	echo '
+	.amp-wp-price .price{
+		color: #f70;
+		font: normal normal bold 14px helvetica, arial, sans-serif;
+		margin: 0 0 0 5px;
+		text-align: left;
+	}
+	.amp-wp-price .price del{
+		color: #666;
+		font-weight: normal;
+		font-size: 10px;
+	}
+	.amp-wp-price .price ins{
+		text-decoration: none;
+	}
+	.current-menu-item a {
+		font-weight: bold;
+		color: #666;
+	}
+	main .taxonomy-description{
+		overflow: hidden;
+		padding: 0;
+		background: transparent;
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}';
 }
 /******************************************************************************/
 /* Archive page - end *********************************************************/
