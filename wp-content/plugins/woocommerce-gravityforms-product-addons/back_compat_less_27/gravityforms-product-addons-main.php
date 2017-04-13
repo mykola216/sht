@@ -446,11 +446,12 @@ if ( is_woocommerce_active() ) {
 		 * @return string
 		 */
 		public static function plugin_url() {
-			return plugins_url() . '/woocommerce-gravityforms-product-addons/back_compat_less_27/';
+			return wc_gfpa_get_plugin_url() . '/back_compat_less_27';
 		}
 
 		public function get_gravity_form_data( $post_id ) {
-			return apply_filters( 'woocommerce_gforms_get_product_form_data', get_post_meta( $post_id, '_gravity_form_data', true ), $post_id );
+			$gravity_form_data = get_post_meta($post_id, '_gravity_form_data', true);
+			return apply_filters( 'woocommerce_gforms_get_product_form_data', $gravity_form_data, $post_id );
 		}
 
 	}

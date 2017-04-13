@@ -59,7 +59,13 @@ class WC_Order_Export_Admin {
 	
 	public function install() {
 		//wp_clear_scheduled_hook( "wc_export_cron_global" ); //debug 
-		wp_schedule_event( time(), 'wc_export_1min_global', 'wc_export_cron_global' );
+		$this->install_job();
+	}
+	
+	private function install_job() {
+		if ( ! wp_get_schedule( 'wc_export_cron_global' ) ) {
+			wp_schedule_event( time(), 'wc_export_1min_global', 'wc_export_cron_global' );
+		}
 	}
 	
 	public function display_plugin_activated_message() {
@@ -103,6 +109,10 @@ class WC_Order_Export_Admin {
     
     public function render_tab_tools() {
 		$this->render( 'tools', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'WC_Order_Export' => $this ) );
+	}
+	
+    public function render_tab_help() {
+		$this->render( 'help', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'WC_Order_Export' => $this ) );
 	}
 
 	public function render_tab_schedules() {
@@ -362,6 +372,7 @@ class WC_Order_Export_Admin {
 			'user_names'                                     => array(),
 			'payment_methods'                                => array(),
 			'coupons'                                        => array(),
+			'order_custom_fields'                            => array(),
 			'product_categories'                             => array(),
 			'product_vendors'                                => array(),
 			'products'                                       => array(),
@@ -442,9 +453,7 @@ class WC_Order_Export_Admin {
 			}
 
 			update_option( $this->settings_name_cron, $all_jobs );
-            if ( ! wp_get_schedule( 'wc_export_cron_global' ) ) {
-                wp_schedule_event( time(), 'wc_export_1min_global', 'wc_export_cron_global' );
-            }
+			$this->install_job();
 		} elseif ( $mode == self::EXPORT_PROFILE ) {
 			$all_jobs = get_option( $this->settings_name_profiles, array() );
 			if ( $id ) {					
@@ -465,17 +474,18 @@ class WC_Order_Export_Admin {
 		wp_enqueue_style( 'jquery-style',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
 		//wp_enqueue_script( 'select2', WC()->plugin_url() . '/assets/js/select2/select2.min.js', array( 'jquery' ), '3.5.2' );
-		wp_enqueue_script( 'select22', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js',
-			array( 'jquery' ), '4.0.0' );
+		wp_enqueue_script( 'select22', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js',
+			array( 'jquery' ), '4.0.3' );
 		//wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), WC_VERSION );
-		wp_enqueue_style( 'select2-css', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css',
+		wp_enqueue_style( 'select2-css', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css',
 			array(), WC_VERSION );
 		wp_enqueue_script( 'export', $this->url_plugin . 'assets/js/export.js' );
 		wp_enqueue_style( 'export', $this->url_plugin . 'assets/css/export.css' );
 	}
 
 	public function script_loader_src($src, $handle) {
-		if (!preg_match('/\/select2\.min\.js\?ver=[1-3]/', $src) && !preg_match('/\/select2\.js/', $src)) {
+		// don't load ANY select2.js / select2.min.js  and OUTDATED select2.full.js
+		if (!preg_match('/\/select2\.full\.js\?ver=[1-3]/', $src) && !preg_match('/\/select2\.min\.js/', $src) && !preg_match('/\/select2\.js/', $src) ) {
 			return $src;
 		}
 	}
@@ -766,7 +776,7 @@ class WC_Order_Export_Admin {
 
 		$result = WC_Order_Export_Engine::build_files_and_export( $settings, '', 1 );
 
-		echo $result;
+		//echo $result;  //export already echo results
 	}
 
 	public function ajax_action_preview() {

@@ -1,4 +1,4 @@
-<form action="<?php echo admin_url('admin.php?import=' . $this->import_page . '&step=2&merge=' . $merge); ?>" method="post">
+<form action="<?php echo admin_url('admin.php?import=' . $this->import_page . '&step=2&merge=' . $merge .'&skip_new=' . $skip_new); ?>" method="post">
     <?php wp_nonce_field('import-woocommerce'); ?>
     <input type="hidden" name="import_id" value="<?php echo $this->id; ?>" />
     <?php if ($this->file_url_import_enabled) : ?>

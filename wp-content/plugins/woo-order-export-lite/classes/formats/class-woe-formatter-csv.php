@@ -74,7 +74,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 		if ( $this->mode == 'preview' ) {
 			$this->rows[] = $rec;
 		} else {
-			if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $rec, self::$delimiter, self::$enclosure ) ) {
+			if( !apply_filters('woe_csv_custom_output_func',false, $this->handle, $rec, self::$delimiter, self::$linebreak, self::$enclosure ) ) {
 				if ( self::$enclosure !== '' ) {
 					fputcsv( $this->handle, $rec, self::$delimiter, self::$enclosure );
 				} else {

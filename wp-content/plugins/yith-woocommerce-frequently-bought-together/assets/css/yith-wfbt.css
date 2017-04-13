@@ -21,6 +21,10 @@
     padding: 10px 0;
     vertical-align: middle;
 }
+.yith-wfbt-section .yith-wfbt-images td img {
+    width: 100px;
+    height: auto;
+}
 .yith-wfbt-section .yith-wfbt-images .image_plus {
     width: 20px;
     text-align: center;

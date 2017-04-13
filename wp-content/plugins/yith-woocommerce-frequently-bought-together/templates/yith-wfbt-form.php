@@ -17,37 +17,52 @@ $total  = 0;
 if( ! isset( $products ) ) {
 	return;
 }
-
+/**
+ * @type $product WC_Product
+ */
 // set query
-$url = ! is_null( $product ) ? get_permalink( $product->id ) : '';
-$url = add_query_arg( 'action', 'yith_bought_together', $url );
-$url = wp_nonce_url( $url, 'yith_bought_together' );
+$url        = ! is_null( $product ) ? $product->get_permalink() : '';
+$url        = add_query_arg( 'action', 'yith_bought_together', $url );
+$url        = wp_nonce_url( $url, 'yith_bought_together' );
+$is_wc_30   = version_compare( WC()->version, '3.0.0', '>=' );
 
-
-foreach( $products as $current ) {
-
+foreach( $products as $current_product ) {
+    /**
+     * @type $current_product WC_Product
+     */
 	// get correct id if product is variation
-	$id = $current->product_type == 'variation' ? $current->variation_id : $current->id;
+    $current_product_is_variation   = $current_product->is_type( 'variation' );
+    if( $is_wc_30 ) {
+        $current_product_id = $current_product->get_id();
+    }
+    else {
+        $current_product_id = $current_product->is_type( 'variation' ) ? $current_product->variation_id : $current_product->id;
+    }
+
+    $current_product_price          = function_exists('wc_get_price_to_display') ? wc_get_price_to_display( $current_product ) : $current_product->get_display_price();
+    $current_product_link           = $current_product->get_permalink();
+    $current_product_image          = $current_product->get_image( 'yith_wfbt_image_size' );
+    $current_product_title          = $current_product->get_title();
 
 	if( $index > 0 )
 		$thumbs .= '<td class="image_plus image_plus_' . $index . '" data-rel="offeringID_' . $index . '">+</td>';
-	$thumbs .= '<td class="image-td" data-rel="offeringID_' . $index . '"><a href="' . get_permalink( $current->id ) . '">' . $current->get_image( 'shop_thumbnail' ) . '</a></td>';
+	$thumbs .= '<td class="image-td" data-rel="offeringID_' . $index . '"><a href="' . $current_product_link . '">' . $current_product_image . '</a></td>';
 
 	ob_start();
 	?>
 	<li class="yith-wfbt-item">
 		<label for="offeringID_<?php echo $index ?>">
 
-			<input type="hidden" name="offeringID[]" id="offeringID_<?php echo $index ?>" class="active" value="<?php echo $id ?>" />
+			<input type="hidden" name="offeringID[]" id="offeringID_<?php echo $index ?>" class="active" value="<?php echo $current_product_id ?>" />
 
 			<span class="product-name">
-				<?php echo ! $index ? __( 'This Product', 'yith-woocommerce-frequently-bought-together' ) . ': ' . $current->get_title() : $current->get_title(); ?>
+				<?php echo ! $index ? __( 'This Product', 'yith-woocommerce-frequently-bought-together' ) . ': ' . $current_product_title : $current_product_title; ?>
 			</span>
 
 			<?php
 
-			if( $current->product_type == 'variation' ) {
-				$attributes = $current->get_variation_attributes();
+			if( $current_product_is_variation ) {
+				$attributes = $current_product->get_variation_attributes();
 				$variations = array();
 
 				foreach( $attributes as $key => $attribute ) {
@@ -71,7 +86,7 @@ foreach( $products as $current ) {
 			}
 
 			// echo product price
-			echo ' &ndash; <span class="price">' . $current->get_price_html() . '</span>';
+			echo ' &ndash; <span class="price">' . $current_product->get_price_html() . '</span>';
 			?>
 
 		</label>
@@ -79,7 +94,7 @@ foreach( $products as $current ) {
 	<?php
 	$checks .= ob_get_clean();
 	// increment total
-	$total += floatval( $current->get_display_price() );
+	$total += floatval( $current_product_price );
 
 	// increment index
 	$index++;

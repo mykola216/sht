@@ -17,7 +17,7 @@ class WF_CSV_Parser {
 	 */
 	public function __construct( $post_type = 'product' ) {
 		$this->post_type         = $post_type;
-                $this->decentFgetcsv = (version_compare(PHP_VERSION, '5.3.0') >= 0);
+		$this->decentFgetcsv = (version_compare(PHP_VERSION, '5.3.0') >= 0);
 		$this->reserved_fields   = include( 'data/data-wf-reserved-fields.php' );
 		$this->post_defaults     = include( 'data/data-wf-post-defaults.php' );
 		$this->postmeta_defaults = include( 'data/data-wf-postmeta-defaults.php' );
@@ -33,7 +33,7 @@ class WF_CSV_Parser {
 			'variable'	=> $variable_term->term_id,
 			'grouped'	=> $grouped_term->term_id,
 			'external'	=> $external_term->term_id
-		);
+			);
 
 		// Subscription product types
 		if ( class_exists( 'WC_Subscriptions' ) ) {
@@ -63,14 +63,14 @@ class WF_CSV_Parser {
 		}
 
                 // Wcpb Product Bundle
-                if ( class_exists( 'WC_Product_Wcpb' ) ) {
+		if ( class_exists( 'WC_Product_Wcpb' ) ) {
 			$wcbundle_term = get_term_by( 'name', 'wcpb', 'product_type' );
 
 			if ( $wcbundle_term ) {
 				$this->allowed_product_types['wcpb'] = $wcbundle_term->term_id;
 			}
 		}
-                
+		
 		// Booking product types
 		if ( class_exists( 'WC_Booking' ) ) {
 			$booking_term                           = get_term_by( 'slug', 'booking', 'product_type' );
@@ -126,34 +126,34 @@ class WF_CSV_Parser {
 			if ( $start_pos != 0 )
 				fseek( $handle, $start_pos );
 
-		    while ( ( $postmeta = ($this->decentFgetcsv)? fgetcsv( $handle, 0, $delimiter , '"', '"' ) : fgetcsv( $handle, 0, $delimiter , '"' ) ) !== FALSE ) {
-	            $row = array();
+			while ( ( $postmeta = ($this->decentFgetcsv)? fgetcsv( $handle, 0, $delimiter , '"', '"' ) : fgetcsv( $handle, 0, $delimiter , '"' ) ) !== FALSE ) {
+				$row = array();
 				
-	            foreach ( $header as $key => $heading ) {
+				foreach ( $header as $key => $heading ) {
 					$s_heading = $heading;
 
 	            	// Check if this heading is being mapped to a different field
-            		if ( isset( $mapping[$s_heading] ) ) {
-            			if ( $mapping[$s_heading] == 'import_as_meta' ) {
+					if ( isset( $mapping[$s_heading] ) ) {
+						if ( $mapping[$s_heading] == 'import_as_meta' ) {
 
-            				$s_heading = 'meta:' . $s_heading;
+							$s_heading = 'meta:' . $s_heading;
 
-            			} elseif ( $mapping[$s_heading] == 'import_as_images' ) {
+						} elseif ( $mapping[$s_heading] == 'import_as_images' ) {
 
-            				$s_heading = 'images';
+							$s_heading = 'images';
 
-            			} else {
-            				$s_heading = esc_attr( $mapping[$s_heading] );
-            			}
-            		}
-                        foreach ($mapping as $mkey => $mvalue) {
-                                if(trim($mvalue) === trim($heading)){
-                                    $s_heading =  $mkey;
-                                }
-                        }
+						} else {
+							$s_heading = esc_attr( $mapping[$s_heading] );
+						}
+					}
+					foreach ($mapping as $mkey => $mvalue) {
+						if(trim($mvalue) === trim($heading)){
+							$s_heading =  $mkey;
+						}
+					}
 
-            		if ( $s_heading == '' )
-            			continue;
+					if ( $s_heading == '' )
+						continue;
 
 	            	// Add the heading to the parsed data
 					$row[$s_heading] = ( isset( $postmeta[$key] ) ) ? $this->format_data_from_csv( $postmeta[$key], $enc ) : '';
@@ -162,17 +162,17 @@ class WF_CSV_Parser {
 					
 	               	// Raw Headers stores the actual column name in the CSV
 					$raw_headers[ $s_heading ] = $heading;
-	            }
-	            $parsed_data[] = $row;
+				}
+				$parsed_data[] = $row;
 
-	            unset( $postmeta, $row );
+				unset( $postmeta, $row );
 
-	            $position = ftell( $handle );
+				$position = ftell( $handle );
 
-	            if ( $end_pos && $position >= $end_pos )
-	            	break;
-		    }
-		    fclose( $handle );
+				if ( $end_pos && $position >= $end_pos )
+					break;
+			}
+			fclose( $handle );
 		}
 		return array( $parsed_data, $raw_headers, $position );
 	}
@@ -185,28 +185,28 @@ class WF_CSV_Parser {
 				$eval_val = substr($evaluation_field, 1);
 				switch($operator){
 					case '=':
-							$processed_value = trim($eval_val); 
-							break;
+					$processed_value = trim($eval_val); 
+					break;
 					case '+':
-							$processed_value = $this->hf_currency_formatter($value) + $eval_val; 
-							break;
+					$processed_value = $this->hf_currency_formatter($value) + $eval_val; 
+					break;
 					case '-': 
-							$processed_value = $value - $eval_val; 
-							break;
+					$processed_value = $value - $eval_val; 
+					break;
 					case '*': 
-							$processed_value = $value * $eval_val; 
-							break;
+					$processed_value = $value * $eval_val; 
+					break;
 					case '/': 
-							$processed_value = $value / $eval_val; 
-							break;
+					$processed_value = $value / $eval_val; 
+					break;
 					case '&': 
-							if (strpos($eval_val, '[VAL]') !== false) {
-								$processed_value = str_replace('[VAL]',$value,$eval_val);								 
-							}
-							else{
-								$processed_value = $value . $eval_val;
-							}
-							break;					
+					if (strpos($eval_val, '[VAL]') !== false) {
+						$processed_value = str_replace('[VAL]',$value,$eval_val);								 
+					}
+					else{
+						$processed_value = $value . $eval_val;
+					}
+					break;					
 				}
 			}	
 		}
@@ -227,23 +227,47 @@ class WF_CSV_Parser {
 		$attributes = $default_attributes = $gpf_data = null;
 		// Merging
 		$merging = ( ! empty( $_GET['merge'] ) && $_GET['merge'] ) ? true : false;
-                $this->post_defaults['post_type'] = 'product';
-                if($item['parent_sku'] !== '' && $item['parent_sku'] !== null){
-                    $prod_id = wc_get_product_id_by_sku( $item['parent_sku'] );
-                    $prod    = wc_get_product( $prod_id );
-                        if($prod->product_type === 'grouped'){
-                           $this->post_defaults['post_type'] = 'product';   
-                        }else{
-			   $this->post_defaults['post_type'] = 'product_variation';
-                        }
-                }if(isset($item['post_parent']) && $item['post_parent'] !== '' && $item['post_parent'] !== null){
-                    $prod    = wc_get_product( $item['post_parent'] );
-                        if($prod->product_type === 'grouped'){
-                           $this->post_defaults['post_type'] = 'product';   
-                        }else{
-			   $this->post_defaults['post_type'] = 'product_variation';
-                        }
-                }
+		
+		$skip_new = ( ! empty( $_GET['skip_new'] ) && $_GET['skip_new'] ) ? true : false;
+		if($skip_new){
+			$product['skip_new'] = TRUE;
+		}
+		
+
+		$this->post_defaults['post_type'] = 'product';
+		if($item['parent_sku'] !== '' && $item['parent_sku'] !== null){
+			$prod_id = wc_get_product_id_by_sku( $item['parent_sku'] );
+			$prod    = wc_get_product( $prod_id );
+			if(WC()->version < '2.7.0')
+			{
+				$temp_product_type = ($prod) ? $prod->product_type : '';
+			}
+			else
+			{
+				$temp_product_type = ($prod) ? $prod->get_type() : '';
+			}
+			if($temp_product_type === 'grouped'){
+				$this->post_defaults['post_type'] = 'product';   
+			}else{
+				$this->post_defaults['post_type'] = 'product_variation';
+			}
+		}
+		if(isset($item['post_parent']) && $item['post_parent'] !== '' && $item['post_parent'] !== null){
+			$prod    = wc_get_product( $item['post_parent'] );
+			if(WC()->version < '2.7.0')
+			{
+				$temp_product_type1 = ($prod) ? $prod->product_type : '';
+			}
+			else
+			{
+				$temp_product_type1 = ($prod) ? $prod->get_type() : '';
+			}
+			if($temp_product_type1 === 'grouped'){
+				$this->post_defaults['post_type'] = 'product';   
+			}else{
+				$this->post_defaults['post_type'] = 'product_variation';
+			}
+		}
 		// Post ID field mapping
 		$post_id = ( ! empty( $item['id'] ) ) ? $item['id'] : 0;
 		$post_id = ( ! empty( $item['post_id'] ) ) ? $item['post_id'] : $post_id;
@@ -251,39 +275,39 @@ class WF_CSV_Parser {
 
 			$product['merging'] = true;
 
-			$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __('> Row %s - preparing for merge.', 'wf_csv_import_export'), $this->row ) );
+			$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> Row %s - preparing for merge.', 'wf_csv_import_export'), $this->row ) );
 
 			// Required fields
 			if ( ! $post_id && empty( $item['sku'] ) ) {
 
-				$WF_CSV_Product_Import->log->add( 'csv-import', __( '> > Cannot merge without id or sku. Importing instead.', 'wf_csv_import_export') );
+				$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', __( '> > Cannot merge without id or sku. Importing instead.', 'wf_csv_import_export') );
 
 				$merging = false;
 			} else {
 
 				// Check product exists
 				if ( ! $post_id ) {
-                                        $post_db_type = $this->post_defaults['post_type'];
-                                        $post_pass_type = '"'.$post_db_type.'"';
+					$post_db_type = $this->post_defaults['post_type'];
+					$post_pass_type = '"'.$post_db_type.'"';
 					// Check product to merge exists
-                                        $db_query = $wpdb->prepare("
+					$db_query = $wpdb->prepare("
 						SELECT $wpdb->posts.ID
-					    FROM $wpdb->posts
-					    LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
-					    WHERE $wpdb->posts.post_type = $post_pass_type
-					    AND $wpdb->posts.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
-					    AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-					 ", $item['sku']);
+						FROM $wpdb->posts
+						LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
+						WHERE $wpdb->posts.post_type = $post_pass_type
+						AND $wpdb->posts.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
+						AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
+						", $item['sku']);
 					$found_product_id = $wpdb->get_var($db_query);
 					if ( ! $found_product_id ) {
-						$WF_CSV_Product_Import->log->add( 'csv-import', sprintf(__( '> > Skipped. Cannot find product with sku %s. Importing instead.', 'wf_csv_import_export'), $item['sku']) );
+						$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf(__( '> > Skipped. Cannot find product with sku %s. Importing instead.', 'wf_csv_import_export'), $item['sku']) );
 						$merging = false;
 
 					} else {
 
 						$post_id = $found_product_id;
 
-						$WF_CSV_Product_Import->log->add( 'csv-import', sprintf(__( '> > Found product with ID %s.', 'wf_csv_import_export'), $post_id) );
+						$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf(__( '> > Found product with ID %s.', 'wf_csv_import_export'), $post_id) );
 
 					}
 				}
@@ -294,17 +318,17 @@ class WF_CSV_Parser {
 		if ( ! $merging ) {
 
 			$product['merging'] = false;
-			$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __('> Row %s - preparing for import.', 'wf_csv_import_export'), $this->row ) );
+			$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> Row %s - preparing for import.', 'wf_csv_import_export'), $this->row ) );
 
 			// Required fields
 			if ( isset($item['post_parent']) && $item['post_parent']=== '' &&  $item['post_title']=== '') {
-				$WF_CSV_Product_Import->log->add( 'csv-import', __( '> > Skipped. No post_title set for new product.', 'wf_csv_import_export') );
+				$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', __( '> > Skipped. No post_title set for new product.', 'wf_csv_import_export') );
 				return new WP_Error( 'parse-error', __( 'No post_title set for new product.', 'wf_csv_import_export' ) );
 			}
-                        if ( isset($item['post_parent']) && $item['post_parent']!== '' && $item['post_parent']!== null &&  $item['parent_sku'] === '' ) {
-				$WF_CSV_Product_Import->log->add( 'csv-import', __( '> > Skipped. No parent set for new variation product.', 'wf_csv_import_export') );
+			if ( isset($item['post_parent']) && $item['post_parent']!== '' && $item['post_parent']!== null &&  $item['parent_sku'] === '' ) {
+				$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', __( '> > Skipped. No parent set for new variation product.', 'wf_csv_import_export') );
 				//return new WP_Error( 'parse-error', __( 'No post_title set for new product.', 'wf_csv_import_export' ) );
-                                return new WP_Error( 'parse-error', __( 'No parent set for new variation product.', 'wf_csv_import_export' ) );
+				return new WP_Error( 'parse-error', __( 'No parent set for new variation product.', 'wf_csv_import_export' ) );
 			}
 
 		}
@@ -343,15 +367,15 @@ class WF_CSV_Parser {
 			if ( $merging ) {
 				if ( ! isset( $postmeta['regular_price'] ) )
 					$postmeta['regular_price'] = get_post_meta( $post_id, '_regular_price', true );
-                                        $postmeta['regular_price'] = $this->hf_currency_formatter($postmeta['regular_price']);
+				$postmeta['regular_price'] = $this->hf_currency_formatter($postmeta['regular_price']);
 				if ( ! isset( $postmeta['sale_price'] ) )
 					$postmeta['sale_price'] = get_post_meta( $post_id, '_sale_price', true );
-                                        $postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
+				$postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
 			}
 
 			if ( isset( $postmeta['regular_price'] ) && isset( $postmeta['sale_price'] ) && $postmeta['sale_price'] !== '' ) {
-                                $postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
-                                $postmeta['regular_price'] = $this->hf_currency_formatter($postmeta['regular_price']);
+				$postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
+				$postmeta['regular_price'] = $this->hf_currency_formatter($postmeta['regular_price']);
 				$price = min( $postmeta['sale_price'], $postmeta['regular_price']);
 				$postmeta['price'] = $price;
 			} elseif ( isset( $postmeta['regular_price'] ) ) {
@@ -364,15 +388,15 @@ class WF_CSV_Parser {
 			if ( $merging ) {
 				if ( ! isset( $postmeta['regular_price'] ) )
 					$postmeta['regular_price'] = get_post_meta( $post_id, '_regular_price', true );
-                                        $postmeta['regular_price'] =  $this->hf_currency_formatter($postmeta['regular_price']);
+				$postmeta['regular_price'] =  $this->hf_currency_formatter($postmeta['regular_price']);
 				if ( ! isset( $postmeta['sale_price'] ) )
 					$postmeta['sale_price'] = get_post_meta( $post_id, '_sale_price', true );
-                                        $postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
+				$postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
 			}
 
 			if ( isset( $postmeta['regular_price'] ) && isset( $postmeta['sale_price'] ) && $postmeta['sale_price'] !== '' ) {
-                                $postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
-                                $postmeta['regular_price'] = $this->hf_currency_formatter($postmeta['regular_price']);
+				$postmeta['sale_price'] = $this->hf_currency_formatter($postmeta['sale_price']);
+				$postmeta['regular_price'] = $this->hf_currency_formatter($postmeta['regular_price']);
 				$price = min( $postmeta['sale_price'], $postmeta['regular_price']);
 				$postmeta['price'] = $price;
 			} elseif ( isset( $postmeta['regular_price'] ) ) {
@@ -477,7 +501,7 @@ class WF_CSV_Parser {
 						$_file_paths[ md5( $file_path ) ] = array(
 							'name' => $file_name,
 							'file' => $file_path
-						);
+							);
 					} else {
 						$file_path = trim( $file_path );
 						$_file_paths[ md5( $file_path ) ] = $file_path;
@@ -504,7 +528,7 @@ class WF_CSV_Parser {
 				$product['postmeta'][] = array(
 					'key' 	=> esc_attr( $meta_key ),
 					'value' => $value
-				);
+					);
 
 			}
 
@@ -517,19 +541,19 @@ class WF_CSV_Parser {
 				$meta_key = ( isset( $WF_CSV_Product_Import->raw_headers[$key] ) ) ? $WF_CSV_Product_Import->raw_headers[$key] : $key;
 				$meta_key = trim( str_replace( 'meta:', '', $meta_key ) );
 
-                                if($meta_key !== 'wcpb_bundle_products'){
+				if($meta_key !== 'wcpb_bundle_products'){
 				// Decode JSON
-				$json = json_decode( $value, true );
+					$json = json_decode( $value, true );
 
-				if ( is_array( $json ) || is_object( $json ) )
-					$value = (array) $json;
-                                
-                                }
+					if ( is_array( $json ) || is_object( $json ) )
+						$value = (array) $json;
+					
+				}
 				// Add to postmeta array
 				$product['postmeta'][] = array(
 					'key' 	=> esc_attr( $meta_key ),
 					'value' => $value
-				);
+					);
 			}
 
 			/**
@@ -542,7 +566,7 @@ class WF_CSV_Parser {
 
 				// Exists?
 				if ( ! taxonomy_exists( $taxonomy ) ) {
-					$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __('> > Skipping taxonomy "%s" - it does not exist.', 'wf_csv_import_export'), $taxonomy ) );
+					$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> > Skipping taxonomy "%s" - it does not exist.', 'wf_csv_import_export'), $taxonomy ) );
 					continue;
 				}
 
@@ -551,7 +575,7 @@ class WF_CSV_Parser {
 					$term = strtolower( $value );
 
 					if ( ! array_key_exists( $term, $this->allowed_product_types ) ) {
-						$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __('> > > Product type "%s" not allowed - using simple.', 'wf_csv_import_export'), $term ) );
+						$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> > > Product type "%s" not allowed - using simple.', 'wf_csv_import_export'), $term ) );
 						$term_id = $this->allowed_product_types['simple'];
 					} else {
 						$term_id = $this->allowed_product_types[ $term ];
@@ -561,7 +585,7 @@ class WF_CSV_Parser {
 					$terms_array[] = array(
 						'taxonomy' 	=> $taxonomy,
 						'terms'		=> array( $term_id )
-					);
+						);
 
 					continue;
 				}
@@ -577,8 +601,16 @@ class WF_CSV_Parser {
 					if ( strstr( $raw_term, '>' ) ) {
 
 						$raw_term = explode( '>', $raw_term );
+						global $wp_version;
 						$raw_term = array_map( 'trim', $raw_term );
-						$raw_term = array_map( 'wp_specialchars', $raw_term );
+						if($wp_version < '2.8.0'){
+							$raw_term = array_map( 'wp_specialchars', $raw_term );
+						}
+						else
+						{
+							$raw_term = array_map( 'esc_html', $raw_term );
+
+						}
 						$raw_term = array_filter( $raw_term );
 
 						$parent = 0;
@@ -597,7 +629,7 @@ class WF_CSV_Parser {
 								 */
 								$term_may_exist = term_exists( $term, $taxonomy, absint( $parent ) );
 
-								$WF_CSV_Product_Import->log->add( 'CSV-Import', sprintf( __( '> > (' . __LINE__ . ') Term %s (%s) exists? %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), esc_html( $taxonomy ), $term_may_exist ? print_r( $term_may_exist, true ) : '-' ) );
+								$WF_CSV_Product_Import->hf_log_data_change( 'CSV-Import', sprintf( __( '> > (' . __LINE__ . ') Term %s (%s) exists? %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), esc_html( $taxonomy ), $term_may_exist ? print_r( $term_may_exist, true ) : '-' ) );
 
 								if ( is_array( $term_may_exist ) ) {
 									$possible_term = get_term( $term_may_exist['term_id'], 'product_cat' );
@@ -622,7 +654,7 @@ class WF_CSV_Parser {
 									if ( ! is_wp_error( $t ) ) {
 										$term_id = $t['term_id'];
 									} else {
-										$WF_CSV_Product_Import->log->add( 'CSV-Import', sprintf( __( '> > (' . __LINE__ . ') Failed to import term %s, parent %s - %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), sanitize_text_field( $parent ), sanitize_text_field( $taxonomy ) ) );
+										$WF_CSV_Product_Import->hf_log_data_change( 'CSV-Import', sprintf( __( '> > (' . __LINE__ . ') Failed to import term %s, parent %s - %s', 'wf_csv_import_export' ), sanitize_text_field( $term ), sanitize_text_field( $parent ), sanitize_text_field( $taxonomy ) ) );
 										break;
 									}
 								}
@@ -644,7 +676,8 @@ class WF_CSV_Parser {
 					} else {
 
 						$term_id  = '';
-						$raw_term = wp_specialchars( $raw_term );
+						global $wp_version;
+						$raw_term = ( $wp_version < '2.8.0') ? wp_specialchars( $raw_term ) : esc_html( $raw_term );
 
 						if ( isset( $this->inserted_terms[$taxonomy][0][$raw_term] ) ) {
 
@@ -662,7 +695,7 @@ class WF_CSV_Parser {
 								if ( ! is_wp_error( $t ) ) {
 									$term_id = $t['term_id'];
 								} else {
-									$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __( '> > Failed to import term %s %s', 'wf_csv_import_export' ), esc_html($raw_term), esc_html($taxonomy) ) );
+									$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __( '> > Failed to import term %s %s', 'wf_csv_import_export' ), esc_html($raw_term), esc_html($taxonomy) ) );
 									break;
 								}
 							}
@@ -687,7 +720,7 @@ class WF_CSV_Parser {
 				$terms_array[] = array(
 					'taxonomy' 	=> $taxonomy,
 					'terms'		=> $terms
-				);
+					);
 			}
 
 			/**
@@ -711,7 +744,7 @@ class WF_CSV_Parser {
 
 						$nicename = sanitize_title( str_replace( 'pa_', '', $taxonomy ) );
 
-						$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __('> > Attribute taxonomy "%s" does not exist. Adding it. Nicename: %s', 'wf_csv_import_export'), $taxonomy, $nicename ) );
+						$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> > Attribute taxonomy "%s" does not exist. Adding it. Nicename: %s', 'wf_csv_import_export'), $taxonomy, $nicename ) );
 
 						$exists_in_db = $wpdb->get_var( "SELECT attribute_id FROM " . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '" . $nicename . "';" );
 
@@ -719,25 +752,33 @@ class WF_CSV_Parser {
 							// Create the taxonomy
 							$wpdb->insert( $wpdb->prefix . "woocommerce_attribute_taxonomies", array( 'attribute_name' => $nicename, 'attribute_label' => $nicename, 'attribute_type' => 'select', 'attribute_orderby' => 'menu_order' ) );
 						} else {
-							$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __('> > Attribute taxonomy %s already exists in DB.', 'wf_csv_import_export'), $taxonomy ) );
+							$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __('> > Attribute taxonomy %s already exists in DB.', 'wf_csv_import_export'), $taxonomy ) );
 						}
 
 						// Register the taxonomy now so that the import works!
 						register_taxonomy( $taxonomy,
-					        array( 'product', 'product_variation' ),
-					        array(
+							array( 'product', 'product_variation' ),
+							array(
 								'hierarchical' => true,
 								'show_ui'      => false,
 								'query_var'    => true,
 								'rewrite'      => false,
-					        )
-					    );
+								)
+							);
 					}
 
 					// Get terms
 					$terms     = array();
 					$raw_terms = explode( '|', $value );
-					$raw_terms = array_map( 'wp_specialchars', $raw_terms );
+					global $wp_version;
+					if($wp_version < '2.8.0'){
+						$raw_terms = array_map( 'wp_specialchars', $raw_terms );
+					}
+					else
+					{
+						$raw_terms = array_map( 'esc_html', $raw_terms );
+						
+					}
 					$raw_terms = array_map( 'trim', $raw_terms );
 
 					if ( sizeof( $raw_terms ) > 0 ) {
@@ -758,13 +799,13 @@ class WF_CSV_Parser {
 								if ( ! is_wp_error( $t ) ) {
 									$term_id = $t['term_id'];
 
-									$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __( '> > Inserted Raw Term %s ID = %s', 'wf_csv_import_export' ), esc_html( $raw_term ), $term_id ) );
+									$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __( '> > Inserted Raw Term %s ID = %s', 'wf_csv_import_export' ), esc_html( $raw_term ), $term_id ) );
 								} else {
-									$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __( '> > Failed to import term %s %s', 'wf_csv_import_export' ), esc_html($raw_term), esc_html($taxonomy) ) );
+									$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __( '> > Failed to import term %s %s', 'wf_csv_import_export' ), esc_html($raw_term), esc_html($taxonomy) ) );
 									break;
 								}
 							} else {
-								$WF_CSV_Product_Import->log->add( 'csv-import', sprintf( __( '> > Raw Term %s ID = %s', 'wf_csv_import_export' ), esc_html( $raw_term ), $term_id ) );
+								$WF_CSV_Product_Import->hf_log_data_change( 'csv-import', sprintf( __( '> > Raw Term %s ID = %s', 'wf_csv_import_export' ), esc_html( $raw_term ), $term_id ) );
 							}
 
 							if ( $term_id ) {
@@ -778,7 +819,7 @@ class WF_CSV_Parser {
 					$terms_array[] = array(
 						'taxonomy' 	=> $taxonomy,
 						'terms'		=> $terms
-					);
+						);
 
 					// Ensure we have original attributes
 					if ( is_null( $attributes ) && $merging ) {
@@ -897,7 +938,7 @@ class WF_CSV_Parser {
 						'age_group'               => '',
 						'color'                   => '',
 						'size'                    => ''
-					);
+						);
 				}
 
 				$gpf_data[$gpf_key] = $value;
@@ -910,14 +951,14 @@ class WF_CSV_Parser {
 			elseif ( strstr( $key, 'parent_sku' ) ) {
 
 				if ( $value ) {
-                                        $dbQuery = $wpdb->prepare("
+					$dbQuery = $wpdb->prepare("
 						SELECT $wpdb->posts.ID
-					    FROM $wpdb->posts
-					    LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
-					    WHERE $wpdb->posts.post_type = 'product'
-					    AND $wpdb->posts.post_status IN ( 'publish', 'private', 'draft' )
-					    AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-					 ", $value );
+						FROM $wpdb->posts
+						LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
+						WHERE $wpdb->posts.post_type = 'product'
+						AND $wpdb->posts.post_status IN ( 'publish', 'private', 'draft' )
+						AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
+						", $value );
 					$found_product_id = $wpdb->get_var($dbQuery);
 					if ( $found_product_id )
 						$product['post_parent'] = $found_product_id;
@@ -948,10 +989,10 @@ class WF_CSV_Parser {
 		}
 
 		// Remove empty attribues
-                if(!empty($attributes))
-		foreach ( $attributes as $key => $value ) {
-			if ( ! isset($value['name']) ) unset( $attributes[$key] );
-		}
+		if(!empty($attributes))
+			foreach ( $attributes as $key => $value ) {
+				if ( ! isset($value['name']) ) unset( $attributes[$key] );
+			}
 
 		/**
 		 * Handle images
@@ -972,8 +1013,8 @@ class WF_CSV_Parser {
 		unset( $item, $terms_array, $postmeta, $attributes, $gpf_data, $images );
 		return $product;
 	}
-        function hf_currency_formatter($price){
-            $decimal_seperator = wc_get_price_decimal_separator();
-            return preg_replace("[^0-9\\'.$decimal_seperator.']", "", $price);
-        }
+	function hf_currency_formatter($price){
+		$decimal_seperator = wc_get_price_decimal_separator();
+		return preg_replace("[^0-9\\'.$decimal_seperator.']", "", $price);
+	}
 }

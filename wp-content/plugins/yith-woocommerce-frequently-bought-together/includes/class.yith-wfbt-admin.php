@@ -253,7 +253,11 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 		 */
 		public function add_bought_together_panel(){
 
-			global $post;
+			global $post, $product_object;
+
+            $product_id = $post->ID;
+            is_null( $product_object ) && $product_object = wc_get_product( $product_id );
+            $to_exclude = array( $product_id );
 
 			?>
 
@@ -262,8 +266,9 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 				<div class="options_group">
 
 					<p class="form-field"><label for="yith_wfbt_ids"><?php _e( 'Select products', 'yith-woocommerce-frequently-bought-together' ); ?></label>
-						<input type="hidden" class="wc-product-search" style="width: 50%;" id="yith_wfbt_ids" name="yith_wfbt_ids" data-placeholder="<?php _e( 'Search for a product&hellip;', 'yith-woocommerce-frequently-bought-together' ); ?>" data-multiple="true" data-action="yith_ajax_search_product" data-selected="<?php
-						$product_ids = array_filter( array_map( 'absint', (array) get_post_meta( $post->ID, YITH_WFBT_META, true ) ) );
+						<?php
+                        $product_ids = yit_get_prop( $product_object, YITH_WFBT_META, true );
+                        $product_ids = array_filter( array_map( 'absint', (array) $product_ids ) );
 						$json_ids    = array();
 
 						foreach ( $product_ids as $product_id ) {
@@ -273,8 +278,21 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 							}
 						}
 
-						echo esc_attr( json_encode( $json_ids ) );
-						?>" value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>" />
+                        yit_add_select2_fields( array(
+                            'class' => 'wc-product-search',
+                            'style' => 'width: 50%;',
+                            'id' => 'yith_wfbt_ids',
+                            'name' => 'yith_wfbt_ids',
+                            'data-placeholder' => __( 'Search for a product&hellip;', 'yith-woocommerce-frequently-bought-together' ),
+                            'data-multiple' => true,
+                            'data-action'   => 'yith_ajax_search_product',
+                            'data-selected' => $json_ids,
+                            'value'         => implode( ',', array_keys( $json_ids ) ),
+                            'custom-attributes' => array(
+                                    'data-exclude'  => implode(',', $to_exclude )
+                            )
+                        ) );
+                        ?>
 						<img class="help_tip" data-tip='<?php _e( 'Select products for "Frequently bought together" group', 'yith-woocommerce-frequently-bought-together' ) ?>' src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16" width="16" />
 					</p>
 
@@ -300,6 +318,8 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 			$term = (string) wc_clean( stripslashes( $_GET['term'] ) );
 			$post_types = array( 'product', 'product_variation' );
 
+			$to_exclude = isset( $_GET['exclude'] ) ? explode(',', $_GET['exclude'] ) : false;
+
 			if ( empty( $term ) ) {
 				die();
 			}
@@ -311,6 +331,10 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 				's'              => $term,
 				'fields'         => 'ids'
 			);
+
+			if( $to_exclude ) {
+				$args['post__not_in'] = $to_exclude;
+			}
 
 			if ( is_numeric( $term ) ) {
 
@@ -372,7 +396,7 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 				foreach ( $posts as $post ) {
 					$product = wc_get_product( $post );
 					// exclude variable product
-					if( $product->product_type == 'variable' ) {
+					if( $product->is_type( 'variable' ) ) {
 						continue;
 					}
 
@@ -392,9 +416,15 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 		 */
 		public function save_bought_together_tab( $post_id ){
 
-			// save products group
-			$products = isset( $_POST['yith_wfbt_ids'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['yith_wfbt_ids'] ) ) ) : array();
-			update_post_meta( $post_id, YITH_WFBT_META, $products );
+            // save default variation is product is variable
+            $product            = wc_get_product( $post_id );
+            // save products group
+            $products_array = array();
+            if( isset( $_POST['yith_wfbt_ids'] ) ) {
+                $products_array = ! is_array( $_POST['yith_wfbt_ids'] ) ? explode( ',', $_POST['yith_wfbt_ids'] ) : $_POST['yith_wfbt_ids'];
+                $products_array = array_filter( array_map( 'intval', $products_array ) );
+            }
+            yit_save_prop( $product, YITH_WFBT_META, $products_array );
 
 		}
 
