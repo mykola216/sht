@@ -20,38 +20,12 @@
 	<style amp-custom>
 	<?php $this->load_parts( array( 'style' ) ); ?>
 	<?php do_action( 'amp_post_template_css', $this ); ?>
-	.amp-wp-price .price{
-		color: #f70;
-		font: normal normal bold 14px helvetica, arial, sans-serif;
-		margin: 0 0 0 5px;
-		text-align: left;
-	}
-	.amp-wp-price .price del{
-		color: #666;
-		font-weight: normal;
-		font-size: 10px;
-	}
-	.amp-wp-price .price ins{
-		text-decoration: none;
-	}
-	.current-menu-item a {
-		font-weight: bold;
-		color: #666;
-	}
-	main .taxonomy-description{
-		overflow: hidden;
-		padding: 0;
-		background: transparent;
-		-moz-box-shadow: none;
-		-webkit-box-shadow: none;
-		box-shadow: none;
-	}
 	</style>
 </head>
 <body class="amp_home_body design_2_wrapper">
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 <?php do_action( 'ampforwp_after_header', $this ); ?>
-<?php do_action('ampforwp_home_above_loop') ?>
+<?php do_action('ampforwp_home_above_loop'); ?>
 <main>
 	<?php do_action('ampforwp_post_before_loop') ?>
 
@@ -65,33 +39,14 @@
 	    }
 
 	    $exclude_ids = get_option('ampforwp_exclude_post');
-
 		$args = array(
 			'post_type'           => 'post',
 			'orderby'             => 'date',
 			'paged'               => esc_attr($paged),
-			'post__not_in' 		  => $exclude_ids,
-			'has_password' => false ,
-			'post_status'=> 'publish'
+			'post__not_in'        => $exclude_ids,
+			'has_password'        => false ,
+			'post_status'         => 'publish'
 		);
-		if (is_page()) {
-			$args['post_type'] = 'page';
-		}
-		if (is_singular('product')) {
-			$args['post_type'] = 'product';
-		}
-		if (is_tax('product_cat')) {
-			//$args['posts_per_page'] = -1;
-			$args['post_type'] = 'product';
-			$args['tax_query'] = array(
-				'relation' => 'AND',
-				array(
-					'taxonomy' => 'product_cat',
-					'field'    => 'id',
-					'terms'    => array( get_queried_object_id() ), // ID of current cat
-				),
-			);
-		}
 		$filtered_args = apply_filters('ampforwp_query_args', $args);
 		$q = new WP_Query( $filtered_args ); ?>
 
@@ -129,13 +84,15 @@
 			<div class="amp-wp-post-content">
 
 				<h2 class="amp-wp-title"> <a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>"> <?php the_title(); ?></a></h2>
-				<div class="amp-wp-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-					<div class="price"><?php echo $product->get_price_html(); ?></div>
-					<meta itemprop="price" content="<?php echo esc_attr( $product->get_price() ); ?>" />
-					<meta itemprop="priceCurrency" content="<?php echo esc_attr( get_woocommerce_currency() ); ?>" />
-					<link itemprop="availability" href="http://schema.org/<?php echo $product->is_in_stock() ? 'InStock' : 'OutOfStock'; ?>" />
-					<meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
-				</div>
+				<?php if ('product' == get_post_type()) { ?>
+					<div class="amp-wp-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+						<div class="price"><?php echo $product->get_price_html(); ?></div>
+						<meta itemprop="price" content="<?php echo esc_attr( $product->get_price() ); ?>" />
+						<meta itemprop="priceCurrency" content="<?php echo esc_attr( get_woocommerce_currency() ); ?>" />
+						<link itemprop="availability" href="http://schema.org/<?php echo $product->is_in_stock() ? 'InStock' : 'OutOfStock'; ?>" />
+						<meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
+					</div>
+				<?php } ?>
 
 				<?php
 					if(has_excerpt()){
