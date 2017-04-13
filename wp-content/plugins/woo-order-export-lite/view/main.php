@@ -12,6 +12,7 @@ $active_tab = isset( $_REQUEST[ 'tab' ] ) ? $_REQUEST[ 'tab' ] : 'export';
 	<a class="nav-tab <?php echo $active_tab == 'profiles' ? 'nav-tab-active' : '' ?>" href="<?php echo admin_url( 'admin.php?page=wc-order-export&tab=profiles' ) ?>"><?php _e( 'Profiles', 'woocommerce-order-export' ) ?></a>
 	<a class="nav-tab <?php echo $active_tab == 'schedules' ? 'nav-tab-active' : '' ?>" href="<?php echo admin_url( 'admin.php?page=wc-order-export&tab=schedules' ) ?>"><?php _e( 'Scheduled Exports', 'woocommerce-order-export' ) ?></a>
     <a class="nav-tab <?php echo $active_tab == 'tools' ? 'nav-tab-active' : '' ?>" href="<?php echo admin_url( 'admin.php?page=wc-order-export&tab=tools' ) ?>"><?php _e( 'Tools', 'woocommerce-order-export' ) ?></a>
+    <a class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : '' ?>" href="<?php echo admin_url( 'admin.php?page=wc-order-export&tab=help' ) ?>"><?php _e( 'Help', 'woocommerce-order-export' ) ?></a>
 </h2>
 
 <script>

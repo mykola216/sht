@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Order Export\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-07 11:50+0000\n"
-"PO-Revision-Date: 2016-11-23 18:38+0000\n"
-"Last-Translator: wordpress <wordpress@wordpress.com>\n"
+"POT-Creation-Date: 2017-04-07 11:56+0000\n"
+"PO-Revision-Date: 2017-04-07 12:10+0000\n"
+"Last-Translator: wordpress <wp-irfan@test.com>\n"
 "Language-Team: Russian\n"
 "Language: ru-RU\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
@@ -23,75 +23,807 @@ msgstr ""
 "X-Loco-Target-Locale: ru_RU\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#. Plugin Name of the plugin/theme
-msgid "Advanced Order Export For WooCommerce (Pro)"
-msgstr "Advanced Order Export For WooCommerce (Pro)"
+#: view/settings-form.php:26
+#, php-format
+msgid ""
+"If you see this message, user interface won't work correctly!<br>There is a "
+"JS error (<a target=blank href='%s'>read here</a> how to view it). Probably, "
+"it's a conflict with another plugin or active theme."
+msgstr ""
+"Если вы видите это сообщение, пользовательский интерфейс не работает!<br>"
+"Ошибки javascript (<a target=blank href='%s'>подробнее как эти ошибки "
+"увидеть </a>  ).  Возможно конфликт с другим плагином или активной темой."
 
-#. Author URI of the plugin/theme
-msgid "http://algolplus.com/"
-msgstr "http://algolplus.com/"
+#: view/tools.php:16
+msgid "Export settings"
+msgstr "Экспорт настроек"
 
-#: classes/class-wc-order-export-admin.php:63
-msgid "Imported from Free version"
-msgstr "Загружен из бесплатной версии"
+#: view/tools.php:19
+msgid ""
+"Copy these settings and use it to migrate plugin to another wordpress install"
+msgstr ""
+"Скопируйте настройки и используйте их для переноса плагина в другой Wordpress"
 
-#: classes/class-wc-order-export-admin.php:671
-msgid "Nothing to export. Please, adjust your filters"
-msgstr "Нет заказов для экспорта. Измените фильтры!"
+#: view/tools.php:23
+msgid "Just click inside the textarea and copy (Ctrl+C)"
+msgstr "Нажмите внутри этого поля и скопируйте значения (Ctr+C)"
 
-#: classes/class-wc-order-export-admin.php:1032
-msgid "Export as profile '%s'"
-msgstr "Выгрузить профиль как '%s' "
+#: view/tools.php:32
+msgid "Import settings"
+msgstr "Импорт настроек"
 
+#: view/tools.php:35
+msgid ""
+"Paste text into this field to import settings into the current wordpress "
+"install."
+msgstr "Вставьте текст в это поле, что бы импортировать настройки"
+
+#: view/tools.php:39
+msgid "This process will overwrite all your \"Advanced Order Export\" settings"
+msgstr "Импорт заменит все настройки плагина"
+
+#: view/settings-form.php:35 view/settings-form.php:50
+#: classes/class-wc-table-schedules.php:70
+msgid "Title"
+msgstr "Заголовок"
+
+#: view/settings-form.php:41
+msgid "Use as bulk action"
+msgstr "Использовать в Bulk Actions"
+
+#: view/settings-form.php:55
+msgid "Schedule"
+msgstr "Расписание"
+
+#: view/settings-form.php:61
+msgid "Sun"
+msgstr "Вс"
+
+#: view/settings-form.php:65
+msgid "Mon"
+msgstr "Пн"
+
+#: view/settings-form.php:69
+msgid "Tue"
+msgstr "Вт"
+
+#: view/settings-form.php:73
+msgid "Wed"
+msgstr "Ср"
+
+#: view/settings-form.php:77
+msgid "Thu"
+msgstr "Чт"
+
+#: view/settings-form.php:81
+msgid "Fri"
+msgstr "Пт"
+
+#: view/settings-form.php:85
+msgid "Sat"
+msgstr "Сб"
+
+#: view/settings-form.php:90
+msgid "Run at"
+msgstr "Выполнять в"
+
+#: view/settings-form.php:115
+msgid "Choose"
+msgstr "Выберите"
+
+#: view/settings-form.php:116
+msgid "Custom"
+msgstr "Производный"
+
+#: view/settings-form.php:125
+msgid "On the 1st day of the month"
+msgstr "1 день месяца"
+
+#: view/settings-form.php:126
+msgid "On the 1st day of the quarter"
+msgstr "1 день квартала"
+
+#: view/settings-form.php:129
+msgid "interval (min)"
+msgstr "Интервал(в минутах)"
+
+#: view/settings-form.php:137
+msgid "Export options"
+msgstr "Настройки экспорта"
+
+#: view/settings-form.php:141
+msgid "Since last Run"
+msgstr "С последнего выполнения"
+
+#: view/settings-form.php:146
+msgid "Today"
+msgstr "Сегодня"
+
+#: view/settings-form.php:151
+msgid "Yesterday"
+msgstr "Вчера"
+
+#: view/settings-form.php:156
+msgid "Last week"
+msgstr "Последняя неделя"
+
+#: view/settings-form.php:161
+msgid "Last month"
+msgstr "Последний месяц"
+
+#: view/settings-form.php:166
+msgid "Last quarter"
+msgstr "Последний квартал"
+
+#: view/settings-form.php:171
+msgid "This year"
+msgstr "Этот год"
+
+#: view/settings-form.php:176
+msgid "Last"
+msgstr "Последние"
+
+#: view/settings-form.php:176
+msgid "days"
+msgstr "дней"
+
+#: view/settings-form.php:179
+msgid "Filter orders by"
+msgstr "Фильтровать заказы по"
+
+#: view/settings-form.php:183
+msgid "date created"
+msgstr "дате создания"
+
+#: view/settings-form.php:188
+msgid "date modified"
+msgstr "дате изменения"
+
+#: view/settings-form.php:197
+msgid "Date range"
+msgstr "Даты"
+
+#: view/settings-form.php:199
+msgid "to"
+msgstr "в"
+
+#: view/settings-form.php:203
+msgid "Express Export"
+msgstr "Быстрый экспорт"
+
+#: view/settings-form.php:210
+msgid "Export filename"
+msgstr "Маска файла"
+
+#: view/settings-form.php:220 classes/class-wc-table-schedules.php:71
+#: classes/class-wc-table-profiles.php:68
+msgid "Format"
+msgstr "Формат"
+
+#: view/settings-form.php:231
+msgid "XLS options"
+msgstr "Опции XLS"
+
+#: view/settings-form.php:237
+msgid "Export as .xls (Binary File Format)"
+msgstr "Бинарный формат (.xls)"
+
+#: view/settings-form.php:238 view/settings-form.php:248
+msgid "Output column titles as first line"
+msgstr "Выводить названия полей в первой строке"
+
+#: view/settings-form.php:239
+msgid "Auto column width "
+msgstr "Автовыравнивание ширины"
+
+#: view/settings-form.php:240 view/settings-form.php:249
+msgid "Populate other columns if products exported as rows"
+msgstr "Заполнять все колонки при экспорте продуктов как отдельных строк"
+
+#: view/settings-form.php:241
+msgid "Right-to-Left direction"
+msgstr "Справа-налево"
+
+#: view/settings-form.php:243
+msgid "CSV options"
+msgstr "Опции CSV"
+
+#: view/settings-form.php:247
+msgid "Output utf-8 BOM"
+msgstr "Добавлять utf8 BOM"
+
+#: view/settings-form.php:250
+msgid "Enclosure"
+msgstr "Обрамление"
+
+#: view/settings-form.php:251
+msgid "Field Delimiter"
+msgstr "Разделитель полей"
+
+#: view/settings-form.php:252
+msgid "Line Break"
+msgstr "Перенос строки"
+
+#: view/settings-form.php:254
+msgid "Code Page"
+msgstr "Кодовая страница"
+
+#: view/settings-form.php:257
+msgid "XML options"
+msgstr "Настройки XML"
+
+#: view/settings-form.php:258
+msgid "Prepend XML"
+msgstr "Добавить в начало XML"
+
+#: view/settings-form.php:259
+msgid "Root tag"
+msgstr "Корневой тэг"
+
+#: view/settings-form.php:260
+msgid "Order tag"
+msgstr "Тэг для заказа"
+
+#: view/settings-form.php:261
+msgid "Product tag"
+msgstr "Тэг для продукта"
+
+#: view/settings-form.php:262
+msgid "Coupon tag"
+msgstr "Тэг для купона"
+
+#: view/settings-form.php:263
+msgid "Append XML"
+msgstr "Добавить в конец XML"
+
+#: view/settings-form.php:271
+msgid "Date"
+msgstr "Дата"
+
+#: view/settings-form.php:284 view/settings-form.php:302
+msgid "-"
+msgstr "-"
+
+#: view/settings-form.php:290
+msgid "Time"
+msgstr "Время"
+
+#: view/settings-form.php:310
+msgid "Sort orders by \"Order Id\" in  "
+msgstr "Сортировать заказы по полю Order Id"
+
+#: view/settings-form.php:312
+msgid "Descending"
+msgstr "По убыванию"
+
+#: view/settings-form.php:313
+msgid "Ascending"
+msgstr "По возрастанию"
+
+#: view/settings-form.php:314
+msgid " order"
+msgstr "заказ"
+
+#: view/settings-form.php:321 classes/class-wc-table-schedules.php:73
+msgid "Destination"
+msgstr "Назначение"
+
+#: view/settings-form.php:325
+msgid "EMAIL"
+msgstr "Email"
+
+#: view/settings-form.php:331
+msgid "FTP"
+msgstr "Ftp"
+
+#: view/settings-form.php:337
+msgid "HTTP POST"
+msgstr "Http post"
+
+#: view/settings-form.php:343 classes/class-wc-table-schedules.php:128
+msgid "Folder"
+msgstr "Папка"
+
+#: view/settings-form.php:348
+msgid "Email Settings"
+msgstr "Настройки Email"
+
+#: view/settings-form.php:351
+msgid "From Email"
+msgstr "От email"
+
+#: view/settings-form.php:358
+msgid "From Name"
+msgstr "От кого"
+
+#: view/settings-form.php:365
+msgid "Recipient(s)"
+msgstr "Адресаты"
+
+#: view/settings-form.php:372
+msgid "Email Subject"
+msgstr "Тема письма"
+
+#: view/settings-form.php:380 view/settings-form.php:388
+msgid "Email Body"
+msgstr "Содержимое письма"
+
+#: view/settings-form.php:381
+msgid "Edit Email Body"
+msgstr "Редактировать содержимое  письма"
+
+#: view/settings-form.php:397 view/settings-form.php:452
+#: view/settings-form.php:471 view/settings-form.php:490
+msgid "Test"
+msgstr "Проверка"
+
+#: view/settings-form.php:404
+msgid "FTP Settings"
+msgstr "Настройки FTP"
+
+#: view/settings-form.php:407
+msgid "Server Name"
+msgstr "Имя сервера"
+
+#: view/settings-form.php:412
+msgid "Port"
+msgstr "Порт"
+
+#: view/settings-form.php:420
+msgid "Username"
+msgstr "Логин"
+
+#: view/settings-form.php:425
+msgid "Password"
+msgstr "Пароль"
+
+#: view/settings-form.php:432
+msgid "Initial path"
+msgstr "Путь"
+
+#: view/settings-form.php:440
+msgid "Passive mode"
+msgstr "Пассивный режим"
+
+#: view/settings-form.php:445
+msgid "Append to existing file(CURL is required!)"
+msgstr "Добавлять в существующий файл (нужен php_curl)"
+
+#: view/settings-form.php:459
+msgid "HTTP POST Settings"
+msgstr "Настройки HTTP  Post"
+
+#: view/settings-form.php:463
+msgid "URL"
+msgstr "Url"
+
+#: view/settings-form.php:478
+msgid "To Folder Settings"
+msgstr "Настройки папки"
+
+#: view/settings-form.php:482
+msgid "Path"
+msgstr "Путь"
+
+#: view/settings-form.php:497
+msgid "Test Results"
+msgstr "Результат теста "
+
+#: view/settings-form.php:506
+msgid "Make separate file for each order"
+msgstr "Выгружать каждый заказ в отдельный файл"
+
+#: view/settings-form.php:515
+msgid "Filter by order"
+msgstr "Фильтр по заказам"
+
+#: view/settings-form.php:518
+msgid "Don't export child orders"
+msgstr "Пропускать дочерние заказы"
+
+#: view/settings-form.php:519
+msgid "Order Statuses"
+msgstr "Статус заказа"
+
+#: view/settings-form.php:526
+msgid "Custom fields"
+msgstr "Пользовательские поля"
+
+#: view/settings-form.php:560
+msgid ""
+"The filters won't work correctly.<br>Another plugin(or theme) has loaded "
+"outdated Select2.js"
+msgstr ""
+"Фильтры не работают. Сторонний плагин или активная тема используют "
+"предыдущую версию Select2"
+
+#: view/settings-form.php:561
+msgid "Filter by product"
+msgstr "Фильтр по продуктам"
+
+#: view/settings-form.php:564
+msgid "Export all products from a order"
+msgstr "Выгружать все продукты заказа"
+
+#: view/settings-form.php:565
+msgid "Product categories"
+msgstr "Категории"
+
+#: view/settings-form.php:575
+msgid "Vendor/creator"
+msgstr "Создатель"
+
+#: view/settings-form.php:588
+msgid "Product"
+msgstr "Продукт"
+
+#: view/settings-form.php:600
+msgid "Variable Product Attributes"
+msgstr "Атрибуты вариантов"
+
+#: view/settings-form.php:627
+msgid "Item Meta Data"
+msgstr "Метаданные продукта"
+
+#: view/settings-form.php:654
+msgid "Product Taxonomies"
+msgstr "Справочники продуктов"
+
+#: view/settings-form.php:680
+msgid "Filter by customers"
+msgstr "Фильтр по покупателям"
+
+#: view/settings-form.php:683
+msgid "User roles"
+msgstr "Роли пользователей"
+
+#: view/settings-form.php:692
+msgid "User names"
+msgstr "Ники пользователей"
+
+#: view/settings-form.php:709
+msgid "Filter by coupons"
+msgstr "Фильтр по купонам"
+
+#: view/settings-form.php:712
+msgid "Coupons"
+msgstr "Купоны"
+
+#: view/settings-form.php:728
+msgid "Filter by payment"
+msgstr "Фильтр по платежу"
+
+#: view/settings-form.php:731
+msgid "Payment Methods"
+msgstr "Методы оплаты"
+
+#: view/settings-form.php:744
+msgid "Filter by shipping"
+msgstr "Фильтровать по адресу"
+
+#: view/settings-form.php:747
+msgid "Shipping locations"
+msgstr "Адрес доставки"
+
+#: view/settings-form.php:771
+msgid "Shipping methods"
+msgstr "Методы доставки"
+
+#: view/settings-form.php:785
+msgid "Set up fields to export "
+msgstr "Настроить поля для экспорта"
+
+#: view/settings-form.php:791 view/modal-controls.php:3
+#: view/modal-controls.php:35
+msgid "Meta key"
+msgstr "Мета ключ"
+
+#: view/settings-form.php:799 view/settings-form.php:810
+#: view/modal-controls.php:19 view/modal-controls.php:25
+#: view/modal-controls.php:42 view/modal-controls.php:48
+msgid "Column Name"
+msgstr "Название колонки"
+
+#: view/settings-form.php:802 view/modal-controls.php:6
+#: view/modal-controls.php:38
+msgid "Hide unused"
+msgstr "Скрыть неиспользуемые"
+
+#: view/settings-form.php:811 view/modal-controls.php:26
+#: view/modal-controls.php:49
+msgid "Value"
+msgstr "Значение"
+
+#: view/settings-form.php:813
+msgid "Confirm"
+msgstr "Подтверждение"
+
+#: view/settings-form.php:814
+msgid "Cancel"
+msgstr "Отмена"
+
+#: view/settings-form.php:817
+msgid "Use sections"
+msgstr "Использовать секции"
+
+#: view/settings-form.php:824 classes/class-wc-table-schedules.php:76
+#: classes/class-wc-table-profiles.php:72
+msgid "Actions"
+msgstr "Действия"
+
+#: view/settings-form.php:825 view/modal-controls.php:21
+#: view/modal-controls.php:44
+msgid "Add Field"
+msgstr "Новое поле"
+
+#: view/settings-form.php:827 view/modal-controls.php:28
+#: view/modal-controls.php:51
+msgid "Add Static Field"
+msgstr "Статичное поле"
+
+#: view/settings-form.php:830
+msgid "Hide Unused"
+msgstr "Скрывать неиспользуемые"
+
+#: view/settings-form.php:831
+msgid "Show Unused"
+msgstr "Показывать неиспользуемые"
+
+#: view/settings-form.php:839
+msgid "Select All"
+msgstr "Выбрать все"
+
+#: view/settings-form.php:842
+msgid "Drag rows to reorder exported fields"
+msgstr "Переносите строки для изменения порядка колонок"
+
+#: view/settings-form.php:854
+msgid "Preview"
+msgstr "Превью"
+
+#: view/settings-form.php:855
+msgid "Save Settings"
+msgstr "Сохранить настройки"
+
+#: view/settings-form.php:857 view/main.php:11
+#: classes/class-wc-table-schedules.php:174
+#: classes/class-wc-table-profiles.php:89
+msgid "Export"
+msgstr "Экспорт"
+
+#: view/settings-form.php:858
+msgid "Export [w/o progressbar]"
+msgstr "Экспорт без прогрессбара"
+
+#: view/settings-form.php:861
+msgid "Export total: "
+msgstr "Всего заказов"
+
+#: view/settings-form.php:861
+msgid " orders"
+msgstr "заказы"
+
+#: view/settings-form.php:862
+msgid "Export view"
+msgstr "Показывать"
+
+#: view/settings-form.php:870
+msgid "Press 'Esc' to cancel the export"
+msgstr "Нажмите Esc для отмены"
+
+#: view/main.php:8
+msgid "Settings saved"
+msgstr "Настройки сохранены"
+
+#: view/main.php:12
+msgid "Profiles"
+msgstr "Профили"
+
+#: view/main.php:13
+msgid "Scheduled Exports"
+msgstr "Расписание"
+
+#: view/main.php:14
+msgid "Tools"
+msgstr "Операции"
+
+#: view/main.php:15
+msgid "Help"
+msgstr "Помощь"
+
+#: view/modal-controls.php:5 view/modal-controls.php:37
+msgid "All meta"
+msgstr "Все поля"
+
+#: view/modal-controls.php:10
+msgid "OR"
+msgstr "ИЛИ"
+
+#: view/modal-controls.php:11
+msgid "Taxonomy"
+msgstr "Справочники"
+
+#: view/help.php:9
+msgid "Need help ? Create ticket in"
+msgstr "Проблемы? Создайте тикет в"
+
+#: view/help.php:9
+msgid "helpdesk system"
+msgstr "системе поддержки"
+
+#: view/help.php:12
+msgid "Don't forget to attach your"
+msgstr "Не забудьте приложить ваши"
+
+#: view/help.php:12
+msgid "settings"
+msgstr "настройки"
+
+#: view/help.php:12
+msgid "or some screenshots. It will significantly reduce reply time :)"
+msgstr "или скриншоты. Это ускорит процесс :)"
+
+#: view/help.php:14
+msgid "Check"
+msgstr "Ознакомьтесь с"
+
+#: view/help.php:14
+msgid "code snippets"
+msgstr "примерами кода"
+
+#: view/help.php:14
+msgid "for popular plugins or review"
+msgstr "для популярных плагинов или посетите"
+
+#: view/help.php:14
+msgid "this page"
+msgstr "страницу"
+
+#: view/help.php:14
+msgid "to study how to extend the plugin."
+msgstr "что понять как дополнять фунционал"
+
+#: view/profiles.php:10 view/schedules.php:10
+msgid "Buy pro version"
+msgstr "Купите про версию"
+
+#: view/profiles.php:10
+msgid " to get access to profiles"
+msgstr " чтобы получить доступ к профилям"
+
+#: view/profiles.php:26
+msgid "Are you sure you want to DELETE this profile?"
+msgstr "Вы хотите удалить этот профиль?"
+
+#: view/profiles.php:41
+msgid "Are you sure you want to CLONE this profile?"
+msgstr "Вы хотите клонировать этот профиль?"
+
+#: view/profiles.php:48
+msgid ""
+"Are you sure you want to COPY this profile and MOVE it to scheduled list?"
+msgstr "Вы хотите копировать этот профиль в  задание?"
+
+#: view/export.php:7
+msgid "Export Now"
+msgstr "Экспорт"
+
+#: view/schedules.php:10
+msgid " to get access to scheduled reports"
+msgstr " чтобы использовать расписания"
+
+#: view/schedules.php:26
+msgid "Are you sure you want to DELETE this job?"
+msgstr "Вы хотите удалить это задание?"
+
+#: view/schedules.php:41
+msgid "Are you sure you want to CLONE this job?"
+msgstr "Вы хотите клонировать это задание?"
+
+#: classes/class-wc-order-export-edd.php:39
 #: classes/class-wc-order-export-edd.php:39
 msgid "Advanced Order Export For WooCommerce (Pro) License"
 msgstr "Лицензия Order Export (Pro)"
 
-#: classes/class-wc-order-export-edd.php:48
-msgid "Plugin License Options"
-msgstr "Лицензия"
+#: classes/class-wc-table-schedules.php:41
+msgid "Add Schedule"
+msgstr "Добавить расписание"
 
-#: classes/class-wc-order-export-edd.php:57
-msgid "License Key"
-msgstr "Ключ"
+#: classes/class-wc-table-schedules.php:68
+msgid "Active"
+msgstr "Активный"
 
-#: classes/class-wc-order-export-edd.php:61
-msgid "Enter your license key"
-msgstr "Введите ключ"
+#: classes/class-wc-table-schedules.php:69
+msgid "Id"
+msgstr "Ид"
 
-#: classes/class-wc-order-export-edd.php:67 
-#: classes/class-wc-order-export-edd.php:79
-msgid "Activate License"
-msgstr "Активировать лицензию"
+#: classes/class-wc-table-schedules.php:72
+msgid "Recurrence"
+msgstr "Частота"
 
-#: classes/class-wc-order-export-edd.php:71
-msgid "active"
-msgstr "Активна"
+#: classes/class-wc-table-schedules.php:74
+msgid "Destination Details"
+msgstr "Детали шлюза"
 
-#: classes/class-wc-order-export-edd.php:73
-msgid "Deactivate License"
-msgstr "Деактивировать лицензию"
+#: classes/class-wc-table-schedules.php:75
+msgid "Next event"
+msgstr "Следующеее событие"
 
-#: classes/class-wc-order-export-updater.php:189
-msgid ""
-"There is a new version of %1$s available. %2$sView version %3$s details%4$s."
-msgstr "Новая версия  %1$s доступна . %2$s Посмотреть %3$s детали %4$s."
+#: classes/class-wc-table-schedules.php:93
+msgid "Run "
+msgstr "Выполнить"
 
-#: classes/class-wc-order-export-updater.php:197
-msgid ""
-"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
-"or %5$supdate now%6$s."
-msgstr ""
-"Новая версия  %1$s доступна . %2$s Посмотреть %3$s детали %4$s или  "
-"%5$sобновить сейчас%6$s."
+#: classes/class-wc-table-schedules.php:96
+msgid " on "
+msgstr "в"
 
-#: classes/class-wc-order-export-updater.php:340
-msgid "You do not have permission to install plugin updates"
-msgstr "У вас нет разрешения устанавливать расширения"
+#: classes/class-wc-table-schedules.php:99
+msgid "  at "
+msgstr "в"
 
-#: classes/class-wc-order-export-updater.php:340
-msgid "Error"
-msgstr "Ошибка"
+#: classes/class-wc-table-schedules.php:103
+msgid "Never"
+msgstr "Никогда"
+
+#: classes/class-wc-table-schedules.php:106
+msgid "First Day Every Month"
+msgstr "1 день каждого vtczwf"
+
+#: classes/class-wc-table-schedules.php:108
+msgid "First Day Every Quarter"
+msgstr "1 день каждого квартала"
+
+#: classes/class-wc-table-schedules.php:110
+#, php-format
+msgid "to run every %s minute(s)"
+msgstr "выполнять каждые %s минут"
+
+#: classes/class-wc-table-schedules.php:125
+msgid "Ftp"
+msgstr "Ftp"
+
+#: classes/class-wc-table-schedules.php:126
+msgid "Http post"
+msgstr "Http post"
+
+#: classes/class-wc-table-schedules.php:127
+msgid "Email"
+msgstr "Email"
+
+#: classes/class-wc-table-schedules.php:140
+msgid "Subject: "
+msgstr "Тема:"
+
+#: classes/class-wc-table-schedules.php:141
+msgid "To: "
+msgstr "Кому:"
+
+#: classes/class-wc-table-schedules.php:159
+msgid "Inactive"
+msgstr "Неактивный"
+
+#: classes/class-wc-table-schedules.php:167
+msgid "Not installed"
+msgstr "Не инсталлировано"
+
+#: classes/class-wc-table-schedules.php:171
+#: classes/class-wc-table-profiles.php:85
+msgid "Edit"
+msgstr "Редактировать"
+
+#: classes/class-wc-table-schedules.php:172
+#: classes/class-wc-table-profiles.php:86
+msgid "Copy"
+msgstr "Копировать"
+
+#: classes/class-wc-table-schedules.php:173
+#: classes/class-wc-table-profiles.php:88
+msgid "Delete"
+msgstr "Удалить"
+
+#: classes/class-wc-order-export-data-extractor.php:1741
+msgid "[Rest of the World] "
+msgstr "Остальной мир"
 
 #: classes/class-wc-table-profiles.php:41
 msgid "Add Profile"
@@ -109,392 +841,112 @@ msgstr "С даты"
 msgid "To Date"
 msgstr "По дату"
 
-#: classes/class-wc-table-profiles.php:84 
-#: classes/class-wc-table-schedules.php:163
-msgid "Edit"
-msgstr "Редактировать"
-
-#: classes/class-wc-table-profiles.php:85 
-#: classes/class-wc-table-schedules.php:164
-msgid "Copy"
-msgstr "Копировать"
-
-#: classes/class-wc-table-profiles.php:86
+#: classes/class-wc-table-profiles.php:87
 msgid "Copy to Scheduled"
 msgstr "Скопировать в задания"
 
-#: classes/class-wc-table-profiles.php:87 
-#: classes/class-wc-table-schedules.php:165
-msgid "Delete"
-msgstr "Удалить"
+#: classes/class-wc-order-export-engine.php:16
+msgid "Wrong format"
+msgstr "Неверный формат"
 
-#: classes/class-wc-table-schedules.php:68
-msgid "Id"
-msgstr "Ид"
+#: classes/class-wc-order-export-engine.php:496
+#: classes/class-wc-order-export-engine.php:505
+msgid "Nothing to export. Please, adjust your filters"
+msgstr "Нет заказов для экспорта. Измените фильтры!"
 
-#: classes/class-wc-table-schedules.php:69 view/settings-form.php:31 
-#: view/settings-form.php:46
-msgid "Title"
-msgstr "Заголовок"
+#: classes/class-wc-order-export-admin.php:68
+msgid ""
+"Advanced Orders Export For WooCommerce  is available <a href=\"admin.php?"
+"page=wc-order-export\">on this page</a>."
+msgstr ""
+"Плагин доступен на  <a href=\"admin.php?page=wc-order-export\">этой "
+"странице</a>."
 
-#: classes/class-wc-table-schedules.php:99
-msgid "Never"
-msgstr "Никогда"
+#: classes/class-wc-order-export-admin.php:88
+#: classes/class-wc-order-export-admin.php:89
+msgid "Export Orders"
+msgstr "Экспорт"
 
-#: classes/class-wc-table-schedules.php:102
-msgid "First Day Every Month"
-msgstr "1 день каждого vtczwf"
+#: classes/class-wc-order-export-admin.php:330
+msgid "Copied from \"Export Now\""
+msgstr "Скопировано из настроек по умолчанию"
 
-#: classes/class-wc-table-schedules.php:104
-msgid "First Day Every Quarter"
-msgstr "1 день каждого квартала"
+#: classes/class-wc-order-export-admin.php:909
+msgid "Can not create temporary file"
+msgstr "Не могу создать временный файл"
 
-#: classes/class-wc-table-schedules.php:121
-msgid "Ftp"
-msgstr "Ftp"
+# файл
+#: classes/class-wc-order-export-admin.php:927
+msgid "Can not find exported file"
+msgstr "Не могу найти временный файл"
 
-#: classes/class-wc-table-schedules.php:122
-msgid "Http post"
-msgstr "Http post"
+#: classes/class-wc-order-export-admin.php:1144
+#, php-format
+msgid "Export as %s"
+msgstr "Экспортировать как %s"
 
-#: classes/class-wc-table-schedules.php:123
-msgid "Email"
-msgstr "Email"
+#: classes/class-wc-order-export-admin.php:1153
+#, php-format
+msgid "Export as profile '%s'"
+msgstr "Выгрузить профиль как '%s' "
 
-#: classes/class-wc-table-schedules.php:160
-msgid "Not installed"
-msgstr "Не инсталлировано"
+#: classes/class-wc-order-export-admin.php:1237
+msgid "Orders exported."
+msgstr "Заказы экспортированы."
+
+#: classes/formats/abstract-class-woe-formatter.php:21
+msgid "can not open for output"
+msgstr "не могу открыть для вывода"
+
+#: classes/formats/class-woe-formatter-csv.php:92
+#: classes/formats/class-woe-formatter-xls.php:98
+msgid "<td colspan=10><b>No results</b></td>"
+msgstr "<td colspan=10><b>Нет результатов</b></td>"
+
+#: classes/formats/class-woe-formatter-xls.php:62
+msgid "Orders"
+msgstr "Заказы"
+
+#: classes/exports/class-woe-export-email.php:17
+msgid "Can not rename temporary file"
+msgstr "Не могу переименовать временный файл"
 
 #: classes/exports/class-woe-export-email.php:27
 msgid "Please, review the attachment"
 msgstr "См. вложение"
 
-#: view/main.php:12
-msgid "Profiles"
-msgstr "Профили"
-
-#: view/modal-controls.php:5 view/modal-controls.php:37
-msgid "All meta"
-msgstr "Все поля"
-
-#: view/modal-controls.php:6 view/modal-controls.php:38 
-#: view/settings-form.php:750
-msgid "Hide unused"
-msgstr "Скрыть неиспользуемые"
-
-#: view/profiles.php:25
-msgid "Are you sure you want to DELETE this profile?"
-msgstr "Вы хотите удалить этот профиль?"
-
-#: view/profiles.php:36
-msgid "Are you sure you want to CLONE this profile?"
-msgstr "Вы хотите клонировать этот профиль?"
-
-#: view/profiles.php:43
-msgid ""
-"Are you sure you want to COPY this profile and MOVE it to scheduled list?"
-msgstr "Вы хотите копировать этот профиль в  задание?"
-
-#: view/schedules.php:25
-msgid "Are you sure you want to DELETE this job?"
-msgstr "Вы хотите удалить это задание?"
-
-#: view/schedules.php:36
-msgid "Are you sure you want to CLONE this job?"
-msgstr "Вы хотите клонировать это задание?"
-
-#: view/settings-form.php:37
-msgid "Use as bulk action"
-msgstr "Использовать в Bulk Actions"
-
-#: view/settings-form.php:121
-msgid "On the 1st day of the month"
-msgstr "1 день месяца"
-
-#: view/settings-form.php:122
-msgid "On the 1st day of the quarter"
-msgstr "1 день квартала"
-
-#: view/settings-form.php:133
-msgid "Export options"
-msgstr "Настройки экспорта"
-
-#: view/settings-form.php:137
-msgid "Since last Run"
-msgstr "С последнего выполнения"
-
-#: view/settings-form.php:142
-msgid "Today"
-msgstr "Сегодня"
-
-#: view/settings-form.php:147
-msgid "Yesterday"
-msgstr "Вчера"
-
-#: view/settings-form.php:152
-msgid "Last week"
-msgstr "Последняя неделя"
-
-#: view/settings-form.php:157
-msgid "Last month"
-msgstr "Последний месяц"
-
-#: view/settings-form.php:162
-msgid "Last quarter"
-msgstr "Последний квартал"
-
-#: view/settings-form.php:167
-msgid "This year"
-msgstr "Этот год"
-
-#: view/settings-form.php:172
-msgid "Last"
-msgstr "Последние"
-
-#: view/settings-form.php:172
-msgid "days"
-msgstr "дней"
-
-#: view/settings-form.php:175
-msgid "Filter orders by"
-msgstr "Фильтровать заказы по"
-
-#: view/settings-form.php:179
-msgid "date created"
-msgstr "дате создания"
-
-#: view/settings-form.php:184
-msgid "date modified"
-msgstr "дате изменения"
-
-#: view/settings-form.php:233
-msgid "Export as .xls (Binary File Format)"
-msgstr "Бинарный формат (.xls)"
-
-#: view/settings-form.php:235
-msgid "Auto column width "
-msgstr "Автовыравнивание ширины"
-
-#: view/settings-form.php:237
-msgid "Right-to-Left direction"
-msgstr "Справа-налево"
-
-#: view/settings-form.php:246
-msgid "Enclosure"
-msgstr "Обрамление"
-
-#: view/settings-form.php:250
-msgid "Code Page"
-msgstr "Кодовая страница"
-
-#: view/settings-form.php:267
-msgid "Date"
-msgstr "Дата"
-
-#: view/settings-form.php:280 view/settings-form.php:298
-msgid "-"
-msgstr "-"
-
-#: view/settings-form.php:286
-msgid "Time"
-msgstr "Время"
-
-#: view/settings-form.php:340
-msgid "From Email"
-msgstr "От email"
-
-#: view/settings-form.php:347
-msgid "From Name"
-msgstr "От кого"
-
-#: view/settings-form.php:369 view/settings-form.php:377
-msgid "Email Body"
-msgstr "Содержимое письма"
-
-#: view/settings-form.php:370
-msgid "Edit Email Body"
-msgstr "Редактировать содержимое  письма"
-
-#: view/settings-form.php:490
-msgid "Filter by order"
-msgstr "Фильтр по заказам"
-
-#: view/settings-form.php:493
-msgid "Don't export child orders"
-msgstr "Пропускать дочерние заказы"
-
-#: view/settings-form.php:501
-msgid "Custom fields"
-msgstr "Пользовательские поля"
-
-#: view/settings-form.php:535
-msgid ""
-"The filters won't work correctly.<br>Another plugin(or theme) has loaded "
-"outdated Select2.js"
-msgstr ""
-"Фильтры не работают. Сторонний плагин или активная тема используют "
-"предыдущую версию Select2"
-
-#: view/settings-form.php:539
-msgid "Export all products from a order"
-msgstr "Выгружать все продукты заказа"
-
-#: view/settings-form.php:551
-msgid "Vendor/creator"
-msgstr "Создатель"
-
-#: view/settings-form.php:601
-msgid "Item Meta Data"
-msgstr "Метаданные продукта"
-
-#: view/settings-form.php:654
-msgid "Filter by customers"
-msgstr "Фильтр по покупателям"
-
-#: view/settings-form.php:657
-msgid "User roles"
-msgstr "Роли пользователей"
-
-#: view/settings-form.php:666
-msgid "User names"
-msgstr "Ники пользователей"
-
-#: view/settings-form.php:683
-msgid "Filter by payment"
-msgstr "Фильтр по платежу"
-
-#: view/settings-form.php:686
-msgid "Payment Methods"
-msgstr "Методы оплаты"
-
-#: view/settings-form.php:800
-msgid "Export [w/o progressbar]"
-msgstr "Экспорт без прогрессбара"
-
-#: view/settings-form.php:802
-msgid "Press 'Esc' to cancel the export"
-msgstr "Нажмите Esc для отмены"
-
-#: classes/class-wc-order-export-admin.php:82 
-#: classes/class-wc-order-export-admin.php:83
-msgid "Export Orders"
-msgstr "Экспорт"
-
-#: classes/class-wc-order-export-admin.php:797 
-#: classes/exports/class-woe-export-email.php:17
-msgid "Can not create temporary file"
-msgstr "Не могу создать временный файл"
-
-# файл
-#: classes/class-wc-order-export-admin.php:815
-msgid "Can not find exported file"
-msgstr "Не могу найти временный файл"
-
-#: classes/class-wc-order-export-admin.php:1023
-msgid "Export as %s"
-msgstr "Экспортировать как %s"
-
-#: classes/class-wc-order-export-admin.php:1116
-msgid "Orders exported."
-msgstr "Заказы экспортированы."
-
-#: classes/class-wc-order-export-engine.php:13
-msgid "Wrong format"
-msgstr "Неверный формат"
-
-#: classes/class-wc-table-profiles.php:13 
-#: classes/class-wc-table-schedules.php:13
-msgid "item"
-msgstr "продукт"
-
-#: classes/class-wc-table-profiles.php:14 
-#: classes/class-wc-table-schedules.php:14
-msgid "items"
-msgstr "продукты"
-
-#: classes/class-wc-table-profiles.php:68 
-#: classes/class-wc-table-schedules.php:70 view/settings-form.php:216
-msgid "Format"
-msgstr "Формат"
-
-#: classes/class-wc-table-profiles.php:72 
-#: classes/class-wc-table-schedules.php:75 view/settings-form.php:772
-msgid "Actions"
-msgstr "Действия"
-
-#: classes/class-wc-table-schedules.php:41
-msgid "Add Schedule"
-msgstr "Добавить расписание"
-
-#: classes/class-wc-table-schedules.php:71
-msgid "Recurrence"
-msgstr "Частота"
-
-#: classes/class-wc-table-schedules.php:72 view/settings-form.php:310
-msgid "Destination"
-msgstr "Назначение"
-
-#: classes/class-wc-table-schedules.php:73
-msgid "Destination Details"
-msgstr "Детали шлюза"
-
-#: classes/class-wc-table-schedules.php:74
-msgid "Next event"
-msgstr "Следующеее событие"
-
-#: classes/class-wc-table-schedules.php:89
-msgid "Run "
-msgstr "Выполнить"
-
-#: classes/class-wc-table-schedules.php:92
-msgid " on "
-msgstr "в"
-
-#: classes/class-wc-table-schedules.php:95
-msgid "  at "
-msgstr "в"
-
-#: classes/class-wc-table-schedules.php:106
-msgid "to run every %s minute(s)"
-msgstr "выполнять каждые %s минут"
-
-#: classes/class-wc-table-schedules.php:124 view/settings-form.php:332
-msgid "Folder"
-msgstr "Папка"
-
-#: classes/class-wc-table-schedules.php:136
-msgid "Subject: "
-msgstr "Тема:"
-
-#: classes/class-wc-table-schedules.php:137
-msgid "To: "
-msgstr "Кому:"
-
 #: classes/exports/class-woe-export-email.php:63
+#, php-format
 msgid "We have sent file '%s' to '%s'"
 msgstr "Мы отправили файл %s  %s"
 
 #: classes/exports/class-woe-export-folder.php:16
+#, php-format
 msgid "Can't create folder '%s'. Check premissions."
 msgstr "Невозможно создать папку %s. Проверьте права на запись."
 
 #: classes/exports/class-woe-export-folder.php:20
+#, php-format
 msgid "Folder '%s' is not writable. Check premissions."
 msgstr "Невозможно записать в папку %s. Проверьте права на запись."
 
 #: classes/exports/class-woe-export-folder.php:24
+#, php-format
 msgid "Can't export file to '%s'. Check premissions."
 msgstr "Невозможно экспортировать файл в  %s. Проверьте права на запись."
 
 #: classes/exports/class-woe-export-folder.php:27
+#, php-format
 msgid "We have created file '%s' in folder '%s'"
 msgstr "Создан файл  %s  в папке %s."
 
 #: classes/exports/class-woe-export-ftp.php:20
+#, php-format
 msgid "Can not connect to %s using port %s"
 msgstr "Нет подключения к  %s( порт %s)"
 
 #: classes/exports/class-woe-export-ftp.php:26
+#, php-format
 msgid "Can not login to FTP as user '%s' using password '%s'"
 msgstr "Попытка входа на Ftp не удалась ( пользователь %s пароль %s)"
 
@@ -503,340 +955,28 @@ msgid "Can not switch to Passive Mode"
 msgstr "Невозможно переключиться в пассивный режим"
 
 #: classes/exports/class-woe-export-ftp.php:40
+#, php-format
 msgid "Can not change FTP directory to '%s'"
 msgstr "Невозможно сменить директорию на %s"
 
-#: classes/exports/class-woe-export-ftp.php:46
+#: classes/exports/class-woe-export-ftp.php:52
+#, php-format
+msgid "Can not download file '%s'"
+msgstr "Не могу скачать файл"
+
+#: classes/exports/class-woe-export-ftp.php:63
+#, php-format
 msgid "Can not upload file '%s'"
 msgstr "Невозможно загрузить файл %s"
 
-#: classes/exports/class-woe-export-ftp.php:51
+#: classes/exports/class-woe-export-ftp.php:68
+#, php-format
 msgid "We have uploaded file '%s' to '%s'"
 msgstr "Файл %s был загружен на %s"
 
-#: classes/formats/abstract-class-woe-formatter.php:21
-msgid "can not open for output"
-msgstr "не могу открыть для вывода"
-
-#: classes/formats/class-woe-formatter-csv.php:92 
-#: classes/formats/class-woe-formatter-xls.php:93
-msgid "<td colspan=10><b>No results</b></td>"
-msgstr "<td colspan=10><b>Нет результатов</b></td>"
-
-#: classes/formats/class-woe-formatter-xls.php:59
-msgid "Orders"
-msgstr "Заказы"
-
-#: view/export.php:7
-msgid "Export Now"
-msgstr "Экспорт"
-
-#: view/main.php:8
-msgid "Settings saved"
-msgstr "Настройки сохранены"
-
-#: view/main.php:11 view/settings-form.php:799
-msgid "Export"
-msgstr "Экспорт"
-
-#: view/main.php:13
-msgid "Scheduled Exports"
-msgstr "Расписание"
-
-#: view/modal-controls.php:3 view/modal-controls.php:35 
-#: view/settings-form.php:739
-msgid "Meta key"
-msgstr "Мета ключ"
-
-#: view/modal-controls.php:10
-msgid "OR"
-msgstr "ИЛИ"
-
-#: view/modal-controls.php:11
-msgid "Taxonomy"
-msgstr "Справочники"
-
-#: view/modal-controls.php:19 view/modal-controls.php:25 
-#: view/modal-controls.php:42 view/modal-controls.php:48 
-#: view/settings-form.php:747 view/settings-form.php:758
-msgid "Column Name"
-msgstr "Название колонки"
-
-#: view/modal-controls.php:21 view/modal-controls.php:44 
-#: view/settings-form.php:773
-msgid "Add Field"
-msgstr "Новое поле"
-
-#: view/modal-controls.php:26 view/modal-controls.php:49 
-#: view/settings-form.php:759
-msgid "Value"
-msgstr "Значение"
-
-#: view/modal-controls.php:28 view/modal-controls.php:51 
-#: view/settings-form.php:775
-msgid "Add Static Field"
-msgstr "Статичное поле"
-
-#: view/settings-form.php:51
-msgid "Schedule"
-msgstr "Расписание"
-
-#: view/settings-form.php:57
-msgid "Sun"
-msgstr "Вс"
-
-#: view/settings-form.php:61
-msgid "Mon"
-msgstr "Пн"
-
-#: view/settings-form.php:65
-msgid "Tue"
-msgstr "Вт"
-
-#: view/settings-form.php:69
-msgid "Wed"
-msgstr "Ср"
-
-#: view/settings-form.php:73
-msgid "Thu"
-msgstr "Чт"
-
-#: view/settings-form.php:77
-msgid "Fri"
-msgstr "Пт"
-
-#: view/settings-form.php:81
-msgid "Sat"
-msgstr "Сб"
-
-#: view/settings-form.php:86
-msgid "Run at"
-msgstr "Выполнять в"
-
-#: view/settings-form.php:111
-msgid "Choose"
-msgstr "Выберите"
-
-#: view/settings-form.php:112
-msgid "Custom"
-msgstr "Производный"
-
-#: view/settings-form.php:125
-msgid "interval (min)"
-msgstr "Интервал(в минутах)"
-
-#: view/settings-form.php:193
-msgid "Date range"
-msgstr "Даты"
-
-#: view/settings-form.php:195
-msgid "to"
-msgstr "в"
-
-#: view/settings-form.php:199
-msgid "Express Export"
-msgstr "Быстрый экспорт"
-
-#: view/settings-form.php:206
-msgid "Export filename"
-msgstr "Маска файла"
-
-#: view/settings-form.php:227
-msgid "XLS options"
-msgstr "Опции XLS"
-
-#: view/settings-form.php:234 view/settings-form.php:244
-msgid "Output column titles as first line"
-msgstr "Выводить названия полей в первой строке"
-
-#: view/settings-form.php:236 view/settings-form.php:245
-msgid "Populate other columns if products exported as rows"
-msgstr "Заполнять все колонки при экспорте продуктов как отдельных строк"
-
-#: view/settings-form.php:239
-msgid "CSV options"
-msgstr "Опции CSV"
-
-#: view/settings-form.php:243
-msgid "Output utf-8 BOM"
-msgstr "Добавлять utf8 BOM"
-
-#: view/settings-form.php:247
-msgid "Field Delimiter"
-msgstr "Разделитель полей"
-
-#: view/settings-form.php:248
-msgid "Line Break"
-msgstr "Перенос строки"
-
-#: view/settings-form.php:253
-msgid "XML options"
-msgstr "Настройки XML"
-
-#: view/settings-form.php:254
-msgid "Prepend XML"
-msgstr "Добавить в начало XML"
-
-#: view/settings-form.php:255
-msgid "Root tag"
-msgstr "Корневой тэг"
-
-#: view/settings-form.php:256
-msgid "Order tag"
-msgstr "Тэг для заказа"
-
-#: view/settings-form.php:257
-msgid "Product tag"
-msgstr "Тэг для продукта"
-
-#: view/settings-form.php:258
-msgid "Coupon tag"
-msgstr "Тэг для купона"
-
-#: view/settings-form.php:259
-msgid "Append XML"
-msgstr "Добавить в конец XML"
-
-#: view/settings-form.php:314
-msgid "EMAIL"
-msgstr "Email"
-
-#: view/settings-form.php:320
-msgid "FTP"
-msgstr "Ftp"
-
-#: view/settings-form.php:326
-msgid "HTTP POST"
-msgstr "Http post"
-
-#: view/settings-form.php:337
-msgid "Email Settings"
-msgstr "Настройки Email"
-
-#: view/settings-form.php:354
-msgid "Recipient(s)"
-msgstr "Адресаты"
-
-#: view/settings-form.php:361
-msgid "Email Subject"
-msgstr "Тема письма"
-
-#: view/settings-form.php:386 view/settings-form.php:436 
-#: view/settings-form.php:455 view/settings-form.php:474
-msgid "Test"
-msgstr "Проверка"
-
-#: view/settings-form.php:393
-msgid "FTP Settings"
-msgstr "Настройки FTP"
-
-#: view/settings-form.php:396
-msgid "Server Name"
-msgstr "Имя сервера"
-
-#: view/settings-form.php:401
-msgid "Port"
-msgstr "Порт"
-
-#: view/settings-form.php:409
-msgid "Username"
-msgstr "Логин"
-
-#: view/settings-form.php:414
-msgid "Password"
-msgstr "Пароль"
-
-#: view/settings-form.php:421
-msgid "Initial path"
-msgstr "Путь"
-
-#: view/settings-form.php:429
-msgid "Passive mode"
-msgstr "Пассивный режим"
-
-#: view/settings-form.php:443
-msgid "HTTP POST Settings"
-msgstr "Настройки HTTP  Post"
-
-#: view/settings-form.php:447
-msgid "URL"
-msgstr "Url"
-
-#: view/settings-form.php:462
-msgid "To Folder Settings"
-msgstr "Настройки папки"
-
-#: view/settings-form.php:466
-msgid "Path"
-msgstr "Путь"
-
-#: view/settings-form.php:481
-msgid "Test Results"
-msgstr "Результат теста "
-
-#: view/settings-form.php:494
-msgid "Order Statuses"
-msgstr "Статус заказа"
-
-#: view/settings-form.php:536
-msgid "Filter by product"
-msgstr "Фильтр по продуктам"
-
-#: view/settings-form.php:540
-msgid "Product categories"
-msgstr "Категории"
-
-#: view/settings-form.php:562
-msgid "Product"
-msgstr "Продукт"
-
-#: view/settings-form.php:574
-msgid "Product Attributes"
-msgstr "Атрибуты продукта"
-
-#: view/settings-form.php:628
-msgid "Product Taxonomies"
-msgstr "Справочники продуктов"
-
-#: view/settings-form.php:699
-msgid "Filter by shipping"
-msgstr "Фильтровать по адресу"
-
-#: view/settings-form.php:702
-msgid "Shipping locations"
-msgstr "Адрес доставки"
-
-#: view/settings-form.php:733
-msgid "Set up fields to export "
-msgstr "Настроить поля для экспорта"
-
-#: view/settings-form.php:761
-msgid "Confirm"
-msgstr "Подтверждение"
-
-#: view/settings-form.php:762
-msgid "Cancel"
-msgstr "Отмена"
-
-#: view/settings-form.php:765
-msgid "Use sections"
-msgstr "Использовать секции"
-
-#: view/settings-form.php:782
-msgid "Select All"
-msgstr "Выбрать все"
-
-#: view/settings-form.php:785
-msgid "Drag rows to reorder exported fields"
-msgstr "Переносите строки для изменения порядка колонок"
-
-#: view/settings-form.php:796
-msgid "Preview"
-msgstr "Превью"
-
-#: view/settings-form.php:797
-msgid "Save Settings"
-msgstr "Сохранить настройки"
+#. Plugin Name of the plugin/theme
+msgid "Advanced Order Export For WooCommerce (Pro)"
+msgstr "Advanced Order Export For WooCommerce (Pro)"
 
 #. Description of the plugin
 msgid "Ultimate plugin to export WooCommerce sales"
@@ -845,3 +985,7 @@ msgstr "Гибкий плагин для экспорта заказов Woocomm
 #. Author of the plugin
 msgid "AlgolPlus"
 msgstr "Алгол+"
+
+#. Author URI of the plugin/theme
+msgid "http://algolplus.com/"
+msgstr "http://algolplus.com/"

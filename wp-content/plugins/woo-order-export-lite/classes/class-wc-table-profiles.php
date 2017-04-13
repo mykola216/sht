@@ -36,7 +36,7 @@ class WC_Table_Profiles extends WP_List_Table {
 			return;
 		}
 		?>
-		<div>
+		<div style="margin-top: 10px;">
 			<input type="button" class="button-secondary"
 				   value="<?php _e( 'Add Profile', 'woocommerce-order-export' ); ?>" id="add_profile">
 		</div><br>

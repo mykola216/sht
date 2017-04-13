@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9009232da92018c3d426861ee19e0ad4
+class ComposerStaticInit0008b289d92558142c819e0a687a57e2
 {
     public static $files = array (
         'ddd9d6a62b0c815095c510b8a39fd6c2' => __DIR__ . '/..' . '/wp-pay-extensions/gravityforms/src/functions.php',
@@ -586,10 +586,10 @@ class ComposerStaticInit9009232da92018c3d426861ee19e0ad4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit9009232da92018c3d426861ee19e0ad4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0008b289d92558142c819e0a687a57e2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0008b289d92558142c819e0a687a57e2::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit0008b289d92558142c819e0a687a57e2::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit0008b289d92558142c819e0a687a57e2::$classMap;
 
         }, null, ClassLoader::class);
     }

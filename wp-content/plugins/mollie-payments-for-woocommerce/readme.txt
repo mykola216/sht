@@ -1,9 +1,9 @@
 === Mollie Payments for WooCommerce ===
 Contributors: l.vangunst, daanvm, ndijkstra, robin-mollie
-Tags: mollie, payments, woocommerce, e-commerce, webshop, psp, ideal, sofort, credit card, creditcard, visa, mastercard, mistercash, bancontact, bitcoin, paysafecard, direct debit, incasso, sepa, banktransfer, overboeking, betalingen
+Tags: mollie, payments, woocommerce, e-commerce, webshop, psp, ideal, sofort, credit card, creditcard, visa, mastercard, mistercash, bancontact, bitcoin, paysafecard, direct debit, incasso, sepa, banktransfer, overboeking, betalingen, recurring, subscriptions
 Requires at least: 3.8
-Tested up to: 4.6.1
-Stable tag: 2.4.1
+Tested up to: 4.7.3
+Stable tag: 2.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,10 +14,9 @@ Accept payments in WooCommerce with the official Mollie plugin
 This plugin will add support for the following Mollie payments methods to your WooCommerce webshop:
 
 * iDEAL
-* Banktransfer
+* Bank transfer
 * Credit card
 * Bancontact / Mister Cash
-* SEPA Direct Debit
 * PayPal
 * SOFORT banking
 * Belfius Direct Net
@@ -30,6 +29,7 @@ Please go to the [signup page](https://www.mollie.com/nl/signup) to create a new
 = Features = 
 
 * Support for all available Mollie payment methods
+* Compatible with WooCommerce Subscriptions for recurring payments
 * Edit order, title, description for every payment method
 * Refunds (WooCommerce 2.2+)
 * Multiple translations: English, Dutch, German and French
@@ -113,6 +113,17 @@ Automatic updates should work like a charm; as always though, ensure you backup 
 
 == Changelog ==
 
+= 2.5.4 - 07/03/2017 =
+* Added an option to disable storing the customer details at Mollie
+
+= 2.5.3 - 01/03/2017 =
+* Bugfix for crashing Wordpress when using PHP version 5.3 or lower
+
+= 2.5.2 - 28/02/2017 =
+* The plugin is now compatible with WooCommerce Subscriptions for recurring payments
+* Removed 'test mode enabled' description, which causes problems when using WPML
+* Empty the cart when the order is finished, rather than when the payment is created
+
 = 2.4.1 - 10/10/2016 =
 * Fix 2.4.0 release (https://wordpress.org/support/topic/error-500-after-updating)
 
@@ -163,6 +174,9 @@ WooCommerce -> Settings -> Checkout -> Mollie - Bank Transfer.
 * Complete rewrite of our WooCommerce plugin to better follow WordPress and WooCommerce standards and add better support for other plugins.
 
 == Upgrade Notice ==
+
+= 2.5.2 =
+Our plugin is now compatible with WooCommerce Subscriptions for recurring payments.
 
 = 2.0.0 =
 * The 2.x version of the plugin uses a different plugin name. You can still run version 1.x of our plugin if you want to temporary

@@ -1,42 +1,45 @@
-#AMP for WP - Accelerated Mobile Pages
-The Must have AMP plugin for WordPress. Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site. More details on https://wordpress.org/plugins/accelerated-mobile-pages/ & http://AMPforWP.com
-
 === AMP for WP - Accelerated Mobile Pages ===
 Contributors: mohammed_kaludi, ahmedkaludi, ampforwp
 Tags: AMP, accelerated mobile pages, mobile, amp project, google amp, amp wp, google, plugin
 Donate link: https://www.paypal.me/Kaludi/5
 Requires at least: 3.0
-Tested up to: 4.7
-Stable tag: 0.9.1.2.1
+Tested up to: 4.7.2
+Stable tag: 0.9.43.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Must have AMP plugin for WordPress. Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site.
+AMP for WP is the most recommended AMP plugin by the community. Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site.
 
 == Description ==
-Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on your WordPress site. AMP WP is a plugin that needs to no configuration, just activate it and you are done.
+AMP for WP automatically adds Accelerated Mobile Pages (Google AMP Project) functionality to your WordPress site. AMP makes your website faster for Mobile visitors.
 
-[What's New in this Version?](http://ampforwp.com/new/) | [Priority Support](http://ampforwp.com/priority-support/) | [View Demo](http://ampforwp.com/demo/?amp) | [Screenshots](https://wordpress.org/plugins/accelerated-mobile-pages/screenshots/) | [Community](http://ampforwp.com/community/)
+[What's New in this Version?](http://ampforwp.com/new/) | [Priority Support](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) | [View Demo](https://demo.ampforwp.com/amp/) | [Screenshots](https://wordpress.org/plugins/accelerated-mobile-pages/screenshots/) | [Community](http://ampforwp.com/community/)
 
+[youtube https://www.youtube.com/watch?v=zzRy6Q_VGGc]
 
 > <strong>Extensions</strong><br>
-> Some useful extensions to extend AMP features, check [AMP Adsense Support](https://ampforwp.com/advanced-amp-ads/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin), [Custom Post Type Support](https://ampforwp.com/custom-post-type/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) and [DoubleClick Support](https://ampforwp.com/doubleclick-for-publishers/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin). To view more, go to our [Extensions page](https://ampforwp.com/extensions/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin).
+> Some useful extensions to extend AMP features, check [AMP Adsense Support](https://ampforwp.com/advanced-amp-ads/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin), [Custom Post Type Support](https://ampforwp.com/custom-post-type/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) and [DoubleClick Support](https://ampforwp.com/doubleclick-for-publishers/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin). To view more, go to our [Extensions page](https://ampforwp.com/extensions/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin). 
 >
 > <strong>Premium Support</strong><br>
-> We try our best to provide support on WordPress.org forums. However, One-on-one email support is available to people who bought the [Priority Support](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) only.
->	
+> We try our best to provide support on WordPress.org forums. However, One-on-one email support is available to people who bought the [Priority Support](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) only. 
+>
 > <strong>Bug Reports</strong><br>
 > Bug reports for AMP for WP are [welcomed on GitHub](https://github.com/ahmedkaludi/Accelerated-Mobile-Pages). Please note GitHub is _not_ a support forum, and issues that aren't properly qualified as bugs will be closed.
 
 
 = Features: =
 
-* NEW - DoubleClick Support 
-* NEW - Custom Post Type Support 
-* NEW - Star Ratings  
-* NEW - Drag & Drop Page builder Added 
-* NEW - 2 Designs Added 
-* NEW - 100% Yoast SEO support on AMP pages
+* NEW - Design 3 [Watch the Video Overview](https://www.youtube.com/watch?v=ub1pwskt3Rc)
+* NEW - Disqus Comments Support
+* NEW - Google Tag Manager Support
+* NEW - Page, Category & Tags Support Added
+* NEW - Custom AMP Editor - Which allows you to override your Content that you had written in Post or page, so you can add the different content just for AMP.
+* Mobile Redirection -  More than 50% of your traffic is from mobile and you aren’t doing anything to improve their user experience, which means you are falling behind on SEO and it can result in lower SERPS. Lightning fast mobile version means faster User experience means more engagement which directly results in the lower bounce rate.
+* Custom Post Type Support 
+* Star Ratings
+* Drag & Drop Page builder Added 
+* 2 Designs Added 
+* Yoast SEO support on AMP pages and other SEO plugins
 * AMP WooCommerce Support 
 * Switch on/off Support for Pages on AMP
 * Translation Panel & RTL
@@ -68,22 +71,23 @@ Automatically add Accelerated Mobile Pages (Google AMP Project) functionality on
 * Custom AMP FrontPage
 * Notifications
 * Piwik & Segment.com Support
+* Incontent & DoubleClick Support
 * Great Support & Active Development.
-
-[youtube https://www.youtube.com/watch?v=zzRy6Q_VGGc]
-
-
-**NOTE:** Next Update of this plugin will be released by end of Dec 2016.
-
 
 **[JOIN CHAT GROUP COMMUNITY](http://ampforwp.com/community/)**: Purpose of this group is to get proper suggestions and feedback from plugin users and the community so that we can make the plugin even better.
 
-**How to test if AMP is working or not?**
-After you install the plugin, Google will automatically index the amp pages using the amp tag and then show you the updates in the search console.
+= Getting Started: =
+**[1. User Documentation:](http://ampforwp.com/help/)** The AMP for WP plugin is easy to setup but we have some tutorials and guides prepared for you which will help you dive deep with the plugin.
 
-**How can I view the AMP version of my site**
-To view the AMP version, add /?amp at the end of your url. An example would be http://Website.com/?amp .... and No, you don't have to worry about duplication of the content because that has been taken care of the canonical tag as suggested by Google.
+**[2. Developer Docs:](https://ampforwp.com/help/#extend)** We have created special documentations for developers and semi technical users who are willing to modify the plugin according to their own needs.
 
+**[3. Fixing AMP Validation Errors:](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin)** We will personally take care that your website’s AMP version is perfectly validated. We will make sure that your AMP version gets approved and indexed by Google Webmaster Tools properly and we will even keep an eye on AMP updates from Google and implement them into your website.
+
+**[4. Community Support Forum:](https://ampforwp.com/help/#support-forum)** We have a special community support forum where you can ask us questions and get help about your AMP related questions. Delivering a good user experience means alot to us and so we try our best to reply each and every question that gets asked.
+
+**[5. Frequently Asked Questions:](http://ampforwp.com/faq/)** Some of the Frequently Asked questions.
+
+= Issues & Bug Reports: =
 **How do I Report Bugs and Suggest New Features**
 <i>You</i> can report the bugs at https://github.com/ahmedkaludi/Accelerated-Mobile-Pages/issues
 
@@ -95,40 +99,15 @@ You can contact me using this url: http://ampforwp.com/contact/
 
 
 == Installation ==
-1. Upload the folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. You can access your amp enabled website by adding ?amp at the end of the url.
+**[Visit Help area for the Documentation:](http://ampforwp.com/help/)**
+
+[youtube https://www.youtube.com/watch?v=zzRy6Q_VGGc]
+
+**[Visit Help area for the Documentation:](http://ampforwp.com/help/)**
 
 
 == Frequently Asked Questions ==
-= How to Setup Navigation Menu? =
-We have created a Seperate Navigation menu for AMP version which you can setup from the WordPress Menus, then navigate to Menu Locations, their you will notice AMP Menu. You can assign existing menus to this locations.
-
-= I added /?amp on the end of one of my URLs and a minimalist version of my page appeared. It looks just like on one of your screenshots, so I guess its installed properly. Okay what now? Is it just enough to install it and the plugin will do the rest? =
-
-After you see the minimalist view if you use the url with ?amp then it means that it has been installed properly. You dont need any extra steps to enable it.
-
-= The plugin supposed to redirect all mobile visitors to AMP version of site or not? =
-When you view the website from the mobile, it is not supposed to redirect you to the amp version, amp version is always ready for google in the backend, if Google wants to serve to the people, then it will get the amp version and serve to the customers.
-
-= I am worried that it will cause Duplicate content? =
-In the AMP version, we are using Canonical tag to solve this. I am 100% sure that using this plugin will not duplicate the content.
-
-= How do I know that my site is AMP enabled? =
-Add /?amp at the end of your website url and you will get amp version of your website.
-
-= I have addded /?amp at the end of the url and still I am not able to see the AMP version of my site? =
-Please check if you have "Pretty Permalinks" enabled. If not then activate it.
-
-= How do I report Bug reports? =
-Before you submit a new bug, please check if there already is an existing bug report for it. If so, it may be far more valuable to add to the existing one, than to create a new bug report. You can submit bug reports and feature requests at GitHub Issues Page.
-
-= How do I know that my site is AMP enabled? =
-Add /?amp at the end of your website url and you will get amp version of your website.
-
-= I have addded /?amp at the end of the url and still I'm not able to see the AMP version of my site? =
-Please check if you have "Pretty Permalinks" enabled. If not then activate it. For more details about Pretty Permalinks check out this wonderful article https://codex.wordpress.org/Using_Permalinks
-
+**[View The Full FAQ at:](http://ampforwp.com/faq/)**
 
 
 == Screenshots ==
@@ -137,9 +116,193 @@ Please check if you have "Pretty Permalinks" enabled. If not then activate it. F
 3. Post Navigation in Single
 4. Sticky Social sharing icons
 5. Overlay Navigation menu sidebar.
+6. Page builder of the Single article. You can drag and drop any element.
+7. Single post of Design One
+8. GTMetrix Performance Report
+9. Google PageSpeed Insight report for AMP
+10. Homepage of Design One
+11. Pingdom Speed Report for AMP
 
 
 == Changelog ==
+
+= 0.9.43.1 = 
+* View more details at https://ampforwp.com/0-9-43-1-released-stability-sprint-1-49th-update/
+* Emoji in comments leads to AMP errors
+* Design 1 showing time on archives
+* Added some space between the archive label.
+* Lazy loading plugins compatibility #544
+* Custom header and footer areas
+* Sticky posts now come on top #564
+* Footer non-amplink added in design 3 #562
+* HTML <p> tag is shown in the title in category! #518
+
+= 0.9.42 = 
+* View more details at https://ampforwp.com/design-three-update/
+* Design 3 was released – Video Overview  along with new options and features. View the video overview at: https://www.youtube.com/watch?v=ub1pwskt3Rc [Major Feature]
+* Ticket #517 – Added Upload field into Redux core [3rd party Compatiblity]
+* Ticket#529 Controls for archive titles added [Improvement]
+* Ticket #548 Jetpack photon code removed
+
+= 0.9.41 = 
+* View more details at https://ampforwp.com/disqus-comments-in-amp/
+* Disqus Comments in AMP Support Added [New Feature] - This feature can be enabled from Dashboard > AMP Options > Disqus Comments
+* AMP WooCommerce supported tag was missing after the last update. [Bug fix]
+* Homepage & Related Posts was displaying private and protected posts, which is now fixed [Bug fix]
+* Next previous links added in Design 1 [Enhancement]
+* Invalid Post Time displaying in the homepage of Design 1 [Bug fix]
+* Twitter share now includes the twitter handle of the author with setting in options [Enhancement]
+* Emoji in comments leads to AMP errors was fixed [Bug fix]
+* Date are now displayed on archives in Design 1 [Enhancement]
+* When RTL enabled logo merges with nav bar was fixed  [Bug fix]
+* Jetpack Photon compatibility added  [3rd Party Compatibility]
+
+= 0.9.40 =
+* View more details at https://ampforwp.com/0-9-40-released-biggest-stability-update/
+* Proper endpoints added [Improvement]
+* Flush Rewrites properly [Improvement]
+* REL Canonical properly getting added. [Improvement]
+* Proper Frontpage Canonical added [Improvement]
+* Added Base name support for categories and tags [Improvement]
+* Redirection of excluded post solved. [Bug fix]
+* Archives properly redirecting to the right URL [Bug fix]
+* Homepage redirection solved [Bug fix]
+* Plusone tag is stripped properly. [Validation Issue fixed]
+* Archives are now clickable. [Improvements]
+* WP_Query filter added for better customizability of Homepage loop. [Better Customizations]
+* Social share boost plugin compatibility. [3rd party Customizations]
+* Removed H1 from the frontpage even if it is not available. [Improvement]
+* H3 instead of H1 for Site title. So there is only one H1 per page. [SEO Improvement]
+
+= 0.9.38 =
+* View full details at https://ampforwp.com/google-tag-manager-for-amp/
+* Google Tag manager included [New feature]
+* Iframe max-width added [Improvement]
+* Paginated pages have different titles now. [Bug fix]
+
+= 0.9.37 =
+* View full details at https://ampforwp.com/category-tags-archive-support-added/
+* Debug issues solved [Bug fix]
+* Remove Extra styling added by other Themes/ Plugins [3rd party themes and plugin Support]
+* Category, Tags & Archive Support with titles added [Enchancement]
+* Archive Title support added [Enchancement]
+* There were some issues with attachments [Bug fix]
+* removed ? from amp url's [Improvement]
+* Mobile redirection for Archives added and 404 redirections removed for archives [Improvement]
+* View non-amp version now properly redirects to the normal version. #415 [Bug fix]
+* Added an option to turn off AMP support for Homepage. [Enchancement]
+* Too many redirects issue on homepage is fixed #435 [Improvement]
+* Spell check and G tags are removed for thrive & Spell check compatibility [Better Validation]
+* If image is not available in gravatar fixed, it was throwing an error #365 #327 [Improvement]
+* Comment anchor link changed for simplecomment button files in both designs [Improvement]
+* Redirection Loop issue fixed [Bug fix]
+* Shortcodes were visible in excerpt, it's fixed now. [Improvement]
+* Defer onload by other plugins was causing issues #431 [Better Validation & 3rd party support]
+* Improved Sessions [Improvement]
+* Advnaced Settings panel was created for better user experience. [Improvement]
+* Spell check tag was causing validation issues. [Better Validation & 3rd party support]
+* RTL issue fixed #454 [Bug fixed]
+
+= 0.9.36 =
+* Full details at https://ampforwp.com/0-9-36-released-stability-update-43rd-update/
+* Redux Core Update. Better compatibility with the Salient theme and Themeforest themes & plugins using redux framework in their core, which makes the plugin much stable. [Huge Improvements]
+* Hide advertisement section if advance ads plugin is active. [Better User experience]
+* Ultimate Social Media PLUS Plugin Compatibility (Link) [3rd Party plugin Compatibility & Better Validation]
+* Launch Post Builder button added. One of the important feature called ‘Post Builder’, that is drag and drop post builder was somewhere hidden in the customizer, so positioned it for better visibility from users. [Better UX]
+
+= 0.9.35 =
+* Full details at https://ampforwp.com/page-builder-realtime-preview-3rd-party-plugins-compatibility/
+* Customizer page builder (Design Manager) was not showing real-time preview, we have fixed this issue properly [Bug fix]
+* Attachment page was having the wrong endpoint. [Bug fix]
+* Fb:like div has href, showfaces, send and action tag, which was against validation [Validation Improvement]
+* A plugin (Spam Protection by CleanTalk, no Captcha Anti-Spam) was forcefully adding script into the AMP version. [3rd party Compatibility]
+* Lang attributes were added [Enhancement]
+* The tag like was disallowed in the AMP [Validation Improvement]
+* We did some more testing with Visual Composer & AMP [3rd party Compatibility]
+* AMP on Pages option was not working in some cases. [Bug fix]
+* Disable comment button when comments were disabled. This was fixed by @lofesa and was sent as a pull request. Thank you Lofesa!
+* g:plusone tag was not getting removed properly. [Validation Improvement]
+* Thrive headline optimizer was having issues in AMP version. [Validation Improvement]
+* Structured Data Image width issue solved [Enhancement]
+* BJ Lazy Load was having issues, we have added a fix which will make this plugin compatible with the AMP. [3rd party Compatibility & Validation Improvement]
+* imageanchor=”1″ was getting added by some 3rd party plugin, this was fixed.[Validation Improvement]
+
+= 0.9.34 =
+* Newspaper theme by Tagdiv was having issues, we have fixed this one. 
+
+= 0.9.33 [15th Jan 2017] =
+* Full details at https://ampforwp.com/debug-errors-shortcodes/
+* Mobile was not working with Newspaper theme by Tagdiv [Bugfix]
+* Debug errors fixed, Code is now much cleaner.
+* New rewrite rules for homepage pagination. It had some paginated URLs with wrong amphtml tag.
+* Extra analytics file was loading. Better compatibility with Yoast & Monster analytics.
+* Properly removes AMP if turned off from Post panel
+* z-index position improved on Sticky Social bar
+* Better compatibility with shortcodes.
+* Divi Standard Layouts Compatibility
+* Properly Hide AMP posts if excluded. #367
+* Mobile redirection was causing loop issues which are now fixed.
+* Some plugins were loading in core AMP js file, which was causing the issues, which is now fixed. [Better Validation]
+* onclick was getting added in the links on AMP version. Issue fixed. [Better Validation]
+* thrive_headline tag was getting added in the Title tag which was causing validation issues. Fixed. [Better Validation]
+* Some interactive plugins were using place, state, city and imap tags which are now fixed. [Better Validation]
+
+= 0.9.32 [7th Jan 2017] =
+* Full details at https://ampforwp.com/first-wave-of-polishing-in-2017/
+* Rel=canonical issue fixed: AMP URL redirect to the normal URL #293 & #332.
+* Paginated pages on homepage redirect to homepage URL #335
+* Title of the page should be displayed on the FrontPage #358
+* Thrive Builder AMP Validation Compatibility, so it will be validated properly in AMP.
+* Twitter Sharing improved so it gets the data properly #341
+* Option to change the number of Related Posts #290
+* Validation errors due to rel="canonical" was missing on some pages
+* Comment button displays even if the comments are not available
+* Threaded comments were duplicating, so that issue is solved and added proper CSS for it.
+* Minor issue with Jetpack Comments fixed.
+* Missing amp-social-share.js on front page fixed #372
+* Minor improvements to Title and description tags.
+* Analytics Script was loading twice when Glue was active.
+* Page specific class added for better customization compatibility #377
+* Inline Style support added Fixed #356
+* Bugs fixed in Email notification pointer
+
+= 0.9.31 [2nd Jan 2017] =
+* Proper Details at https://ampforwp.com/amp-0-9-31-released-installation-user-experience/
+* Proper Condition added for the scripts to load in Frontpage.php
+* Rel canonical properly added for front pages
+* 404 and Archive page Mobile redirection code refined
+* User Experience Improvement: Installation process was improved
+
+= 0.9.3 [31th December 2016] =
+* Proper Details at https://ampforwp.com/custom-amp-content-editor/
+* Custom AMP Editor - Which allows you to override your Content that you had written in Post or page, so you can add the different content just for AMP.
+* FrontPage had some validation issues. [Bug fix]
+* Related posts in Design 1 we're redirecting to 404 fixed [Bug fix]
+
+= 0.9.2.2 [27th December 2016] =
+* Proper Details at https://ampforwp.com/polishing-user-experience-improvements/
+* Made the Options panel user-friendly
+* Social Share on frontpage issue fixed.
+* Readme.txt made user-friendly.
+* Archive option removed and some UI improvements
+* Single was not displaying the Title
+* 'Type is not allowed' [Validation issue fixed]
+* noshade tag Validation issue fixed
+
+= 0.9.2.1 [24th December 2016] =
+* Proper Details at https://ampforwp.com/step-towards-fixing-amp-validation-errors/
+* Disabled the Tags and Categories support for AMP for better validation until we find a better solution.
+* Mobile redirection bug fixed, It was continuously redirecting to the same page [Bug fix]
+* trailingslashit added to make sure we have proper url for Mobile redirection [Bug fix]
+* In content AD overlapping the content issue fixed
+
+= 0.9.2 [23th December 2016] =
+* Proper Details at https://ampforwp.com/mobile-redirection/
+* AMP Mobile Redirection Feature added. It can be turned on from Dashboard > General and then Mobile Redirection. [New Feature]
+* Archive title and description added [Improvement]
+* Improved the Speed of the AMP version #321 [Improvement]
+* Anchor link was not closing fixed #328 [Bug Fix]
+* Typo in Trailingslashit function which resulted in some issues in the Homepage version [Bug Fix]
 
 = 0.9.1.2 [20th December 2016] =
 * Proper Details at http://ampforwp.com/new/

@@ -103,8 +103,8 @@ if ( ! class_exists( 'YITH_WFBT_Frontend' ) ) {
 		public function add_bought_together_form(){
 
 			global $product;
-
-			echo do_shortcode( '[ywfbt_form product_id="' . $product->id . '"]' );
+            $product_id = yit_get_base_product_id( $product );
+			echo do_shortcode( '[ywfbt_form product_id="' . $product_id . '"]' );
 		}
 
 
@@ -131,13 +131,13 @@ if ( ! class_exists( 'YITH_WFBT_Frontend' ) ) {
             }
 
             // get meta for current product
-            $group  = get_post_meta( $product->id, YITH_WFBT_META, true );
+            $group  = yit_get_prop( $product, YITH_WFBT_META, true );
 
-            if( empty( $group ) || $product->product_type == 'grouped' || $product->product_type == 'external' ) {
+            if( empty( $group ) || $product->is_type( 'grouped', 'external' ) ) {
                 return '';
             }
 
-            if( $product->product_type == 'variable' ) {
+            if( $product->is_type( 'variable' ) ) {
 
                 $variations = $product->get_children();
 

@@ -23,8 +23,13 @@ class WC_Order_Export_Engine {
 
 		$filename = self::make_filename( $settings['export_filename'] );
 		$custom_export = apply_filters('woe_custom_export_to_'.$export_type,false, $filename, $filepath, $exporter);
-		if( !$custom_export )
-			echo $exporter->run_export( $filename, $filepath ) . "\r\n";
+		if( !$custom_export ) {
+			$result = $exporter->run_export( $filename, $filepath );
+		} else {
+			$result = $custom_export;
+		}
+		echo $result . "\r\n";
+		return $result;
 	}
 
 	public static function make_filename( $mask ) {
@@ -339,6 +344,14 @@ class WC_Order_Export_Engine {
 	public static function build_file_full( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		global $wpdb;
 		
+		//for hooks
+		while ( @ob_end_clean() ) {
+		}; // remove ob_xx
+		$settings = self::validate_defaults( $settings );
+		self::$current_job_settings = $settings;
+		self::$current_job_build_mode = 'full';
+		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
+
 		$filename = ( ! empty( $filename ) ? $filename : self::tempnam( sys_get_temp_dir(), $settings['format'] ) );
 
 		$formater = self::init_formater( '', $settings, $filename, $labels, $static_vals );
@@ -398,6 +411,14 @@ class WC_Order_Export_Engine {
 	public static function build_separate_files_and_export( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		global $wpdb;
 
+		//for hooks
+		while ( @ob_end_clean() ) {
+		}; // remove ob_xx
+		$settings = self::validate_defaults( $settings );
+		self::$current_job_settings = $settings;
+		self::$current_job_build_mode = 'full';
+		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
+		
 		$filename = ( ! empty( $filename ) ? $filename : self::tempnam( sys_get_temp_dir(), $settings['format'] ) );
 
 		self::init_labels( $settings, $labels, $static_vals );
@@ -453,9 +474,9 @@ class WC_Order_Export_Engine {
 
 			if ( $filename !== false ) {
 				$result = self::export( $settings, $filename );
-				if ($result) {
-					return $result;
-				}
+				//if ($result) {
+				//	return $result;
+				//}
 			}
 			self::$order_id = '';
 		}
@@ -465,13 +486,6 @@ class WC_Order_Export_Engine {
 
 
 	public static function build_files_and_export( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
-		//for hooks
-		while ( @ob_end_clean() ) {
-		}; // remove ob_xx
-		$settings = self::validate_defaults( $settings );
-		self::$current_job_settings = $settings;
-		self::$current_job_build_mode = 'full';
-		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
 
 		if (!empty($settings['destination']['separate_files'])) {
 			$result = self::build_separate_files_and_export( $settings, $filename, $limit, $order_ids );

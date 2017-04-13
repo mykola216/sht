@@ -65,23 +65,43 @@ class MailChimp_WooCommerce_Transform_Orders
             $order->setCampaignId($this->campaign_id);
         }
 
-        $order->setFulfillmentStatus($woo->get_status());
         $order->setProcessedAt(mailchimp_date_utc($woo->order_date));
 
-        if ($woo->get_status() === 'cancelled') {
-            $order->setCancelledAt(mailchimp_date_utc($woo->modified_date));
-        }
-
         $order->setCurrencyCode($woo->get_order_currency());
-        $order->setFinancialStatus($woo->is_paid() ? 'paid' : 'pending');
 
+        // grab the current statuses - this will end up being custom at some point.
+        $statuses = $this->getOrderStatuses();
+
+        // grab the order status
+        $status = $woo->get_status();
+
+        // map the fulfillment and financial statuses based on the map above.
+        $fulfillment_status = array_key_exists($status, $statuses) ? $statuses[$status]->fulfillment : null;
+        $financial_status = array_key_exists($status, $statuses) ? $statuses[$status]->financial : $status;
+
+        // set the fulfillment_status
+        $order->setFulfillmentStatus($fulfillment_status);
+
+        // set the financial status
+        $order->setFinancialStatus($financial_status);
+
+        // only set this if the order is cancelled.
+        if ($status === 'cancelled') $order->setCancelledAt(mailchimp_date_utc($woo->modified_date));
+
+        // set the total
         $order->setOrderTotal($woo->get_total());
+
+        // set the order URL
+        $order->setOrderURL($woo->get_view_order_url());
 
         // if we have any tax
         $order->setTaxTotal($woo->get_total_tax());
 
         // if we have shipping.
         $order->setShippingTotal($woo->get_total_shipping());
+
+        // set the order discount
+        $order->setDiscountTotal($woo->get_total_discount());
 
         // set the customer
         $order->setCustomer($this->buildCustomerFromOrder($woo));
@@ -121,6 +141,10 @@ class MailChimp_WooCommerce_Transform_Orders
             $order->addItem($item);
         }
 
+        //if (($refund = $woo->get_total_refunded()) && $refund > 0){
+            // this is where we would be altering the submission to tell us about the refund.
+        //}
+
         return $order;
     }
 
@@ -155,7 +179,11 @@ class MailChimp_WooCommerce_Transform_Orders
         $address->setPostalCode($order->billing_postcode);
         $address->setCountry($order->billing_country);
         $address->setPhone($order->billing_phone);
-        $address->setName('billing');
+
+        // if we have billing names set it here
+        if (!empty($order->billing_first_name) && !empty($order->billing_last_name)) {
+            $address->setName($order->billing_first_name.' '.$order->billing_last_name);
+        }
 
         $customer->setAddress($address);
 
@@ -345,7 +373,11 @@ class MailChimp_WooCommerce_Transform_Orders
         $billing->setPostalCode($order->billing_postcode);
         $billing->setCountry($order->billing_country);
         $billing->setPhone($order->billing_phone);
-        $billing->setName('billing');
+
+        // if we have billing names go ahead and apply them
+        if (!empty($order->billing_first_name) && !empty($order->billing_last_name)) {
+            $billing->setName($order->billing_first_name.' '.$order->billing_last_name);
+        }
 
         $shipping = new MailChimp_WooCommerce_Address();
         $shipping->setAddress1($order->shipping_address_1);
@@ -357,7 +389,11 @@ class MailChimp_WooCommerce_Transform_Orders
         if (isset($order->shipping_phone)) {
             $shipping->setPhone($order->shipping_phone);
         }
-        $shipping->setName('shipping');
+
+        // if we have shipping names go ahead and apply them
+        if (!empty($order->shipping_first_name) && !empty($order->shipping_last_name)) {
+            $shipping->setName($order->shipping_first_name.' '.$order->shipping_last_name);
+        }
 
         return (object) array('billing' => $billing, 'shipping' => $shipping);
     }
@@ -394,5 +430,51 @@ class MailChimp_WooCommerce_Transform_Orders
         }
 
         return $address;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrderStatuses()
+    {
+        return array(
+            // Order received (unpaid)
+            'pending'       => (object) array(
+                'financial' => 'pending',
+                'fulfillment' => null
+            ),
+            // Payment received and stock has been reduced – the order is awaiting fulfillment.
+            // All product orders require processing, except those for digital downloads
+            'processing'    => (object) array(
+                'financial' => 'processing',
+                'fulfillment' => null
+            ),
+            // Awaiting payment – stock is reduced, but you need to confirm payment
+            'on-hold'       => (object) array(
+                'financial' => 'on-hold',
+                'fulfillment' => null
+            ),
+            // Order fulfilled and complete – requires no further action
+            'completed'     => (object) array(
+                'financial' => 'fulfilled',
+                'fulfillment' => 'fulfilled'
+            ),
+            // Cancelled by an admin or the customer – no further action required
+            'cancelled'     => (object) array(
+                'financial' => 'cancelled',
+                'fulfillment' => null
+            ),
+            // Refunded by an admin – no further action required
+            'refunded'      => (object) array(
+                'financial' => 'refunded',
+                'fulfillment' => null
+            ),
+            // Payment failed or was declined (unpaid). Note that this status may not show immediately and
+            // instead show as Pending until verified (i.e., PayPal)
+            'failed'        => (object) array(
+                'financial' => 'failed',
+                'fulfillment' => null
+            ),
+        );
     }
 }
