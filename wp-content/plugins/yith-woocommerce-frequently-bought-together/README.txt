@@ -2,8 +2,8 @@
 Contributors: yithemes
 Tags: yith, woocommerce, wc, shop, frequently bought together, bought together, bundles, products, frequently bought products, bought, together, product group, add to cart, cart
 Requires at least: 4.0
-Tested up to: 4.6.1
-Stable tag: 1.0.7
+Tested up to: 4.7.3
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,43 +36,49 @@ Full documentation is available [here](http://yithemes.com/docs-plugins/yith-woo
 
 == Changelog ==
 
+== 1.1.0 == Released on Mar 28, 2017
+
+* New: Support to WooCommerce 3.0.0 RC2.
+* New: Support to WordPress 4.7.3.
+* Update: Plugin core.
+
 == 1.0.7 == Released on Oct 26, 2016
 
-* Added: Support to WooCommerce 2.6.6.
-* Added: Support to WordPress 4.6.1
-* Added: Shortcode [ywfbt_form product_id=""] to print form "bought together" products.
-* Updated: Plugin core.
+* New: Support to WooCommerce 2.6.6.
+* New: Support to WordPress 4.6.1
+* New: Shortcode [ywfbt_form product_id=""] to print form "bought together" products.
+* Update: Plugin core.
 
 == 1.0.6 == Released on Aug 16, 2016
 
-* Added: Support to WooCommerce 2.6.4.
-* Added: Support to WordPress 4.6.
-* Updated: Plugin core.
+* New: Support to WooCommerce 2.6.4.
+* New: Support to WordPress 4.6.
+* Update: Plugin core.
 
 == 1.0.5 == Released on Jun 10, 2016
 
-* Added: Support to WooCommerce 2.6 RC1.
-* Updated: Plugin core.
+* New: Support to WooCommerce 2.6 RC1.
+* Update: Plugin core.
 
 == 1.0.4 == Released on Apr 27, 2016
 
-* Added: WordPress 4.5 compatibility.
-* Updated: Template yith-wfbt-form.php to version 1.0.4
-* Updated: Changed plugin textdomain from ywbt to yith-woocommerce-frequently-bought-together.
-* Updated: Language file.
-* Updated: Plugin core.
+* New: WordPress 4.5 compatibility.
+* Update: Template yith-wfbt-form.php to version 1.0.4
+* Update: Changed plugin textdomain from ywbt to yith-woocommerce-frequently-bought-together.
+* Update: Language file.
+* Update: Plugin core.
 
 == 1.0.3 == Released on Jan 12, 2016
 
-* Added: Compatibility with WooCommerce 2.5 RC2.
-* Updated: Plugin Core
+* New: Compatibility with WooCommerce 2.5 RC2.
+* Update: Plugin Core
 
 == 1.0.2 == Released on Aug 21, 2015
 
-* Added: Compatibility with WooCommerce 2.4.x
-* Added: Compatibility with WordPress 4.3
-* Added: ITA Translation
-* Updated: Plugin Core
+* New: Compatibility with WooCommerce 2.4.x
+* New: Compatibility with WordPress 4.3
+* New: ITA Translation
+* Update: Plugin Core
 
 == 1.0.1 == Released on Jul 24, 2015
 
@@ -88,15 +94,15 @@ If you have suggestions about how to improve YITH WooCommerce Frequently Bought 
 
 * English
 * Italian
+* Spanish
 
 If you have created your own language pack, or have an update for an existing one, you can send [gettext PO and MO file](http://codex.wordpress.org/Translating_WordPress "Translating WordPress")
 [use](http://yithemes.com/contact/ "Your Inspiration Themes") so we can bundle it into YITH Frequently Bought Together languages.
 
 == Upgrade notice ==
 
-== 1.0.7 == Released on Oct 26, 2016
+== 1.1.0 == Released on Mar 28, 2017
 
-* Added: Support to WooCommerce 2.6.6.
-* Added: Support to WordPress 4.6.1
-* Added: Shortcode [ywfbt_form product_id=""] to print form "bought together" products.
-* Updated: Plugin core.
+* New: Support to WooCommerce 3.0.0 RC2.
+* New: Support to WordPress 4.7.3.
+* Update: Plugin core.
