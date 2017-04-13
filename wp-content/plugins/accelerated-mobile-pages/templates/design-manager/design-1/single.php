@@ -11,21 +11,22 @@
 	</style>
 </head>
 
-<body class="<?php echo esc_attr( $this->get( 'body_class' ) ); ?>">
+<body class="<?php echo esc_attr( $this->get( 'body_class' ) ); ?> single-post <?php if(is_page()){ echo'amp-single-page'; };?> design_1_wrapper">
 
-<?php $this->load_parts( array( 'header-bar' ) ); ?>
+	<?php $this->load_parts( array( 'header-bar' ) ); ?>
 
-<article class="amp-wp-article">
-	<?php do_action('ampforwp_post_before_design_elements') ?>
-	
-	<?php $this->load_parts( apply_filters( 'ampforwp_design_elements', array( 'empty-filter' ) ) ); ?>
+	<article class="amp-wp-article">
+		<?php do_action('ampforwp_post_before_design_elements') ?>
 
-	<?php do_action('ampforwp_post_after_design_elements') ?>
-</article>
+		<?php $this->load_parts( apply_filters( 'ampforwp_design_elements', array( 'empty-filter' ) ) ); ?>
 
-<?php $this->load_parts( array( 'footer' ) ); ?>
+		<?php do_action('ampforwp_post_after_design_elements') ?>
+	</article>
+
+	<?php $this->load_parts( array( 'footer' ) ); ?>
 
 <?php do_action( 'amp_post_template_footer', $this ); ?>
 
 </body>
 </html>
+
