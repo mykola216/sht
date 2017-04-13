@@ -73,6 +73,9 @@ add_action( 'woocommerce_before_cart', 'display_print_button');
 add_action( 'woocommerce_single_product_summary', 'display_print_button', 12);
 
 add_filter( 'woocommerce_defer_transactional_emails', '__return_false' );
+
+add_filter( 'woocommerce_admin_billing_fields', 'canvas_child_woocommerce_admin_billing_fields');
+add_filter( 'woocommerce_admin_shipping_fields', 'canvas_child_woocommerce_admin_shipping_fields');
 // Common - end
 
 
@@ -457,6 +460,45 @@ function display_print_button() {
 	print_button();
 }
 
+function canvas_child_woocommerce_admin_billing_fields($billing_fields) {
+	global $theorder, $post;
+
+	if ( ! is_object( $theorder ) ) {
+		$theorder = wc_get_order( $post->ID );
+	}
+
+	$order = $theorder;
+	$order_address['billing'] = $order->get_address('billing');
+
+	foreach ($billing_fields as $key => $field) {
+		$billing_fields[$key]['value'] = isset($order_address['billing'][$key]) ? $order_address['billing'][$key] : '';
+		if ('country' == $key) {
+			$billing_fields[$key]['class'] = 'select short';
+		}
+	}
+
+	return $billing_fields;
+}
+
+function canvas_child_woocommerce_admin_shipping_fields($shipping_fields) {
+	global $theorder, $post;
+
+	if ( ! is_object( $theorder ) ) {
+		$theorder = wc_get_order( $post->ID );
+	}
+
+	$order = $theorder;
+	$order_address['shipping'] = $order->get_address('shipping');
+
+	foreach ($shipping_fields as $key => $field) {
+		$shipping_fields[$key]['value'] = isset($order_address['shipping'][$key]) ? $order_address['shipping'][$key] : '';
+		if ('country' == $key) {
+			$shipping_fields[$key]['class'] = 'select short';
+		}
+	}
+
+	return $shipping_fields;
+}
 
 /******************************************************************************/
 /* Common - end                                                               */
