@@ -184,6 +184,11 @@ function update_dynamic_price_ajax(gform_total) {
         }
     };
 
+    $(document).on('wc_variation_form', function (e) {
+        var $form = $(this);
+        $form.wc_gravity_form();
+    });
+
     $(document).ready(function (e) {
         $('form.cart').each(function (index, form) {
             var $form = $(form);

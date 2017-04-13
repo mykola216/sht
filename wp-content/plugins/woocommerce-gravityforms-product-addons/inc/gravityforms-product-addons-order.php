@@ -56,7 +56,7 @@ class WC_GFPA_Order {
 					if ( $entry_id ) {
 
 						$entry = GFAPI::get_entry( $entry_id );
-						if ( $entry ) {
+						if ( $entry && !is_wp_error($entry) ) {
 							$display_value = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . $entry['form_id'] . '&lid=' . $entry_id ) . '">' . __( 'View', 'wc_gf_addons' ) . '</a>';
 							$meta_to_display[ 'gravity_form_entry_' . $entry_id ] = (object) array(
 								'key'           => 'gravity_form_entry',
