@@ -18,34 +18,34 @@
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 
 	<style amp-custom>
-		<?php $this->load_parts( array( 'style' ) ); ?>
-		<?php do_action( 'amp_post_template_css', $this ); ?>
-		.amp-wp-price .price{
-			color: #f70;
-			font: normal normal bold 14px helvetica, arial, sans-serif;
-			margin: 0 0 0 5px;
-			text-align: left;
-		}
-		.amp-wp-price .price del{
-			color: #666;
-			font-weight: normal;
-			font-size: 10px;
-		}
-		.amp-wp-price .price ins{
-			text-decoration: none;
-		}
-		.current-menu-item a {
-			font-weight: bold;
-			color: #666;
-		}
-		.taxonomy-description{
-			overflow: hidden;
-			padding: 0 !important;
-			background: transparent !important;
-			-moz-box-shadow: none !important;
-			-webkit-box-shadow: none !important;
-			box-shadow: none !important;
-		}
+	<?php $this->load_parts( array( 'style' ) ); ?>
+	<?php do_action( 'amp_post_template_css', $this ); ?>
+	.amp-wp-price .price{
+		color: #f70;
+		font: normal normal bold 14px helvetica, arial, sans-serif;
+		margin: 0 0 0 5px;
+		text-align: left;
+	}
+	.amp-wp-price .price del{
+		color: #666;
+		font-weight: normal;
+		font-size: 10px;
+	}
+	.amp-wp-price .price ins{
+		text-decoration: none;
+	}
+	.current-menu-item a {
+		font-weight: bold;
+		color: #666;
+	}
+	main .taxonomy-description{
+		overflow: hidden;
+		padding: 0;
+		background: transparent;
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
 	</style>
 </head>
 <body class="amp_home_body design_2_wrapper">
