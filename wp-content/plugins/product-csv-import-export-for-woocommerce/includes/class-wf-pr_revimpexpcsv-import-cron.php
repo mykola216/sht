@@ -85,7 +85,7 @@ class WF_PrRevImpExpCsv_ImportCron {
                                 
             }else{
                 $this->error_message = 'Please set a mapping profile';
-                $GLOBALS['WF_CSV_Product_Review_Import']->log->add( 'csv-import', __( 'Failed processing import. Reason:'.$this->error_message, 'wf_csv_import_export' ) );
+                $GLOBALS['WF_CSV_Product_Review_Import']->hf_log_data_change( 'csv-import', __( 'Failed processing import. Reason:'.$this->error_message, 'wf_csv_import_export' ) );
             }
         if($this->settings['rev_auto_import_merge']){ $_GET['merge'] = 1; } else { $_GET['merge'] = 0; }    
           
@@ -100,7 +100,7 @@ class WF_PrRevImpExpCsv_ImportCron {
         
         die();
         }else{
-            $GLOBALS['WF_CSV_Product_Review_Import']->log->add( 'csv-import', __( 'Fetching file failed. Reason:'.$this->error_message, 'wf_csv_import_export' ) );
+            $GLOBALS['WF_CSV_Product_Review_Import']->hf_log_data_change( 'csv-import', __( 'Fetching file failed. Reason:'.$this->error_message, 'wf_csv_import_export' ) );
         }
         
     }

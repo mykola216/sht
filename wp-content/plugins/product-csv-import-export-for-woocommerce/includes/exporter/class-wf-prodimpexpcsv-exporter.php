@@ -161,7 +161,7 @@ class WF_ProdImpExpCsv_Exporter {
 		if ( ! $export_columns || in_array( 'product_page_url', $export_columns ) ) {
 			$row[] = 'Product Page URL';
 		}
-
+                $row = apply_filters('hf_alter_product_export_csv_columns', $row);
 		$row = array_map( 'WF_ProdImpExpCsv_Exporter::wrap_column', $row );
 		fwrite( $fp, implode( $delimiter, $row ) . "\n" );
 		unset( $row );
@@ -485,10 +485,10 @@ class WF_ProdImpExpCsv_Exporter {
 					if ( $product->post_parent ) {
 						$product_page_url = get_permalink( $product->post_parent );
 					}
-					
 					$row[] = $product_page_url;
 				}
 
+                                $row = apply_filters('hf_alter_product_export_csv_data', $row , $product->ID);
 				// Add to csv
 				$row = array_map( 'WF_ProdImpExpCsv_Exporter::wrap_column', $row );
 				fwrite( $fp, implode( $delimiter, $row ) . "\n" );
@@ -509,6 +509,8 @@ class WF_ProdImpExpCsv_Exporter {
 			}
 			$login = ftp_login($ftp_conn, $ftp_user, $ftp_password);
 
+			ftp_pasv($ftp_conn, TRUE);
+			
 			// upload file
 			if (ftp_put($ftp_conn, $file, $file, FTP_ASCII)) {
 				$wf_product_ie_msg = 1;
