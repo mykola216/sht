@@ -3,11 +3,11 @@
 /**
  * Title: WordPress payment test data
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 3.7.0
+ * @version 4.5.3
  * @since 3.7.0
  */
 class Pronamic_WP_Pay_PaymentFormData extends Pronamic_WP_Pay_PaymentData {
@@ -67,25 +67,10 @@ class Pronamic_WP_Pay_PaymentFormData extends Pronamic_WP_Pay_PaymentData {
 		$items = new Pronamic_IDeal_Items();
 
 		// Amount
-		$amount = filter_input( INPUT_POST, 'pronamic_pay_amount', FILTER_SANITIZE_STRING, array(
-			'flags'   => FILTER_FLAG_ALLOW_THOUSAND,
-			'options' => array( 'decimal' => pronamic_pay_get_decimal_separator() ),
-		) );
+		$amount = filter_input( INPUT_POST, 'pronamic_pay_amount', FILTER_SANITIZE_STRING );
 
-		// Get correct amount if pronamic_pay_amount is an array
-		if ( ! $amount && $amount = filter_input( INPUT_POST, 'pronamic_pay_amount', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY ) ) {
-			// Array filter will remove values NULL, FALSE and empty strings ('')
-			$amount = array_filter( $amount );
-
-			// Make sure the amount has the correct floating value
-			foreach ( $amount as $key => $value ) {
-				if ( 'other' !== $key ) {
-					$amount[ $key ] = $value / 100;
-				}
-			}
-
-			// Get first element of the array
-			$amount = array_shift( $amount );
+		if ( 'other' === $amount ) {
+			$amount = filter_input( INPUT_POST, 'pronamic_pay_amount_other', FILTER_SANITIZE_STRING );
 		}
 
 		$amount = Pronamic_WP_Pay_Util::string_to_amount( $amount );
@@ -121,12 +106,12 @@ class Pronamic_WP_Pay_PaymentFormData extends Pronamic_WP_Pay_PaymentData {
 	//////////////////////////////////////////////////
 
 	public function get_email() {
-		return filter_input( INPUT_POST, 'pronamic_pay_email', FILTER_VALIDATE_EMAIL );
+		return filter_input( INPUT_POST, 'pronamic_pay_email', FILTER_SANITIZE_EMAIL );
 	}
 
 	public function get_customer_name() {
-		$first_name = filter_input( INPUT_POST, 'pronamic_pay_first_name', FILTER_VALIDATE_EMAIL );
-		$last_name  = filter_input( INPUT_POST, 'pronamic_pay_last_name', FILTER_VALIDATE_EMAIL );
+		$first_name = filter_input( INPUT_POST, 'pronamic_pay_first_name', FILTER_SANITIZE_STRING );
+		$last_name  = filter_input( INPUT_POST, 'pronamic_pay_last_name', FILTER_SANITIZE_STRING );
 
 		return $first_name . ' ' . $last_name;
 	}

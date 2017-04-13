@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.2
+ * @version 1.6.4
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
@@ -26,7 +26,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
-		if ( version_compare( GFCommon::$version, '1.7', '>=' ) ) {
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '>=' ) ) {
 			add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
 		}
 
@@ -231,6 +231,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_frequency'       => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 		);
+
+		if ( class_exists( 'GFActiveCampaign' ) ) {
+			$definition['_pronamic_pay_gf_delay_activecampaign_subscription'] = FILTER_VALIDATE_BOOLEAN;
+		}
 
 		if ( class_exists( 'GFAWeber' ) ) {
 			$definition['_pronamic_pay_gf_delay_aweber_subscription'] = FILTER_VALIDATE_BOOLEAN;
