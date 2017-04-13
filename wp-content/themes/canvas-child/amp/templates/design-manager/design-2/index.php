@@ -38,13 +38,13 @@
 			font-weight: bold;
 			color: #666;
 		}
-		.taxonomy-description{
+		main .taxonomy-description{
 			overflow: hidden;
-			padding: 0 !important;
-			background: transparent !important;
-			-moz-box-shadow: none !important;
-			-webkit-box-shadow: none !important;
-			box-shadow: none !important;
+			padding: 0;
+			background: transparent;
+			-moz-box-shadow: none;
+			-webkit-box-shadow: none;
+			box-shadow: none;
 		}
 	</style>
 </head>
