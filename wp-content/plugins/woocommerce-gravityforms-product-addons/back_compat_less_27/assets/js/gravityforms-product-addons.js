@@ -146,11 +146,10 @@ function update_dynamic_price_ajax(gform_total) {
             $form.attr('action', '');
             $form.attr('id', 'gform_' + form_id);
 
-            $form.on('found_variation', function () {
+            $form.on('found_variation', function (variation) {
                 try {
                     gf_apply_rules(form_id, ["0"]);
                 } catch (err) {
-
                 }
 
                 gformCalculateTotalPrice(form_id);
@@ -180,9 +179,14 @@ function update_dynamic_price_ajax(gform_total) {
                 $form.attr('action', window.location.hash);
                 $form.trigger("submit", [true]);
             });
-
         }
     };
+
+
+    $(document).on('wc_variation_form', function (e) {
+        var $form = $(this);
+        $form.wc_gravity_form();
+    });
 
     $(document).ready(function (e) {
         $('form.cart').each(function (index, form) {

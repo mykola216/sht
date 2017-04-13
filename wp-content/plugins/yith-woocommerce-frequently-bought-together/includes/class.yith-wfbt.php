@@ -66,14 +66,13 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
 		 */
 		public function __construct() {
 
+            // Load Plugin Framework
+            add_action( 'after_setup_theme', array( $this, 'plugin_fw_loader' ), 1 );
+
 			// Class admin
 			if ( $this->is_admin() ) {
-
 			    // require admin class
                 require_once('class.yith-wfbt-admin.php');
-
-				// Load Plugin Framework
-				add_action( 'after_setup_theme', array( $this, 'plugin_fw_loader' ), 1 );
 				// admin class
 				YITH_WFBT_Admin();
 			}
@@ -115,8 +114,8 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
          */
         public function is_admin(){
             $context_check = isset( $_REQUEST['context'] ) && $_REQUEST['context'] == 'frontend';
-
-            return is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX && $context_check );
+            $is_admin = is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX && $context_check );
+            return apply_filters( 'yith_wfbt_check_is_admin', $is_admin );
         }
 
 		/**
@@ -143,11 +142,14 @@ if ( ! class_exists( 'YITH_WFBT' ) ) {
 
 				$attr = array();
 				$variation_id = '';
-				$product_id = $product->id;
 
-				if( $product->product_type == 'variation' ) {
+				if( $product->is_type( 'variation' ) ) {
 					$attr           = $product->get_variation_attributes();
-					$variation_id   = $product->variation_id;
+					$variation_id   = version_compare( WC()->version, '2.7.0', '<' ) ? $product->variation_id : $product->get_id();
+					$product_id     = yit_get_base_product_id( $product );
+				}
+				else {
+				    $product_id = yit_get_prop( $product, 'id', true );
 				}
 
 				if( WC()->cart->add_to_cart( $product_id, 1, $variation_id, $attr ) ) {

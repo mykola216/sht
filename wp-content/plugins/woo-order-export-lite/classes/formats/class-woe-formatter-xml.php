@@ -53,8 +53,6 @@ class WOE_Formatter_Xml extends WOE_Formatter {
 						foreach ( $child_elements as $field_child => $value_child ) {
 							if( isset( $child_labels[ $field_child ] ) ) 
 								$child->addChild( $child_labels[ $field_child ], $this->prepare_string($value_child) );
-							else 
-								$child->addChild( $field_child, $this->prepare_string($value_child) );
 						}
 					}	
 				}

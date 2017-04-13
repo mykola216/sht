@@ -1,6 +1,7 @@
 <?php
 class Mollie_WC_Helper_Settings
 {
+    const DEFAULT_TIME_PAYMENT_CONFIRMATION_CHECK = '3:00';
     /**
      * @return bool
      */
@@ -73,6 +74,16 @@ class Mollie_WC_Helper_Settings
     public function getCurrentLocale ()
     {
         return apply_filters('wpml_current_language', get_locale());
+    }
+
+    /**
+     * Store customer details at Mollie
+     *
+     * @return string
+     */
+    public function shouldStoreCustomer ()
+    {
+        return get_option($this->getSettingId('customer_details'), 'yes') === 'yes';
     }
 
     /**
@@ -184,7 +195,7 @@ class Mollie_WC_Helper_Settings
             if (isset($_GET['refresh-methods']) && check_admin_referer('refresh-methods'))
             {
                 /* Reload active Mollie methods */
-                $data_helper->getPaymentMethods($test_mode, $use_cache = false);
+                $data_helper->getAllPaymentMethods($test_mode, $use_cache = false);
             }
 
             $icon_available     = ' <span style="color: green; cursor: help;" title="' . __('Gateway enabled', 'mollie-payments-for-woocommerce'). '">' . strtolower(__('Enabled', 'mollie-payments-for-woocommerce')) . '</span>';
@@ -363,6 +374,15 @@ class Mollie_WC_Helper_Settings
                 'default' => 'wp_locale',
             ),
             array(
+                'id'                => $this->getSettingId('customer_details'),
+                'title'             => __('Store customer details at Mollie', 'mollie-payments-for-woocommerce'),
+                /* translators: Placeholder 1: enabled or disabled */
+                'desc'              => sprintf(__('Should Mollie store customers name and email address for Single Click Payments? Default <code>%s</code>', 'mollie-payments-for-woocommerce'), strtolower(__('Enabled', 'mollie-payments-for-woocommerce'))),
+                'type'              => 'checkbox',
+                'default'           => 'yes',
+
+            ),
+            array(
                 'id'      => $this->getSettingId('debug'),
                 'title'   => __('Debug Log', 'mollie-payments-for-woocommerce'),
                 'type'    => 'checkbox',
@@ -376,6 +396,22 @@ class Mollie_WC_Helper_Settings
         );
 
         return $this->mergeSettings($settings, $mollie_settings);
+    }
+
+    public function getPaymentConfirmationCheckTime()
+    {
+        $time = strtotime(self::DEFAULT_TIME_PAYMENT_CONFIRMATION_CHECK);
+        $date = new DateTime();
+
+        if ($date->getTimestamp() > $time){
+            $date->setTimestamp($time);
+            $date->add(new DateInterval('P1D'));
+        } else {
+            $date->setTimestamp($time);
+        }
+
+
+        return $date->getTimestamp();
     }
 
     /**

@@ -53,7 +53,7 @@ class WC_Order_Export_Data_Extractor {
 	public static function get_order_custom_fields() { 
 		global $wpdb;
 		
-		$fields = $wpdb->get_col( "SELECT DISTINCT meta_key FROM {$wpdb->postmeta} WHERE meta_key NOT LIKE '\_%'    AND post_id IN
+		$fields = $wpdb->get_col( "SELECT DISTINCT meta_key FROM {$wpdb->postmeta} WHERE post_id IN
 									(SELECT DISTINCT ID FROM {$wpdb->posts} WHERE post_type = 'shop_order' )" );
 		sort( $fields );
 		return apply_filters( 'woe_get_order_custom_fields', $fields );
@@ -209,6 +209,7 @@ class WC_Order_Export_Data_Extractor {
 			'name'        => array( 'label' => 'Name', 'checked' => 1 ),
 			'seller'      => array( 'label' => 'Item Seller', 'checked' => 1 ),
 			'qty'         => array( 'label' => 'Quantity', 'checked' => 1 ),
+			'qty_minus_refund' => array( 'label' => 'Quantity (- Refund)', 'checked' => 0 ),
 			'item_price'  => array( 'label' => 'Item Cost', 'checked' => 1 ),
 			'price'       => array( 'label' => 'Product Current Price', 'checked' => 0 ),
 			'line_no_tax' => array( 'label' => 'Order Line (w/o tax)', 'checked' => 0 ),
@@ -369,6 +370,7 @@ class WC_Order_Export_Data_Extractor {
 			'order_refund'          => array( 'label' => 'Order Refund Amount', 'checked' => 1 ),
 			'order_total_inc_refund'=> array( 'label' => 'Order Total Amount (- Refund)', 'checked' => 1 ),
 			'order_total'           => array( 'label' => 'Order Total Amount', 'checked' => 1 ),
+			'order_total_no_tax'    => array( 'label' => 'Order Total Amount without Tax', 'checked' => 0 ),
 			'order_total_tax'       => array( 'label' => 'Order Total Tax Amount', 'checked' => 1 ),
 			'order_total_tax_refunded'    => array( 'label' => 'Order Total Tax Amount Refunded', 'checked' => 1 ),
 			'order_total_tax_minus_refund' => array( 'label' => 'Order Total Tax Amount (- Refund)', 'checked' => 1 ),
@@ -499,9 +501,9 @@ class WC_Order_Export_Data_Extractor {
 				$values = self::sql_subset( $values );
 				if ( $values ) {
 					$taxonomy_where_object_id = $taxonomy_where ? "AND object_id IN ($taxonomy_where)" : "";
-					$taxonomy_where           = "(SELECT  object_id FROM {$wpdb->term_relationships} AS {$field}_rel
-						INNER JOIN {$wpdb->term_taxonomy} AS {$field}_cat ON {$field}_cat.term_taxonomy_id = {$field}_rel.term_taxonomy_id
-						WHERE {$field}_cat.term_id IN (SELECT term_id FROM {$wpdb->terms} WHERE name IN($values) ) $taxonomy_where_object_id 
+					$taxonomy_where           = "(SELECT  object_id FROM {$wpdb->term_relationships} AS `{$field}_rel`
+						INNER JOIN {$wpdb->term_taxonomy} AS `{$field}_cat` ON `{$field}_cat`.term_taxonomy_id = `{$field}_rel`.term_taxonomy_id
+						WHERE `{$field}_cat`.term_id IN (SELECT term_id FROM {$wpdb->terms} WHERE name IN($values) ) $taxonomy_where_object_id 
 					)";
 				}
 			}
@@ -673,9 +675,9 @@ class WC_Order_Export_Data_Extractor {
 				$values = self::sql_subset( $values );
 				if ( $values ) {
 					$taxonomy_where_object_id = $taxonomy_where ? "AND object_id IN ($taxonomy_where)" : "";
-					$taxonomy_where           = "(SELECT  object_id FROM {$wpdb->term_relationships} AS {$field}_rel
-						INNER JOIN {$wpdb->term_taxonomy} AS {$field}_cat ON {$field}_cat.term_taxonomy_id = {$field}_rel.term_taxonomy_id
-						WHERE {$field}_cat.term_id IN (SELECT term_id FROM {$wpdb->terms} WHERE name IN($values) ) $taxonomy_where_object_id 
+					$taxonomy_where           = "(SELECT  object_id FROM {$wpdb->term_relationships} AS `{$field}_rel`
+						INNER JOIN {$wpdb->term_taxonomy} AS `{$field}_cat` ON `{$field}_cat`.term_taxonomy_id = `{$field}_rel`.term_taxonomy_id
+						WHERE `{$field}_cat`.term_id IN (SELECT term_id FROM {$wpdb->terms} WHERE name IN($values) ) $taxonomy_where_object_id 
 					)";
 				}
 			}
@@ -1268,7 +1270,7 @@ class WC_Order_Export_Data_Extractor {
 			$i++;
 			$product   = $order->get_product_from_item( $item );
 			$product = apply_filters( "woe_get_order_product", $product );
-			$item_meta = $order->get_item_meta( $item_id );
+			$item_meta = get_metadata( 'order_item', $item_id );
             foreach($item_meta as $key=>$value) {
                 $clear_key = wc_sanitize_taxonomy_name( $key );
                 if ( taxonomy_exists( $clear_key ) ) {
@@ -1280,14 +1282,23 @@ class WC_Order_Export_Data_Extractor {
             }
 			$item_meta = apply_filters( "woe_get_order_product_item_meta", $item_meta );
 			$product = apply_filters( "woe_get_order_product_and_item_meta", $product , $item_meta );
+			// product was deleted ??
+			if( !$product )
+				continue;
 			$row       = array();
+			
+			$product_id  = method_exists($product,'get_id') ? $product->get_id() : $product->id;
+			$post   = method_exists($product,'get_id') ? get_post($product->get_id()) : $product->post;
 			foreach ( $labels as $field => $label ) {
 				if ( strpos( $field, '__' ) !== false && $taxonomies = wc_get_product_terms( $item['product_id'],
 						substr( $field, 2 ), array( 'fields' => 'names' ) )
 				) {
 					$row[ $field ] = implode( ', ', $taxonomies );
-				} else if ( $field == 'product_shipping_class' && $taxonomies = wc_get_product_terms( $item['product_id'], $field, array( 'fields' => 'names' ) ) ) {
-					$row[ $field ] = implode( ', ', $taxonomies );
+				} else if ( $field == 'product_shipping_class' ) {
+					if( $taxonomies = wc_get_product_terms( $item['product_id'], $field, array( 'fields' => 'names' ) ) )
+						$row[ $field ] = implode( ', ', $taxonomies );
+					else	
+						$row[ $field ] = ""; // unknown class 
 				} elseif ( isset( $item_meta[ $field ] ) ) {    //meta from order
 					$row[ $field ] = $item_meta[ $field ][0];
 				} elseif ( isset( $item_meta[ "_" . $field ] ) ) {// or hidden field
@@ -1299,12 +1310,12 @@ class WC_Order_Export_Data_Extractor {
 				} elseif ( $field == 'name' ) {
 					$row['name'] = $item["name"];
 				} elseif ( $field == 'seller' ) {
-					$user = get_userdata( $product->post->post_author );
+					$user = get_userdata( $post->post_author );
 					$row[ $field ] = ! empty( $user->display_name ) ? $user->display_name : '';
 				} elseif ( $field == 'type' ) {
 					$row['type'] = $product->product_type;
 				} elseif ( $field == 'tags' ) {
-					$terms       = get_the_terms( $product->id, 'product_tag' );
+					$terms       = get_the_terms( $product_id, 'product_tag' );
 					$row['tags'] = array();
 					if ( $terms ) {
 						foreach ( $terms as $term ) {
@@ -1313,7 +1324,7 @@ class WC_Order_Export_Data_Extractor {
 					}
 					$row['tags'] = join( ",", $row['tags'] );
 				} elseif ( $field == 'category' ) {
-					$terms           = get_the_terms( $product->id, 'product_cat' );
+					$terms           = get_the_terms( $product_id, 'product_cat' );
 					$row['category'] = array();
 					if ( $terms ) {
 						foreach ( $terms as $term ) {
@@ -1328,6 +1339,8 @@ class WC_Order_Export_Data_Extractor {
 					$row['line_total_refunded'] = $order->get_total_refunded_for_item( $item_id );
 				} elseif ( $field == 'line_total_minus_refund' ) {
 					$row['line_total_minus_refund'] = $item_meta["_line_total"][0] - $order->get_total_refunded_for_item( $item_id );
+				} elseif ( $field == 'qty_minus_refund' ) {
+					$row['qty_minus_refund'] = $item_meta["_qty"][0] + $order->get_qty_refunded_for_item( $item_id ); // Yes we add negative! qty
 				//tax refund	
 				} elseif ( $field == 'line_tax_refunded' ) {
 					$row['line_tax_refunded'] = self::get_order_item_taxes_refund($order, $item_id );
@@ -1340,7 +1353,7 @@ class WC_Order_Export_Data_Extractor {
 				} elseif ( $field == 'download_url' ) {
 					$row[ $field ] = '';
 					if ( $product->is_downloadable() ) {
-						$files = get_post_meta( $product->id, '_downloadable_files', true );
+						$files = get_post_meta( $product_id, '_downloadable_files', true );
 						$links = array();
 						foreach ( $files as $file ) {
 							$links[] = $file['file'];
@@ -1356,9 +1369,9 @@ class WC_Order_Export_Data_Extractor {
 					if( !empty( $item['variation_id'] ) )
 						$row[ $field ] = get_post_meta( $item['variation_id'], $field, true );
 					if($row[ $field ] === '' ) // empty value ? try get custom!
-						$row[ $field ] = get_post_meta( $product->id, $field, true );
+						$row[ $field ] = get_post_meta( $product_id, $field, true );
 					if($row[ $field ] === '' ) // empty value ?
-						$row[ $field ] = $product->$field;
+						$row[ $field ] = method_exists($product,'get_'.$field) ? $product->{'get_'.$field}() : $product->$field;
 					if($row[ $field ] === '' AND empty( $item['variation_id'] ) ) // empty value ? try get attribute for !variaton
 						$row[ $field ] = $product->get_attribute( $field );
 				}
@@ -1433,6 +1446,11 @@ class WC_Order_Export_Data_Extractor {
 		$date_fields = self::get_order_fields_as_type( $labels['order'], 'date' );
 		self::$date_format = $date_format = trim( $options['date_format'] . ' ' . $options['time_format'] );
 
+		// add fields for WC 3.0
+		foreach( array( "billing_country","billing_state","shipping_country","shipping_state") as $field_30 ) {
+			$$field_30 = method_exists($order,'get_'.$field_30) ? $order->{'get_'.$field_30}() : $order->$field_30;
+		}
+		
 		// fill as it must
 		foreach ( $labels['order'] as $field => $label ) {
 			if(substr($field,0,5) == "USER_") { //user field
@@ -1440,28 +1458,38 @@ class WC_Order_Export_Data_Extractor {
 				$row[ $field ] = $user ? $user->get($key) : '';
 			} elseif ( $field == 'order_id' ) {
 				$row['order_id'] = $order_id;
+			} elseif ( $field == 'order_date' ) {
+				$row['order_date'] = !method_exists( $order, "get_date_created") ? $order->order_date : ( $order->get_date_created() ? gmdate( 'Y-m-d H:i:s', $order->get_date_created()->getOffsetTimestamp() ) : '' ) ;
+			} elseif ( $field == 'completed_date' ) {
+				$row['completed_date'] = !method_exists( $order, "get_date_completed") ? $order->completed_date : ( $order->get_date_completed() ? gmdate( 'Y-m-d H:i:s', $order->get_date_completed()->getOffsetTimestamp() ) : '' ) ;
 			} elseif ( $field == 'order_number' ) {
 				$row['order_number'] = $order->get_order_number();
 			} elseif ( $field == 'order_subtotal' ) {
-				$row['order_subtotal'] = $order->get_subtotal();
+				$row['order_subtotal'] = wc_format_decimal( $order->get_subtotal(), 2);
 			//order total
 			} elseif ( $field == 'order_total' ) {
 				$row['order_total'] = $order->get_total();
+			} elseif ( $field == 'order_total_no_tax' ) {
+				$row['order_total_no_tax'] = $order->get_total() - $order->get_total_tax();
 			} elseif ( $field == 'order_refund' ) {
 				$row['order_refund'] = $order->get_total_refunded();
 			} elseif ( $field == 'order_total_inc_refund' ) {
 				$row['order_total_inc_refund'] = $order->get_total() - $order->get_total_refunded();
 			//shipping 	
+			} elseif ( $field == 'order_shipping' ) {
+				$row['order_shipping'] = $order->get_total_shipping();
 			} elseif ( $field == 'order_shipping_refunded' ) {
 				$row['order_shipping_refunded'] = $order->get_total_shipping_refunded();
 			} elseif ( $field == 'order_shipping_minus_refund' ) {
 				$row['order_shipping_minus_refund'] = $order->get_total_shipping() - $order->get_total_shipping_refunded();
 			//shipping tax	
 			} elseif ( $field == 'order_shipping_tax_refunded' ) {
-				$row['order_shipping_tax_refunded'] = self::get_order_shipping_tax_refunded( $order );
+				$row['order_shipping_tax_refunded'] = self::get_order_shipping_tax_refunded( $order_id );
 			} elseif ( $field == 'order_shipping_tax_minus_refund' ) {
-				$row['order_shipping_tax_minus_refund'] = $order->get_shipping_tax() - self::get_order_shipping_tax_refunded( $order );
+				$row['order_shipping_tax_minus_refund'] = $order->get_shipping_tax() - self::get_order_shipping_tax_refunded( $order_id );
 			//order tax 	
+			} elseif ( $field == 'order_tax' ) {
+				$row['order_tax'] = wc_round_tax_total( $order->get_cart_tax() );
 			} elseif ( $field == 'order_total_tax' ) {
 				$row['order_total_tax'] = $order->get_total_tax();
 			} elseif ( $field == 'order_total_tax_refunded' ) {
@@ -1481,15 +1509,15 @@ class WC_Order_Export_Data_Extractor {
 			} elseif ( $field == 'shipping_full_name' ) {
 				$row[ $field ] = trim( $order_meta["_shipping_first_name"] . ' ' . $order_meta["_shipping_last_name"] );
 			} elseif ( $field == 'billing_country_full' ) {
-				$row[ $field ] = isset( self::$countries[ $order->billing_country ] ) ? self::$countries[ $order->billing_country ] : $order->billing_country;
+				$row[ $field ] = isset( self::$countries[ $billing_country ] ) ? self::$countries[ $billing_country ] : $billing_country;
 			} elseif ( $field == 'shipping_country_full' ) {
-				$row[ $field ] = isset( self::$countries[ $order->shipping_country ] ) ? self::$countries[ $order->shipping_country ] : $order->shipping_country;
+				$row[ $field ] = isset( self::$countries[ $shipping_country ] ) ? self::$countries[ $shipping_country ] : $shipping_country;
 			} elseif ( $field == 'billing_state_full' ) {
-				$country_states = WC()->countries->get_states( $order->billing_country );
-				$row[ $field ] = isset( $country_states[ $order->billing_state ]) ? $country_states[ $order->billing_state ] : $order->billing_state;
+				$country_states = WC()->countries->get_states( $billing_country );
+				$row[ $field ] = isset( $country_states[ $billing_state ]) ? html_entity_decode( $country_states[ $billing_state ] ) : $billing_state;
 			} elseif ( $field == 'shipping_state_full' ) {
-				$country_states = WC()->countries->get_states( $order->shipping_country );
-				$row[ $field ] = isset( $country_states[ $order->shipping_state ]) ? $country_states[ $order->shipping_state ] : $order->shipping_state;
+				$country_states = WC()->countries->get_states( $shipping_country );
+				$row[ $field ] = isset( $country_states[ $shipping_state ]) ? html_entity_decode( $country_states[ $shipping_state ] ) : $shipping_state;
 			} elseif ( $field == 'products' OR $field == 'coupons' ) {
 				if ( $format == 'xls' OR $format == 'csv' ) {
 					if ( $csv_max[ $field ] == 1 ) {
@@ -1533,7 +1561,7 @@ class WC_Order_Export_Data_Extractor {
 			} elseif ( $field == 'order_notes' ) {
 				$comments = array();
 				$args = array(
-						'post_id' 	=> $order->id,
+						'post_id' 	=> $order_id,
 						'approve' 	=> 'approve',
 						'type' 		=> 'order_note',
 				);
@@ -1563,7 +1591,7 @@ class WC_Order_Export_Data_Extractor {
 			} elseif ( isset( $order_meta[ "_" . $field ] ) ) { // or hidden field
 				$row[ $field ] = $order_meta[ "_" . $field ];
 			} else { // customer_note,order_date
-				$row[ $field ] = $order->$field;
+				$row[ $field ] = method_exists($order,'get_'.$field) ? $order->{'get_'.$field}() : $order->$field;
 				//print_r($field."=".$label); echo "debug static!\n\n";
 			}
 
@@ -1682,7 +1710,7 @@ class WC_Order_Export_Data_Extractor {
 		}
 	}
 	
-	private static function get_order_shipping_tax_refunded($order) {
+	private static function get_order_shipping_tax_refunded($order_id) {
 		global $wpdb;
 		$refund_ship_taxes  = $wpdb->get_var( $wpdb->prepare( "
 			SELECT SUM( order_itemmeta.meta_value )
@@ -1691,7 +1719,7 @@ class WC_Order_Export_Data_Extractor {
 			INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON ( order_items.order_id = posts.ID AND order_items.order_item_type = 'tax' )
 			WHERE order_itemmeta.order_item_id = order_items.order_item_id
 			AND order_itemmeta.meta_key IN ( 'shipping_tax_amount')
-		", $order->id ) );
+		", $order_id ) );
 
 		return   abs( $refund_ship_taxes  );
 	}
@@ -1700,6 +1728,10 @@ class WC_Order_Export_Data_Extractor {
 	 * @return array
 	 */
 	public static function get_shipping_methods() {
+	
+		if( !class_exists("WC_Shipping_Zone") )
+			return array();
+	
 		$shipping_methods = array();
 
 		$zone    = new WC_Shipping_Zone( 0 );

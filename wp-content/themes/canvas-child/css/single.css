@@ -248,7 +248,8 @@ img.attachment-shop_thumbnail {
 	padding: 0;
 }
 .yith-wfbt-section table tr td img.attachment-shop_single,
-.yith-wfbt-section table tr td img.attachment-shop_thumbnail{
+.yith-wfbt-section table tr td img.attachment-shop_thumbnail,
+.yith-wfbt-section table tr td.image-td img{
 	width: 90px !important;
 	height:auto;
 }
