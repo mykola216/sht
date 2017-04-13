@@ -97,7 +97,7 @@
 
  	<?php if ( is_archive() ) {
  			the_archive_title( '<h3 class="page-title amp-wp-content">', '</h3>' );
- 			the_archive_description( '<div class="taxonomy-description amp-wp-content">', '</div>' );
+ 			//the_archive_description( '<div class="taxonomy-description amp-wp-content">', '</div>' );
  		} ?>
 
 	<?php if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
