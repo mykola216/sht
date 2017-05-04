@@ -75,8 +75,9 @@ class WC_GFPA_Cart {
 
 				$total += floatval( $products["shipping"]["price"] );
 			}
-
-			$cart_item['data']->adjust_price( $total );
+			$price = $cart_item['data']->get_price();
+			$price += (float)$total;
+			$cart_item['data']->set_price( $price );
 			$cart_item['_gform_total'] = $total;
 			error_reporting( $err_level );
 		}

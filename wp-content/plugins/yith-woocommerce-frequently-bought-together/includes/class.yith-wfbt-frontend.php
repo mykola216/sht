@@ -124,16 +124,17 @@ if ( ! class_exists( 'YITH_WFBT_Frontend' ) ) {
 
             extract( $atts );
 
-            $product = wc_get_product( intval( $product_id ) );
+	        $product_id = intval( $product_id );
+            $product = wc_get_product( $product_id );
 
             if( ! $product ) {
                 return '';
             }
 
             // get meta for current product
-            $group  = yit_get_prop( $product, YITH_WFBT_META, true );
+            $group  = $this->get_meta_prevent_multiple( $product_id );
 
-            if( empty( $group ) || $product->is_type( 'grouped', 'external' ) ) {
+            if( empty( $group ) || $product->is_type( array( 'grouped', 'external' ) ) ) {
                 return '';
             }
 
@@ -162,6 +163,40 @@ if ( ! class_exists( 'YITH_WFBT_Frontend' ) ) {
 
             return ob_get_clean();
         }
+
+		/**
+		 * Prevent multiple meta values
+		 *
+		 * @since 1.1.1
+		 * @author Francesco Licandro
+		 * @param integer|string $product_id
+		 * @return array
+		 */
+		public function get_meta_prevent_multiple( $product_id ) {
+
+			// check for multiple meta
+			$group = get_post_meta( $product_id, YITH_WFBT_META, false );
+			$new_group = array();
+			if( ! empty( $group ) && count( $group ) > 1 ) {
+				foreach ( $group as $elem => $single_group ){
+					if( ! is_array( $single_group ) ) {
+						continue;
+					}
+					$new_group = array_merge( $new_group, $single_group );
+				}
+
+				delete_post_meta( $product_id, YITH_WFBT_META );
+				$new_group = array_filter( $new_group );
+				$new_group = array_unique( $new_group );
+
+				update_post_meta( $product_id, YITH_WFBT_META, $new_group );
+
+				return $new_group;
+			}
+			else {
+				return empty( $group ) ? array() : array_shift( $group );
+			}
+		}
 	}
 }
 /**

@@ -18,6 +18,34 @@
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 
 	<style amp-custom>
+		<?php $this->load_parts( array( 'style' ) ); ?>
+		<?php do_action( 'amp_post_template_css', $this ); ?>
+		.amp-wp-price .price{
+			color: #f70;
+			font: normal normal bold 14px helvetica, arial, sans-serif;
+			margin: 0 0 0 5px;
+			text-align: left;
+		}
+		.amp-wp-price .price del{
+			color: #666;
+			font-weight: normal;
+			font-size: 10px;
+		}
+		.amp-wp-price .price ins{
+			text-decoration: none;
+		}
+		.current-menu-item a {
+			font-weight: bold;
+			color: #666;
+		}
+		main .taxonomy-description{
+			overflow: hidden;
+			padding: 0;
+			background: transparent;
+			-moz-box-shadow: none;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+		}
 	<?php $this->load_parts( array( 'style' ) ); ?>
 	<?php do_action( 'amp_post_template_css', $this ); ?>
 	</style>
@@ -112,9 +140,8 @@
 	<div class="amp-wp-content pagination-holder">
 
 		<div id="pagination">
-			<div class="next"><?php next_posts_link( $redux_builder_amp['amp-translator-next-text'] . ' &raquo;', 0 ) ?></div>
-			<div class="prev"><?php previous_posts_link( '&laquo; '. $redux_builder_amp['amp-translator-previous-text'] ); ?></div>
-
+			<div class="next"><?php next_posts_link( ampforwp_translation($redux_builder_amp['amp-translator-next-text'] . ' &raquo;' , 'Next'), 0 ) ?></div>
+			<div class="prev"><?php previous_posts_link( '&laquo; '. ampforwp_translation($redux_builder_amp['amp-translator-previous-text'], 'Previous' ) ); ?></div>
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -126,6 +153,7 @@
 
 </main>
 <?php do_action('ampforwp_home_below_loop') ?>
+<?php do_action( 'amp_post_template_above_footer', $this ); ?>
 <?php $this->load_parts( array( 'footer' ) ); ?>
 <?php do_action( 'amp_post_template_footer', $this ); ?>
 </body>

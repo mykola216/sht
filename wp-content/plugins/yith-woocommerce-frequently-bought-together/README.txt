@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: yithemes
-Tags: yith, woocommerce, wc, shop, frequently bought together, bought together, bundles, products, frequently bought products, bought, together, product group, add to cart, cart
+Tags: frequently bought together, bought together, bundles, frequently bought products, product group
 Requires at least: 4.0
-Tested up to: 4.7.3
-Stable tag: 1.1.0
+Tested up to: 4.7.4
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,13 @@ Full documentation is available [here](http://yithemes.com/docs-plugins/yith-woo
 3. The plugin tab in edit product
 
 == Changelog ==
+
+== 1.1.1 == Released on Apr 24, 2017
+
+* New: Support to WooCommerce 3.0.4.
+* New: Support to WordPress 4.7.4.
+* Update: Plugin core.
+* Fix: Prevent multiple postmeta entry for same product.
 
 == 1.1.0 == Released on Mar 28, 2017
 
@@ -101,8 +108,9 @@ If you have created your own language pack, or have an update for an existing on
 
 == Upgrade notice ==
 
-== 1.1.0 == Released on Mar 28, 2017
+== 1.1.1 == Released on Apr 24, 2017
 
-* New: Support to WooCommerce 3.0.0 RC2.
-* New: Support to WordPress 4.7.3.
+* New: Support to WooCommerce 3.0.4.
+* New: Support to WordPress 4.7.4.
 * Update: Plugin core.
+* Fix: Prevent multiple postmeta entry for same product.
