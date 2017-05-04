@@ -46,12 +46,14 @@
 			-webkit-box-shadow: none;
 			box-shadow: none;
 		}
+	<?php $this->load_parts( array( 'style' ) ); ?>
+	<?php do_action( 'amp_post_template_css', $this ); ?>
 	</style>
 </head>
 <body class="amp_home_body design_2_wrapper">
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 <?php do_action( 'ampforwp_after_header', $this ); ?>
-<?php do_action('ampforwp_home_above_loop') ?>
+<?php do_action('ampforwp_home_above_loop'); ?>
 <main>
 	<?php do_action('ampforwp_post_before_loop') ?>
 
@@ -65,39 +67,20 @@
 	    }
 
 	    $exclude_ids = get_option('ampforwp_exclude_post');
-
 		$args = array(
 			'post_type'           => 'post',
 			'orderby'             => 'date',
 			'paged'               => esc_attr($paged),
-			'post__not_in' 		  => $exclude_ids,
-			'has_password' => false ,
-			'post_status'=> 'publish'
+			'post__not_in'        => $exclude_ids,
+			'has_password'        => false ,
+			'post_status'         => 'publish'
 		);
-		if (is_page()) {
-			$args['post_type'] = 'page';
-		}
-		if (is_singular('product')) {
-			$args['post_type'] = 'product';
-		}
-		if (is_tax('product_cat')) {
-			//$args['posts_per_page'] = -1;
-			$args['post_type'] = 'product';
-			$args['tax_query'] = array(
-				'relation' => 'AND',
-				array(
-					'taxonomy' => 'product_cat',
-					'field'    => 'id',
-					'terms'    => array( get_queried_object_id() ), // ID of current cat
-				),
-			);
-		}
 		$filtered_args = apply_filters('ampforwp_query_args', $args);
 		$q = new WP_Query( $filtered_args ); ?>
 
  	<?php if ( is_archive() ) {
  			the_archive_title( '<h3 class="page-title amp-wp-content">', '</h3>' );
- 			the_archive_description( '<div class="taxonomy-description amp-wp-content">', '</div>' );
+ 			//the_archive_description( '<div class="taxonomy-description amp-wp-content">', '</div>' );
  		} ?>
 
 	<?php if ( $q->have_posts() ) : while ( $q->have_posts() ) : $q->the_post();
@@ -129,13 +112,15 @@
 			<div class="amp-wp-post-content">
 
 				<h2 class="amp-wp-title"> <a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>"> <?php the_title(); ?></a></h2>
-				<div class="amp-wp-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-					<div class="price"><?php echo $product->get_price_html(); ?></div>
-					<meta itemprop="price" content="<?php echo esc_attr( $product->get_price() ); ?>" />
-					<meta itemprop="priceCurrency" content="<?php echo esc_attr( get_woocommerce_currency() ); ?>" />
-					<link itemprop="availability" href="http://schema.org/<?php echo $product->is_in_stock() ? 'InStock' : 'OutOfStock'; ?>" />
-					<meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
-				</div>
+				<?php if ('product' == get_post_type()) { ?>
+					<div class="amp-wp-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+						<div class="price"><?php echo $product->get_price_html(); ?></div>
+						<meta itemprop="price" content="<?php echo esc_attr( $product->get_price() ); ?>" />
+						<meta itemprop="priceCurrency" content="<?php echo esc_attr( get_woocommerce_currency() ); ?>" />
+						<link itemprop="availability" href="http://schema.org/<?php echo $product->is_in_stock() ? 'InStock' : 'OutOfStock'; ?>" />
+						<meta itemprop="itemCondition" content="http://schema.org/NewCondition" />
+					</div>
+				<?php } ?>
 
 				<?php
 					if(has_excerpt()){
@@ -155,9 +140,8 @@
 	<div class="amp-wp-content pagination-holder">
 
 		<div id="pagination">
-			<div class="next"><?php next_posts_link( $redux_builder_amp['amp-translator-next-text'] . ' &raquo;', 0 ) ?></div>
-			<div class="prev"><?php previous_posts_link( '&laquo; '. $redux_builder_amp['amp-translator-previous-text'] ); ?></div>
-
+			<div class="next"><?php next_posts_link( ampforwp_translation($redux_builder_amp['amp-translator-next-text'] . ' &raquo;' , 'Next'), 0 ) ?></div>
+			<div class="prev"><?php previous_posts_link( '&laquo; '. ampforwp_translation($redux_builder_amp['amp-translator-previous-text'], 'Previous' ) ); ?></div>
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -169,6 +153,7 @@
 
 </main>
 <?php do_action('ampforwp_home_below_loop') ?>
+<?php do_action( 'amp_post_template_above_footer', $this ); ?>
 <?php $this->load_parts( array( 'footer' ) ); ?>
 <?php do_action( 'amp_post_template_footer', $this ); ?>
 </body>

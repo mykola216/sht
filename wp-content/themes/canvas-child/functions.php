@@ -71,6 +71,11 @@ add_filter( 'yith_wcwl_email_share_subject', 'canvas_child_yith_wcwl_email_share
 add_action( 'yith_wcwl_before_wishlist', 'display_print_button');
 add_action( 'woocommerce_before_cart', 'display_print_button');
 add_action( 'woocommerce_single_product_summary', 'display_print_button', 12);
+
+add_filter( 'woocommerce_defer_transactional_emails', '__return_false' );
+
+add_filter( 'woocommerce_admin_billing_fields', 'canvas_child_woocommerce_admin_billing_fields');
+add_filter( 'woocommerce_admin_shipping_fields', 'canvas_child_woocommerce_admin_shipping_fields');
 // Common - end
 
 
@@ -86,6 +91,8 @@ remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_
 add_action( 'woocommerce_archive_description', 'canvas_child_taxonomy_archive_description', 10 );
 //add_action( 'woocommerce_after_main_content', 'canvas_child_after_main_content_sidebar');
 add_filter( 'amp_post_template_file', 'canvas_child_amp_custom_template', 20, 3 );
+add_filter( 'ampforwp_query_args', 'canvas_child_ampforwp_query_args' );
+add_action( 'amp_post_template_css', 'canvas_child_amp_post_template_css' );
 add_filter( 'woo_title', 'canvas_child_woo_title', 999, 3 );
 // Archive - end
 
@@ -453,6 +460,45 @@ function display_print_button() {
 	print_button();
 }
 
+function canvas_child_woocommerce_admin_billing_fields($billing_fields) {
+	global $theorder, $post;
+
+	if ( ! is_object( $theorder ) ) {
+		$theorder = wc_get_order( $post->ID );
+	}
+
+	$order = $theorder;
+	$order_address['billing'] = $order->get_address('billing');
+
+	foreach ($billing_fields as $key => $field) {
+		$billing_fields[$key]['value'] = isset($order_address['billing'][$key]) ? $order_address['billing'][$key] : '';
+		if ('country' == $key) {
+			$billing_fields[$key]['class'] = 'select short';
+		}
+	}
+
+	return $billing_fields;
+}
+
+function canvas_child_woocommerce_admin_shipping_fields($shipping_fields) {
+	global $theorder, $post;
+
+	if ( ! is_object( $theorder ) ) {
+		$theorder = wc_get_order( $post->ID );
+	}
+
+	$order = $theorder;
+	$order_address['shipping'] = $order->get_address('shipping');
+
+	foreach ($shipping_fields as $key => $field) {
+		$shipping_fields[$key]['value'] = isset($order_address['shipping'][$key]) ? $order_address['shipping'][$key] : '';
+		if ('country' == $key) {
+			$shipping_fields[$key]['class'] = 'select short';
+		}
+	}
+
+	return $shipping_fields;
+}
 
 /******************************************************************************/
 /* Common - end                                                               */
@@ -558,6 +604,61 @@ function canvas_child_amp_custom_template( $file, $type, $post ) {
 	}
 
 	return $file;
+}
+
+function canvas_child_ampforwp_query_args($args) {
+	$args['posts_per_page'] = get_option('posts_per_page');
+	if (is_page()) {
+		$args['post_type'] = 'page';
+	}
+	if (is_singular('product')) {
+		$args['post_type'] = 'product';
+	}
+	if (is_archive()) {
+		$args['post_type'] = 'product';
+	}
+	if (is_tax('product_cat')) {
+		$args['post_type'] = 'product';
+		$args['tax_query'] = array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'id',
+				'terms'    => array( get_queried_object_id() ), // ID of current cat
+			),
+		);
+	}
+	return $args;
+}
+
+function canvas_child_amp_post_template_css($amp_tpl_obj) {
+	echo '
+	.amp-wp-price .price{
+		color: #f70;
+		font: normal normal bold 14px helvetica, arial, sans-serif;
+		margin: 0 0 0 5px;
+		text-align: left;
+	}
+	.amp-wp-price .price del{
+		color: #666;
+		font-weight: normal;
+		font-size: 10px;
+	}
+	.amp-wp-price .price ins{
+		text-decoration: none;
+	}
+	.current-menu-item a {
+		font-weight: bold;
+		color: #666;
+	}
+	main .taxonomy-description{
+		overflow: hidden;
+		padding: 0;
+		background: transparent;
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}';
 }
 /******************************************************************************/
 /* Archive page - end *********************************************************/

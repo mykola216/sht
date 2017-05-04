@@ -425,7 +425,6 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
                 $products_array = array_filter( array_map( 'intval', $products_array ) );
             }
             yit_save_prop( $product, YITH_WFBT_META, $products_array );
-
 		}
 
 		/**

@@ -1,4 +1,12 @@
 *** Gravity Forms Product Add-Ons Changelog ***
+2017.04.25 - version 3.1.8
+    * Update:  Remove deprecated call to adjust_price();
+    * Update:  Prevent the View Gravity Form entry data from appearing in re-sent processing emails.
+    * Update:  Prevent the gravity form entry meta key from being saved as order item meta when an order is updated.
+
+2017.04.11 - version 3.1.7
+    * Update:  Fix display of admin notices on bookable products.
+
 2017.04.05 - version 3.1.6
     * Fix:  Fix function reference error to wc_add_notice from the admin.
     * Fix:  Fix product prices not being hidden in WC 3.0 when selecting the option in the Gravity Forms configuration.
