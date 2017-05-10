@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canvas-child\n"
 "POT-Creation-Date: 2016-07-18 11:30+0300\n"
-"PO-Revision-Date: 2016-07-18 11:31+0300\n"
+"PO-Revision-Date: 2017-05-10 12:47+0300\n"
 "Last-Translator: Aleksandr Levashov <w3craftsman@gmail.com>\n"
 "Language-Team: w3craftsman.com <w3craftsman@gmail.com>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-KeywordsList: __;_e;_;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -175,8 +175,8 @@ msgstr ""
 msgid "Update Cart"
 msgstr ""
 
-#: content-404.php:26 ../canvas/content-tumblog.php:25
-#: ../canvas/content.php:29 ../canvas/content-page.php:27
+#: content-404.php:26 ../canvas/content-tumblog.php:25 ../canvas/content.php:29
+#: ../canvas/content-page.php:27
 #: ../canvas/content-page-template-business.php:24
 #: ../canvas/content-magazine-grid.php:27 ../canvas/content-post.php:41
 #: ../canvas/content-archive-portfolio.php:30 ../canvas/content-404.php:26
@@ -1718,7 +1718,7 @@ msgstr ""
 #: ../canvas/includes/theme-options.php:623
 #: ../canvas/includes/woo-hooks/classes/woo-hooks.class.php:635
 msgid "Navigation"
-msgstr "Navigatie"
+msgstr "MENU"
 
 #: ../canvas/includes/theme-functions.php:69
 #, fuzzy

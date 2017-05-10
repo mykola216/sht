@@ -513,6 +513,9 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         font-weight: 700;
         font-size: 16px;
     }
+    ul.nav > li > a > br {
+        display: none;
+    }
 }
 #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
     background-image: url(images/ruller-pencil-icon.png) !important;
