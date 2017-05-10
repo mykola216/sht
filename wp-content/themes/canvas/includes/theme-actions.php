@@ -2644,7 +2644,7 @@ add_action( 'woo_header_inside', 'woo_logo', 10 );
 if ( ! function_exists( 'woo_nav_toggle' ) ) {
 function woo_nav_toggle () {
 ?>
-<h3 class="nav-toggle icon"><a href="#navigation"><?php _e( 'Navigation ', 'woothemes' ); ?></a></h3>
+<h3 class="nav-toggle icon"><a href="#navigation"><?php _e( 'MENU', 'woothemes' ); ?></a></h3>
 <?php
 } // End woo_nav_toggle()
 }
