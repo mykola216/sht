@@ -180,6 +180,7 @@ function canvas_child_wp_enqueue_script() {
 
 	wp_enqueue_style( 'theme-stylesheet', get_template_directory_uri() . '/style.css', array( 'dashicons' ) );
 	wp_enqueue_style( 'theme-child-style', $uri . '/style.css', array( 'theme-stylesheet' ) );
+    wp_enqueue_style( 'canvas_child_bootstrap', $uri . '/lite-bootstrap/lite-bootstrap.css' );
 
 	if ( is_home() ) {
 		wp_enqueue_style( 'canvas_child_home', $uri . '/css/home.css', array( 'theme-child-style' ) );
@@ -1286,4 +1287,14 @@ if ( ! function_exists( 'woo_get_layout' ) ) {
 		return $layout;
 
 	} // End woo_get_layout()
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/* Add ACF options */
+/*-----------------------------------------------------------------------------------*/
+
+if( function_exists('acf_add_options_page') ) {
+
+    acf_add_options_page('Dynamic change blocks');
 }
