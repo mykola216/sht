@@ -522,15 +522,21 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     display: inline-block;
     vertical-align: middle;
     background-repeat: no-repeat !important;
-    padding-left: 49px !important;
+    padding-left: 50px !important;
     background-position: 15px 4px !important;
     margin-bottom: -1px;
+    background-color: #999 !important;
+}
+@media (max-width: 767px) {
+    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
+        display: block;
+        margin-right: 24px;
+        background-size: 22px !important;
+        margin-bottom: 5px;
+    }
 }
 
 @media only screen and (min-width: 768px) {
-    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
-        background-color: #999!important;
-    }
     #header .widget_metaslider_widget > div {
         float: right;
     }
