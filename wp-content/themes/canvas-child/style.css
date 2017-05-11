@@ -525,6 +525,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     padding-left: 49px !important;
     background-position: 15px 4px !important;
     margin-bottom: -1px;
+    background-color: #999 !important;
 }
 
 @media only screen and (min-width: 768px) {
