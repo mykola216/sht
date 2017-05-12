@@ -171,9 +171,6 @@ canvas_child_top_products( array(
 
 
     <section class="our-team">
-        <?php if( !have_rows('kinds_of_furniture_repeater', 'option') ): ?>
-            <hr>
-        <?php endif;?>
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 wrap-item">
