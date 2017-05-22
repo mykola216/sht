@@ -609,6 +609,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     }
 }
 
+
 @media only screen and (min-width: 768px) {
     #header .widget_metaslider_widget > div {
         float: right;
@@ -643,6 +644,12 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 
     ul.nav ul {
         width: 16em;
+    }
+    #navigation ul#main-nav>li.menu-item:first-child {
+        display: none;
+    }
+    #navigation .cart.no-rss-link {
+        display: none;
     }
 
     /* nav_after module - end */
