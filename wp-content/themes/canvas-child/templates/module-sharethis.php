@@ -22,12 +22,13 @@
 	<span class='st_pinterest_hcount' displayText='Pinterest' st_url="<?php echo esc_attr( $st_url ); ?>" st_title="<?php echo esc_attr( get_the_title() ); ?>"></span>
 	<span class='st_twitter_hcount' displayText='Tweet' st_url="<?php echo esc_attr( $st_url ); ?>" st_title="<?php echo esc_attr( get_the_title() ); ?>"></span>
 	<span class='st_googleplus_hcount' displayText='Google +' st_url="<?php echo esc_attr( $st_url ); ?>" st_title="<?php echo esc_attr( get_the_title() ); ?>"></span>
+	<span class='st_whatsapp_hcount' displayText='WhatsApp +' st_url="<?php echo esc_attr( $st_url ); ?>" st_title="<?php echo esc_attr( get_the_title() ); ?>"></span>
 </div>
 <script type="text/javascript">
 	if (typeof stLight != 'undefined') {
 		stLight.options(
 			{
-				publisher: "c4c40d90-2189-4fa7-8b1c-192a6f2fe24f",
+				publisher: "58b076de554fa300116731c4",
 				doNotHash: false,
 				doNotCopy: false,
 				hashAddressBar: false
