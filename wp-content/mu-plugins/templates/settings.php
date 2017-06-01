@@ -65,23 +65,6 @@
 				</td>
 			</tr>
 
-			<!-- Home page band module -->
-			<tr>
-				<td colspan="2" bgcolor="#abc"><strong>Home page band module</strong></td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Home page band text</th>
-				<td>
-					<input  type="text" name="steigerhouttrend_options[home_band_text]" value="<?php echo $st_options['home_band_text']; ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Home page band logo</th>
-				<td>
-					<input  type="text" name="steigerhouttrend_options[home_band_logo]" value="<?php echo $st_options['home_band_logo']; ?>" />
-				</td>
-			</tr>
-
 			<!-- Slider module -->
 			<tr>
 				<td colspan="2" bgcolor="#abc"><strong>Slider module</strong></td>
@@ -164,6 +147,17 @@
 				</td>
 			</tr>
 
+			<!-- Type Furniture Block -->
+			<tr>
+				<td colspan="2" bgcolor="#abc"><strong>Type Furniture Block</strong></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row">Block Title</th>
+				<td>
+					<input  type="text" name="steigerhouttrend_options[type_furniture_title]" value="<?php echo $st_options['type_furniture_title']; ?>" />
+				</td>
+			</tr>
+
 			<!-- Best sellers module -->
 			<tr>
 				<td colspan="2" bgcolor="#abc"><strong>Best sellers module</strong></td>
@@ -242,35 +236,6 @@
 				<th scope="row">The Pinterest URL</th>
 				<td>
 					<input type="text" name="steigerhouttrend_options[pinterest_url]" value="<?php echo $st_options['pinterest_url']; ?>" />
-				</td>
-			</tr>
-
-			<!-- Furniture production module -->
-			<tr>
-				<td colspan="2" bgcolor="#abc"><strong>Furniture production module</strong></td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Furniture production title</th>
-				<td>
-					<input type="text" name="steigerhouttrend_options[production-title]" value="<?php echo $st_options['production-title']; ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Furniture production text</th>
-				<td>
-					<input type="text" name="steigerhouttrend_options[production-text]" value="<?php echo $st_options['production-text']; ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Furniture production image url</th>
-				<td>
-					<input type="text" name="steigerhouttrend_options[production-img-url]" value="<?php echo $st_options['production-img-url']; ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">Furniture production page url</th>
-				<td>
-					<input type="text" name="steigerhouttrend_options[production-page-url]" value="<?php echo $st_options['production-page-url']; ?>" />
 				</td>
 			</tr>
 
