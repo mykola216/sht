@@ -489,6 +489,79 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 }
 /* Copntact Form - END */
 
+/* contact-page style */
+#contact-page .twocol-one {
+    float: left;
+}
+#contact-page .twocol-one.last {
+    float: right;
+}
+@media (max-width: 850px) {
+    #contact-page .twocol-one.last {
+        float: none;
+    }
+}
+
+#contact-page #gform_fields_186  , #contact-page #gform_fields_186 #field_186_1 {
+    /* checkbox aspect */
+    /* checked mark aspect */
+    /* checked mark aspect changes */ }
+#contact-page #gform_fields_186   label, #contact-page #gform_fields_186 #field_186_1 label {
+    font-weight: 400;
+    font-size: 16px; }
+#contact-page #gform_fields_186   [type="checkbox"]:not(:checked), #contact-page #gform_fields_186   [type="checkbox"]:checked, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:not(:checked),
+#contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:checked {
+    position: absolute;
+    left: -9999px; }
+#contact-page #gform_fields_186   [type="checkbox"]:not(:checked) + label, #contact-page #gform_fields_186   [type="checkbox"]:checked + label, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:not(:checked) + label,
+#contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 35px;
+    min-height: 30px;
+    cursor: pointer; }
+#contact-page #gform_fields_186   [type="checkbox"]:not(:checked) + label:before, #contact-page #gform_fields_186   [type="checkbox"]:checked + label:before, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:not(:checked) + label:before, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #bfbfbf;
+    background: #fff;
+    border-radius: 0; }
+#contact-page #gform_fields_186   [type="checkbox"]:not(:checked) + label:after, #contact-page #gform_fields_186   [type="checkbox"]:checked + label:after, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:not(:checked) + label:after, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:checked + label:after {
+    content: '✔';
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    font-size: 21px;
+    line-height: 0.8;
+    color: #000;
+    transition: all .2s; }
+#contact-page #gform_fields_186   [type="checkbox"]:not(:checked) + label:after, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0); }
+#contact-page #gform_fields_186   [type="checkbox"]:checked + label:after, #contact-page #gform_fields_186 #field_186_1 [type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1); }
+#contact-page #gform_fields_186   #label_186_6_1, #contact-page #gform_fields_186 #field_186_1 #label_186_6_1 {
+    margin-left: 4px; }
+@media (min-width: 0px) and (max-width: 767px) {
+    #contact-page #gform_fields_186   #label_186_6_1, #contact-page #gform_fields_186 #field_186_1 #label_186_6_1 {
+        margin-left: 0; } }
+
+
+
+/* end contact-page style */
+
+
+
+
+
+
+
+
+
 @media (max-width: 768px){
     body.archive .widget.woocommerce_products_of_the_day{
         clear: both !important;
@@ -513,21 +586,41 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
         font-weight: 700;
         font-size: 16px;
     }
+    ul.nav > li > a > br {
+        display: none;
+    }
 }
 #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
     background-image: url(images/ruller-pencil-icon.png) !important;
     display: inline-block;
     vertical-align: middle;
     background-repeat: no-repeat !important;
-    padding-left: 49px !important;
+    padding-left: 50px !important;
     background-position: 15px 4px !important;
     margin-bottom: -1px;
+    background-color: #999 !important;
+}
+@media (max-width: 767px) {
+    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
+        display: block;
+        margin-right: 24px;
+        background-size: 22px !important;
+        margin-bottom: 5px;
+    }
+    #logo {
+        max-width: 220px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+@media (max-width: 1030px) and (min-width: 768px) {
+    ul.nav li a {
+        padding: .5em 0.7em;
+    }
 }
 
+
 @media only screen and (min-width: 768px) {
-    #navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
-        background-color: #999!important;
-    }
     #header .widget_metaslider_widget > div {
         float: right;
     }
@@ -561,6 +654,12 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 
     ul.nav ul {
         width: 16em;
+    }
+    #navigation ul#main-nav>li.menu-item:first-child {
+        display: none;
+    }
+    #navigation .cart.no-rss-link {
+        display: none;
     }
 
     /* nav_after module - end */

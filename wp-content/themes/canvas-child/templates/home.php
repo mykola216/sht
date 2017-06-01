@@ -11,6 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $st_options;
+
+$text_our_team = get_field('our_team_home_text', 'option');
+$img_our_team = get_field('our_team_home', 'option');
+
 ?>
 
 <div id="slider">
@@ -49,54 +53,56 @@ global $st_options;
 </div>
 
 
+
+
+
+
 <!--Best Selling Products-->
 <?php
-canvas_child_top_products( array(
-	'title'   => $st_options['best_sellers_title'],
-	'href'    => $st_options['best_sellers_url'],
-	'text'    => 'Best verkochte steigerhouten meubelen',
-	'columns' => 3,
-	'args'    => apply_filters( 'canvas_child_bestselling_products_args', array(
-		'ignore_sticky_posts' => 1,
-		'meta_key'            => 'total_sales',
-		'no_found_rows'       => 1,
-		'orderby'             => 'meta_value_num',
-		'order'               => 'DESC',
-		'post_type'           => 'product',
-		'posts_per_page'      => 6,
-		'stock'               => 1
-	))
-));
+	canvas_child_top_products( array(
+		'title'   => $st_options['best_sellers_title'],
+		'href'    => $st_options['best_sellers_url'],
+		'text'    => 'Best verkochte steigerhouten meubelen',
+		'columns' => 3,
+		'args'    => apply_filters( 'canvas_child_bestselling_products_args', array(
+			'ignore_sticky_posts' => 1,
+			'meta_key'            => 'total_sales',
+			'no_found_rows'       => 1,
+			'orderby'             => 'meta_value_num',
+			'order'               => 'DESC',
+			'post_type'           => 'product',
+			'posts_per_page'      => 6,
+			'stock'               => 1
+		))
+	));
 ?>
 
 
 <!-- Custom Category Products -->
 <?php
-$product_cat_slug = end(explode('/', trim($st_options['custom_cat_products_url'], '/')));
-//$product_cat = get_term_by( 'slug', $product_cat_slug, 'product_cat');
-//$product_cat_ID = $product_cat->term_id;
-canvas_child_top_products( array(
-	'title'   => $st_options['custom_cat_products_title'],
-	'href'    => $st_options['custom_cat_products_url'],
-	'text'    => $st_options['custom_cat_products_btn_label'],
-	'container_class' => 'custom-cat-products',
-	'columns' => 4,
-	'args'    => apply_filters( 'canvas_child_bestselling_products_args', array(
-		'ignore_sticky_posts' => 1,
-		'no_found_rows'       => 1,
-		'orderby'             => 'title',
-		'order'               => 'ASC',
-		'post_type'           => 'product',
-		'posts_per_page'      => 8,
-		'stock'               => 1,
-		'product_cat' => $product_cat_slug,
-		/*'tax_query' => array(
-			'taxonomy' => 'product_cat',
-			'field'    => 'id',
-			'terms'    => $product_cat_ID
-		),*/
-	))
-));
+	$product_cat_slug = end(explode('/', trim($st_options['custom_cat_products_url'], '/')));
+	canvas_child_top_products( array(
+		'title'   => $st_options['custom_cat_products_title'],
+		'href'    => $st_options['custom_cat_products_url'],
+		'text'    => $st_options['custom_cat_products_btn_label'],
+		'container_class' => 'custom-cat-products',
+		'columns' => 4,
+		'args'    => apply_filters( 'canvas_child_bestselling_products_args', array(
+			'ignore_sticky_posts' => 1,
+			'no_found_rows'       => 1,
+			'orderby'             => 'title',
+			'order'               => 'ASC',
+			'post_type'           => 'product',
+			'posts_per_page'      => 8,
+			'stock'               => 1,
+			'product_cat' => $product_cat_slug,
+			/*'tax_query' => array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'id',
+				'terms'    => $product_cat_ID
+			),*/
+		))
+	));
 ?>
 
 
@@ -123,25 +129,51 @@ canvas_child_top_products( array(
 ?>
 
 
-<!--Band module-->
-<div id="band-module">
-	<img src="<?php echo esc_attr( $st_options['home_band_logo'] ); ?>" />
-	<?php echo esc_html( $st_options['home_band_text'] ); ?>
+<!--Furniture Module-->
+<div class="type-furniture">
+	<div class="__container">
+		<?php $counter = 0; ?>
+		<?php if ( have_rows('kinds_of_furniture_repeater', 'option') ) { ?>
+			<div class="caption">
+				<h2><?php echo esc_html( $st_options['type_furniture_title'] ); ?></h2>
+			</div>
+			<div class="row">
+				<?php while ( have_rows('kinds_of_furniture_repeater', 'option') ) { the_row();
+					$image = get_sub_field('img');
+					$link = get_sub_field('link');
+				?>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 wrap-item clearfix">
+						<a href="<?php echo $link; ?>">
+							<img src="<?php echo $image['url']; ?>" alt="<? echo $image['alt']; ?>">
+						</a>
+					</div>
+				<?php } ?>
+			</div>
+		<?php } ?>
+	</div>
 </div>
 
+<hr>
 
-<!--Furniture production module-->
-<div id="production">
-	<h2><?php echo esc_html( $st_options['production-title'] ); ?></h2>
-
-	<img src="<?php echo esc_attr( $st_options['production-img-url'] ); ?>" />
-
-	<a href="<?php echo esc_attr( $st_options['production-page-url'] ); ?>" class="button orange-button">
-		<?php echo esc_html( $st_options['production-text'] ); ?>
-	</a>
-</div>
+<!-- Our Team Module-->
+<section class="our-team">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 wrap-item">
+				<div class="wrapper">
+					<?php echo $text_our_team; ?>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 wrap-item">
+				<div class="wrapper">
+					<?php echo $img_our_team; ?>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 
 
 <!--Output the sharethis module-->
-<?php
-	wc_get_template_part( 'templates/module', 'sharethis' );
+<?php wc_get_template_part( 'templates/module', 'sharethis' ); ?>
