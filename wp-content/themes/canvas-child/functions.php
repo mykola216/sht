@@ -53,7 +53,9 @@ add_action( 'admin_enqueue_scripts', 'canvas_child_admin_enqueue_script' );
 add_action( 'widgets_init', 'canvas_child_register_sidebars' );
 
 add_action( 'woo_nav_after', 'canvas_child_nav_after_module' );
-add_action( 'woo_footer_top', 'canvas_child_social_media_footer_module' );
+add_action( 'woo_footer_top', 'canvas_child_social_media_footer_module', 29);
+
+
 
 add_action( 'woocommerce_after_shop_loop_item', 'canvas_child_product_excerpt', 10 );
 
