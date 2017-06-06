@@ -675,6 +675,15 @@ function canvas_child_excerpt_length($length) {
 }
 add_filter('excerpt_length', 'canvas_child_excerpt_length');
 
+function canvas_child_display_map() {
+	$map_url = get_field('map_url_single_pro', 'option');
+	$map_img = get_field('map_img_single_pro', 'option');
+	$out = '<div class="display-maps"><a href="' . $map_url . '" target="_blank">
+				<img src="' . $map_img['url'] . '" alt="' . $map_img['alt'] . '">
+			</a></div>';
+	echo $out;
+}
+
 /**
  * Add Facebook moderation.
  */
