@@ -44,5 +44,6 @@ global $st_options;
 </div>
 
 <?php
+    canvas_child_display_map();
     wc_get_template_part( 'templates/module', 'sharethis' );
     wc_get_template_part( 'templates/module', 'facebook-comments' );
