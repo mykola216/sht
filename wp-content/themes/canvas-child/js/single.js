@@ -102,8 +102,26 @@ jQuery(document).ready(function ($) {
             if (parseInt(Localize_JS_Canvas_Child_Single.is_animated_textural_menu)) {
                 $('#' + that.attr('id') + '-menu.behandeling').addClass('animated');
             }
+            if (parseInt(Localize_JS_Canvas_Child_Single.is_animated_textural_menu)) {
+                $('#' + that.attr('id') + '-menu.behandeling-kleur').addClass('animated');
+            }
+            if (parseInt(Localize_JS_Canvas_Child_Single.is_animated_textural_menu)) {
+                $('#' + that.attr('id') + '-menu.behandeling-nanolak').addClass('animated');
+            }
 
             $('#' + that.attr('id') + '-menu.behandeling.animated')
+                .closest('.ui-selectmenu-menu')
+                .css({
+                     'left' : that.closest('li').offset().left + 'px',
+                    'width' : that.closest('li').width() + 'px',
+                });
+            $('#' + that.attr('id') + '-menu.behandeling-kleur.animated')
+                .closest('.ui-selectmenu-menu')
+                .css({
+                     'left' : that.closest('li').offset().left + 'px',
+                    'width' : that.closest('li').width() + 'px',
+                });
+            $('#' + that.attr('id') + '-menu.behandeling-nanolak.animated')
                 .closest('.ui-selectmenu-menu')
                 .css({
                      'left' : that.closest('li').offset().left + 'px',
