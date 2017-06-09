@@ -311,6 +311,87 @@ Ext.onReady(function () {
 });
 
 
+var taxStatusStoreData = new Array();
+	taxStatusStoreData = [
+							[ 'taxable', getText('Taxable') ],
+							[ 'shipping', getText('Shipping only') ],
+							[ 'none', getText('None') ]
+						 ];
+
+var visibilityStoreData = new Array();
+	
+	if( SM_IS_WOO30 == 'true' ) {
+		visibilityStoreData = [
+	                            ['visible', getText('Visible')],
+	                            ['catalog', getText('Catalog')],
+	                            ['search', getText('Search')],
+	                            ['hidden', getText('Hidden')]
+	                          ];
+	} else {
+		visibilityStoreData = [
+	                            ['visible', getText('Catalog & Search')],
+	                            ['catalog', getText('Catalog')],
+	                            ['search', getText('Search')],
+	                            ['hidden', getText('Hidden')]
+	                          ];	
+	}
+
+var postStatusStoreData = new Array();
+    postStatusStoreData = [
+                            ['publish', getText('Publish')],
+                            ['pending', getText('Pending Review')],
+                            ['draft', getText('Draft')],
+                            ['private', getText('Private')]
+                          ];
+                          
+
+//Products custom columns bool type
+var trueFalseCombo_inline = new Ext.form.ComboBox({
+	typeAhead: true,
+	triggerAction: 'all',
+	lazyRender:true,
+	editable: false,
+	mode: 'local',
+	store: new Ext.data.ArrayStore({
+		id: 0,
+		fields: ['value','name'],
+		data: [['true', 'True'], ['false', 'False']]
+	}),
+	valueField: 'value',
+	displayField: 'name'
+});
+
+//Coupons == combo box consisting of yes and no values for inline editing
+var yesNoCombo_inline = new Ext.form.ComboBox({
+	typeAhead: true,
+	triggerAction: 'all',
+	lazyRender:true,
+	editable: false,
+	mode: 'local',
+	store: new Ext.data.ArrayStore({
+		id: 0,
+		fields: ['value','name'],
+		data: [['yes', 'Yes'], ['no', 'No']]
+	}),
+	valueField: 'value',
+	displayField: 'name'
+});	
+
+//combo box consisting of yes and no values.
+var yesNoCombo = new Ext.form.ComboBox({
+	typeAhead: true,
+	triggerAction: 'all',
+	lazyRender:true,
+	editable: false,
+	mode: 'local',
+	store: new Ext.data.ArrayStore({
+		id: 0,
+		fields: ['value','name'],
+		data: [[1, 'Yes'], [0, 'No']]
+	}),
+	valueField: 'value',
+	displayField: 'name'
+});	
 	proSelectDate = function (dateValue){
 		
 	var fromDate,toDate,
@@ -616,6 +697,11 @@ Ext.onReady(function () {
                             productsColumnModel.getColumnById('visibility').editor = visibilityCombo;
                             productsColumnModel.getColumnById('taxStatus').editor = taxStatusCombo;
                             productsColumnModel.getColumnById('product_type').editor = productTypeCombo;
+
+                            if( SM_IS_WOO30 == 'true' ) {
+								productsColumnModel.getColumnById('featured').editor = yesNoCombo_inline;
+							}
+
 						if(fileExists == 1){
 							addProduct(productsStore, cnt_array, cnt, newCatName);
 						}else{
@@ -915,7 +1001,7 @@ Ext.onReady(function () {
 		                    css: 'display:none;visibility:hidden;height:0px;', 
 		                    // src: jsonURL+'?cmd=exportCsvWoo&incVariation='+SM.incVariation+'&searchText='+SM.searchTextField.getValue()+'&fromDate='+fromDateTxt.getValue()+'&toDate='+toDateTxt.getValue()+'&active_module='+SM.activeModule+'&SM_IS_WOO16='+SM_IS_WOO16+''
 		                    // src: ajaxurl + '?action=sm_include_file&file='+jsonURL+'&func_nm=exportCsvWoo&incVariation='+SM.incVariation+'&searchText='+SM.searchTextField.getValue()+'&fromDate='+fromDateTxt.getValue()+'&toDate='+toDateTxt.getValue()+'&active_module='+SM.activeModule+'&SM_IS_WOO16='+SM_IS_WOO16+''
-		                    src: fileurl + '&file='+jsonURL+'&func_nm=exportCsvWoo&incVariation='+SM.incVariation+'&search_query[]='+encodeURIComponent(search_query)+'&search=advanced_search&searchText='+SM.searchTextField.getValue()+'&fromDate='+fromDateTxt.getValue()+'&toDate='+toDateTxt.getValue()+'&active_module='+SM.activeModule+'&SM_IS_WOO16='+SM_IS_WOO16+'&SM_IS_WOO21='+SM_IS_WOO21+'&SM_IS_WOO22='+SM_IS_WOO22+'&security='+SM_NONCE,
+		                    src: fileurl + '&file='+jsonURL+'&func_nm=exportCsvWoo&incVariation='+SM.incVariation+'&search_query[]='+encodeURIComponent(search_query)+'&search=advanced_search&searchText='+SM.searchTextField.getValue()+'&fromDate='+fromDateTxt.getValue()+'&toDate='+toDateTxt.getValue()+'&active_module='+SM.activeModule+'&SM_IS_WOO16='+SM_IS_WOO16+'&SM_IS_WOO21='+SM_IS_WOO21+'&SM_IS_WOO22='+SM_IS_WOO22+'&SM_IS_WOO30='+SM_IS_WOO30+'&security='+SM_NONCE,
 		                }); 
 					}
 				}
@@ -948,53 +1034,6 @@ Ext.onReady(function () {
         return value ? value.dateFormat('M d, Y') : '';
     }
 	
-    //Products custom columns bool type
-	var trueFalseCombo_inline = new Ext.form.ComboBox({
-		typeAhead: true,
-		triggerAction: 'all',
-		lazyRender:true,
-		editable: false,
-		mode: 'local',
-		store: new Ext.data.ArrayStore({
-			id: 0,
-			fields: ['value','name'],
-			data: [['true', 'True'], ['false', 'False']]
-		}),
-		valueField: 'value',
-		displayField: 'name'
-	});
-
-    //Coupons == combo box consisting of yes and no values for inline editing
-	var yesNoCombo_inline = new Ext.form.ComboBox({
-		typeAhead: true,
-		triggerAction: 'all',
-		lazyRender:true,
-		editable: false,
-		mode: 'local',
-		store: new Ext.data.ArrayStore({
-			id: 0,
-			fields: ['value','name'],
-			data: [['yes', 'Yes'], ['no', 'No']]
-		}),
-		valueField: 'value',
-		displayField: 'name'
-	});	
-
-	//combo box consisting of yes and no values.
-	var yesNoCombo = new Ext.form.ComboBox({
-		typeAhead: true,
-		triggerAction: 'all',
-		lazyRender:true,
-		editable: false,
-		mode: 'local',
-		store: new Ext.data.ArrayStore({
-			id: 0,
-			fields: ['value','name'],
-			data: [[1, 'Yes'], [0, 'No']]
-		}),
-		valueField: 'value',
-		displayField: 'name'
-	});	
 
 //Variations
 		var getVariations = function (params,columnModel,store){
@@ -1084,12 +1123,7 @@ Ext.onReady(function () {
         store: new Ext.data.ArrayStore({
             id: 0,
             fields: ['value','name'],
-            data: [
-                    ['visible', 'Catalog & Search'],
-                    ['catalog', 'Catalog'],
-                    ['search', 'Search'],
-                    ['hidden', 'Hidden']
-                  ]
+            data: visibilityStoreData
         }),
         valueField: 'value',
         displayField: 'name'
@@ -1443,6 +1477,20 @@ products_columns = [editorGridSelectionModel,
 		            renderer: Ext.util.Format.comboRenderer(taxStatusCombo)
 				}];
 
+if( SM_IS_WOO30 == 'true' ) {
+	var featured = {
+					header: SM.productsCols.featured.name,
+					id: 'featured',
+					width: 60,
+					hidden: true,
+					sortable: true,
+					dataIndex: SM.productsCols.featured.colName,
+					tooltip: getText('Featured'),
+		            renderer: Ext.util.Format.comboRenderer(yesNoCombo_inline)
+				};
+	products_columns.push(featured);
+}
+
 // Code to create render fields array for products dashboard
 var products_render_fields = new Array();
 
@@ -1471,6 +1519,10 @@ products_render_fields = [
 			                {name: SM.productsCols.visibility.colName,        type: 'string'}
 			            ];
 
+if( SM_IS_WOO30 == 'true' ) {
+	products_render_fields.push({name: SM.productsCols.featured.colName,          type: 'string'});
+}
+
 jQuery(function($) {
 	
 	column_index = products_columns.length;
@@ -1481,9 +1533,9 @@ jQuery(function($) {
 
 	$.each(SM.productsCols, function(index, value) {
 
-	    if (value.hasOwnProperty('colType') && value.colType == 'custom_column' && value.name != 'Other Meta') {
+	    if (value.hasOwnProperty('colType') && (value.colType == 'custom_column' || value.colType == 'custom_column_serialized') && value.name != 'Other Meta') {
 
-        var name = value.value,
+        var name = (value.hasOwnProperty('value')) ? value.value : ''
         	f_name = name.replace(/[^a-zA-z0-9_-]/g,''); // commented for meta_keys containing sp. chars [like #,~..]
      	
 
@@ -1592,13 +1644,12 @@ jQuery(function($) {
 
         	column_index++;
 
-
 	        //Code for rendering array
 
         	if (fileExists == 1) {
 		    	var product_column_render = new Object();
 
-                // var name = value.value;
+                // var name = (value.hasOwnProperty('value')) ? value.value : ''
                 product_column_render.name = f_name; // commented for meta_keys containing sp. chars [like #,~..]
 	        	//product_column_render.name = value.value;
 	        	product_column_render.type = (decimal_precision > 0 || jQuery.inArray(value.colName, columns_render_string) > -1 ) ? 'string' : value.dataType;
@@ -1726,6 +1777,7 @@ var productsColumnModel = new Ext.ProductsColumnModel({
             SM_IS_WOO16: SM_IS_WOO16,
             SM_IS_WOO21: SM_IS_WOO21,
             SM_IS_WOO22: SM_IS_WOO22,
+            SM_IS_WOO30: SM_IS_WOO30,
             security: SM_NONCE,
             file:  jsonURL
 		},
@@ -1742,6 +1794,10 @@ var productsColumnModel = new Ext.ProductsColumnModel({
                 productsColumnModel.getColumnById('visibility').editor = visibilityCombo;  
                 productsColumnModel.getColumnById('taxStatus').editor = taxStatusCombo;
                 productsColumnModel.getColumnById('product_type').editor = productTypeCombo;
+
+                if( SM_IS_WOO30 == 'true' ) {
+					productsColumnModel.getColumnById('featured').editor = yesNoCombo_inline;
+				}
 			}
 		}
 	});
@@ -1842,6 +1898,7 @@ var productsColumnModel = new Ext.ProductsColumnModel({
 				            SM_IS_WOO16: SM_IS_WOO16,
 				            SM_IS_WOO21: SM_IS_WOO21,
 				            SM_IS_WOO22: SM_IS_WOO22,
+				            SM_IS_WOO30: SM_IS_WOO30,
 				            security: SM_NONCE,
 				            file:  jsonURL,
 				            search_query: search_query,
@@ -2065,6 +2122,7 @@ var pagingActivePage = pagingToolbar.getPageData().activePage;
                 SM_IS_WOO16: SM_IS_WOO16,
                 SM_IS_WOO21: SM_IS_WOO21,
                 SM_IS_WOO22: SM_IS_WOO22,
+                SM_IS_WOO30: SM_IS_WOO30,
                 security: SM_NONCE,
                 file:  jsonURL
 			}};
@@ -2213,6 +2271,7 @@ var pagingActivePage = pagingToolbar.getPageData().activePage;
                                                     incvariation: SM.incVariation,
                                                     SM_IS_WOO21: SM_IS_WOO21,
                                                     SM_IS_WOO22: SM_IS_WOO22,
+                                                    SM_IS_WOO30: SM_IS_WOO30,
                                                     security: SM_NONCE,
                                                     file:  jsonURL
                                             }
@@ -2633,6 +2692,7 @@ var searchLogic = function () {
 			SM_IS_WOO16: SM_IS_WOO16,
 			SM_IS_WOO21: SM_IS_WOO21,
 			SM_IS_WOO22: SM_IS_WOO22,
+			SM_IS_WOO30: SM_IS_WOO30,
 			security: SM_NONCE,
 			file:  jsonURL
 		}
@@ -2693,30 +2753,6 @@ jQuery(function($) {
 	});
 });
 
- 
-var taxStatusStoreData = new Array();
-	taxStatusStoreData = [
-							[ 'taxable', getText('Taxable') ],
-							[ 'shipping', getText('Shipping only') ],
-							[ 'none', getText('None') ]
-						 ];
-
-var visibilityStoreData = new Array();
-    visibilityStoreData = [
-                            ['visible', getText('Catalog & Search')],
-                            ['catalog', getText('Catalog')],
-                            ['search', getText('Search')],
-                            ['hidden', getText('Hidden')]
-                          ];
-
-var postStatusStoreData = new Array();
-    postStatusStoreData = [
-                            ['publish', getText('Publish')],
-                            ['pending', getText('Pending Review')],
-                            ['draft', getText('Draft')],
-                            ['private', getText('Private')]
-                          ];
-
 
 //Store for 'set to' from second combobox(actions combobox).
 var countriesStore = new Ext.data.Store({
@@ -2770,7 +2806,7 @@ var orderStatusStore = new Ext.data.ArrayStore({
 	});
 	
 // for woo2.2	
-if (SM_IS_WOO22 == 'true') {
+if (SM_IS_WOO22 == 'true' || SM_IS_WOO30 == 'true') {
 	orderStatusStoreData[0][1] = getText('Pending payment'); 
 	orderStatusStore.data.items[0].data.name = getText('Pending payment');
 }
@@ -2871,7 +2907,7 @@ var batchUpdateToolbarInstance = Ext.extend(Ext.Toolbar, {
 								comboCategoriesActionCmp.hide();
                                 lblImg.hide();
                                 setTextarea.hide();
-							} else if(colName == '_tax_status' || colName == '_visibility' || field_name == 'Publish' || colName == 'product_type' || (field.colType == "custom_column" && field.hasOwnProperty('values'))) {
+							} else if(colName == '_tax_status' || colName == '_visibility' || colName == 'visibility' || field_name == 'Publish' || colName == 'product_type' || (field.colType == "custom_column" && field.hasOwnProperty('values'))) {
 								setTextfield.hide();
 								textField2Cmp.hide();
 								comboCategoriesActionCmp.show();
@@ -3613,7 +3649,7 @@ var batchUpdatePanel = new Ext.Panel({
 				}
 
 			}
-			batchUpdateRecords(batchUpdatePanel,toolbarCount,cnt_array,store,jsonURL,batchUpdateWindow,radioValue,flag,pagingToolbar,products_search_flag,batch_limit,SM_IS_WOO16,SM_IS_WOO21,SM_IS_WOO22);
+			batchUpdateRecords(batchUpdatePanel,toolbarCount,cnt_array,store,jsonURL,batchUpdateWindow,radioValue,flag,pagingToolbar,products_search_flag,batch_limit,SM_IS_WOO16,SM_IS_WOO21,SM_IS_WOO22,SM_IS_WOO30);
 		}}
 	}]
 });
@@ -3982,6 +4018,7 @@ var showCustomerDetails = function(record,rowIndex){
             SM_IS_WOO16: SM_IS_WOO16,
             SM_IS_WOO21: SM_IS_WOO21,
             SM_IS_WOO22: SM_IS_WOO22,
+            SM_IS_WOO30: SM_IS_WOO30,
             security: SM_NONCE,
             file:  jsonURL
 		},
@@ -4210,6 +4247,7 @@ var showCustomerDetails = function(record,rowIndex){
 			SM_IS_WOO16: SM_IS_WOO16,
 			SM_IS_WOO21: SM_IS_WOO21,
 			SM_IS_WOO22: SM_IS_WOO22,
+			SM_IS_WOO30: SM_IS_WOO30,
 			security: SM_NONCE,
 			file:  jsonURL
 		},
@@ -4571,6 +4609,7 @@ var showCustomerDetails = function(record,rowIndex){
             SM_IS_WOO16: SM_IS_WOO16,
             SM_IS_WOO21: SM_IS_WOO21,
             SM_IS_WOO22: SM_IS_WOO22,
+            SM_IS_WOO30: SM_IS_WOO30,
             security: SM_NONCE,
             file:  jsonURL
 		},
@@ -4867,6 +4906,11 @@ var showCustomerDetails = function(record,rowIndex){
 
 					//code for handling custom columns
 					for( var key in sm_prod_custom_cols_formatted ) {
+
+						if( !SM.productsCols.hasOwnProperty(key) ) {
+							continue;
+						}
+
 						if( SM.productsCols[key].hasOwnProperty('variation_values') ) {
 							customColIndex = productsColumnModel.findColumnIndex(SM.productsCols[key].colName);
 

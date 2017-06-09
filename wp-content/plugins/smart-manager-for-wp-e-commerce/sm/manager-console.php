@@ -488,7 +488,7 @@ if (WPSC_RUNNING === true) {
 									  array ( 'meta_key' => 'usage_limit' ));
 	}
 
-	$select_box = (SM_IS_WOO21 == "true" || SM_IS_WOO22 == "true") ?  wc_get_coupon_types() : $woocommerce->get_coupon_discount_types();
+	$select_box = (SM_IS_WOO21 == "true" || SM_IS_WOO22 == "true" || SM_IS_WOO30 == "true") ?  wc_get_coupon_types() : $woocommerce->get_coupon_discount_types();
 
 	$select_box_keys = array_keys($select_box);
 
@@ -572,7 +572,7 @@ if (WPSC_RUNNING === true) {
 	$ordersfield_names ['items'] [$cnt] ['name'] = 'Order Status';
 	$ordersfield_names ['items'] [$cnt] ['type'] = 'bigint';
 
-	if (SM_IS_WOO22 == "true") {
+	if (SM_IS_WOO22 == "true" || SM_IS_WOO30 == "true") {
 		$ordersfield_names ['items'] [$cnt] ['value'] = " ,{$wpdb->prefix}posts";
 		$ordersfield_names ['items'] [$cnt] ['colName']= 'post_status';
 	} else {
@@ -656,6 +656,20 @@ if (WPSC_RUNNING === true) {
 	$products_cols['attributes']['colName']='product_attributes';
 	$products_cols['attributes']['tableName']="{$wpdb->prefix}postmeta";
 	$products_cols['attributes']['updateColName']='meta_value';
+
+
+	if( SM_IS_WOO30 == "true" ) {
+		$products_cols['visibility']['colName']='visibility';
+		$products_cols['visibility']['tableName']="{$wpdb->prefix}term_relationships";
+		$products_cols['visibility']['updateColName']='term_taxonomy_id';
+
+		$products_cols['featured']['name']=__( 'Featured', $sm_text_domain );
+		$products_cols['featured']['actionType']='YesNoActions';
+		$products_cols['featured']['colName']='featured';
+		$products_cols['featured']['tableName']="{$wpdb->prefix}term_relationships";
+		$products_cols['featured']['updateColName']='term_taxonomy_id';
+
+	}
 
 
 	// 	if (value.value != 'id' || value.value != 'image' || value.value != 'post_parent' ) {
@@ -975,14 +989,8 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 				$products_search_cols [$index]['type'] = 'String';	
 			}
 
-			if ($products_col['name'] == 'Visibility') {
-				$products_search_cols [$index]['values'] = array();
-				$products_search_cols [$index]['values'][0] = array('key' => 'visible', 'value' =>  __('Catalog & Search',$sm_text_domain));
-				$products_search_cols [$index]['values'][1] = array('key' => 'catalog', 'value' =>  __('Catalog',$sm_text_domain));
-				$products_search_cols [$index]['values'][2] = array('key' => 'search', 'value' =>  __('Search',$sm_text_domain));
-				$products_search_cols [$index]['values'][3] = array('key' => 'hidden', 'value' =>  __('Hidden',$sm_text_domain));
 
-			} else if ($products_col['name'] == 'Tax Status') {
+			if ($products_col['name'] == 'Tax Status') {
 				$products_search_cols [$index]['values'] = array();
 				$products_search_cols [$index]['values'][0] = array('key' => 'taxable', 'value' =>  __('Taxable',$sm_text_domain));
 				$products_search_cols [$index]['values'][1] = array('key' => 'shipping', 'value' =>  __('Shipping only',$sm_text_domain));
@@ -1003,6 +1011,39 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 			$products_search_cols [$index]['col_name'] = ($products_col['colName'] == "category") ? 'product_cat' : $products_col['colName'];
 			$products_search_cols [$index]['maxlength'] = 10;
 
+			if( SM_IS_WOO30 == "true" && $products_col['name'] == 'Featured' ) {
+				$products_search_cols [$index]['col_name'] = 'product_visibility_featured';
+				$products_search_cols [$index]['values'] = array();
+				$products_search_cols [$index]['values'][0] = array('key' => 'yes', 'value' =>  __('Yes',$sm_text_domain));
+				$products_search_cols [$index]['values'][1] = array('key' => 'no', 'value' =>  __('No',$sm_text_domain));
+			}
+
+			if ($products_col['name'] == 'Visibility') {
+				$products_search_cols [$index]['values'] = array();
+
+				if( SM_IS_WOO30 == "true" ) {
+
+					$products_search_cols [$index]['col_name'] = 'product_visibility';
+
+					if( function_exists('wc_get_product_visibility_options') ) {
+						$visibility_options = wc_get_product_visibility_options();
+
+						if( !empty($visibility_options) ) {
+							foreach ($visibility_options as $key => $value) {
+								$products_search_cols [$index]['values'][] = array('key' => $key, 'value' =>  __($value,$sm_text_domain));
+							}
+						}
+					}
+
+				} else {
+					$products_search_cols [$index]['values'][0] = array('key' => 'visible', 'value' =>  __('Catalog & Search',$sm_text_domain));
+					$products_search_cols [$index]['values'][1] = array('key' => 'catalog', 'value' =>  __('Catalog',$sm_text_domain));
+					$products_search_cols [$index]['values'][2] = array('key' => 'search', 'value' =>  __('Search',$sm_text_domain));
+					$products_search_cols [$index]['values'][3] = array('key' => 'hidden', 'value' =>  __('Hidden',$sm_text_domain));	
+				}
+
+			}
+
 			$index++;
 		}
 	}
@@ -1017,29 +1058,48 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 	
 
 	// if (!empty($attribute)) {
-		
-		// Code for getting the 'term_taxonomy.taxonomy' column collation
-	    $results = $wpdb->get_results( "SHOW FULL COLUMNS FROM {$wpdb->prefix}term_taxonomy", 'ARRAY_A' );
 
-	    $taxonomy_collattion = 'utf8mb4_unicode_ci';
+		$wpdb->hide_errors();
 
-	    if( count($results) > 0 ) {
-	      foreach ( $results as $column ) {
-	          if( $column['Field'] == 'taxonomy' ) {
-	              $taxonomy_collattion = $column['Collation'];
-	              break;
-	          }
-	      }
-	    }
-
-		$query_attributes_advanced_search = "SELECT tt.term_taxonomy_id, t.name, t.slug, wat.attribute_type, tt.taxonomy
+	    $query_attributes_advanced_search = "SELECT tt.term_taxonomy_id, t.name, t.slug, wat.attribute_type, tt.taxonomy
 	                FROM {$wpdb->prefix}terms as t 
 	                    JOIN {$wpdb->prefix}term_taxonomy as tt on (t.term_id = tt.term_id) 
-	                    LEFT JOIN {$wpdb->prefix}woocommerce_attribute_taxonomies as wat on (concat('pa_',wat.attribute_name) COLLATE ". $taxonomy_collattion ." = tt.taxonomy COLLATE ". $taxonomy_collattion .") 
+	                    LEFT JOIN {$wpdb->prefix}woocommerce_attribute_taxonomies as wat on (concat('pa_',wat.attribute_name) = tt.taxonomy) 
 	                WHERE tt.taxonomy LIKE 'pa_%' OR tt.taxonomy LIKE 'product_cat'
 	                GROUP BY tt.taxonomy,tt.term_taxonomy_id";
-		$results_attributes_advanced_search = $wpdb->get_results ($query_attributes_advanced_search, 'ARRAY_A');
-	    $rows_attributes_advanced_search = $wpdb->num_rows;
+
+	    $results_attributes_advanced_search = $wpdb->get_results ($query_attributes_advanced_search, 'ARRAY_A');
+	    $rows_attributes_advanced_search = $wpdb->num_rows;	
+
+	    if ($wpdb->last_error) {	    	
+
+	    	// Code for getting the 'term_taxonomy.taxonomy' column collation
+		    $results = $wpdb->get_results( "SHOW FULL COLUMNS FROM {$wpdb->prefix}term_taxonomy", 'ARRAY_A' );
+
+		    $taxonomy_collattion = 'utf8mb4_unicode_ci';
+
+		    if( count($results) > 0 ) {
+		      foreach ( $results as $column ) {
+		          if( $column['Field'] == 'taxonomy' ) {
+		              $taxonomy_collattion = $column['Collation'];
+		              break;
+		          }
+		      }
+		    }
+
+	    	$query_attributes_advanced_search = "SELECT tt.term_taxonomy_id, t.name, t.slug, wat.attribute_type, tt.taxonomy
+		                FROM {$wpdb->prefix}terms as t 
+		                    JOIN {$wpdb->prefix}term_taxonomy as tt on (t.term_id = tt.term_id) 
+		                    LEFT JOIN {$wpdb->prefix}woocommerce_attribute_taxonomies as wat on (concat('pa_',wat.attribute_name) COLLATE ". $taxonomy_collattion ." = tt.taxonomy COLLATE ". $taxonomy_collattion .") 
+		                WHERE tt.taxonomy LIKE 'pa_%' OR tt.taxonomy LIKE 'product_cat'
+		                GROUP BY tt.taxonomy,tt.term_taxonomy_id";
+
+			$results_attributes_advanced_search = $wpdb->get_results ($query_attributes_advanced_search, 'ARRAY_A');
+		    $rows_attributes_advanced_search = $wpdb->num_rows;
+
+	    }
+
+		$wpdb->show_errors();
 
 		if ($rows_attributes_advanced_search > 0) {
 
@@ -1112,7 +1172,6 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 
 }
 
-
 $encoded_categories = json_encode ( $categories );
 
 $products_cols_wpsc = json_encode( $products_cols );
@@ -1165,6 +1224,11 @@ function sm_product_columns_filter($attr) {
 								'_min_regular_price_variation_id', '_min_sale_price_variation_id',
 								'_min_variation_price', '_min_variation_regular_price',
 								'_min_variation_sale_price', '_product_image_gallery', '_wp_trash_meta_time', '_edit_last','_edit_lock');
+
+
+	if( SM_IS_WOO30 == "true" ) {
+		$meta_key_ignored[] = '_featured';
+	}
 
 	$max_id = 0;
 
@@ -1400,6 +1464,7 @@ if (WOO_RUNNING === true) {
         var SM_IS_WOO16            =  '" . ((WOO_RUNNING === true) ? SM_IS_WOO16 : '') . "';
         var SM_IS_WOO21            =  '" . ((WOO_RUNNING === true) ? SM_IS_WOO21 : '') . "';
         var SM_IS_WOO22            =  '" . ((WOO_RUNNING === true) ? SM_IS_WOO22 : '') . "';
+        var SM_IS_WOO30            =  '" . ((WOO_RUNNING === true) ? SM_IS_WOO30 : '') . "';
         var SM_NONCE            =  '" . wp_create_nonce( 'smart-manager-security' ) . "';
         var IS_WP35             =  '" . ((version_compare ( $wp_version, '3.5', '>=' )) ? IS_WP35 : '') . "';
         var IS_WP40             =  '" . ((version_compare ( $wp_version, '4.0', '>=' )) ? IS_WP40 : '') . "';
@@ -1627,6 +1692,7 @@ if (WPSC_RUNNING === true) {
 		lang.width_unit				= '" . __('Width Unit',$sm_text_domain) . "';
 		lang.length_unit				= '" . __('Length Unit',$sm_text_domain) . "';		
         lang.catalog___search	      		= '" . __('Catalog & Search',$sm_text_domain) . "';
+        lang.visible	      		= '" . __('Visible',$sm_text_domain) . "'; 
 		lang.catalog				    = '" . __('Catalog',$sm_text_domain) . "';
 		lang.search				        = '" . __('Search',$sm_text_domain) . "';
 		lang.hidden			            = '" . __('Hidden',$sm_text_domain) . "';
@@ -1646,6 +1712,7 @@ if (WPSC_RUNNING === true) {
                     
         lang.product_visibility			= '" . __('Product Visibility',$sm_text_domain) . "';
         lang.visibility     			= '" . __('Visibility',$sm_text_domain) . "';
+        lang.featured     			= '" . __('Featured',$sm_text_domain) . "';
         lang.taxable     			= '" . __('Taxable',$sm_text_domain) . "';
         lang.shipping_only     			= '" . __('Shipping only',$sm_text_domain) . "';
         lang.none     			= '" . __('None',$sm_text_domain) . "';
@@ -1834,7 +1901,7 @@ if (! function_exists('sm_add_social_links')) {
         $social_link .= '<a href="https://twitter.com/storeapps" class="twitter-follow-button" data-show-count="true" data-dnt="true" data-show-screen-name="false">Follow</a>';
         $social_link .= "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>";
         $social_link .= '<iframe id="fb_like_sm" src="'. $ssl .'://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FStore-Apps%2F614674921896173&width=100&layout=button_count&action=like&show_faces=false&share=false&height=21"></iframe>';
-        $social_link .= '<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script><script type="IN/FollowCompany" data-id="3758881" data-counter="right"></script>';
+        // $social_link .= '<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script><script type="IN/FollowCompany" data-id="3758881" data-counter="right"></script>';
 
         return $social_link;
 
