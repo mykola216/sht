@@ -11,6 +11,9 @@ class WC_Order_Export_Engine {
 	private static $order_id = '';
 	//
 	public static function export( $settings, $filepath ) {
+		if( empty($settings['destination']['type']) ) {
+			return __( "No format selected", 'woocommerce-order-export' );
+		}	
 		$export_type = strtolower( $settings['destination']['type'] );
 		if ( ! in_array( strtoupper( $export_type ), WC_Order_Export_Admin::$export_types ) ) {
 			return __( "Wrong format", 'woocommerce-order-export' );
@@ -28,14 +31,14 @@ class WC_Order_Export_Engine {
 		} else {
 			$result = $custom_export;
 		}
-		echo $result . "\r\n";
+		//echo $result . "\r\n";
 		return $result;
 	}
 
 	public static function make_filename( $mask ) {
 		if ( ! empty( self::$order_id ) && strpos( $mask, '%order_id' ) === false ) {
 			$mask_parts = explode( '.', $mask );
-			$mask_parts[ count( $mask_parts ) - 2 ] .= '-%order_id';
+			$mask_parts[ count( $mask_parts ) - 1 ] .= '-%order_id';
 			$mask       = implode( '.', $mask_parts );
 		}
 		$time = apply_filters( 'woe_make_filename_current_time', current_time( 'timestamp' ) );
@@ -133,7 +136,7 @@ class WC_Order_Export_Engine {
 		);
 	}
 
-	private static function _prepare_xls_csv( $settings ) {
+	private static function _prepare_xls_csv( $settings, $order_ids ) {
 		$format = strtolower( $settings['format'] );
 
 		$csv_max['coupons'] = $csv_max['products'] = 1;
@@ -233,13 +236,16 @@ class WC_Order_Export_Engine {
 		else
 			$options['time_format'] = 'H:i';
 
+		//as is	
+		$options['export_refunds'] = $settings['export_refunds'];
+		
 		return $options;
 	}
 	
 	private static function  validate_defaults( $settings ) {
 		if( empty($settings['sort_direction']) )
 			$settings['sort_direction'] = 'DESC';
-		return $settings;
+		return apply_filters('woe_settings_validate_defaults', $settings);
 	}
 
 	public static function build_file(
@@ -297,7 +303,7 @@ class WC_Order_Export_Engine {
 		$order_ids = $wpdb->get_col( $sql );
 
 		// prepare for XLS/CSV
-		$csv_max = self::_prepare_xls_csv( $settings );
+		$csv_max = self::_prepare_xls_csv( $settings, $order_ids );
 
 		// try to optimize calls
 		$filters_active = self::_optimize_calls( $settings );
@@ -364,16 +370,15 @@ class WC_Order_Export_Engine {
 		if ( $limit ) {
 			$sql .= " LIMIT " . intval( $limit );
 		}
-
 		if ( !$order_ids )
 			$order_ids = $wpdb->get_col( $sql );
 		
-		if ( empty( $order_ids ) ) {
+		if ( empty( $order_ids )  AND apply_filters( 'woe_schedule_job_skip_empty_file', true ) ) {
 			return false;
 		}
 
 		// prepare for XLS/CSV
-		$csv_max = self::_prepare_xls_csv( $settings );
+		$csv_max = self::_prepare_xls_csv( $settings, $order_ids );
 
 		// try to optimize calls
 		$filters_active = self::_optimize_calls( $settings );
@@ -439,7 +444,7 @@ class WC_Order_Export_Engine {
 			return false;
 		}
 		// prepare for XLS/CSV
-		$csv_max = self::_prepare_xls_csv( $settings );
+		$csv_max = self::_prepare_xls_csv( $settings, $order_ids );
 
 		// try to optimize calls
 		$filters_active = self::_optimize_calls( $settings );
@@ -452,6 +457,8 @@ class WC_Order_Export_Engine {
 
 		$options = self::_install_options( $settings );
 
+		$result = false;
+		
 		WC_Order_Export_Data_Extractor::prepare_for_export();
 		foreach ( $order_ids as $order_id ) {
 			self::$order_id = $order_id;
@@ -481,31 +488,24 @@ class WC_Order_Export_Engine {
 			self::$order_id = '';
 		}
 
-		return true;
+		return $result; //return last result
 	}
 
 
 	public static function build_files_and_export( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
-
 		if (!empty($settings['destination']['separate_files'])) {
 			$result = self::build_separate_files_and_export( $settings, $filename, $limit, $order_ids );
-			if ( $result === true ) {
-				$result = __( '', 'woocommerce-order-export' );
-			}
-			elseif ( $result === false ) {
-				$result = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );
-			}
 		}
 		else {
 			$file = self::build_file_full( $settings, $filename, $limit, $order_ids );
-			if ( $file !== false ) {
+			if ( $file !== false ) 
 				$result = self::export( $settings, $file );
-			}
-			else {
-				$result = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );
-			}
+			else 
+				$result = false;
 		}
-
+		
+		if ( $result === false )
+			$result  = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );		
 		return $result;
 	}
 

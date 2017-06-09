@@ -26,9 +26,9 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 				$this->objPHPExcel = new PHPExcel();
 			}
 			$this->objPHPExcel->setActiveSheetIndex( 0 );
-			
+
 			$this->last_row = $this->objPHPExcel->getActiveSheet()->getHighestRow();
-			
+
 			//fix bug,  row=1  if we have 0 records
 			if( $this->last_row == 1  AND $this->objPHPExcel->getActiveSheet()->getHighestColumn() == "A" )
 				$this->last_row = 0;
@@ -38,7 +38,7 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 	public function start( $data = '' ) {
 		$data = apply_filters( "woe_xls_header_filter", $data );
 		parent::start( $data );
-		
+
 		if ( $this->mode == 'preview' ) {
 			$this->rows[] = $data;
 			return;
@@ -52,22 +52,22 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 
 			//make first bold
 			$last_column = $this->objPHPExcel->getActiveSheet()->getHighestDataColumn();
-			$this->objPHPExcel->getActiveSheet()->getStyle( "A1:" + $last_column + "1" )->getFont()->setBold( true );
+			$this->objPHPExcel->getActiveSheet()->getStyle( "A1:" . $last_column . "1" )->getFont()->setBold( true );
 
 			//freeze
 			$this->objPHPExcel->getActiveSheet()->freezePane( 'A2' );
 		}
 
-		//rename 
+		//rename
 		$this->objPHPExcel->getActiveSheet()->setTitle( __( 'Orders', 'woocommerce-order-export' ) );
 
 		// right-to-left worksheet?
 		if( $this->settings['direction_rtl'] )
 			$this->objPHPExcel->getActiveSheet()->setRightToLeft(true);
-		
+
 		do_action ( 'woe_xls_print_header', $this->objPHPExcel, $this );
 
-		//save only header or empty file on init 
+		//save only header or empty file on init
 		$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 		$objWriter->save( $this->filename );
 	}
@@ -99,13 +99,13 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 			}
 			foreach ( $this->rows as $num => $rec ) {
 				$max_columns  = max( $max_columns  , count($rec) );
-				
+
 				//adds extra space for RTL
 				if( $this->settings['direction_rtl'] ) {
 					while( count($rec) < $max_columns  )
 						$rec[] = '';
 					$rec = array_reverse( $rec );
-				}	
+				}
 				if ( $num == 0 AND $this->settings['display_column_names'] ) {
 					fwrite( $this->handle, '<tr style="font-weight:bold"><td>' . join( '</td><td>', $rec ) . "</td><tr>\n" );
 				} else {
@@ -123,7 +123,7 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 					$sheet->getColumnDimension($cell->getColumn())->setAutoSize(true);
 				}
 				$sheet->calculateColumnWidths();
-			}	
+			}
 
 			$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 			$objWriter->save( $this->filename );
