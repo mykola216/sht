@@ -169,7 +169,16 @@
 ul.behandeling {
     height: 250px;
 }
-ul.behandeling li {
+ul.behandeling-kleur {
+    height: auto;
+}
+ul.behandeling-nanolak {
+    height: auto;
+}
+
+
+
+ul.behandeling li, ul.behandeling-kleur li, ul.behandeling-nanolak li {
     background-image: url('../images/wood-treatments.png');
     background-repeat: no-repeat;
     background-position-x: -3px;
@@ -180,17 +189,21 @@ ul.behandeling li {
     color: white;
     text-shadow: 1px 1px 1px black;
 }
-ul.behandeling li:hover {
+ul.behandeling li:hover, ul.behandeling-kleur li:hover, ul.behandeling-nanolak li:hover {
     text-shadow: none;
     /*background-color: rgba(0,0,0,0.9) !important;*/
     /*border: 1px solid;*/
 }
-ul.behandeling li:nth-child(1) {
+ul.behandeling li:nth-child(1), ul.behandeling-kleur li:nth-child(1), ul.behandeling-nanolak li:nth-child(1) {
     background-position: 0 100px;
     height: auto !important;
     line-height: inherit;
     color: inherit;
-    text-shadow: none;
+    text-shadow: none
+
+
+
+
 }
 ul.behandeling li:nth-child(2) {
     background-position: 0 0;
@@ -210,3 +223,31 @@ ul.behandeling li:nth-child(6) {
 ul.behandeling li:nth-child(7) {
     background-position: 0 -541px;
 }
+
+
+
+
+/* new form class behandeling-kleur (form-1) */
+ul.behandeling-kleur li:nth-child(2) {
+    background-position: 0 -220px;
+}
+ul.behandeling-kleur li:nth-child(3) {
+    background-position: 0 -113px;
+}
+ul.behandeling-kleur li:nth-child(4) {
+    background-position: 0 0;
+}
+ul.behandeling-kleur li:nth-child(5) {
+    background-position: 0 -327px;
+}
+/*            */
+
+
+/* new form class behandeling-nanolak (form-2) */
+ul.behandeling-nanolak li:nth-child(2) {
+    background-position: 0 -434px;
+}
+ul.behandeling-nanolak li:nth-child(3) {
+    background-position: 0 -541px;
+}
+/*            */
