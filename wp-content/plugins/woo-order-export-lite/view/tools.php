@@ -3,9 +3,9 @@ if ( !defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 $settings_export[ $WC_Order_Export->settings_name_now ]      = get_option( $WC_Order_Export->settings_name_now, array() );
-$settings_export[ $WC_Order_Export->settings_name_cron ]     = get_option( $WC_Order_Export->settings_name_cron, array() );
 $settings_export[ $WC_Order_Export->settings_name_profiles ] = get_option( $WC_Order_Export->settings_name_profiles, array() );
-
+$settings_export[ $WC_Order_Export->settings_name_actions ] = get_option( $WC_Order_Export->settings_name_actions , array() );
+$settings_export[ $WC_Order_Export->settings_name_cron ]     = get_option( $WC_Order_Export->settings_name_cron, array() );
 $settings_json = json_encode( $settings_export, JSON_PRETTY_PRINT );
 ?>
 <div class="clearfix"></div>

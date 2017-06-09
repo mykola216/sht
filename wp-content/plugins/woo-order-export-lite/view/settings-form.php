@@ -4,6 +4,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 add_thickbox();
 $settings = $WC_Order_Export->get_export_settings( $mode, $id );
+$order_custom_meta_fields = WC_Order_Export_Data_Extractor::get_all_order_custom_meta_fields();
 
 //var_dump( $WC_Order_Export->get_value( $settings, '[schedule][type]' ) );
 ?>
@@ -15,7 +16,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 	var order_fields = <?php echo json_encode( $settings[ 'order_fields' ] ) ?>;
 	var order_products_fields = <?php echo json_encode( $settings[ 'order_product_fields' ] ) ?>;
 	var order_coupons_fields = <?php echo json_encode( $settings[ 'order_coupon_fields' ] ) ?>;
-	var order_custom_meta_fields = <?php echo json_encode( WC_Order_Export_Data_Extractor::get_all_order_custom_meta_fields() ) ?>;
+	var order_custom_meta_fields = <?php echo json_encode( $order_custom_meta_fields ) ?>;
 	var order_products_custom_meta_fields = <?php echo json_encode( WC_Order_Export_Data_Extractor::get_all_product_custom_meta_fields() ) ?>;
 	var order_coupons_custom_meta_fields = <?php echo json_encode( WC_Order_Export_Data_Extractor::get_all_coupon_custom_meta_fields() ) ?>;
 </script>
@@ -41,9 +42,43 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					</label>
 				</div>
 			</div>
+			<br>
+		<?php elseif ( $mode === $WC_Order_Export::EXPORT_ORDER_ACTION ): ?>
+			<div class="my-block">
+				<div style="display: inline;">
+					<span class="wc-oe-header"><?php _e( 'Title', 'woocommerce-order-export' ) ?></span>
+					<input type=text  style="width: 90%;" name="settings[title]" value='<?php echo ( isset( $settings[ 'title' ] ) ? $settings[ 'title' ] : '' ) ?>'>
+				</div>
+			</div>
+			<br>
+			<div class="my-block">
+				<div>
+					<span class="wc-oe-header"><?php _e( 'From status', 'woocommerce-order-export' ) ?></span>
+					<select id="from_status" name="settings[from_status][]" multiple="multiple" style="width: 100%; max-width: 25%;">
+						<?php foreach ( wc_get_order_statuses() as $i => $status ) { ?>
+							<option value="<?php echo $i ?>" <?php if ( in_array( $i, $settings[ 'from_status' ] ) ) echo 'selected'; ?>><?php echo $status ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div>
+					<span class="wc-oe-header"><?php _e( 'To status', 'woocommerce-order-export' ) ?></span>
+					<select id="to_status" name="settings[to_status][]" multiple="multiple" style="width: 100%; max-width: 25%;">
+						<?php foreach ( wc_get_order_statuses() as $i => $status ) { ?>
+							<option value="<?php echo $i ?>" <?php if ( in_array( $i, $settings[ 'to_status' ] ) ) echo 'selected'; ?>><?php echo $status ?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<?php if( function_exists( "wc_get_logger" ) ) : ?>
+				<div>
+					<label>
+						<input type="checkbox" name="settings[log_results]" <?php echo isset( $settings[ 'log_results' ] ) ? 'checked' : '' ?>>
+						<?php _e( 'Log results', 'woocommerce-order-export' ) ?>&nbsp;<a href="admin.php?page=wc-status&tab=logs&source=woocommerce-order-export" target=_blank><?php _e( 'View logs', 'woocommerce-order-export' ) ?></a>
+					</label>
+				</div>
+				<?php endif; ?>
+			</div>
 			<hr>
-		<?php endif; ?>
-		<?php if ( $mode === $WC_Order_Export::EXPORT_SCHEDULE ): ?>
+		<?php elseif ( $mode === $WC_Order_Export::EXPORT_SCHEDULE ): ?>
 			<div class="my-block">
 				<div style="display: inline;">
 					<span class="wc-oe-header"><?php _e( 'Title', 'woocommerce-order-export' ) ?></span>
@@ -129,6 +164,14 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 						<input name="settings[schedule][custom_interval]" value="<?php echo isset( $settings[ 'schedule' ][ 'custom_interval' ] ) ? $settings[ 'schedule' ][ 'custom_interval' ] : '' ?>" >
 					</label>
 				</div>
+				<?php if( function_exists( "wc_get_logger" ) ) : ?>
+				<div id="d-schedule-3" class="padding-bottom-10">
+					<label>
+						<input type="checkbox" name="settings[log_results]" <?php echo isset( $settings[ 'log_results' ] ) ? 'checked' : '' ?>>
+						<?php _e( 'Log results', 'woocommerce-order-export' ) ?>&nbsp;<a href="admin.php?page=wc-status&tab=logs&source=woocommerce-order-export" target=_blank><?php _e( 'View logs', 'woocommerce-order-export' ) ?></a>
+					</label>
+				</div>
+				<?php endif; ?>
 			</div>
 			<br>
 			<div id="my-export-options" class="my-block">
@@ -315,7 +358,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 	</div>
 
 	<div id="my-right" style="float: left; width: 48%; margin: 0px 10px; max-width: 500px;">
-		<?php if ( $mode === $WC_Order_Export::EXPORT_SCHEDULE ): ?>
+		<?php if ( in_array( $mode, array( $WC_Order_Export::EXPORT_SCHEDULE, $WC_Order_Export::EXPORT_ORDER_ACTION ) ) ): ?>
 			<div id="my-shedule-destination" class="my-block">
 				<div class="wc-oe-header"><?php _e( 'Destination', 'woocommerce-order-export' ) ?></div>
 
@@ -500,11 +543,13 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<div class="clear"></div>
 				<br/>
 				<div id="extend_desstination">
-					<div>
-						<label>
-							<input name="settings[destination][separate_files]" type="checkbox" value="1" <?php echo $WC_Order_Export->get_value( $settings, "[destination][separate_files]" ) ? 'checked' : ''; ?>><?php _e( 'Make separate file for each order', 'woocommerce-order-export' ) ?>
-						</label>
-					</div>
+					<?php if ( $mode !== $WC_Order_Export::EXPORT_ORDER_ACTION ): ?>
+						<div>
+							<label>
+								<input name="settings[destination][separate_files]" type="checkbox" value="1" <?php echo $WC_Order_Export->get_value( $settings, "[destination][separate_files]" ) ? 'checked' : ''; ?>><?php _e( 'Make separate file for each order', 'woocommerce-order-export' ) ?>
+							</label>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 			<br>
@@ -515,6 +560,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 				<span class="ui-icon ui-icon-triangle-1-s my-icon-triangle"></span></span>
 			<div id="my-order" hidden="hidden">
 				<div><input type="hidden" name="settings[skip_suborders]" value="0"/><label><input type="checkbox" name="settings[skip_suborders]" value="1" <?php checked($settings[ 'skip_suborders' ]) ?> /> <?php _e( "Don't export child orders", 'woocommerce-order-export' ) ?></label></div>
+				<div><input type="hidden" name="settings[export_refunds]" value="0"/><label><input type="checkbox" name="settings[export_refunds]" value="1" <?php checked($settings[ 'export_refunds' ]) ?> /> <?php _e( "Export refunds", 'woocommerce-order-export' ) ?></label></div>
 				<span class="wc-oe-header"><?php _e( 'Order Statuses', 'woocommerce-order-export' ) ?></span>
 				<select id="statuses" name="settings[statuses][]" multiple="multiple" style="width: 100%; max-width: 25%;">
 					<?php foreach ( wc_get_order_statuses() as $i => $status ) { ?>
@@ -595,6 +641,52 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 							<option selected value="<?php echo $prod ?>"> <?php echo $p; ?></option>
 						<?php } ?>
 				</select>
+           
+				<span class="wc-oe-header"><?php _e( 'Product Taxonomies', 'woocommerce-order-export' ) ?></span>
+				<br>
+				<select id="taxonomies" style="width: auto;">
+					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_taxonomies() as $attr_id => $attr_name ) { ?>
+						<option><?php echo $attr_name; ?></option>
+					<?php } ?>
+				</select>
+				=
+				<input type=text id="text_taxonomies" value=''> <button id="add_taxonomies" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
+				<br>
+				<select id="taxonomies_check" multiple name="settings[product_taxonomies][]" style="width: 100%; max-width: 25%;">
+					<?php
+					if ( $settings[ 'product_taxonomies' ] )
+						foreach ( $settings[ 'product_taxonomies' ] as $prod ) {
+							?>
+							<option selected value="<?php echo $prod; ?>"> <?php echo $prod; ?></option>
+						<?php } ?>
+				</select>
+				
+				<span class="wc-oe-header"><?php _e( 'Product custom fields', 'woocommerce-order-export' ) ?></span>
+				<br>
+				<select id="product_custom_fields" style="width: auto;">
+					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_custom_fields() as $cf_name ) { ?>
+						<option><?php echo $cf_name; ?></option>
+					<?php } ?>
+				</select>
+
+				<select id="product_custom_fields_compare" class="select_compare">
+					<option>=</option>
+					<option>&lt;&gt;</option>
+					<option>LIKE</option>
+				</select>
+
+				<input type="text" id="text_product_custom_fields" disabled style="display: none;">
+
+				<button id="add_product_custom_fields" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
+				<br>
+				<select id="product_custom_fields_check" multiple name="settings[product_custom_fields][]" style="width: 100%; max-width: 25%;">
+					<?php
+					if ( $settings[ 'product_custom_fields' ] )
+						foreach ( $settings[ 'product_custom_fields' ] as $prod ) {
+							?>
+							<option selected value="<?php echo $prod; ?>"> <?php echo $prod; ?></option>
+						<?php } ?>
+				</select>
 
 				<span class="wc-oe-header"><?php _e( 'Variable Product Attributes', 'woocommerce-order-export' ) ?></span>
 				<br>
@@ -645,25 +737,6 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<?php
 					if ( $settings[ 'product_itemmeta' ] )
 						foreach ( $settings[ 'product_itemmeta' ] as $prod ) {
-							?>
-							<option selected value="<?php echo $prod; ?>"> <?php echo $prod; ?></option>
-						<?php } ?>
-				</select>
-           
-				<span class="wc-oe-header"><?php _e( 'Product Taxonomies', 'woocommerce-order-export' ) ?></span>
-				<br>
-				<select id="taxonomies" style="width: auto;">
-					<?php foreach ( WC_Order_Export_Data_Extractor::get_product_taxonomies() as $attr_id => $attr_name ) { ?>
-						<option><?php echo $attr_name; ?></option>
-					<?php } ?>
-				</select>
-				=
-				<input type=text id="text_taxonomies" value=''> <button id="add_taxonomies" class="button-secondary"><span class="dashicons dashicons-plus-alt"></span></button>
-				<br>
-				<select id="taxonomies_check" multiple name="settings[product_taxonomies][]" style="width: 100%; max-width: 25%;">
-					<?php
-					if ( $settings[ 'product_taxonomies' ] )
-						foreach ( $settings[ 'product_taxonomies' ] as $prod ) {
 							?>
 							<option selected value="<?php echo $prod; ?>"> <?php echo $prod; ?></option>
 						<?php } ?>
@@ -790,7 +863,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<label style="width: 40%;"><?php _e( 'Meta key', 'woocommerce-order-export' ) ?>:
 					<select id='select_custom_meta_order'>
 							<?php
-							foreach ( WC_Order_Export_Data_Extractor::get_all_order_custom_meta_fields() as $meta_id => $meta_name ) {
+							foreach ( $order_custom_meta_fields as $meta_id => $meta_name ) {
 								echo "<option value='$meta_name' >$meta_name</option>";
 							};
 							?>
@@ -798,6 +871,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					<label style="width: 40%;"><?php _e( 'Column Name', 'woocommerce-order-export' ) ?>:<input type='text' id='colname_custom_meta'/></label>
 
 					<div id="custom_meta_order_mode">
+						<label style="width: 40%;"><input style="width: 80%;" type='text' id='text_custom_meta_order' placeholder="or type meta key here"/><br></label>
 						<label><input id="custom_meta_order_mode_used" type="checkbox" name="custom_meta_order_mode" value="used"> <?php _e('Hide unused', 'woocommerce-order-export') ?></label>
 					</div>
 					<div style="text-align: right;">
@@ -851,7 +925,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
      <?php do_action("woe_settings_above_buttons", $settings); ?>
 	<div id=JS_error_onload style='color:red;font-size: 120%;'><?php echo sprintf(__( "If you see this message, user interface won't work correctly!<br>There is a JS error (<a target=blank href='%s'>read here</a> how to view it). Probably, it's a conflict with another plugin or active theme.", 'woocommerce-order-export' ) , "https://codex.wordpress.org/Using_Your_Browser_to_Diagnose_JavaScript_Errors#Step_3:_Diagnosis"); ?></div>
 	<p class="submit">
-		<input type="submit" id='preview-btn' class="button-secondary preview-btn" data-limit="5" value="<?php _e( 'Preview', 'woocommerce-order-export' ) ?>" />
+		<input type="submit" id='preview-btn' class="button-secondary preview-btn"  data-limit="<?php echo ($mode === $WC_Order_Export::EXPORT_ORDER_ACTION ? 1 : 5); ?>" value="<?php _e( 'Preview', 'woocommerce-order-export' ) ?>" />
 		<input type="submit" id='save-btn' class="button-primary" value="<?php _e( 'Save Settings', 'woocommerce-order-export' ) ?>" />
 		<?php if ( $show[ 'export_button' ] ) { ?>
 			<input type="submit" id='export-btn' class="button-secondary" value="<?php _e( 'Export', 'woocommerce-order-export' ) ?>" />
@@ -1191,6 +1265,7 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 		jQuery( '#attributes' ).change();
 		jQuery( '#itemmeta' ).change();
 		jQuery( '#custom_fields' ).change();
+		jQuery( '#product_custom_fields' ).change();
 		jQuery( '#shipping_locations' ).change();
 //		jQuery( '#' + output_format + '_options' ).show();
 
@@ -1563,8 +1638,9 @@ $settings = $WC_Order_Export->get_export_settings( $mode, $id );
 					document.location = '<?php echo admin_url( 'admin.php?page=wc-order-export&tab=schedules&save=y' ) ?>';
 				} else if ( mode == '<?php echo $WC_Order_Export::EXPORT_PROFILE; ?>' ) {
 					document.location = '<?php echo admin_url( 'admin.php?page=wc-order-export&tab=profiles&save=y' ) ?>';
-				}
-				else {
+				} else if ( mode == '<?php echo $WC_Order_Export::EXPORT_ORDER_ACTION; ?>' ) {
+					document.location = '<?php echo admin_url( 'admin.php?page=wc-order-export&tab=order_actions&save=y' ) ?>';
+				} else {
 					document.location = '<?php echo admin_url( 'admin.php?page=wc-order-export&tab=export&save=y' ) ?>';
 				}
 			}, "json" );

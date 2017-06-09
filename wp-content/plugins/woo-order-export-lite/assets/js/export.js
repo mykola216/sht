@@ -232,6 +232,77 @@ function bind_events() {
 
         return false;
     } );
+	
+	
+	
+	// for filter by PRODUCT custom fields
+    jQuery( '#product_custom_fields' ).change( function() {
+
+        jQuery( '#select_product_custom_fields' ).attr( 'disabled', 'disabled' );
+        var data = {
+            'cf_name': jQuery( this ).val(),
+            method: "get_product_custom_fields_values",
+            action: "order_exporter"
+        };
+
+        jQuery.post( ajaxurl, data, function( response ) {
+            jQuery( '#select_product_custom_fields' ).remove();
+            if ( response ) {
+                var options = '';
+                jQuery.each( response, function( index, value ) {
+                    options += '<option>' + value + '</option>';
+                } );
+                jQuery( '<select id="select_product_custom_fields" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_product_custom_fields' ) );
+            }
+            else {
+                jQuery( '<input type="text" id="select_product_custom_fields" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_product_custom_fields' ) );
+            }
+        }, 'json' );
+    } );
+    jQuery( '#add_product_custom_fields' ).click( function() {
+
+        var val = !jQuery( "#select_product_custom_fields" ).is(':disabled') ? jQuery( "#select_product_custom_fields" ).val() : jQuery( "#text_product_custom_fields" ).val();
+        var val2 = jQuery( '#product_custom_fields' ).val();
+        var val_op = jQuery( '#product_custom_fields_compare' ).val();
+        if ( val != null && val2 != null && val.length && val2.length ) {
+            val = val2 + ' ' + val_op + ' ' + val;
+
+            var f = true;
+            jQuery( '#product_custom_fields_check' ).next().find( 'ul li' ).each( function() {
+                if ( jQuery( this ).attr( 'title' ) == val ) {
+                    f = false;
+                }
+            } );
+
+            if ( f ) {
+
+                jQuery( '#product_custom_fields_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
+                jQuery( '#product_custom_fields_check' ).select2();
+
+                jQuery( '#product_custom_fields_check option' ).each( function() {
+                    jQuery( '#product_custom_fields_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
+                } );
+
+                jQuery( "input#select_product_custom_fields" ).val( '' );
+            }
+        }
+
+        return false;
+    } );
+
+    jQuery( '#product_custom_fields_compare').change(function() {
+        var val_op = jQuery( '#product_custom_fields_compare' ).val();
+        if ( 'LIKE' === val_op ) {
+            jQuery( "#select_product_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#text_product_custom_fields" ).css('display', 'inline' ).attr( 'disabled', false );
+        }
+        else {
+            jQuery( "#select_product_custom_fields" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#text_product_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+        }
+    });
+	//end of change 
+	
 
     jQuery( '#orders_add_custom_field' ).click( function() {
         jQuery( "#fields_control > div" ).hide();
@@ -353,6 +424,14 @@ function bind_events() {
     jQuery( '#button_custom_meta' ).click( function() {
         var label = jQuery( '#select_custom_meta_order' ).val();
         var colname = jQuery( '#colname_custom_meta' ).val();        
+		if (! label) //try custom text 
+			label = jQuery( '#text_custom_meta_order' ).val();;
+        if ( !label )
+        {
+            alert( 'empty meta key' );
+			jQuery( '#select_custom_meta_order' ).focus();
+            return false
+        }
         if ( !colname )
         {
             alert( 'empty Column name' );
@@ -488,13 +567,12 @@ function add_custom_field( to, index_p, format, colname, value ) {
     
     value   = escapeStr(value);
     colname = escapeStr(colname);
-    
     var arr = jQuery( 'input[name*=' + index_p + '\\[label\\]\\[custom_field]' );
     var count = arr.length;
     
     var max = 0;
     for(var i=0; i<count; i++) {
-        var n = parseInt(arr[i].name.replace('orders[label][custom_field_', '').replace(']',''));
+        var n = parseInt(arr[i].name.replace(index_p+'[label][custom_field_', '').replace(']','')); // fixed for popups
         if(n > max) {
             max = n;
         }
@@ -522,7 +600,6 @@ function add_custom_meta( to, index_p, format, label, colname ) {
     label   = escapeStr(label);
     colname = escapeStr(colname);
  
-    var count = ( jQuery( 'input[name*=' + index_p + '\\[label\\]\\[' + format + '\\]\\[custom_meta]' ) ).length;
 //    console.log();
     var row = '<li class="mapping_row segment_modal_' + index_p + '">\
                                                         <div class="mapping_col_1">\
@@ -543,6 +620,9 @@ function formatItemSelection( item ) {
 
 function select2_inits()
 {
+    jQuery( "#from_status, #to_status" ).select2({
+        multiple: true
+    });
     jQuery( "#statuses" ).select2();
     jQuery( "#shipping_methods" ).select2();
     jQuery( "#user_roles" ).select2();
@@ -560,6 +640,13 @@ function select2_inits()
         width: 150
     } );
     jQuery( "#custom_fields_check" ).select2();
+	
+    jQuery( "#product_custom_fields" ).select2( {
+        width: 150
+    } );
+    jQuery( "#product_custom_fields_check" ).select2();
+	
+
 	
     jQuery( "#taxonomies" ).select2( {
         width: 150

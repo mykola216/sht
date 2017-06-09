@@ -33,7 +33,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 			fwrite( $this->handle, chr( 239 ) . chr( 187 ) . chr( 191 ) );
 		}
 		
-		if ( $this->settings['display_column_names'] AND $data ) {
+		if ( $this->settings['display_column_names'] ) {
 			if ( $this->mode == 'preview' ) {
 				$this->rows[] = $data;
 			} else {
@@ -44,6 +44,7 @@ class WOE_Formatter_Csv extends WOE_Formatter {
 						fwrite( $this->handle, implode( self::$delimiter, $data ) . self::$linebreak );
 					}
 				}
+				do_action( 'woe_csv_print_header', $this->handle, $data, $this);
 			}
 		}
 	}

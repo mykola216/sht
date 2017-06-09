@@ -1,6 +1,6 @@
 <?php
 global $redux_builder_amp;
-if (!comments_open() || $redux_builder_amp['ampforwp-disqus-comments-support']) {
+if (!comments_open() || $redux_builder_amp['ampforwp-disqus-comments-support'] || $redux_builder_amp['ampforwp-facebook-comments-support']) {
   return;
 }
 ?>
@@ -42,11 +42,13 @@ if (!comments_open() || $redux_builder_amp['ampforwp-disqus-comments-support']) 
 											</footer>
 												<!-- .comment-meta -->
 											<div class="comment-content">
-                        <p><?php
-                          $comment_content = get_comment_text();
-                          $sanitizer = new AMPFORWP_Content( $comment_content, array(), apply_filters( 'ampforwp_content_sanitizers', array( 'AMP_Img_Sanitizer' => array() ) ) );
-                          echo $sanitizer->get_amp_content();  ?>
-                        </p>
+						                        <?php
+						                          	$comment_content = get_comment_text();
+						                        	// Added <p> tag in comments #873
+						                        	$comment_content = wpautop( $comment_content );
+						                          $sanitizer = new AMPFORWP_Content( $comment_content, array(), apply_filters( 'ampforwp_content_sanitizers', array( 'AMP_Img_Sanitizer' => array() ) ) );
+						                         $sanitized_comment_content =  $sanitizer->get_amp_content();
+						                          echo make_clickable( $sanitized_comment_content );   ?>
 											</div>
 												<!-- .comment-content -->
 										</article>
@@ -70,7 +72,7 @@ if (!comments_open() || $redux_builder_amp['ampforwp-disqus-comments-support']) 
     <?php include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
     if( ! is_plugin_active( 'amp-comments/amp-comments.php' ) ) { ?>
   		<div class="comment-button-wrapper">
-  		   <a href="<?php echo trailingslashit( get_permalink() ).'?nonamp=1'.'#commentform' ?>" rel="nofollow"><?php echo ampforwp_translation( $redux_builder_amp['amp-translator-leave-a-comment-text'], 'Leave a Comment'  ); ?></a>
+  		   <a href="<?php echo ampforwp_comment_button_url(); ?>" rel="nofollow"><?php echo ampforwp_translation( $redux_builder_amp['amp-translator-leave-a-comment-text'], 'Leave a Comment'  ); ?></a>
   		</div>
     <?php } ?>
     <?php
@@ -82,8 +84,9 @@ if (!comments_open() || $redux_builder_amp['ampforwp-disqus-comments-support']) 
     <?php include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
     if( ! is_plugin_active( 'amp-comments/amp-comments.php' ) ) { ?>
       <div class="comment-button-wrapper">
-  	       <a href="<?php echo trailingslashit( get_permalink() ).'?nonamp=1'.'#commentform'  ?>" rel="nofollow"><?php echo ampforwp_translation( $redux_builder_amp['amp-translator-leave-a-comment-text'], 'Leave a Comment'  ); ?></a>
+  	       <a href="<?php echo ampforwp_comment_button_url(); ?>" rel="nofollow"><?php echo ampforwp_translation( $redux_builder_amp['amp-translator-leave-a-comment-text'], 'Leave a Comment'  ); ?></a>
        </div>
      <?php } ?>
 <?php } ?>
 </div>
+<?php do_action('ampforwp_after_comment_hook',$this);

@@ -1,11 +1,19 @@
+<?php global $redux_builder_amp; ?>
+<?php do_action('ampforwp_before_content_hook',$this); ?>
+
 <div class="amp-wp-article-content">
-	<?php if(has_excerpt()){ ?>
-		<div class="ampforwp_single_excerpt">
-			<?php $content = get_the_excerpt();
-			echo $content; ?>
-		</div>
-	<?php }
-	do_action('ampforwp_inside_post_content_before');
+	<?php
+if( array_key_exists( 'enable-excerpt-single' , $redux_builder_amp ) ) {
+	if($redux_builder_amp['enable-excerpt-single']) {
+		if(has_excerpt()){ ?>
+			<div class="ampforwp_single_excerpt">
+				<?php $content = get_the_excerpt();
+				echo $content; ?>
+			</div>
+		<?php }
+		}
+}
+	do_action('ampforwp_inside_post_content_before',$this);
 		$amp_custom_content_enable = get_post_meta( $this->get( 'post_id' ) , 'ampforwp_custom_content_editor_checkbox', true);
 
 		// Normal Front Page Content
@@ -16,10 +24,10 @@
 			echo $this->get( 'ampforwp_amp_content' );
 		}
 
-	do_action('ampforwp_after_post_content') ?>
+	do_action('ampforwp_after_post_content',$this) ?>
 
 	<!--Post Next-Previous Links-->
-	<?php global $redux_builder_amp;
+	<?php
 		if($redux_builder_amp['enable-single-next-prev']) { ?>
 			<!--IF Starts here-->
 			<div class="amp-wp-content post-pagination-meta">
