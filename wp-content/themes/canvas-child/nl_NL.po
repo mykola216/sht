@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canvas-child\n"
 "POT-Creation-Date: 2016-07-18 11:30+0300\n"
-"PO-Revision-Date: 2017-05-10 12:47+0300\n"
+"PO-Revision-Date: 2017-06-09 14:26+0300\n"
 "Last-Translator: Aleksandr Levashov <w3craftsman@gmail.com>\n"
 "Language-Team: w3craftsman.com <w3craftsman@gmail.com>\n"
 "Language: nl_NL\n"
@@ -424,7 +424,7 @@ msgstr "Steigerhouten meubelen"
 
 #: templates/home.php:19
 msgid "All scaffold wood articles"
-msgstr "Alle steigerhouten produkten"
+msgstr "Alle steigerhouten producten"
 
 #: templates/single-product/product-description.php:20
 #: templates/single-product/product-description.php:22
