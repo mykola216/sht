@@ -1,10 +1,10 @@
 === Relevanssi - A Better Search ===
 Contributors: msaari
-Donate link: http://www.relevanssi.com/buy-premium/
+Donate link: https://www.relevanssi.com/buy-premium/
 Tags: search, relevance, better search
 Requires at least: 4.0
-Tested up to: 4.7.3
-Stable tag: 3.5.8
+Tested up to: 4.7.5
+Stable tag: 3.5.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Relevanssi replaces the default search with a partial-match search that sorts re
 
 Relevanssi replaces the standard WordPress search with a better search engine, with lots of features and configurable options. You'll get better results, better presentation of results - your users will thank you.
 
-This is the free version of Relevanssi. There's also Relevanssi Premium, which has added features, including Multisite support. This free version does not work properly on Multisite. For more information about Premium, see [Relevanssi.com](http://www.relevanssi.com/).
+This is the free version of Relevanssi. There's also Relevanssi Premium, which has added features, including Multisite support. This free version does not work properly on Multisite. For more information about Premium, see [Relevanssi.com](https://www.relevanssi.com/).
 
 = Key features =
 * Search results sorted in the order of relevance, not by date.
@@ -51,12 +51,13 @@ Relevanssi is available in two versions, regular and Premium. Regular Relevanssi
 * Let the user choose between AND and OR searches, use + and - operator (AND and NOT).
 * Highlighting search terms for visitors from external search engines.
 * Export and import settings.
+* [WP CLI commands](https://www.relevanssi.com/user-manual/wp-cli/).
 
 = Relevanssi in Facebook =
-You can find [Relevanssi in Facebook](http://www.facebook.com/relevanssi). Become a fan to follow the development of the plugin, I'll post updates on bugs, new features and new versions to the Facebook page.
+You can find [Relevanssi in Facebook](https://www.facebook.com/relevanssi). Become a fan to follow the development of the plugin, I'll post updates on bugs, new features and new versions to the Facebook page.
 
 = Other search plugins =
-Relevanssi owes a lot to [wpSearch](http://wordpress.org/extend/plugins/wpsearch/) by Kenny Katzgrau. Relevanssi was built to replace wpSearch, when it started to fail.
+Relevanssi owes a lot to [wpSearch](https://wordpress.org/extend/plugins/wpsearch/) by Kenny Katzgrau. Relevanssi was built to replace wpSearch, when it started to fail.
 
 Search Unleashed is a popular search plugin, but it hasn't been updated since 2010. Relevanssi is in active development and does what Search Unleashed does.
 
@@ -77,7 +78,7 @@ If it seems the plugin doesn't work after an update, the first thing to try is d
 = Changes to templates =
 None necessary! Relevanssi uses the standard search form and doesn't usually need any changes in the search results template.
 
-If the search does not bring any results, your theme probably has a query_posts() call in the search results template. That throws Relevanssi off. For more information, see [The most important Relevanssi debugging trick](http://www.relevanssi.com/knowledge-base/query_posts/).
+If the search does not bring any results, your theme probably has a query_posts() call in the search results template. That throws Relevanssi off. For more information, see [The most important Relevanssi debugging trick](https://www.relevanssi.com/knowledge-base/query_posts/).
 
 = How to index =
 Check the options to make sure they're to your liking, then click "Save indexing options and build the index". If everything's fine, you'll see the Relevanssi options screen again with a message "Indexing successful!"
@@ -98,7 +99,7 @@ To avoid trouble, use the function like this:
 See Frequently Asked Questions for more instructions on what you can do with Relevanssi.
 
 = The advanced hacker option =
-If you're doing something unusual with your search and Relevanssi doesn't work, try using `relevanssi_do_query()`. See [Knowledge Base](http://www.relevanssi.com/knowledge-base/relevanssi_do_query/).
+If you're doing something unusual with your search and Relevanssi doesn't work, try using `relevanssi_do_query()`. See [Knowledge Base](https://www.relevanssi.com/knowledge-base/relevanssi_do_query/).
 
 = Uninstalling =
 To uninstall the plugin remove the plugin using the normal WordPress plugin management tools (from the Plugins page, first Deactivate, then Delete). If you remove the plugin files manually, the database tables and options will remain.
@@ -111,13 +112,13 @@ Some plugins cause problems when indexing documents. These are generally plugins
 == Frequently Asked Questions ==
 
 = Knowledge Base =
-You can find solutions and answers at the [Relevanssi Knowledge Base](http://www.relevanssi.com/category/knowledge-base/).
+You can find solutions and answers at the [Relevanssi Knowledge Base](https://www.relevanssi.com/category/knowledge-base/).
 
 = Relevanssi doesn't work =
 If you the results don't change after installing and activating Relevanssi, the most likely reason is that you have a call to `query_posts()` on your search results template. This confuses Relevanssi. Try removing the query_posts call and see what happens.
 
 = Searching for words with ampersands or hyphens doesn't work =
-Please read [Words with punctuation can't be found](http://www.relevanssi.com/knowledge-base/words-ampersands-cant-found/). This is a Relevanssi feature, but you can circumvent it with a simple filter function.
+Please read [Words with punctuation can't be found](https://www.relevanssi.com/knowledge-base/words-ampersands-cant-found/). This is a Relevanssi feature, but you can circumvent it with a simple filter function.
 
 = Where are the user search logs? =
 See the top of the admin menu. There's 'User searches'. There. If the logs are empty, please note showing the results needs at least MySQL 5.
@@ -266,6 +267,21 @@ Each document database is full of useless words. All the little words that appea
 * Mohib Ebrahim for relentless bug hunting.
 
 == Changelog ==
+
+= 3.5.10 =
+* Some users got a fatal parse error. That shouldn't happen anymore.
+* FacetWP users ran into trouble, as `relevanssi_do_query()` started to explicitly expect a WP_Query object in version 1.15.0. That expectation is removed; it's still highly recommended for future compatibility that you use WP_Query objects.
+* Small bug fix: `get_current_screen()` is now only used when it's available to avoid occasional fatal errors.
+* Error messages from `DOING_AJAX` being undefined should be removed.
+
+= 3.5.9.1 =
+* WP.org plugin repo didn't like 3.5.9 for some reason, hoping to have better luck with this.
+
+= 3.5.9 =
+* Improved the way highlighting handles HTML tags, especially when highlighting on post pages.
+* The throttle limit setting was removed from the settings page for causing trouble. If you need to change it, update `relevanssi_throttle_limit` option directly.
+* Relevanssi didn't support tax_queries with `field` set to `name`. That works now.
+* Much faster way of showing the 25 most common words in the index. If you've disabled this feature because it was so slow, try enabling it - you might be surprised!
 
 = 3.5.8 =
 * Did you mean function had a XSS vulnerability, which is now removed.
@@ -591,7 +607,7 @@ Each document database is full of useless words. All the little words that appea
 = 3.0.2 =
 * AFTER UPGRADING FROM 2.x: Make sure you deactivate and reactivate Relevanssi in order to make the database changes happen.
 * Fixed the "Cannot use a scalar value as an array" bug in indexing.
-* Role-Scoper users: in order to make Relevanssi work with Role-Scoper, replace the Relevanssi helper file in Role-Scoper with [this file](http://www.relevanssi.com/relevanssi-helper-front_rs.txt).
+* Role-Scoper users: in order to make Relevanssi work with Role-Scoper, replace the Relevanssi helper file in Role-Scoper with [this file](https://www.relevanssi.com/relevanssi-helper-front_rs.txt).
 * Removed an error message about set_time_limit() under safe_mode.
 * Jetpack Contact Form shortcode caused problems when indexing. Relevanssi will now simply remove the shortcode before indexing.
 * Fixed errors caused by / characters in highlighting.
@@ -708,7 +724,7 @@ Each document database is full of useless words. All the little words that appea
 * A call to a non-existing function in 2.9.2 made all sorts of mess. This release fixes all problems with broken loops. I'm sorry about the bug.
 
 = 2.9.2 =
-* It's now possible to adjust the number of search results per page. See [Changing posts_per_page](http://www.relevanssi.com/knowledge-base/posts-per-page/) for instructions.
+* It's now possible to adjust the number of search results per page. See [Changing posts_per_page](https://www.relevanssi.com/knowledge-base/posts-per-page/) for instructions.
 * Somebody reported revisions appearing in the search results. Added an extra check to prevent that.
 * Improved the indexing procedure to prevent MySQL errors from appearing and to streamline the process.
 * Improved the way custom post types can be handled in indexing.
@@ -717,7 +733,7 @@ Each document database is full of useless words. All the little words that appea
 = 2.9.1 =
 * It is now possible to change the default result order from relevance to post date.
 * Fixed a bug that caused wrong $post object to be set in indexing.
-* Added a new hook `relevanssi_excerpt_content`; see [Knowledge Base](http://www.relevanssi.com/category/knowledge-base/) for details.
+* Added a new hook `relevanssi_excerpt_content`; see [Knowledge Base](https://www.relevanssi.com/category/knowledge-base/) for details.
 
 = 2.9 =
 * Fixed a bug that caused Cyrillic searches in the log to get corrupted.
@@ -1035,6 +1051,15 @@ Each document database is full of useless words. All the little words that appea
 
 == Upgrade notice ==
 
+= 3.5.10 =
+* Prevented a fatal error for some users, small bug fixes.
+
+= 3.5.9.1 =
+* Improvements in highlighting and taxonomy searches.
+
+= 3.5.9 =
+* Improvements in highlighting and taxonomy searches.
+
 = 3.5.8 =
 * Fix for a XSS vulnerability.
 
@@ -1114,4 +1139,4 @@ Each document database is full of useless words. All the little words that appea
 * WordPress 3.7 compatibility, couple of minor bug fixes.
 
 = 3.1.8 =
-Recommended for users of WPML and BBpress. Category exclusions and restrictions are also fixed.
+* Recommended for users of WPML and BBpress. Category exclusions and restrictions are also fixed.

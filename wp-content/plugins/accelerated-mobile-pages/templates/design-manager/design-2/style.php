@@ -28,6 +28,7 @@ amp-iframe{ max-width: 100%; margin-bottom : 20px; }
 .alignleft{ margin-right: 12px; margin-bottom:5px; float: left; }
 .alignright{ float:right; margin-left: 12px; margin-bottom:5px; }
 .aligncenter{ text-align:center; margin: 0 auto }
+#statcounter{width: 1px;height:1px;}
 
 /* Template Styles */
 .amp-wp-content, .amp-wp-title-bar div {
@@ -57,12 +58,11 @@ amp-sidebar{ width: 250px; }
 .toggle-text:before{ content: "..."; font-size: 32px; position: ; font-family: georgia; line-height: 0px; margin-left: 0px; letter-spacing: 1px; top: -3px; position: relative; padding-right: 10px; }
 .nav_container:hover + .toggle-navigation, .toggle-navigation:hover, .toggle-navigation:active, .toggle-navigation:focus{ display: inline-block; width: 100%; }
 /* Category 2 */
-.amp-category-block, .category-widget-wrapper{ padding:30px 15% 10px 15% }
+.category-widget-wrapper{ padding:30px 15% 10px 15% }
 .amp-category-block ul{ list-style-type:none;padding:0 }
 .amp-category-block-btn{ display: block; text-align: center; font-size: 13px; margin-top: 15px; border-bottom: 1px solid #f1f1f1; text-decoration: none; padding-bottom: 8px;}
 .category-widget-gutter h4{ margin-bottom: 0px;}
 .category-widget-gutter ul{ margin-top: 10px; list-style-type:none; padding:0 }
-.amp-category-block-title{ border-bottom: double #ddd; margin-bottom: 12px; padding-bottom: 1px; text-align: center; font-size: 12px; text-transform: uppercase; color: #666; }
 .amp-category-post{ width: 32%; display:inline-table; }
 .amp-category-post amp-img{ margin-bottom:5px; }
 .amp-category-block li:nth-child(3){ margin: 0 1%;}
@@ -92,13 +92,16 @@ amp-lightbox{ background: rgba(0, 0, 0,0.85); }
 /* Sticky Social bar in Single */
 .ampforwp-social-icons-wrapper{ margin: 0.65em 0px 0.65em 0px; height: 28px; }
 .sticky_social{ width: 100%; bottom: 0; display: block; left: 0; box-shadow: 0px 4px 7px #000; background: #fff; padding: 7px 0px 0px 0px; position: fixed; margin: 0; z-index: 10; text-align: center; }
-.whatsapp-share-icon{ width: 50px; height: 28px; display: inline-block; background: #5cbe4a; padding: 4px 0px; position: relative; top: -4px; }
+.custom-amp-socialsharing-icon{ width: 50px; height: 28px; display: inline-block; background: #5cbe4a;position: relative; top: -8px; padding-top: 0px; }
+.custom-amp-socialsharing-icon amp-img{ top: 4px; }
+.custom-amp-socialsharing-line{background:#00b900}
 /* Header */
 #header{ background: #fff; text-align: center; }
 #header h3{ text-align: center; font-size: 20px; font-weight: bold; line-height: 1; padding: 15px; margin: 0; }
 .amp-logo{ margin: 15px 0px 10px 0px; }
 main{ padding: 30px 15% 10px 15%; }
-main .amp-wp-content{ margin-bottom: 12px; background: #fefefe; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; -moz-box-shadow: 0 2px 3px rgba(0,0,0,.05); -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.05); box-shadow: 0 2px 3px rgba(0,0,0,.05); padding: 15px; }
+main .amp-wp-content{ margin-bottom: 12px;  padding: 15px; }
+.amp-loop-list, .featured-image-content, .the_content, .taxonomy-description{background: #fff; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; -moz-box-shadow: 0 2px 3px rgba(0,0,0,.05); -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.05); box-shadow: 0 2px 3px rgba(0,0,0,.05);}
 .home-post_image{ float: right; margin-left: 15px; margin-bottom: -6px; }
 .amp-wp-title{ margin-top: 0px; }
 h2.amp-wp-title{ line-height: 30px; }
@@ -110,8 +113,13 @@ main .amp-archive-heading{ background : none; box-shadow: none; padding: 5px; }
 #footer{ background : #fff; font-size: 13px; text-align: center; letter-spacing: 0.2px; padding: 20px 0; }
 #footer p:first-child{ margin-bottom: 12px; }
 #footer p{ margin: 0 }
+.footer_menu ul{ list-style-type: none; padding: 0; text-align: center; margin: 0px 20px 25px 20px; line-height: 27px; font-size: 13px }
+.footer_menu ul li{ display:inline; margin:0 10px; }
+.footer_menu ul li:first-child{ margin-left:0 }
+.footer_menu ul li:last-child{ margin-right:0 }
+.footer_menu ul ul{ display:none }
 /* Single */
-.comment-button-wrapper{ margin-bottom: 40px; margin-top: 25px; text-align:center }
+.comment-button-wrapper{ margin-bottom: 0px; margin-top: 60px; text-align:center }
 .comment-button-wrapper a{ color: #fff; background: #312c7e; font-size: 13px; padding: 10px 20px 10px 20px; box-shadow: 0 0px 3px rgba(0,0,0,.04); border-radius: 80px; }
 h1.amp-wp-title{ text-align: center; margin: 0.7em 0px 0.6em 0px; font-size: 1.5em; }
 .amp-wp-content.post-title-meta, .amp-wp-content.post-pagination-meta{ background: none; padding:  0; box-shadow:none }
@@ -137,9 +145,12 @@ figcaption{ font-size: 11px; margin-bottom: 11px; background: #eee; padding: 6px
 .the_content p{ margin-top: 5px; color: #333; font-size: 15px; line-height: 26px; margin-bottom: 15px; }
 .amp-wp-tax-tag{ font-size: 13px; border: 0; display: inline-block; margin: 0.5em 0px 0.7em 0px; width: 100%; }
 main .amp-wp-content.featured-image-content{ padding: 0px; border: 0; margin-bottom: 0; box-shadow: none }
+.amp-wp-article-featured-image amp-img {margin: 0 auto;}
 .amp-wp-content.post-pagination-meta{ max-width: 1030px; }
 .single-post .ampforwp-social-icons.ampforwp-social-icons-wrapper{ display: block; margin: 2em auto 0.9em auto ; max-width: 1030px; }
 .amp-wp-article-header.amp-wp-article-category.ampforwp-meta-taxonomy{ margin: 10px auto; max-width: 1030px; } .ampforwp_single_excerpt { margin-bottom:15px; font-size: 15px;}
+.single-post .amp_author_area amp-img{ margin: 0; float: left; margin-right: 12px; border-radius: 60px; }
+.single-post .amp_author_area .amp_author_area_wrapper{ display: inline-block; width: 100%; line-height: 1.4; margin-top: 22px; font-size: 13px; color:#333; font-family: sans-serif; }
 /* Related Posts */
 main .amp-wp-content.relatedpost{ background: none; box-shadow: none; max-width: 1030px; padding:0px 0 0 0; margin:1.8em auto 1.5em auto }
 .related_posts h3, .comments_list h3{ font-size: 14px; font-weight: bold; letter-spacing: 0.4px; margin: 15px 0 10px 0; color: #333; }
@@ -157,8 +168,8 @@ main .amp-wp-content.relatedpost{ background: none; box-shadow: none; max-width:
 main .amp-wp-content.comments_list {background: none;box-shadow: none;max-width: 1030px;padding:0}
 .comments_list div{ display:inline-block;}
 .comments_list ul{ margin:0;padding:0}
-.comments_list ul.children{ padding-bottom:10px; margin-left: 4%; width: 96%;}
-.comments_list ul li p{ margin:0;font-size:15px;clear:both;padding-top:16px;}
+.comments_list ul.children{ padding-bottom:10px; margin-left: 4%; width: 96%;} 
+.comments_list ul li p{ margin:0;font-size:15px;clear:both;padding-top:16px; word-break: break-word;}
 .comments_list ul li{ font-size:13px;list-style-type:none; margin-bottom: 12px; background: #fefefe; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; -moz-box-shadow: 0 2px 3px rgba(0,0,0,.05); -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.05); box-shadow: 0 2px 3px rgba(0,0,0,.05);padding: 0px;max-width: 1000px;width:100%;}
 .comments_list ul li .comment-body{ padding: 25px;width: 91%;}
 .comments_list ul li .comment-body .comment-author{ margin-right:5px}
@@ -167,6 +178,7 @@ main .amp-wp-content.comments_list {background: none;box-shadow: none;max-width:
 .comments_list li li{ margin: 20px 20px 10px 20px;background: #f7f7f7;box-shadow: none;border: 1px solid #eee;}
 .comments_list li li li{ margin:20px 20px 10px 20px}
 .comment-content amp-img{max-width: 300px;}
+.amp-facebook-comments{margin-top:45px}
 /* ADS */
 .amp_home_body .amp_ad_1{ margin-top: 10px; margin-bottom: -20px; }
 .single-post .amp_ad_1{ margin-top: 10px; margin-bottom: -20px; }
@@ -200,6 +212,7 @@ table tr:last-child td:last-child { -moz-border-radius-bottomright: 3px; -webkit
 table tr:hover td { background: #f2f2f2; background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0)); background: -moz-linear-gradient(top, #f2f2f2, #f0f0f0); }
 
 /* Responsive */
+@media screen and (min-width: 650px) { table {display: inline-table;}  }
 @media screen and (max-width: 800px) { .single-post main{ padding: 12px 10px 10px 10px } }
 @media screen and (max-width: 630px) { .related_posts ol li p{ display:none } .related_link { margin: 16px 18px 20px 19px; } .amp-category-post {line-height: 1.45;font-size: 14px; } .amp-category-block li:nth-child(3) {margin:0 0.6%} }
 @media screen and (max-width: 510px) { .ampforwp-tax-category span{ display:none }

@@ -1,12 +1,13 @@
 <?php
 // Require WooCommerce fallback functions
 require_once dirname(dirname(dirname(__FILE__))) . '/woocommerce_functions.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/subscriptions_status_check_functions.php';
 
 class Mollie_WC_Plugin
 {
     const PLUGIN_ID      = 'mollie-payments-for-woocommerce';
     const PLUGIN_TITLE   = 'Mollie Payments for WooCommerce';
-    const PLUGIN_VERSION = '2.5.4';
+    const PLUGIN_VERSION = '2.6.0';
 
     const DB_VERSION     = '1.0';
     const DB_VERSION_PARAM_NAME = 'mollie-db-version';
@@ -67,13 +68,20 @@ class Mollie_WC_Plugin
             $pendingPaymentConfirmTable = $wpdb->prefix . self::PENDING_PAYMENT_DB_TABLE_NAME;
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
             if($wpdb->get_var("show tables like '$pendingPaymentConfirmTable'") != $pendingPaymentConfirmTable) {
-                $sql = "CREATE TABLE " . $pendingPaymentConfirmTable . " (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `post_id` bigint NOT NULL,
-                    `expired_time` int NOT NULL,
+                $sql = "
+					CREATE TABLE " . $pendingPaymentConfirmTable . " (
+                    id int(11) NOT NULL AUTO_INCREMENT,
+                    post_id bigint NOT NULL,
+                    expired_time int NOT NULL,
                     UNIQUE KEY id (id)
                 );";
                 dbDelta($sql);
+
+	            /**
+	             * Remove redundant 'DESCRIBE *__mollie_pending_payment' error so it doesn't show up in error logs
+	             */
+	            global $EZSQL_ERROR;
+				array_pop($EZSQL_ERROR);
             }
             update_option(self::DB_VERSION_PARAM_NAME, self::DB_VERSION);
         }
@@ -89,13 +97,17 @@ class Mollie_WC_Plugin
         $currentDate = new DateTime();
         $items = $wpdb->get_results("SELECT * FROM {$wpdb->mollie_pending_payment} WHERE expired_time < {$currentDate->getTimestamp()};");
         foreach ($items as $item){
-            $order =  wc_get_order( $item->post_id );
+	        $order = Mollie_WC_Plugin::getDataHelper()->getWcOrder( $item->post_id );
             if ($order->get_status() == Mollie_WC_Gateway_Abstract::STATUS_COMPLETED){
 
                 $new_order_status = Mollie_WC_Gateway_Abstract::STATUS_FAILED;
-                $paymentMethodId = get_post_meta( $order->id, '_payment_method_title', true );
-                $molliePaymentId    = get_post_meta( $order->id, '_mollie_payment_id', true );
-
+	            if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+		            $paymentMethodId = get_post_meta( $order->id, '_payment_method_title', true );
+		            $molliePaymentId = get_post_meta( $order->id, '_mollie_payment_id', true );
+	            } else {
+		            $paymentMethodId = $order->get_meta( '_payment_method_title', true );
+		            $molliePaymentId = $order->get_meta( '_mollie_payment_id', true );
+	            }
                 $order->add_order_note(sprintf(
                 /* translators: Placeholder 1: payment method title, placeholder 2: payment ID */
                     __('%s payment failed (%s).', 'mollie-payments-for-woocommerce'),
@@ -104,19 +116,35 @@ class Mollie_WC_Plugin
 
                 $order->update_status($new_order_status, '');
 
-                if (get_post_meta($order->id, '_order_stock_reduced', $single = true)) {
-                    // Restore order stock
-                    Mollie_WC_Plugin::getDataHelper()->restoreOrderStock($order);
+	            if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+		            if ( get_post_meta( $order->id, '_order_stock_reduced', $single = true ) ) {
+			            // Restore order stock
+			            Mollie_WC_Plugin::getDataHelper()->restoreOrderStock( $order );
 
-                    Mollie_WC_Plugin::debug(__METHOD__ . " Stock for order {$order->id} restored.");
-                }
+			            Mollie_WC_Plugin::debug( __METHOD__ . " Stock for order {$order->id} restored." );
+		            }
 
-                $wpdb->delete(
-                    $wpdb->mollie_pending_payment,
-                    array(
-                        'post_id' => $order->id,
-                    )
-                );
+		            $wpdb->delete(
+			            $wpdb->mollie_pending_payment,
+			            array(
+				            'post_id' => $order->id,
+			            )
+		            );
+	            } else {
+		            if ( $order->get_meta( '_order_stock_reduced', $single = true ) ) {
+			            // Restore order stock
+			            Mollie_WC_Plugin::getDataHelper()->restoreOrderStock( $order );
+
+			            Mollie_WC_Plugin::debug( __METHOD__ . " Stock for order {$order->get_id()} restored." );
+		            }
+
+		            $wpdb->delete(
+			            $wpdb->mollie_pending_payment,
+			            array(
+				            'post_id' => $order->get_id(),
+			            )
+		            );
+	            }
             }
         }
 
@@ -317,7 +345,7 @@ class Mollie_WC_Plugin
         // Convert message to string
         if (!is_string($message))
         {
-            $message = print_r($message, true);
+            $message = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? print_r($message, true) : wc_print_r($message, true);
         }
 
         // Set debug header
@@ -326,19 +354,31 @@ class Mollie_WC_Plugin
             header("X-Mollie-Debug: $message");
         }
 
-        // Log message
-        if (self::getSettingsHelper()->isDebugEnabled())
-        {
-            static $logger;
+	    // Log message
+	    if ( self::getSettingsHelper()->isDebugEnabled() ) {
 
-            if (empty($logger))
-            {
-                // TODO: Use error_log() fallback if Wc_Logger is not available
-                $logger = new WC_Logger();
-            }
+		    if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
 
-            $logger->add(self::PLUGIN_ID . '-' . date('Y-m-d'), $message);
-        }
+			    static $logger;
+
+			    if ( empty( $logger ) ) {
+				    // TODO: Use error_log() fallback if Wc_Logger is not available
+				    $logger = new WC_Logger();
+			    }
+
+			    $logger->add( self::PLUGIN_ID . '-' . date( 'Y-m-d' ), $message );
+
+		    } else {
+
+			    $logger = wc_get_logger();
+
+			    $context = array ( 'source' => self::PLUGIN_ID . '-' . date( 'Y-m-d' ) );
+
+			    $logger->debug( $message, $context );
+
+		    }
+
+	    }
     }
 
     /**
@@ -359,7 +399,7 @@ class Mollie_WC_Plugin
      */
     public static function getPluginUrl ($path = '')
     {
-        return untrailingslashit(plugins_url($path, self::getPluginFile()));
+    	return M4W_PLUGIN_URL . $path;
     }
 
     /**

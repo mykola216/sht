@@ -3,12 +3,12 @@ Contributors: algolplus
 Donate link: http://algolplus.com/plugins/
 Tags: woocommerce,export,order,xls,csv,xml,woo export lite,export orders,orders export,csv export,xml export,xls export
 Requires at least: 4.2.4
-Tested up to: 4.7
+Tested up to: 4.8
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Easily export orders from WooCommerce to Excel/CSV/XML/Json file
+Export orders from WooCommerce with ease ( Excel/CSV/XML/Json supported )
 
 == Description ==
 This plugin helps you to **easily** export WooCommerce order data. 
@@ -64,11 +64,11 @@ Need help ? Create ticket in [helpdesk system](https://algolplus.freshdesk.com).
 
 Check [some snippets](https://algolplus.com/plugins/snippets-plugins/) for popular plugins or review  [this page](https://algolplus.com/plugins/code-samples/) to study how to extend the plugin.
 
-= I am exporting the Orders data with its individual Products/Items as separate rows. But the Product rows don't seem to have rest of order details included. =
-You should mark checkbox "Populate other columns if products exported as rows" for selected format ( CSV or XLS)
-
 = I want to add new attribute to export  =
-You should open section "Setup Fields", scroll down to field "Products", click button  "Setup Fields", click button "Add Field", select field in the dropdown, type column title and press button "Add"
+Check screenshot #5! You should open section "Setup Fields", scroll down to field "Products", click button  "Setup Fields", click button "Add Field", select field in the dropdown, type column title and press button "Add".
+
+= I can't filter/export custom attribute for Simple Product =
+I'm sorry, but it's impossible. You should add this attribute to Products>Attributes at first and use "Filter by Product Taxonomies".
 
 = Plugin produces unreadable XLS file =
 The theme or another plugin outputs some lines. Usually, there are extra empty lines at the end of functions.php(in active theme).
@@ -76,19 +76,41 @@ The theme or another plugin outputs some lines. Usually, there are extra empty l
 = When exporting .csv containing european special characters , I want to open this csv in Excel without extra actions =
 You  should open tab "CSV" and setup ISO-8859-1 as codepage.
 
+= Red text flashes at bottom during page loading = 
+It's a normal situation. The plugin hides this warning on successful load. 
+
 = Can I request any new feature ? =
 Yes, you can email a request to aprokaev@gmail.com. We intensively develop this plugin.
 
 == Screenshots ==
 
-1. Default view.  You can click 'Express Export' to get results.
-2. It's possible to filter orders by many parameters, not only by order date or status.
-3. You can select the fields to export, rename labels, reorder columns.
-4. The preview works for all formats.
-5. You can add custom field or taxonomy as new column to export.
-6. You can select orders to export.
+1. Default view after installation.  Just click 'Express Export' to get results.
+2. Filter orders by many parameters, not only by order date or status.
+3. Select the fields to export, rename labels, reorder columns.
+4. Button Preview works for all formats.
+5. Add custom field or taxonomy as new column to export.
+6. Select orders to export and use "bulk action".
 
 == Changelog ==
+
+= 1.4.0 - 2017-06-02 =
+* Fixed bug for field "Customer order note"
+* Fixed bug for filter by product category
+* Tested for Wordpress 4.8
+* Added new product fields "Description" and "Short Description"
+* Added logger for backgound tasks (for Woocommerce 3.0+)
+* Added a lot of hooks 
+* New tab "Order Change" to export single order immediately (Pro)
+
+= 1.3.1 - 2017-05-12 =
+* Optimized for big shops (tested with 10,000+ orders)
+* Export refunds
+* Export deleted products
+* Added new filter "Product custom fields"
+* Added new product field "Product Variation"
+* Added new coupon fields "Type","Amount", "Discount Amount + Tax"
+* Tweaked default settings
+* Menu uses capability "view_woocommerce_reports"
 
 = 1.3.0 - 2017-04-11 =
 * The plugin is compatible with Woocommerce 3.0
