@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // WOO 2.1 compatibility
-if ((!empty($_POST['SM_IS_WOO21']) && $_POST['SM_IS_WOO21'] == "true") || (!empty($_POST['SM_IS_WOO22']) && $_POST['SM_IS_WOO22'] == "true") ) {
+if ((!empty($_POST['SM_IS_WOO21']) && $_POST['SM_IS_WOO21'] == "true") || (!empty($_POST['SM_IS_WOO22']) && $_POST['SM_IS_WOO22'] == "true") || (!empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true") ) {
     include_once (WP_PLUGIN_DIR . '/woocommerce/includes/class-wc-product-variable.php'); // for handling variable parent price
     include_once (WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-product.php'); // for updating stock status
 }
@@ -1179,7 +1179,7 @@ function batchUpdateWoo($post) {
 					$filter_col = "$col_filter_arr[0]";
 					$row_filter = $col_filter_arr [1];
 				}
-				$text_cmp_value = (!empty($actions [$i]->colValue)) ? $wpdb->_real_escape ( $actions [$i]->colValue ) : '';
+				$text_cmp_value = (!empty($actions [$i]->colValue) || $actions [$i]->colValue == 0) ? $wpdb->_real_escape ( $actions [$i]->colValue ) : '';
 
                 if ($column_type == 'custom_column' && $col_id == 'other_meta') {
 
@@ -1239,6 +1239,9 @@ function batchUpdateWoo($post) {
                                 $old_value = unserialize($result_serialized_data['meta_value']);
                                 $new_value = unserialize(stripslashes($text_cmp_value));
                                 // $final_array = $new_value + $old_value;
+
+                                $old_value = (is_array($old_value)) ? $old_value : array();
+                                $new_value = (is_array($new_value)) ? $new_value : array();
 
                                 $final_array = sm_array_multi_merge_recursive($old_value,$new_value);
 
@@ -1360,7 +1363,7 @@ function batchUpdateWoo($post) {
                                                 WHERE object_id IN ( " . $wpdb->_real_escape($selected_ids) . " )";
                                      $result = $wpdb->query ( $query );
                                      continue  ;
-                                } else if (!empty($_POST['SM_IS_WOO22']) && $_POST['SM_IS_WOO22'] == "true" && $table_name == "{$wpdb->prefix}posts") {
+                                } else if ( ((!empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true") || (!empty($_POST['SM_IS_WOO22']) && $_POST['SM_IS_WOO22'] == "true")) && $table_name == "{$wpdb->prefix}posts") {
                                     $order_status = 'wc-' . $actions [$i] [3];
                                      $query = "UPDATE `{$wpdb->prefix}posts` SET post_status = '$order_status'
                                                 WHERE id IN ( " . $wpdb->_real_escape($selected_ids) . " )";
@@ -1379,6 +1382,13 @@ function batchUpdateWoo($post) {
 			
             $flag_query = 0; //Flag for handling the 'Set To Sales Price' and 'Set To Regular Price' batch update actions
                         
+            $col_nm = array_search($actions_colname, array('featured'));
+
+            if( $col_nm !== false ) {
+                $text_cmp_value = $action_name;
+                $action_name = 'SET_TO';
+            }
+
 			switch ($action_name) {
 				case 'SET_TO' :
                 	if ($table_name =="{$wpdb->prefix}posts" || $table_name =="{$wpdb->prefix}postmeta" || $table_name =="{$wpdb->prefix}usermeta") { //version 3.8
@@ -1387,7 +1397,7 @@ function batchUpdateWoo($post) {
                                 $update_value = $update_column . ' = ROUND(' . $text_cmp_value. ','.get_option( 'woocommerce_price_num_decimals' ).')' ;
                             }
                             else {
-                                if (!empty($text_cmp_value)) {
+                                if (!empty($text_cmp_value) || $text_cmp_value == 0) {
                                     $update_value = $update_column . ' = \'' . $text_cmp_value . '\''; //is array for weight
                                 }
                                 else {
@@ -1395,7 +1405,6 @@ function batchUpdateWoo($post) {
                                 }
                                 
                             }
-
 					} else if($is_category) {
                         $delete_query = "DELETE FROM " . $table_name . " WHERE `object_id` in (";
 						$insert_query = "INSERT INTO " . $table_name . " (object_id,`" . $update_column . "`) VALUES ";
@@ -1427,8 +1436,53 @@ function batchUpdateWoo($post) {
                         }
                         $insert_query = "INSERT INTO " . $table_name . " (object_id,`" . $update_column . "`) VALUES ". implode ( ',', $sub_query );
                         $insert_sql_result = $wpdb->query ( $insert_query );
-                    }
-					break;
+                    } else if($actions_colname == 'visibility' || $actions_colname == 'featured') { //added for woo 3.0+
+
+                        $slug_nm = ( $actions_colname == 'featured' ) ? array('featured') : array('exclude-from-search','exclude-from-catalog');
+
+                        $delete_query = "DELETE FROM " . $table_name . " WHERE `object_id` in (" . $selected_ids . ") AND `term_taxonomy_id` IN ( SELECT term_taxonomy_id 
+                                                FROM {$wpdb->prefix}term_taxonomy AS tt
+                                                    JOIN {$wpdb->prefix}terms AS t
+                                                        ON(t.term_id = tt.term_id AND tt.taxonomy = 'product_visibility' )
+                                                WHERE t.slug IN ('". implode("','",$slug_nm) ."') )";
+                        $delete_sql_result = $wpdb->query ( $delete_query );
+
+                        if( !empty($text_cmp_value) && $text_cmp_value != 'visible' && $text_cmp_value != 'NO' ) {
+
+                            if( $text_cmp_value == 'catalog' ) {
+                                $text_cmp_value = array('exclude-from-search');
+                            } else if( $text_cmp_value == 'search' ) {
+                                $text_cmp_value = array('exclude-from-catalog');
+                            } else if( $text_cmp_value == 'hidden' ) {
+                                $text_cmp_value = array('exclude-from-search','exclude-from-catalog');
+                            } else if( $text_cmp_value == 'YES' ) {
+                                $text_cmp_value = array('featured');
+                            }
+
+                            $query = "SELECT tt.term_taxonomy_id
+                                        FROM {$wpdb->prefix}term_taxonomy AS tt
+                                            JOIN {$wpdb->prefix}terms AS t
+                                                ON (t.term_id = tt.term_id
+                                                    AND tt.taxonomy = 'product_visibility')
+                                        WHERE t.slug IN ('". implode("','",$text_cmp_value) ."')";
+                            $term_taxonomy_ids = $wpdb->get_col($query);
+
+                            $sub_query = array ();
+                            foreach ( $parent_ids as $parent_id ) {
+                                foreach ( $term_taxonomy_ids as $term_taxonomy_id ) {
+                                    $sub_query [] = "(" . $parent_id . "," . $term_taxonomy_id . ")";
+                                }
+                            }
+
+                            if( !empty($sub_query) ) {
+                                $insert_query = "INSERT INTO " . $table_name . " (object_id,`" . $update_column . "`) VALUES ". implode ( ',', $sub_query );
+                                $insert_sql_result = $wpdb->query ( $insert_query );    
+                            }
+                            
+                        }
+
+                    } 
+                    break;
 
 				case 'PREPEND' :
 					if ($table_name =="{$wpdb->prefix}posts" || $table_name =="{$wpdb->prefix}postmeta" || $table_name =="{$wpdb->prefix}usermeta") { //version 3.8
@@ -1814,12 +1868,22 @@ function batchUpdateWoo($post) {
                     //Updating the stock status on updation of inventory
                     if ( $column_name == '_stock' && $selected_ids != "" ) {
 
-                        if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true") {
+                        if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true" || ( !empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true") ) {
                             $product_ids = explode(",",$selected_ids);
 
                             foreach ( $product_ids as $product_id ) {
-                                $woo_prod_obj_stock_status = new WC_Product($product_id);
-                                $woo_prod_obj_stock_status->set_stock($woo_prod_obj_stock_status->get_stock_quantity());
+
+                                if( array_search($product_id, $all_ids_grouped['selected_id_variation']) !== false ) { //for product variations
+                                    $woo_prod_obj_stock_status = new WC_Product_Variation($product_id);    
+                                } else {
+                                    $woo_prod_obj_stock_status = new WC_Product($product_id);
+                                }
+
+                                if( !empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true" ) {
+                                    wc_update_product_stock($woo_prod_obj_stock_status,$woo_prod_obj_stock_status->get_stock_quantity());
+                                } else {
+                                    $woo_prod_obj_stock_status->set_stock($woo_prod_obj_stock_status->get_stock_quantity());
+                                }
                             }
                         }
                     }
@@ -1859,7 +1923,7 @@ function batchUpdateWoo($post) {
                         // For Updating Variable Parent Price
                         if (!empty($price_variation))
                         {
-                            if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true") {
+                            if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true" || ( !empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true") ) {
 
                                 $query = "SELECT distinct post_parent as id from {$wpdb->prefix}posts WHERE post_type='product_variation' AND id IN ($price_variation)";
                                 $parent_ids = $wpdb->get_col ( $query );
@@ -1971,7 +2035,7 @@ function batchUpdateWoo($post) {
 
         if( !empty($product_ids) ) {
             foreach ( $product_ids as $product_id ) {
-                if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true") {
+                if ($_POST['SM_IS_WOO21'] == "true" || $_POST['SM_IS_WOO22'] == "true" || (!empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true") ) {
                     wc_delete_product_transients($product_id);
                 } else {
                     $woocommerce->clear_product_transients($product_id);    

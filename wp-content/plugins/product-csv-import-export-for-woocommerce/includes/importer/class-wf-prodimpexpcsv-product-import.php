@@ -917,6 +917,9 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 			if ( ! empty( $post['comment_status'] ) ) {
 				$postdata['comment_status'] = $post['comment_status'];
 			}
+                        
+                        //if(!empty($postdata['post_content']))  $postdata['post_content'] = utf8_encode ($postdata['post_content']);
+                        
 			if ( sizeof( $postdata ) > 1 ) {
 				$result = wp_update_post( $postdata );
 
@@ -1041,7 +1044,12 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 			unset( $post['terms'], $terms_to_set );
 		}
 
-		$post['postmeta'] = apply_filters('hf_insert_post_extra_data', $post['postmeta'], $post );//process extra table datas from outside that contains in CSV. especially for third party plugins.
+		$post['postmeta'] = apply_filters('hf_insert_post_extra_data', $post['postmeta'], $post, $post_id );//process extra table datas from outside that contains in CSV. especially for third party plugins.
+
+                /*
+		if(!empty($processing_product_sku))
+		   update_post_meta( $post_id, '_sku', $processing_product_sku );
+                */
 
 		// add/update post meta
 		if ( ! empty( $post['postmeta'] ) && is_array( $post['postmeta'] ) ) {
@@ -1216,6 +1224,7 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 			$this->add_import_result( 'imported', 'Import successful', $post_id, $processing_product_title, $processing_product_sku );
 			$this->hf_log_data_change( 'csv-import', sprintf( __('> Finished importing post ID %s.', 'wf_csv_import_export'), $post_id ) );
 		}
+                wc_delete_product_transients($post_id);
 		unset( $post );
 	}
 

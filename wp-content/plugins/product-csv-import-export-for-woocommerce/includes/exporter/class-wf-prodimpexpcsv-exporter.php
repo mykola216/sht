@@ -17,6 +17,7 @@ class WF_ProdImpExpCsv_Exporter {
                     $selected_product_ids = '';
                 }
                 $prod_categories             = ! empty( $_POST['prod_categories'] ) ? $_POST['prod_categories']  : array(); 
+                $prod_types                  = ! empty( $_POST['prod_types'] ) ? $_POST['prod_types']  : array();
 		$export_limit                = ! empty( $_POST['limit'] ) ? intval( $_POST['limit'] ) : 999999999;
 		$export_count                = 0;
 		$limit                       = 100;
@@ -189,6 +190,16 @@ class WF_ProdImpExpCsv_Exporter {
                                 'operator' => 'IN',
                         ));
                     }
+                    
+                    if (!empty($prod_types)) {
+                        $product_args['tax_query'] = array(
+                            array(
+                                'taxonomy' => 'product_type',
+                                'field' => 'slug',
+                                'terms' => $prod_types,
+                                'operator' => 'IN',
+                        ));
+                    }
 
                     if ( $selected_product_ids ) {
                                     $parent_ids      = array_map( 'intval', explode( ',', $selected_product_ids ) );
@@ -203,8 +214,12 @@ class WF_ProdImpExpCsv_Exporter {
                     if (!empty($prod_categories)) {
                         $products = self::get_childs_of_selected_parents($products);
                     }
-                        
-                        
+                    
+                    //if product type selected is variable , get variations of variable product also    
+                    if (!empty($prod_types) && in_array('variable', $prod_types)) {
+                        $products = self::get_childs_of_selected_parents($products);
+                    }
+                                                
 			if ( ! $products || is_wp_error( $products ) )
 				break;
 

@@ -822,8 +822,8 @@ var load_grid = function () {
                                       start: 0,
                                       page: page,
                                       limit: limit,
-                                      sort_params: sm.dashboard_model[sm.dashboard_key].sort_params,
-                                      table_model: sm.dashboard_model[sm.dashboard_key].tables
+                                      sort_params: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('sort_params') ) ? sm.dashboard_model[sm.dashboard_key].sort_params : '',
+                                      table_model: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('tables') ) ? sm.dashboard_model[sm.dashboard_key].tables : ''
                                   },
                               jsonReader: {
                                       root: "items",
@@ -838,7 +838,7 @@ var load_grid = function () {
                                   },
                             // }, 
                             colNames:column_names,
-                            colModel:sm.dashboard_model[sm.dashboard_key].columns,
+                            colModel: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('columns') ) ? sm.dashboard_model[sm.dashboard_key].columns : '',
                             rowNum:limit,
                             // rowList:[10,20,30],
                             pager: '#sm_pagging_bar', // for rendering the paging bottom bar
@@ -875,7 +875,7 @@ var load_grid = function () {
                                 //Code for changing the tree grid icons
                                 jQuery('.ui-icon.ui-icon-radio-off.tree-leaf.treeclick').replaceWith('<div style="margin-left: 20px;height: 18px;width: 18px;color: #469BDD;font-size: 1em;" class="">•••</div>');
 
-                                if ( sm.dashboard_model[sm.dashboard_key].treegrid === true ) {
+                                if ( sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('treegrid') && sm.dashboard_model[sm.dashboard_key].treegrid === true ) {
                                     jQuery('#cb_sm_editor_grid').css('margin-right','8px');
                                 } else {
                                     jQuery('#cb_sm_editor_grid').css('margin-right','0px');
@@ -943,7 +943,7 @@ var load_grid = function () {
                       };
 
     //Code for adding tree-grid params
-    if ( sm.dashboard_model[sm.dashboard_key].treegrid === true ) {
+    if ( sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('treegrid') && sm.dashboard_model[sm.dashboard_key].treegrid === true ) {
         jqgrid_params = jQuery.extend(jqgrid_params, {
                                                     treeGrid: true,
                                                     treeGridModel: 'adjacency',
