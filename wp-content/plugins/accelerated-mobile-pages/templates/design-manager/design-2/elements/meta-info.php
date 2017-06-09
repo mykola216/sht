@@ -1,3 +1,4 @@
+<?php do_action('ampforwp_before_meta_info_hook',$this); ?>
 <div class="amp-wp-article-header ampforwp-meta-info">
 	<div class="amp-wp-content post-title-meta">
 
@@ -11,7 +12,7 @@
 		<?php endif; ?>
 		<span class="amp-wp-author author vcard"><?php echo esc_html( $post_author->display_name ); ?></span>
 
-		<li class="amp-wp-meta-date"> <?php global $redux_builder_amp; echo ampforwp_translation($redux_builder_amp['amp-translator-on-text'], 'On '); the_modified_date( get_option( 'date_format' ) ) ?></li>
+		<li class="amp-wp-meta-date"> <?php global $redux_builder_amp; echo ampforwp_translation($redux_builder_amp['amp-translator-on-text'] . ' ', 'On'); the_modified_date( get_option( 'date_format' ) ) ?></li>
 
 	</div>
 <?php endif; ?>
@@ -30,7 +31,7 @@
 			</span>
       <?php foreach ($ampforwp_categories as $cat ) {
 					if($redux_builder_amp['ampforwp-archive-support']){
-            	echo ('<span><a href="'. trailingslashit( trailingslashit( get_category_link( $cat->term_taxonomy_id ) ) .'amp' ) . '" >'.$cat->name .'</a></span>');
+            	echo ('<span class="amp-cat-'.$cat->term_id.'"><a href="'. trailingslashit( trailingslashit( get_category_link( $cat->term_taxonomy_id ) ) .'amp' ) . '" >'.$cat->name .'</a></span>');
 				} else {
 	echo ('<span>'.$cat->name .'</span>');
 				}
@@ -47,3 +48,4 @@
 			</ul>
 	</div>
 </div>
+<?php do_action('ampforwp_after_meta_info_hook',$this);
