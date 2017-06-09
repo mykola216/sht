@@ -1,6 +1,6 @@
 === Product/Review CSV Import Export ===
-Contributors: HikeForce
-Version: 3.2.1
+Contributors: Xadapter
+Version: 3.2.6
 
 Tags: CSV, Export, Import, WooCommerce, Wordpress
 Requires at least: 3.1.0

@@ -72,7 +72,7 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 		<table class="form-table">
 			<tr>
 				<th>
-					<h3 class="title"><?php _e('FTP Settings for Export Products', 'wf_csv_import_export'); ?></h3>
+					<h3 class="title"><?php _e('FTP Settings for Import/Export Products', 'wf_csv_import_export'); ?></h3>
 				</th>
 			</tr>
 			<tr>
@@ -227,7 +227,7 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 			<table class="form-table">
 				<tr>
 					<th>
-						<h3 class="title"><?php _e('FTP Settings for Export Reviews', 'wf_csv_import_export'); ?></h3>
+						<h3 class="title"><?php _e('FTP Settings for Import/Export Reviews', 'wf_csv_import_export'); ?></h3>
 					</th>
 				</tr>
 				<tr>
