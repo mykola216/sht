@@ -75,10 +75,12 @@ class Mollie_WC_Gateway_BankTransfer extends Mollie_WC_Gateway_Abstract
             $args['dueDate'] = $expiry_date;
         }
 
+	    $order_billing_email = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? $order->billing_email : $order->get_billing_email();
+
         // Mail payment instructions
-        if ($this->get_option('mail_payment_instructions') === 'yes' && !empty($order->billing_email))
+        if ($this->get_option('mail_payment_instructions') === 'yes' && !empty($order_billing_email))
         {
-            $args['billingEmail'] = trim($order->billing_email);
+            $args['billingEmail'] = trim($order_billing_email);
         }
 
         return $args;
@@ -201,21 +203,23 @@ class Mollie_WC_Gateway_BankTransfer extends Mollie_WC_Gateway_Abstract
                 && class_exists('DateTime')
                 && class_exists('DateInterval'))
             {
-                $expiry_date = DateTime::createFromFormat('U', time());
-                $expiry_date->add(new DateInterval($payment->expiryPeriod));
+                $expiry_date = DateTime::createFromFormat( 'U', time() );
+	            $expiry_date->add( new DateInterval( $payment->expiryPeriod ) );
+	            $expiry_date = $expiry_date->format( wc_date_format() );
+	            $expiry_date = date_i18n( wc_date_format(), strtotime( $expiry_date ) );
 
                 if ($admin_instructions)
                 {
                     $instructions .= "\n" . sprintf(
                         __('The payment will expire on <strong>%s</strong>.', 'mollie-payments-for-woocommerce'),
-                        $expiry_date->format(wc_date_format())
+                        $expiry_date
                     ) . "\n";
                 }
                 else
                 {
                     $instructions .= "\n" . sprintf(
                         __('The payment will expire on <strong>%s</strong>. Please make sure you transfer the total amount before this date.', 'mollie-payments-for-woocommerce'),
-                        $expiry_date->format(wc_date_format())
+                        $expiry_date
                     ) . "\n";
                 }
             }
