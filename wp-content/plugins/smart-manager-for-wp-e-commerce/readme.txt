@@ -1,16 +1,15 @@
-=== Smart Manager for WooCommerce & WPeC ===
+=== Smart Store Manager For Your WooCommerce Shop ===
 Contributors: storeapps, niravmehta, ratnakar.dubey, Tarun.Parswani, akash123dhawade
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CPTHCDC382KVA
 Author URI: http://www.storeapps.org/
 Plugin URI: http://www.storeapps.org/
-Tags: administration, wp e-commerce, woo commerce, woocommerce, wpec, wpsc, jigoshop, ecommerce, management, batch update, bulk edit, mass update, wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management,
-woocommerce manager, woocommerce order management, woocommerce product management, woocommerce smart manager, woocommerce store management
+Tags: woocommerce, store manager, bulk update, inline edit, manage variations, bulk edit, coupons , shop manager,  batch update,  wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management
 Requires at least: 2.0.2
-Tested up to: 4.7.1
-Stable tag: 3.9.21
+Tested up to: 4.7.5
+Stable tag: 3.9.23
 License: GPLv3
 
-The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features. 
+The #1 tool to bulk update, inline edit products, orders, customers, coupons on your Woocommerce store. Easily manage your WooCommerce shop within seconds.
 
 
 == Description ==
@@ -140,6 +139,18 @@ It also gives the warm feeling of supporting further development of the plugin.
 4. Batch Update (only in paid version)
 
 == Changelog ==
+
+= 3.9.23 (01.05.2017) =
+* Fix: Fixes related to attributes & categories not getting displayed in the grid (WooCommerce)
+* Fix: Some minor fixes
+
+= 3.9.22 (14.04.2017) =
+* Update: Compatibility with WooCommerce v3.0+
+* Fix: Illegal mix of collation for utf8mb4_unicode_520_ci issue
+* Fix: Type of undefined error on Smart Manager grid load (WooCommerce)
+* Fix: Fixes related to serialized data handling in batch update functionality (WooCommerce)
+* Fix: Fixes related to add product functionality (WooCommerce)
+* Fix: Some minor fixes
 
 = 3.9.21 (23.01.2017) =
 * Fix: 'Same As Parent' option not available for 'Tax Class' field for product variations (WooCommerce)
@@ -702,6 +713,12 @@ It also gives the warm feeling of supporting further development of the plugin.
 * Product administration features
 
 == Upgrade Notice ==
+
+= 3.9.23 =
+Fixes related to WooCommerce attributes & categories not getting displayed in Smart Manager grid along with other important fixes. Recommended upgrade.
+
+= 3.9.22 =
+WooCommerce v3.0+ compatibility, fixes for type of undefined error along with other important fixes. Recommended upgrade.
 
 = 3.9.21 =
 Fixes related '.00' getting trimmed off when saving 'price/sales price' field using Smart Manager along with other important fixes. Recommended upgrade.

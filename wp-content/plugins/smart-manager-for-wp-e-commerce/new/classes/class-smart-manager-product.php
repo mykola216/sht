@@ -126,6 +126,21 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 
 			$dashboard_model[$this->dashboard_key]['treegrid'] = true; //for setting the treegrid
 
+			$product_visibility_index = sm_multidimesional_array_search('terms/product_visibility', 'src', $column_model);
+
+			if( !empty($product_visibility_index) ) {
+				$visibility_index = sm_multidimesional_array_search ('postmeta/meta_key=_visibility/meta_value=_visibility', 'src', $column_model);
+				$featured_index = sm_multidimesional_array_search ('postmeta/meta_key=_featured/meta_value=_featured', 'src', $column_model);
+					
+				if( !empty($visibility_index) && isset($column_model[$visibility_index]) ) {
+					unset($column_model[$visibility_index]);
+				}
+
+				if( !empty($featured_index) && isset($column_model[$featured_index]) ) {
+					unset($column_model[$featured_index]);
+				}
+			}			
+
 			$attr_col_index = sm_multidimesional_array_search ('custom/product_attributes', 'src', $column_model);
 
 			$attributes_val = array();
@@ -184,7 +199,7 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 				// key:true
 
 				if (!empty($src)) {
-					if (substr($src,0,3)=='pa_') {
+					if (substr($src,0,13)=='attribute_pa_') {
 						$attributes_val [$src] = array();
 						$attributes_val [$src]['lbl'] = (!empty($attributes_label[$src]['lbl'])) ? $attributes_label[$src]['lbl'] : $src;
 						$attributes_val [$src]['val'] = $column['values'];
@@ -219,6 +234,11 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 												   'notify' => __('Allow, but notify customer', Smart_Manager::$text_domain),
 												   'yes' => __('Allow', Smart_Manager::$text_domain));
 					} else if ($src == 'product_shipping_class') {
+
+						if( empty($column ['values']) ) {
+							$column ['values'] = array();
+						}
+
 						$column ['values'] = array_replace( array('' => __('No shipping class', Smart_Manager::$text_domain) ), $column ['values'] );
 					}
 				}
@@ -249,6 +269,75 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 
 				//Code for assigning attr. values
 				$column_model [$index]['values'] = $attributes_val;
+			}
+
+			if( !empty($product_visibility_index) ) {
+
+				if( isset($column_model[$product_visibility_index]) ) {
+					unset($column_model[$product_visibility_index]);
+				}
+
+				$visibility_index = sm_multidimesional_array_search ('terms/product_visibility', 'src', $column_model);
+
+				
+				$index = sizeof($column_model);
+
+				if(empty($visibility_index)) {
+
+					//Code for including custom columns for product dashboard
+					$column_model [$index] = array();
+
+					$column_model [$index]['src'] = 'terms/product_visibility';
+					$column_model [$index]['index'] = sanitize_title(str_replace('/', '_', $column_model [$index]['src'])); // generate slug using the wordpress function if not given 
+					$column_model [$index]['name'] = __('Visibility', Smart_Manager::$text_domain);
+					$column_model [$index]['type'] = 'list';
+					$column_model [$index]['hidden']	= true;
+					$column_model [$index]['editable']	= true;
+					$column_model [$index]['batch_editable']	= true;
+					$column_model [$index]['sortable']	= true;
+					$column_model [$index]['resizable']	= true;
+					$column_model [$index]['allow_showhide']	= true;
+					$column_model [$index]['exportable']	= true;
+					$column_model [$index]['searchable']	= true;
+
+					$column_model [$index]['width'] = 100;
+
+					//Code for assigning attr. values
+					$column_model [$index]['values'] = array(
+			                                    'visible' => __('Visible', Smart_Manager::$text_domain),
+			                                    'catalog' => __('Catalog', Smart_Manager::$text_domain),
+			                                    'search' => __('Search', Smart_Manager::$text_domain),
+			                                    'hidden' => __('Hidden', Smart_Manager::$text_domain)
+			                                );
+				}
+
+				$featured_index = sm_multidimesional_array_search ('terms/product_visibility_featured', 'src', $column_model);
+
+				if( empty($featured_index) ) {
+
+					++$index;
+
+					$column_model [$index] = array();
+					$column_model [$index]['src'] = 'terms/product_visibility_featured';
+					$column_model [$index]['index'] = sanitize_title(str_replace('/', '_', $column_model [$index]['src'])); // generate slug using the wordpress function if not given 
+					$column_model [$index]['name'] = __('Featured', Smart_Manager::$text_domain);
+					$column_model [$index]['type'] = 'toggle';
+					$column_model [$index]['hidden']	= true;
+					$column_model [$index]['editable']	= true;
+
+					$column_model [$index]['width'] = 100;
+
+					$column_model [$index]['batch_editable']	= true;
+					$column_model [$index]['sortable']	= true;
+					$column_model [$index]['resizable']	= true;
+					$column_model [$index]['allow_showhide']	= true;
+					$column_model [$index]['exportable']	= true;
+					$column_model [$index]['searchable']	= true;
+
+					//Code for assigning attr. values
+					$column_model [$index]['values'] = array();
+				}
+				
 			}
 
 			// Load from cache
@@ -286,7 +375,7 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 
 				if ( !empty($attr_taxonomy_nm) ) {
 					foreach ( $attr_taxonomy_nm as $key => $attr_taxonomy ) {
-						if ( substr($attr_taxonomy,0,3) != 'pa_' ) {
+						if ( substr($attr_taxonomy,0,13) != 'attribute_pa_' ) {
 							unset( $attr_taxonomy_nm[$key] );
 						}
 					}
@@ -306,6 +395,7 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 				$taxonomy_nm = array();
 				$term_taxonomy_ids = array();
 				$post_ids = array();
+				$parent_ids = array();
 				$product_attributes_postmeta = array();
 
 				foreach ($col_model as $column) {
@@ -323,7 +413,10 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 							}
 						}
 					}
-				}				
+				}			
+
+				$product_visibility_index = sm_multidimesional_array_search('terms/product_visibility', 'src', $col_model);
+				$product_featured_index = sm_multidimesional_array_search('terms/product_visibility_featured', 'src', $col_model);
 
 				foreach ($data_model['items'] as $key => $data) {
 
@@ -354,10 +447,10 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 						$parent_title  = '';
 
 						// Code for the variation title on sorting
-						if ( $this->prod_sort === true ) {
+						// if ( $this->prod_sort === true ) {
 							$parent_title = (!empty($data_model['items'][$parent_key]['posts_post_title'])) ? $data_model['items'][$parent_key]['posts_post_title'] : get_the_title($data['posts_post_parent']);
 							$parent_title .= ( !empty($parent_title) ) ? ' - ' : '';
-						}
+						// }
 						
 						$data_model['items'][$key]['parent'] = $data['posts_post_parent'];
 						$data_model['items'][$key]['isLeaf'] = true;
@@ -389,7 +482,11 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 							}	
 						}
 
-						$data_model['items'][$key]['posts_post_title'] = $parent_title .''. substr($variation_title, 0, strlen($variation_title)-2 );
+
+						if( !empty($variation_title) ){
+							$data_model['items'][$key]['posts_post_title'] = $parent_title .''. substr($variation_title, 0, strlen($variation_title)-2 );	
+						}
+						
 
 					} else if ( !empty($data['terms_product_type']) ) {
 						if ( $data['terms_product_type'] == 'simple' ) {
@@ -407,11 +504,62 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 						$data_model['items'][$key]['level'] = 0;	
 					}
 
+					if ( empty($data['posts_post_parent']) ) {
+						$parent_ids[] = $data['posts_id'];
+					}
+
 					if (empty($data['postmeta_meta_key__product_attributes_meta_value__product_attributes'])) continue;
 					$product_attributes_postmeta[$data['posts_id']] = $data['postmeta_meta_key__product_attributes_meta_value__product_attributes'];
 				}
 
 				$data_model['items'] = array_values($data_model['items']);
+
+
+				if( !empty($parent_ids) && !empty($product_visibility_index) && !empty($product_featured_index) ) {
+					$terms_objects = wp_get_object_terms( $parent_ids, 'product_visibility', 'orderby=none&fields=all_with_object_id' );
+
+					$product_visibility = array();
+
+					if (!empty($terms_objects)) {
+						foreach ($terms_objects as $terms_object) {
+
+							$post_id = $terms_object->object_id;
+							$slug = $terms_object->slug;
+
+							if (!isset($product_visibility[$post_id])){
+								$product_visibility[$post_id] = array();
+							}
+
+							if (!isset($product_visibility[$post_id][$slug])){
+								$product_visibility[$post_id][$slug] = '';
+							}
+
+						}
+					}
+
+					foreach ($data_model['items'] as $key => $data) {
+						if ( empty($data['posts_id']) || !empty($data['posts_post_parent']) ) continue;
+
+						$visibility = 'visible';
+						$featured = 'no';
+
+						if( isset($product_visibility[$data['posts_id']]['exclude-from-search']) && isset($product_visibility[$data['posts_id']]['exclude-from-catalog']) ) {
+							$visibility = 'hidden';
+						} else if( isset($product_visibility[$data['posts_id']]['exclude-from-search']) ) {
+							$visibility = 'catalog';
+						} else if( isset($product_visibility[$data['posts_id']]['exclude-from-catalog']) ) {
+							$visibility = 'search';
+						}
+
+						if( isset($product_visibility[$data['posts_id']]['featured']) ) {
+							$featured = 'yes';	
+						}
+
+						$data_model['items'][$key]['terms_product_visibility'] = $visibility;
+						$data_model['items'][$key]['terms_product_visibility_featured'] = $featured;
+					}
+
+				}
 
 				$terms_objects = wp_get_object_terms( $post_ids, $taxonomy_nm, 'orderby=none&fields=all_with_object_id' );
 				$attributes_val = array();
@@ -530,6 +678,9 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 			$current_store_model = get_transient( 'sm_dashboard_model_'.$this->dashboard_key );
 			$col_model = (!empty($current_store_model[$this->dashboard_key]['columns'])) ? $current_store_model[$this->dashboard_key]['columns'] : array();
 
+			$product_visibility_index = sm_multidimesional_array_search('terms_product_visibility', 'index', $col_model);
+			$product_featured_index = sm_multidimesional_array_search('terms_product_visibility_featured', 'index', $col_model);
+
 			if (!empty($col_model)) {
 
 				foreach ($col_model as $column) {
@@ -552,14 +703,52 @@ if ( ! class_exists( 'Smart_Manager_Product' ) ) {
 				}
 			}
 
-			if( empty($attr_values) ) {
+			if( empty($attr_values) && empty($product_visibility_index) && empty($product_featured_index) ) {
 				return;
 			}
 
-			foreach ($edited_data as $edited_row) {
-				$id = (!empty($edited_row['posts/ID'])) ? $edited_row['posts/ID'] : '';
+			foreach ($edited_data as $pid => $edited_row) {
+
+				$id = (!empty($edited_row['posts/ID'])) ? $edited_row['posts/ID'] : $pid;
 
 				if (empty($id)) continue;
+
+				if( !empty($product_visibility_index) || !empty($product_featured_index) ) {
+					//set the visibility taxonomy
+					$visibility = (!empty($edited_row['terms/product_visibility'])) ? $edited_row['terms/product_visibility'] : '';
+
+					if( !empty($visibility) ) {
+						if( $visibility == 'Visible' ) {
+                            wp_remove_object_terms( $id, array('exclude-from-search', 'exclude-from-catalog'), 'product_visibility' );
+                        } else {
+
+                            $terms = '';
+
+                            if( $visibility == 'Catalog' ) {
+                                $terms = 'exclude-from-search';
+                            } else if( $visibility == 'Search' ) {
+                                $terms = 'exclude-from-catalog';
+                            } else if( $visibility == 'Hidden' ) {
+                                $terms = array('exclude-from-search', 'exclude-from-catalog');
+                            }
+
+                            if( !empty($terms) ) {
+                                wp_remove_object_terms( $id, array('exclude-from-search', 'exclude-from-catalog'), 'product_visibility' );
+                                wp_set_object_terms($id, $terms, 'product_visibility', true);
+                            }
+                        }
+                    }
+
+					//set the featured taxonomy
+					$featured = (!empty($edited_row['terms/product_visibility_featured'])) ? $edited_row['terms/product_visibility_featured'] : '';
+					
+					if( !empty($featured) ) {
+                        if( !empty($featured) ) {
+                            $result = ( $featured == "Yes" ) ? wp_set_object_terms($id, 'featured', 'product_visibility', true) : wp_remove_object_terms( $id, 'featured', 'product_visibility' );
+                        }
+					}
+				}
+
 
 				$attr_edited = (!empty($edited_row['custom/product_attributes'])) ? $edited_row['custom/product_attributes'] : '';
 

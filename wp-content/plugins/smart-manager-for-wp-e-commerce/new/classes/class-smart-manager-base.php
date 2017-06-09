@@ -451,12 +451,12 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			// Load from cache
 			$store_model = get_transient( 'sm_dashboard_model_'.$this->dashboard_key );			
 
+			$store_model = false;
 			// Valid cache not found
 			if ( false === $store_model ) {
 				$this->get_default_store_model();
 				$store_model = $this->default_store_model;
 			}
-
 			//Filter to modify the dashboard model
 			$store_model = apply_filters('sm_dashboard_model', $store_model);
 

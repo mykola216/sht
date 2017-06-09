@@ -3,9 +3,11 @@
 Plugin Name: Smart Manager
 Plugin URI: http://www.storeapps.org/product/smart-manager/
 Description: <strong>Pro Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.21
+Version: 3.9.23
 Author: StoreApps
 Author URI: http://www.storeapps.org/
+Requires at least: 2.0.2
+Tested up to: 4.7.5
 Copyright (c) 2010 - 2017 Store Apps All rights reserved.
 License: GPLv3
 Text Domain: smart-manager-for-wp-e-commerce
@@ -140,15 +142,15 @@ add_action( 'plugins_loaded', 'sm_upgrade' );
 //function to handle inclusion of the SA upgrade file
 function sm_upgrade() {
 	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
-		if ( !class_exists( 'StoreApps_Upgrade_1_4' ) ) {
-	        require_once 'pro/class-storeapps-upgrade-v-1-4.php';
+		if ( !class_exists( 'StoreApps_Upgrade_1_6' ) ) {
+	        require_once 'pro/class-storeapps-upgrade-1-6.php';
 	    }
 
 		$sku = SM_SKU;
 		$prefix = SM_PREFIX;
 		$plugin_name = SM_PLUGIN_NAME;
 		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
-		$GLOBALS['smart_manager_upgrade'] = new StoreApps_Upgrade_1_4( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+		$GLOBALS['smart_manager_upgrade'] = new StoreApps_Upgrade_1_6( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
 
 		//filters for handling quick_help_widget
 		add_filter( 'sa_active_plugins_for_quick_help', 'sm_quick_help_widget', 10, 2 );
@@ -278,7 +280,7 @@ function sm_add_plugin_style_script() {
             wp_enqueue_script( 'underscore' );
         }
 
-        wp_register_script ( 'sm_visualsearch_jquery_ui_widget', plugins_url ( '/visualsearch/jquery.ui.widget.js', __FILE__ ), array ('jquery', 'wp-util', 'underscore'), '0.0.1' );
+        wp_register_script ( 'sm_visualsearch_jquery_ui_widget', plugins_url ( '/visualsearch/jquery.ui.widget.js', __FILE__ ), array ('jquery', 'jquery-ui-sortable', 'wp-util', 'underscore'), '0.0.1' );
         wp_register_script ( 'sm_visualsearch_jquery_ui_menu', plugins_url ( '/visualsearch/jquery.ui.menu.js', __FILE__ ), array ('sm_visualsearch_jquery_ui_widget'), '0.0.1' );
         wp_register_script ( 'sm_visualsearch_jquery_ui_autocomplete', plugins_url ( '/visualsearch/jquery.ui.autocomplete.js', __FILE__ ), array ('sm_visualsearch_jquery_ui_menu'), '0.0.1' );
         wp_register_script ( 'sm_visualsearch_jquery_ui_position', plugins_url ( '/visualsearch/jquery.ui.position.js', __FILE__ ), array ('sm_visualsearch_jquery_ui_autocomplete'), '0.0.1' );
@@ -311,25 +313,34 @@ function sm_add_plugin_style_script() {
 			
 			//todo change 2.1-beta-2 to 2.1  before release
 
-						if (version_compare ( WOOCOMMERCE_VERSION, '2.2.0', '<' )) {
+						if (version_compare ( WOOCOMMERCE_VERSION, '3.0.0', '<' )) {
+							
+							if (version_compare ( WOOCOMMERCE_VERSION, '2.2.0', '<' )) {
 
-							if (version_compare ( WOOCOMMERCE_VERSION, '2.1.0', '<' )) {
+								if (version_compare ( WOOCOMMERCE_VERSION, '2.1.0', '<' )) {
 
-								if (version_compare ( WOOCOMMERCE_VERSION, '2.0', '<' )) {
-		                            define ( 'SM_IS_WOO16', "true" );
-		                        } else {
-		                        	define ( 'SM_IS_WOO16', "false" );	
-		                        }
-	                            define ( 'SM_IS_WOO21', "false" );
+									if (version_compare ( WOOCOMMERCE_VERSION, '2.0', '<' )) {
+		                            	define ( 'SM_IS_WOO16', "true" );
+		                        	} else {
+		                        		define ( 'SM_IS_WOO16', "false" );	
+		                        	}
+	                            	define ( 'SM_IS_WOO21', "false" );
+	                        	} else {
+	                        		define ( 'SM_IS_WOO16', "false" );
+	                            	define ( 'SM_IS_WOO21', "true" );
+	                        	}
+	                        	define ( 'SM_IS_WOO22', "false" );
 	                        } else {
 	                        	define ( 'SM_IS_WOO16', "false" );
-	                            define ( 'SM_IS_WOO21', "true" );
+	                            define ( 'SM_IS_WOO21', "false" );
+	                            define ( 'SM_IS_WOO22', "true" );
 	                        }
-	                        define ( 'SM_IS_WOO22', "false" );
+	                        define ( 'SM_IS_WOO30', "false" );
 						} else {
 							define ( 'SM_IS_WOO16', "false" );
                             define ( 'SM_IS_WOO21', "false" );
-							define ( 'SM_IS_WOO22', "true" );
+							define ( 'SM_IS_WOO22', "false" );
+							define ( 'SM_IS_WOO30', "true" );
 						}
                         
 //			define ( 'IS_WOO20', version_compare ( WOOCOMMERCE_VERSION, '2.0', '>=' ) );
@@ -452,74 +463,15 @@ function sm_add_plugin_style_script() {
 	function sm_add_promo_notices() {
 
 		$sm_dismiss_admin_notice = get_option('sm_dismiss_admin_notice', false);
-		$sm_dismiss_anniversary_promo = get_option('sm_dismiss_anniversary_promo', false);
 
-		if( $sm_dismiss_admin_notice === true && $sm_dismiss_anniversary_promo === true ) {
+		if( $sm_dismiss_admin_notice === true ) {
 			return;
 		}
 
 		$timezone_format = _x('Y-m-d H:i:s', 'timezone date format');
 		$current_wp_date = date_i18n($timezone_format);
 
-		$sm_offer_date = '2017-01-23 00:00:00';
-
-		$date_diff_offer = floor(( strtotime($current_wp_date) - strtotime( $sm_offer_date ) ) / (3600 * 24) );
-
-		if( $date_diff_offer >= 0 && $date_diff_offer <= 2 && $sm_dismiss_anniversary_promo === false ) {
-
-			$current_url = (strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') === FALSE ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?' . $_SERVER['QUERY_STRING'];
-
-			$days_remmaining = 3 - $date_diff_offer;
-			$sm_promo_cond = ($days_remmaining == 1) ? __('*Last Day Today*', 'smart-manager') : '';
-
-			echo '<style type="text/css">
-						.sm-promo-button {
-							background:#03a025 !important;
-							border-color:#03a025 !important;
-							color:#ffffff !important;
-							font-weight: 800;
-						}
-
-						.sm-promo-button:hover {
-							background:#00870c !important;
-							border-color:#00870c !important;
-							color:#ffffff !important;
-						}
-
-						.sm_promo_valid_msg {
-							padding-left: 0.4rem;
-							font-size: 0.7rem;
-							font-style: italic;
-							color: #E34F4C;
-						}
-				  </style>
-				  <div id="sm_promo_msg" class="updated fade" style="display:block !important;"> 
-					<table style="width:100%;"> 
-						<tbody> 
-							<tr>
-								<td style="width:3rem;"> 
-									<span class="dashicons dashicons-megaphone" style="font-size:3em;color:#b32727;margin-left: -0.2em;margin-right: 0.3rem;margin-bottom: 0.45em;"></span> 
-								</td> 
-								<td id="sm_promo_msg_content" style="padding-left:0.5em;width:40rem;">
-									<div style="width:100%;font-size:1.3rem;padding-top: 0.4em;font-weight:bold">
-										'. __('Smart Manager\'s 6th Anniversary!!!', 'smart-manager') .'
-										<span class="sm_promo_valid_msg">'. $sm_promo_cond .'</span>
-									</div>
-									<div style="font-size:1.2em;font-weight:800;width:100%;padding-top: 0.5rem;">
-										<span style="color:#E34F4C;font-weight:bold;font-size:1.3rem;">' . __('20% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager') .'
-									</div>
-									<div style="font-size:0.8em;font-style:italic;width:100%">'. sprintf( __('BTW, even we don\'t like admin notices and this notice will automatically hide in %s. But still if you wish to hide it now, simply click ', 'smart-manager'), ( ( $days_remmaining > 1 ) ? ($days_remmaining .' '. __( 'days', 'smart-manager' )) : ($days_remmaining .' '. __( 'day', 'smart-manager' )) ) ).'<a href="'.$current_url.'&sm_dismiss_anniversary_promo=1">'. __('here', 'smart-manager') .'</a></div>
-								</td> 
-								<td>
-									<div><a href="http://www.storeapps.org/?buy-now=18694&qty=1&coupon=5884bacd63d8d&page=722&with-cart=0&utm_source=SM&utm_medium=Lite&utm_campaign=SM-6th-Anniversary" class="button sm-promo-button" target="_blank" style="line-height:0.1rem;font-size:1.1rem;padding:1.2rem;">' . __( 'Claim 20% OFF Now', 'smart-manager' ) . '</a></div>
-			                        <span style="font-size: 0.8em;padding-left: 3rem;"><a href="http://www.storeapps.org/product/smart-manager" target=_storeapps> '. __( 'Learn more', 'smart-manager' ) . '</a> ' . __( '/', 'smart-manager' ) . ' <a href="http://demo.storeapps.org/?demo=sm-woo" target=_livedemo> ' . __( 'Live Demo', 'smart-manager' ) . ' </a>	</span>
-								</td>
-							</tr>
-						</tbody> 
-					</table> 
-				</div>';
-
-		} else if ( !empty($_GET['page']) && ($_GET['page'] == 'smart-manager-woo' || $_GET['page'] == 'smart-manager-wpsc') && $sm_dismiss_admin_notice === false ) {
+		if ( !empty($_GET['page']) && ($_GET['page'] == 'smart-manager-woo' || $_GET['page'] == 'smart-manager-wpsc') && $sm_dismiss_admin_notice === false ) {
 			$sm_promo_msg = '';
 
 			$sm_lite_activation_date = get_option('sm_lite_activation_date');
@@ -537,12 +489,9 @@ function sm_add_plugin_style_script() {
 			$sm_promo_hide_msg = __('No, I don\'t like offers...', 'smart-manager');
 
 			if ( $date_diff == 0 ) {
-				$sm_promo_msg = '<b>'. __('Big Savings!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('20% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
-				$sm_klawoo_list_id = 'OFvZfJBDn4FLsDOz3Ulpww';
-			} else if ( $date_diff == 1 ) {
-				$sm_promo_msg = '<b>'. __('Missed yesterday?', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' .  __('15% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager');
+				$sm_promo_msg = '<b>'. __('Big Savings!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' .  __('15% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro', 'smart-manager');
 				$sm_klawoo_list_id = '0mHi7635Zb4L2vN7hmngdYDQ';
-			} else if ( $date_diff == 2 ) {
+			} else if ( $date_diff == 1 ) {
 				$sm_promo_msg = '<b>'. __('Last chance!!!', 'smart-manager') .' </b> <span style="color:#E34F4C;font-weight:bold;">' . __('10% OFF ', 'smart-manager') . ' </span>' . __('on Smart Manager Pro!', 'smart-manager');
 				$sm_klawoo_list_id = 'gSlZ3HGl3OMOjE5ZEnAJUQ';
 			} else if ( $date_diff > 2 ) {
@@ -859,7 +808,10 @@ function sm_add_plugin_style_script() {
 		define( 'SM_PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
 		define( 'SM_PLUGIN_DIRNAME', plugins_url( '', __FILE__ ) );
 		define( 'SM_IMG_URL', SM_PLUGIN_DIRNAME . '/images/' );
-		define( 'SM_BETA_IMG_URL', SM_PLUGIN_DIRNAME . '/new/assets/images/' );
+
+		if ( ! defined( 'SM_BETA_IMG_URL' ) ) {
+			define( 'SM_BETA_IMG_URL', SM_PLUGIN_DIRNAME . '/new/assets/images/' );
+		}
 		
 		if (WPSC_RUNNING === true) {
 			$json_filename = (IS_WPSC37) ? 'json37' : 'json38';
