@@ -32,6 +32,10 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 			include_once $this->plugin_path . '/classes/class-smart-manager-controller.php';
 			new Smart_Manager_Controller();
 
+			if ( ! defined( 'SM_BETA_IMG_URL' ) ) {
+				define( 'SM_BETA_IMG_URL', $this->plugin_url . '/assets/images/' );
+			}
+
 			// add_action ( 'admin_notices', array(&$this,'smart_admin_notices') );
 			add_action ( 'admin_head', array(&$this,'remove_help_tab') ); // For removing the help tab
 			// add_action( 'admin_menu', array(&$this,'smart_add_menu_access'), 9 ); // for adding menu
@@ -63,6 +67,8 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 			define( 'SM_PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
 			define( 'SM_IMG_URL', $this->plugin_path . '/assets/images/' );
 			define( 'SM_ADMIN_URL', get_admin_url() ); //defining the admin url
+
+
 
 		} 
 
@@ -232,7 +238,7 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 		                $sm_promo_img_url = "http://www.storeapps.org/ads/sm-in-app.png?d=". date("Ymd");
 				?>
 				<span style="float:right; margin: -6px -21px -20px 0px;">
-						<a href="http://www.storeapps.org/sm-in-app-promo" target="_blank"> <img src="<?php echo $sm_promo_img_url ?>" alt=""> </a>
+						<a href="http://www.storeapps.org/sm-in-app-promo" target="_blank"> <img src="<?php echo SM_BETA_IMG_URL . 'sm-in-app-promo.png' ?>" alt=""> </a>
 				</span>
 		   		<p class="wrap" style="font-size: 12px; margin: 18px -21px 0px 5px;"><span style="float: right; line-height: 17px;"> <?php
 					if ( SMPRO === true && ! is_multisite() ) {
@@ -348,7 +354,7 @@ if ( ! class_exists( 'Smart_Manager' ) ) {
 	        $social_link .= '<a href="https://twitter.com/storeapps" class="twitter-follow-button" data-show-count="true" data-dnt="true" data-show-screen-name="false">Follow</a>';
 	        $social_link .= "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>";
 	        $social_link .= '<iframe id="fb_like_sm" src="http://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FStore-Apps%2F614674921896173&width=100&layout=button_count&action=like&show_faces=false&share=false&height=21"></iframe>';
-	        $social_link .= '<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script><script type="IN/FollowCompany" data-id="3758881" data-counter="right"></script>';
+	        // $social_link .= '<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script><script type="IN/FollowCompany" data-id="3758881" data-counter="right"></script>';
 
 	        return $social_link;
 		}

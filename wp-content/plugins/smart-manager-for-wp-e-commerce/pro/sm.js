@@ -1,5 +1,5 @@
 // Function to batchUpdate Records.
-var batchUpdateRecords = function(batchUpdatePanel,toolbarCount,cnt_array,store,jsonURL,batchUpdateWindow,radioValue,flag,pagingToolbar,products_search_flag,sm_batch_limit,SM_IS_WOO16,SM_IS_WOO21,SM_IS_WOO22)
+var batchUpdateRecords = function(batchUpdatePanel,toolbarCount,cnt_array,store,jsonURL,batchUpdateWindow,radioValue,flag,pagingToolbar,products_search_flag,sm_batch_limit,SM_IS_WOO16,SM_IS_WOO21,SM_IS_WOO22,SM_IS_WOO30)
 {	
 	var sb;
 	var selectedField     = [];
@@ -305,6 +305,7 @@ var batchUpdateRecords = function(batchUpdatePanel,toolbarCount,cnt_array,store,
                 SM_IS_WOO16: SM_IS_WOO16,
                 SM_IS_WOO21: SM_IS_WOO21,
                 SM_IS_WOO22: SM_IS_WOO22,
+                SM_IS_WOO30: SM_IS_WOO30,
                 batch_limit: sm_batch_limit,
                 security: SM_NONCE,
                 file:  jsonURL
@@ -356,6 +357,7 @@ var batchUpdateRecords = function(batchUpdatePanel,toolbarCount,cnt_array,store,
                 SM_IS_WOO16: SM_IS_WOO16,
                 SM_IS_WOO21: SM_IS_WOO21,
                 SM_IS_WOO22: SM_IS_WOO22,
+                SM_IS_WOO30: SM_IS_WOO30,
                 batch_limit: sm_batch_limit,
                 security: SM_NONCE,
                 file:  jsonURL
@@ -446,6 +448,7 @@ var batchUpdateRecords = function(batchUpdatePanel,toolbarCount,cnt_array,store,
                             SM_IS_WOO16: SM_IS_WOO16,
                             SM_IS_WOO21: SM_IS_WOO21,
                             SM_IS_WOO22: SM_IS_WOO22,
+                            SM_IS_WOO30: SM_IS_WOO30,
                             batch_limit: sm_batch_limit,
                             security: SM_NONCE,
                             file:  jsonURL
@@ -507,6 +510,7 @@ var batchUpdateRecords = function(batchUpdatePanel,toolbarCount,cnt_array,store,
                 SM_IS_WOO16: SM_IS_WOO16,
                 SM_IS_WOO21: SM_IS_WOO21,
                 SM_IS_WOO22: SM_IS_WOO22,
+                SM_IS_WOO30: SM_IS_WOO30,
                 security: SM_NONCE,
                 products_search_flag : products_search_flag,
                 file:  jsonURL
@@ -656,6 +660,7 @@ var addProduct  = function(store,cnt_array,cnt,newCatName){
 		SM.productsCols.sku.colName +":'',"+
 		SM.productsCols.group.colName +":newCatName,"+
 		SM.productsCols.group.colName +":'',"+
+		SM.productsCols.product_type.colName +":'simple',"+
 		SM.productsCols.weight.colName +":'',"+
 		SM.productsCols.publish.colName +":'draft',"+
 		SM.productsCols.desc.colName +":'',"+

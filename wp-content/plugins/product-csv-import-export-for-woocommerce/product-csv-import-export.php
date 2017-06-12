@@ -3,9 +3,9 @@
 Plugin Name: Product/Review CSV Import Export
 Plugin URI: https://www.xadapter.com/product/product-import-export-plugin-for-woocommerce/
 Description: Import and Export Products and Product Reviews From and To your WooCommerce Store.
-Author: HikeForce
-Author URI: https://www.xadapter.com/vendor/hikeforce/
-Version: 3.2.1
+Author: Xadapter
+Author URI: https://www.xadapter.com/shop/
+Version: 3.2.6
 Text Domain: wf_csv_import_export
 */
 
@@ -323,3 +323,31 @@ if ( ! class_exists( 'WF_Product_Review_Import_Export_CSV' ) ) :
 	endif;
 
 	new WF_Product_Review_Import_Export_CSV();
+
+    add_action('admin_init', 'impexp_welcome');
+    add_action('admin_menu', 'impexp_welcome_screen');
+    add_action('admin_head', 'impexp_welcome_screen_remove_menus');
+    register_activation_hook(__FILE__, 'hf_welcome_screen_activate');
+        function hf_welcome_screen_activate() {
+        set_transient('_welcome_screen_activation_redirect', true, 30);
+    }
+
+    function impexp_welcome() {
+        if (!get_transient('_welcome_screen_activation_redirect')) {
+            return;
+        }
+        delete_transient('_welcome_screen_activation_redirect');
+        wp_safe_redirect(add_query_arg(array('page' => 'impexp-welcome'), admin_url('index.php')));
+    }
+
+    function impexp_welcome_screen() {
+        add_dashboard_page('Welcome To Import Export', 'Welcome To Import Export', 'read', 'impexp-welcome', 'impexp_screen_content');
+    }
+
+    function impexp_screen_content() {
+        include 'welcome/welcome.php';
+    }
+
+    function impexp_welcome_screen_remove_menus() {
+        remove_submenu_page('index.php', 'impexp-welcome');
+    }

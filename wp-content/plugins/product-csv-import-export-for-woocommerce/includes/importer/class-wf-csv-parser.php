@@ -52,6 +52,14 @@ class WF_CSV_Parser {
 				$this->allowed_product_types['composite'] = $composite_term->term_id;
 			}
 		}
+		// Simple Auction product type
+		if ( class_exists( 'WooCommerce_simple_auction' ) ) {
+			$auction_term = get_term_by( 'name', 'auction', 'product_type' );
+
+			if ( $auction_term ) {
+				$this->allowed_product_types['auction'] = $auction_term->term_id;
+			}
+		}
 
 		// Bundle product type
 		if ( class_exists( 'WC_Bundles' ) ) {

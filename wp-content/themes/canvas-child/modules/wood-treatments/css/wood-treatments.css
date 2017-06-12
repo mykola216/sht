@@ -227,6 +227,7 @@ ul.behandeling li:nth-child(7) {
 
 
 
+/* new form class behandeling-kleur (form-1) */
 ul.behandeling-kleur li:nth-child(2) {
     background-position: 0 -220px;
 }
@@ -239,13 +240,14 @@ ul.behandeling-kleur li:nth-child(4) {
 ul.behandeling-kleur li:nth-child(5) {
     background-position: 0 -327px;
 }
+/*            */
 
 
-
-
-ul.behandeling-nanolak li:nth-child(6) {
+/* new form class behandeling-nanolak (form-2) */
+ul.behandeling-nanolak li:nth-child(2) {
     background-position: 0 -434px;
 }
-ul.behandeling-nanolak li:nth-child(7) {
+ul.behandeling-nanolak li:nth-child(3) {
     background-position: 0 -541px;
 }
+/*            */

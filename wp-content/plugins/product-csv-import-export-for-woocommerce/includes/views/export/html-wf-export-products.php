@@ -41,6 +41,22 @@
             </tr>
             <tr>
                 <th>
+                    <label for="v_prod_types"><?php _e('Product Types', 'wf_csv_import_export'); ?></label>
+                </th>
+                <td>
+                    <select id="v_prod_types" name="prod_types[]" data-placeholder="<?php _e('All Types', 'wf_csv_import_export'); ?>" class="wc-enhanced-select" multiple="multiple">
+                        <?php
+                        foreach ($export_types as $type_slug => $type_name) {
+                            echo '<option value="' . $type_slug . '">' .  $type_name  . '</option>';
+                        }
+                        ?>
+                    </select>
+                                                        
+                    <p style="font-size: 12px"><?php _e('Products under these types will be exported.', 'wf_csv_import_export'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th>
                     <label for="v_sortcolumn"><?php _e('Sort Columns', 'wf_csv_import_export'); ?></label>
                 </th>
                 <td>
@@ -62,6 +78,15 @@
                     <label for="v_columns"><?php _e('Columns', 'wf_csv_import_export'); ?></label>
                 </th>
             <table id="datagrid">
+                
+                <!-- select all boxes -->
+                  <tr>
+                      <td style="padding: 10px;">
+                          <a href="#" id="pselectall" onclick="return false;" >Select all</a> &nbsp;/&nbsp;
+                          <a href="#" id="punselectall" onclick="return false;">Unselect all</a>
+                      </td>
+                  </tr>
+                
                 <th style="text-align: left;">
                     <label for="v_columns"><?php _e('Column', 'wf_csv_import_export'); ?></label>
                 </th>

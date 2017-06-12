@@ -143,6 +143,7 @@ class WF_ProdImpExpCsv_Admin_Screen {
 		include( 'views/html-wf-getting-started.php' );
 		include( 'views/import/html-wf-import-products.php' );
 		$post_columns = include( 'exporter/data/data-wf-post-columns.php' );
+                $export_types = include( 'exporter/data/data-wf-allowed-products.php' );
 		include( 'views/export/html-wf-export-products.php' );
 	}
 
