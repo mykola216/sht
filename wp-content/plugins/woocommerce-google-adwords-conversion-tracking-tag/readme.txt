@@ -3,8 +3,8 @@ Contributors: alekv
 Donate link: http://www.wolfundbaer.ch/donations/
 Tags: woocommerce, woocommerce conversion tracking, google adwords, adwords, conversion, conversion value, conversion tag, conversion pixel, conversion value tracking, conversion tracking, conversion tracking adwords, conversion tracking pixel, conversion tracking script, track conversions, tracking code manager
 Requires at least: 3.1
-Tested up to: 4.6.1
-Stable tag: 1.3.5
+Tested up to: 4.8
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,14 @@ If you like this plugin you might like that one too: https://wordpress.org/plugi
 
 With the Google Tag Assistant you will also be able to see the tag fired on the thankyou page.
 
+= I get a fatal error and I am running old versions of WordPress and/or WooCommerce. What can I do? =
+
+As this is a free plugin we don't support old version of WordPress and WooCommerce. You will have to update your installation.
+
+= I am using an offsite payment gateway and the conversions are not being tracked. What can I do? =
+
+We don't support if an offsite payment gateway is in use. The reason is that those cases can be complex and time consuming. We don't want to cover this for a free plugin. We do not recommend offsite payment gateways anyway. A visitor can stop the redirection manually which prevents at least some conversions to be tracked. Also offsite payment gateways are generally bad for the conversion rate.
+
 = Where can I report a bug or suggest improvements? =
 
 Please post your problem in the WGACT Support forum: http://wordpress.org/support/plugin/woocommerce-google-adwords-conversion-tracking-tag
@@ -64,6 +72,17 @@ You can send the link to the front page of your shop too if you think it would b
 
 == Changelog ==
 
+= 1.4.1 =
+* Tweak: Making the plugin PHP 5.4 backwards compatible
+* Fix: Fixing double counting check logic
+= 1.4 =
+* New: Ask kindly for a rating of the plugin
+* New: Add a radio button to use different styles of order total
+* Tweak: Consolidate options into one array
+* Tweak: Code cleanup
+= 1.3.6 =
+* New: WordPress 4.8 compatibility update
+* Tweak: Minor text tweak.
 = 1.3.5 =
 * Fix: Fixed a syntax error that caused issues on some installations.
 = 1.3.4 =
