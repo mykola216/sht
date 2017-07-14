@@ -5,7 +5,7 @@
  * Description:  Google AdWords dynamic conversion value tracking for WooCommerce.
  * Author:       Wolf+Bär GmbH
  * Author URI:   https://wolfundbaer.ch
- * Version:      1.3.5
+ * Version:      1.4.1
  * License:      GPLv2 or later
  * Text Domain:  woocommerce-google-adwords-conversion-tracking-tag
  **/
@@ -17,7 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WGACT {
 
+    public $conversion_id;
+    public $conversion_label;
+
 	public function __construct() {
+
+
+		// preparing the DB check and upgrade routine
+		require_once plugin_dir_path( __FILE__ ) . 'includes/class-db-upgrade.php';
+
+		// running the DB updater
+		$db_upgrade = new WGACT_DB_Upgrade();
+		$db_upgrade->run_options_db_upgrade();
 
 		// startup all functions
 		$this->init();
@@ -26,6 +37,9 @@ class WGACT {
 
 	// startup all functions
 	public function init() {
+
+		// load the options
+		$this->wgact_options_init();
 
 		// add the admin options page
 		add_action( 'admin_menu', array( $this, 'wgact_plugin_admin_add_page' ), 99 );
@@ -42,7 +56,151 @@ class WGACT {
 		// add the Google AdWords tag to the thankyou part of the page within the body tags
 		add_action( 'woocommerce_thankyou', array( $this, 'GoogleAdWordsTag' ) );
 
+		// ask for a rating in a plugin notice
+		add_action( 'admin_head', array( $this, 'ask_for_rating_js' ) );
+		add_action( 'wp_ajax_wgact_dismissed_notice_handler', array( $this, 'ajax_rating_notice_handler' ) );
+		add_action( 'admin_notices', array( $this, 'ask_for_rating_notices_if_not_asked_before' ) );
+
 	}
+
+	// client side ajax js handler for the admin rating notice
+	public function ask_for_rating_js() {
+
+		?>
+        <script type="text/javascript">
+            jQuery(document).on('click', '.notice-success.wgact-rating-success-notice, wgact-rating-link, .wgact-rating-support', function ($) {
+
+                var data = {
+                    'action': 'wgact_dismissed_notice_handler',
+                };
+
+                jQuery.post(ajaxurl, data);
+                jQuery('.wgact-rating-success-notice').remove();
+
+            });
+        </script> <?php
+
+	}
+
+	// server side php ajax handler for the admin rating notice
+	public function ajax_rating_notice_handler() {
+
+		// prepare the data that needs to be written into the user meta
+		$wgdr_admin_notice_user_meta = array(
+			'date-dismissed' => date( 'Y-m-d' ),
+		);
+
+		// update the user meta
+		update_user_meta( get_current_user_id(), 'wgact_admin_notice_user_meta', $wgdr_admin_notice_user_meta );
+
+		wp_die(); // this is required to terminate immediately and return a proper response
+	}
+
+
+	// only ask for rating if not asked before or longer than a year
+	public function ask_for_rating_notices_if_not_asked_before() {
+
+		// get user meta data for this plugin
+		$user_meta = get_user_meta( get_current_user_id(), 'wgact_admin_notice_user_meta' );
+
+		// check if there is already a saved value in the user meta
+		if ( isset( $user_meta[0]['date-dismissed'] ) ) {
+
+			$date_1 = date_create( $user_meta[0]['date-dismissed'] );
+			$date_2 = date_create( date( 'Y-m-d' ) );
+
+			// calculate day difference between the dates
+			$interval = date_diff( $date_1, $date_2 );
+
+			// check if the date difference is more than 360 days
+			if ( 360 < $interval->format( '%a' ) ) {
+				$this->ask_for_rating_notices();
+			}
+
+		} else {
+
+			$this->ask_for_rating_notices();
+		}
+	}
+
+	// show an admin notice to ask for a plugin rating
+	public function ask_for_rating_notices() {
+
+		$current_user = wp_get_current_user();
+
+		?>
+        <div class="notice notice-success is-dismissible wgact-rating-success-notice">
+            <p>
+                <span><?php _e( 'Hi ', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></span>
+                <span><?php echo( $current_user->user_firstname ? $current_user->user_firstname : $current_user->nickname ); ?></span>
+                <span><?php _e( '! ', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></span>
+                <span><?php _e( 'You\'ve been using the ', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></span>
+                <span><b><?php _e( 'WGACT Google AdWords Conversion Tracking Plugin', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></b></span>
+                <span><?php _e( ' for a while now. If you like the plugin please support our development by leaving a ★★★★★ rating: ', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></span>
+                <span class="wgact-rating-link">
+                    <a href="https://wordpress.org/support/view/plugin-reviews/woocommerce-google-adwords-conversion-tracking-tag?rate=5#postform"
+                       target="_blank"><?php _e( 'Rate it!', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></a>
+                </span>
+            </p>
+            <p>
+                <span><?php _e( 'Or else, please leave us a support question in the forum. We\'ll be happy to assist you: ', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></span>
+                <span class="wgact-rating-support">
+                    <a href="https://wordpress.org/support/plugin/woocommerce-google-adwords-conversion-tracking-tag"
+                       target="_blank"><?php _e( 'Get support', 'woocommerce-google-adwords-conversion-tracking-tag' ); ?></a>
+                </span>
+            </p>
+        </div>
+		<?php
+
+	}
+
+
+    // initialise the options
+	public function wgact_options_init() {
+
+		// set options equal to defaults
+		global $wgact_plugin_options;
+		$wgact_plugin_options = get_option( 'wgact_plugin_options' );
+
+		if ( false === $wgact_plugin_options ) {
+
+			$wgact_plugin_options = $this->wgact_get_default_options();
+			update_option( 'wgact_plugin_options', $wgact_plugin_options );
+
+		} else {  // Check if each single option has been set. If not, set them. That is necessary when new options are introduced.
+
+			// get default plugins options
+			$wgact_default_plugin_options = $this->wgact_get_default_options();
+
+			// go through all default options an find out if the key has been set in the current options already
+			foreach ( $wgact_default_plugin_options as $key => $value ) {
+
+				// Test if the key has been set in the options already
+				if ( ! array_key_exists( $key, $wgact_plugin_options ) ) {
+
+					// set the default key and value in the options table
+					$wgact_plugin_options[$key] = $value;
+
+					// update the options table with the new key
+					update_option( 'wgact_plugin_options', $wgact_plugin_options );
+
+				}
+			}
+		}
+	}
+
+    // get the default options
+	public function wgact_get_default_options() {
+		// default options settings
+		$options = array(
+			'conversion_id'     => '',
+			'conversion_label'  => '',
+            'order_total_logic' => 0,
+		);
+
+		return $options;
+	}
+
 
 	// Load text domain function
 	public function load_plugin_textdomain() {
@@ -73,17 +231,13 @@ class WGACT {
 		?>
 
 		<br>
-		<div style="float: right; padding-right: 20px">
-			<div style="float:left; margin-right: 10px">Tell us how much you like the plugin!</div>
-			<div style="float:left"><?php require( 'includes/rating.php' ); ?></div>
-		</div>
 		<div style="width:980px; float: left; margin: 5px">
 			<div style="float:left; margin: 5px; margin-right:20px; width:750px">
 				<div style="background: #0073aa; padding: 10px; font-weight: bold; color: white; border-radius: 2px">
 					<?php esc_html_e( 'Google AdWords Conversion Tracking Settings', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
 				</div>
 				<form action="options.php" method="post">
-					<?php settings_fields( 'wgact_plugin_options' ); ?>
+					<?php settings_fields( 'wgact_plugin_options_settings_fields' ); ?>
 					<?php do_settings_sections( 'wgact' ); ?>
 					<br>
 					<table class="form-table" style="margin: 10px">
@@ -105,7 +259,7 @@ class WGACT {
 					<span style="float: right;">
 						<a href="https://wolfundbaer.ch/?utm_source=WGACT&utm_medium=plugin&utm_campaign=WGACT-Plugin"
 						   target="_blank" style="color: white">
-							<?php esc_html_e( 'Visit us here: https://wolfundbaer.ch', 'woocommerce-google-dynamic-retargeting-tag' ) ?>
+							<?php esc_html_e( 'Visit us here: https://wolfundbaer.ch', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
 						</a>
 					</span>
 				</div>
@@ -130,50 +284,64 @@ class WGACT {
 
 	// add the admin settings and such
 	function wgact_plugin_admin_init() {
-		//register_setting( 'plugin_options', 'plugin_options', 'wgact_plugin_options_validate' );
-		register_setting( 'wgact_plugin_options', 'wgact_plugin_options_1' );
-		register_setting( 'wgact_plugin_options', 'wgact_plugin_options_2' );
+
+		register_setting( 'wgact_plugin_options_settings_fields', 'wgact_plugin_options' );
+
 		add_settings_section( 'wgact_plugin_main', esc_html__( 'Settings', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
 			$this,
 			'wgact_plugin_section_text'
 		), 'wgact' );
-		add_settings_field( 'wgact_plugin_text_string_1', esc_html__( 'Conversion ID', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
+
+		// add the field for the conversion id
+		add_settings_field( 'wgact_plugin_conversion_id', esc_html__( 'Conversion ID', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
 			$this,
-			'wgact_plugin_setting_string_1'
+			'wgact_plugin_setting_conversion_id'
 		), 'wgact', 'wgact_plugin_main' );
-		add_settings_field( 'wgact_plugin_text_string_2', esc_html__( 'Conversion Label', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
+
+		// ad the field for the conversion label
+		add_settings_field( 'wgact_plugin_conversion_label', esc_html__( 'Conversion Label', 'woocommerce-google-adwords-conversion-tracking-tag' ), array(
 			$this,
-			'wgact_plugin_setting_string_2'
+			'wgact_plugin_setting_conversion_label'
 		), 'wgact', 'wgact_plugin_main' );
+
+		// add fields for the product identifier
+		add_settings_field(
+			'wgact_plugin_order_total_logic',
+			esc_html__(
+				'Order Total Logic',
+				'woocommerce-google-adwords-conversion-tracking-tag'
+			),
+			array(
+				$this,
+				'wgact_plugin_setting_order_total_logic',
+			),
+			'wgact',
+			'wgact_plugin_main'
+		);
 	}
 
 	function wgact_plugin_section_text() {
-		//echo '<p>Woocommerce Google AdWords conversion tracking tag</p>';
+		//echo '<p>Woocommerce Google AdWords Conversion Tracking Tag</p>';
 	}
 
-	/*
-	function wgact_plugin_setting_string_1() {
-		$options = get_option('wgact_plugin_options_1');
-		echo "<input id='wgact_plugin_text_string_1' name='wgact_plugin_options_1[text_string]' size='40' type='text' value='{$options['text_string']}' />";	
-	}
-	*/
-
-	function wgact_plugin_setting_string_1() {
-		$options = get_option( 'wgact_plugin_options_1' );
-		echo "<input id='wgact_plugin_text_string_1' name='wgact_plugin_options_1[text_string]' size='40' type='text' value='{$options['text_string']}' />";
+	function wgact_plugin_setting_conversion_id() {
+		$options = get_option( 'wgact_plugin_options' );
+		echo "<input id='wgact_plugin_conversion_id' name='wgact_plugin_options[conversion_id]' size='40' type='text' value='{$options['conversion_id']}' />";
 	}
 
-	function wgact_plugin_setting_string_2() {
-		$options = get_option( 'wgact_plugin_options_2' );
-		echo "<input id='wgact_plugin_text_string_2' name='wgact_plugin_options_2[text_string]' size='40' type='text' value='{$options['text_string']}' />";
+	function wgact_plugin_setting_conversion_label() {
+		$options = get_option( 'wgact_plugin_options' );
+		echo "<input id='wgact_plugin_conversion_label' name='wgact_plugin_options[conversion_label]' size='40' type='text' value='{$options['conversion_label']}' />";
 	}
 
-	/*
-	function wgact_plugin_setting_string_3() {
-		$options = get_option('wgact_plugin_options_3');
-		echo "<input id='wgact_plugin_text_string_3' name='wgact_plugin_options_3[text_string]' size='40' type='text' value='{$options['text_string']}' />";
+	function wgact_plugin_setting_order_total_logic() {
+		$options = get_option( 'wgact_plugin_options' );
+		?>
+		<input type='radio' id='wgact_plugin_option_product_identifier_0' name='wgact_plugin_options[order_total_logic]' value='0'  <?php echo( checked( 0, $options['order_total_logic'], false ) ) ?> ><?php _e( 'Use order_subtotal: Doesn\'t include tax and shipping (default)', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?><br>
+		<input type='radio' id='wgact_plugin_option_product_identifier_1' name='wgact_plugin_options[order_total_logic]' value='1'  <?php echo( checked( 1, $options['order_total_logic'], false ) ) ?> ><?php _e( 'Use order_total: Includes tax and shipping', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?><br><br>
+		<?php _e( 'This is the order total amount reported back to AdWords', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
+        <?php
 	}
-	*/
 
 	// validate our options
 	function wgact_plugin_options_validate( $input ) {
@@ -185,21 +353,6 @@ class WGACT {
 		return $newinput;
 	}
 
-	private function get_conversion_id() {
-		$opt           = get_option( 'wgact_plugin_options_1' );
-		$conversion_id = $opt['text_string'];
-
-		return $conversion_id;
-	}
-
-	private function get_conversion_label() {
-		$opt              = get_option( 'wgact_plugin_options_2' );
-		$conversion_label = $opt['text_string'];
-
-		return $conversion_label;
-	}
-
-	// insert the Google AdWords tag into the page
 	public function GoogleAdWordsTag( $order_id ) {
 
 		$conversion_id    = $this->get_conversion_id();
@@ -207,9 +360,13 @@ class WGACT {
 
 		// get order from URL and evaluate order total
 		$order       = new WC_Order( $order_id );
-		$order_total = $order->get_total();
 
-		$order_total = apply_filters( 'wgact_conversion_value_filter', $order_total, $order );
+		$options = get_option( 'wgact_plugin_options' );
+		$order_total_setting = $options['order_total_logic'];
+		$order_total = 0 == $order_total_setting ? $order->get_subtotal() : $order->get_total();
+
+		// the filter is deprecated
+		// $order_total_filtered = apply_filters( 'wgact_conversion_value_filter', $order_total, $order );
 
 		?>
 
@@ -225,7 +382,7 @@ class WGACT {
 
 			<div style="display:inline;">
 				<img height="1" width="1" style="border-style:none;" alt=""
-				     src="//www.googleadservices.com/pagead/conversion/<?php echo $conversion_id; ?>/?value=<?php echo $order_total; ?>&amp;currency_code=<?php echo $order->get_order_currency(); ?>&amp;label=<?php echo $conversion_label; ?>&amp;guid=ON&amp;oid=<?php echo $order_id; ?>&amp;script=0"/>
+				     src="//www.googleadservices.com/pagead/conversion/<?php echo $conversion_id; ?>/?value=<?php echo $order_total; ?>&amp;currency_code=<?php echo $order->get_currency(); ?>&amp;label=<?php echo $conversion_label; ?>&amp;guid=ON&amp;oid=<?php echo $order_id; ?>&amp;script=0"/>
 			</div>
 
 
@@ -248,6 +405,22 @@ class WGACT {
 
 		<!-- END Google Code for Sales (AdWords) Conversion Page -->
 		<?php
+	}
+
+	private function get_conversion_id() {
+		$opt           = get_option( 'wgact_plugin_options' );
+		$conversion_id = $opt['conversion_id'];
+
+		return $conversion_id;
+	}
+
+	// insert the Google AdWords tag into the page
+
+	private function get_conversion_label() {
+		$opt              = get_option( 'wgact_plugin_options' );
+		$conversion_label = $opt['conversion_label'];
+
+		return $conversion_label;
 	}
 }
 
