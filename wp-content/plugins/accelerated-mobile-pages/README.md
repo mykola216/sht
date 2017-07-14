@@ -1,10 +1,10 @@
 === AMP for WP - Accelerated Mobile Pages ===
 Contributors: mohammed_kaludi, ahmedkaludi, ampforwp
-Tags: AMP, accelerated mobile pages, mobile, amp project, google amp, amp wp, google, plugin, SEO
+Tags: AMP, accelerated mobile pages, mobile, amp project, google amp, amp wp, google, plugin, SEO, Instant Articles
 Donate link: https://www.paypal.me/Kaludi/5
 Requires at least: 3.0
-Tested up to: 4.7.5
-Stable tag: 0.9.51
+Tested up to: 4.8
+Stable tag: 0.9.54
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,23 +17,24 @@ AMP for WP automatically adds Accelerated Mobile Pages (Google AMP Project) func
 
 [youtube https://www.youtube.com/watch?v=jglJGmlZyos]
 
-> <strong>Extensions</strong><br>
-> Some useful extensions to extend AMP features, check [AMP Adsense Support](https://ampforwp.com/advanced-amp-ads/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin), [Email Opt-in Support](https://ampforwp.com/opt-in-forms/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) and [Call To Action Support](https://ampforwp.com/call-to-action/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin). To view more, go to our [Extensions page](https://ampforwp.com/extensions/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin).
->
-> <strong>Premium Support</strong><br>
-> We try our best to provide support on WordPress.org forums. However, One-on-one email support is available to people who bought the [Priority Support](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) only. 
->
-> <strong>Bug Reports</strong><br>
-> Bug reports for AMP for WP are [welcomed on GitHub](https://github.com/ahmedkaludi/Accelerated-Mobile-Pages). Please note GitHub is _not_ a support forum, and issues that aren't properly qualified as bugs will be closed.
+<strong>Extensions</strong><br>
+Some useful extensions to extend AMP features, check [AMP Adsense Support](https://ampforwp.com/advanced-amp-ads/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin), [Contact Form 7 Support](https://ampforwp.com/contact-form-7/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin), [Email Opt-in Support](https://ampforwp.com/opt-in-forms/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) and [Call To Action Support](https://ampforwp.com/call-to-action/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin). To view more, go to our [Extensions page](https://ampforwp.com/extensions/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin).
+
+<strong>Premium Support</strong><br>
+We try our best to provide support on WordPress.org forums. However, One-on-one email support is available to people who bought the [Priority Support](https://ampforwp.com/priority-support/#utm_source=wp_org&utm_medium=description-tab-pro-box&utm_campaign=AMP%20Plugin) only. 
+
+<strong>Bug Reports</strong><br>
+Bug reports for AMP for WP are [welcomed on GitHub](https://github.com/ahmedkaludi/Accelerated-Mobile-Pages). Please note GitHub is _not_ a support forum, and issues that aren't properly qualified as bugs will be closed.
 
 
 = Features: =
 
+* NEW - Contact Form 7 Support [More Info](https://ampforwp.com/contact-form-7/)
 * NEW - Page Builder for AMP! [Watch the Demo](http://ampforwp.com/demo/#pagebuilder) | [How to](https://ampforwp.com/tutorials/page-builder/)
 * NEW - Github Gist Support
 * NEW - Facebook Comments Support
 * NEW - Email Opt-in Subscription form support in AMP added
-* NEW - Call to Action boxes and notification bars 
+* Call to Action boxes and notification bars 
 * 9 Advertisement sizes - 2 More AD slots added recently
 * Comments Forms in AMP.
 * Native AMP Search functionality.
@@ -77,10 +78,11 @@ AMP for WP automatically adds Accelerated Mobile Pages (Google AMP Project) func
 * RTL Support
 * Custom AMP FrontPage
 * Notifications
-* Piwik & Segment.com, StatCounter (NEW) & Effective Measure (NEW) Support 
+* Chartbeat (NEW), Hi-stats (NEW), Yandex Metrika (NEW), Piwik, Segment.com, StatCounter, Effective Measure and comScore Support 
 * Incontent & DoubleClick Support
 * Great Support & Active Development.
 * Widgets & WooCommerce 
+* NEW - Facebook Instant Articles Support Added
 
 **[JOIN CHAT GROUP COMMUNITY](http://ampforwp.com/community/)**: Purpose of this group is to get proper suggestions and feedback from plugin users and the community so that we can make the plugin even better.
 
@@ -133,6 +135,41 @@ You can contact me using this url: http://ampforwp.com/contact/
 
 
 == Changelog ==
+
+= 0.9.54 (4th July 2017) =
+* View more details on https://ampforwp.com/new/
+* Facebook Instant Articles Support #862
+* Exclude Some Pages from Mobile Redirection #914
+* After 0.9.53 update amp-social-share js missing (critical issue) #924
+* Hooks added in Header (above and below)
+* View non AMP[Code improvement] #928
+* Pages are not supposed to show meta like this, especially Categories #894
+* Monarch plugin having design issues #925
+* Show AMP Hide AMP Check Box Fixes #794
+
+= 0.9.53 (19th June 2017) =
+* View more details on https://ampforwp.com/stability-validation-issues-59th-update/
+* Compatibility Issue with Rocket Lazy Load plugin #907
+* Link color issue with UX of Color Pickers in Design 3 #731
+* amp-analytics js appears more than once when Google tag manager is used #885
+* SEO by SQUIRRLY is adding analytics twice #678
+* Fatal error when WPSEO is activated #900
+* Design 3 Sticky header should have an option #625
+* Search form was enhanced, it can now be used on the websites without https certificate. That will certainly fix a lot of validation issues. #912
+* Yandex Metrika support in AMP #585
+* Histats Analytics Support #880
+* Chartbeat Analytics Support #882
+* Do not strip Rel from anchor tags #790
+* Design close Resulting Blank Screen in AMP Site #642
+* Logo size is not applying #817
+* AMP Publisher logo guidelines #162
+* Remove amp-social-share extension .js from Custom Frontpage #899
+* Add compatibility with Sassy Social Share #679
+* Remove Disallowed ‘like’ tag from Facebook Like button by Ultimate Facebook plugin
+
+= 0.9.51.1 (12th June 2017) =
+* Redirection issue after 0.9.51 Update.
+* Improved compatibility with plugins.
 
 = 0.9.51 (8th June 2017) =
 * View more details on https://ampforwp.com/page-builder-released-in-amp/

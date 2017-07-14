@@ -23,7 +23,15 @@ $extension_listing = '
         <div class="extension_btn">From: $19</div>
         </div>
     </a></li>
-    <li class="second"><a href="http://ampforwp.com/opt-in-forms/#utm_source=options-panel&utm_medium=extension-tab_opt-in-forms&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="second"><a href="http://ampforwp.com/contact-form-7/#utm_source=options-panel&utm_medium=extension-tab_cf7&utm_campaign=AMP%20Plugin" target="_blank">
+        <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/cf7.png" /></div>
+        <div class="extension_desc">
+        <h2>Contact Form 7</h2>
+        <p>Add Contact Us Form in AMP.</p>
+        <div class="extension_btn">From: $39</div>
+        </div>
+    </a></li>
+    <li class="first"><a href="http://ampforwp.com/opt-in-forms/#utm_source=options-panel&utm_medium=extension-tab_opt-in-forms&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/email.png" /></div>
         <div class="extension_desc">
         <h2>Email Opt-in Forms</h2>
@@ -31,7 +39,7 @@ $extension_listing = '
         <div class="extension_btn">From: $79</div>
         </div>
     </a></li>
-    <li class="first"><a href="http://ampforwp.com/call-to-action/#utm_source=options-panel&utm_medium=extension-tab_amp-cta&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="second"><a href="http://ampforwp.com/call-to-action/#utm_source=options-panel&utm_medium=extension-tab_amp-cta&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/mac-click.png" /></div>
         <div class="extension_desc">
         <h2>Call To Action (CTA)</h2>
@@ -39,7 +47,7 @@ $extension_listing = '
         <div class="extension_btn">From: $29</div>
         </div>
     </a></li>
-    <li class="second"><a href="http://ampforwp.com/custom-post-type/#utm_source=options-panel&utm_medium=extension-tab_custom-post-type&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="first"><a href="http://ampforwp.com/custom-post-type/#utm_source=options-panel&utm_medium=extension-tab_custom-post-type&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/comments.png" /></div>
         <div class="extension_desc">
         <h2>Custom Post Type</h2>
@@ -48,7 +56,7 @@ $extension_listing = '
         </div>
     </a></li>
 
-    <li class="first"><a href="http://ampforwp.com/acf-amp/#utm_source=options-panel&utm_medium=extension-tab_opt-in-forms&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="second"><a href="http://ampforwp.com/acf-amp/#utm_source=options-panel&utm_medium=extension-tab_opt-in-forms&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/acf.png" /></div>
         <div class="extension_desc">
         <h2>Advanced Custom Fields</h2>
@@ -56,7 +64,7 @@ $extension_listing = '
         <div class="extension_btn">From: $29</div>
         </div>
     </a></li>
-    <li class="second"><a href="http://ampforwp.com/doubleclick-for-publishers/#utm_source=options-panel&utm_medium=extension-tab_doubleclick&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="first"><a href="http://ampforwp.com/doubleclick-for-publishers/#utm_source=options-panel&utm_medium=extension-tab_doubleclick&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/dfp.png" /></div>
         <div class="extension_desc">
         <h2>DoubleClick For Publishers</h2>
@@ -66,7 +74,7 @@ $extension_listing = '
     </a></li>
 
 
-    <li class="first"><a href="http://ampforwp.com/amp-ratings/#utm_source=options-panel&utm_medium=extension-tab_amp-ratings&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="second"><a href="http://ampforwp.com/amp-ratings/#utm_source=options-panel&utm_medium=extension-tab_amp-ratings&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/star.png" /></div>
         <div class="extension_desc">
         <h2>Star Ratings</h2>
@@ -74,7 +82,7 @@ $extension_listing = '
         <div class="extension_btn">From: $19</div>
         </div>
     </a></li>
-    <li class="second"><a href="https://wordpress.org/plugins/amp-woocommerce/" target="_blank">
+    <li class="first"><a href="https://wordpress.org/plugins/amp-woocommerce/" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/woo.png" /></div>
         <div class="extension_desc">
         <h2>AMP WooCommerce</h2>
@@ -83,7 +91,7 @@ $extension_listing = '
         </div>
     </a></li>
 
-    <li class="first"><a href="http://ampforwp.com/amp-category-base-remove-support/#utm_source=options-panel&utm_medium=extension-tab_amp-category-base-remove-support&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="second"><a href="http://ampforwp.com/amp-category-base-remove-support/#utm_source=options-panel&utm_medium=extension-tab_amp-category-base-remove-support&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/puzzel.png" /></div>
         <div class="extension_desc">
         <h2>Category Base Removal</h2>
@@ -91,7 +99,7 @@ $extension_listing = '
         <div class="extension_btn">FREE</div>
         </div>
     </a></li>
-    <li class="second"><a href="https://ampforwp.com/extensions/#utm_source=options-panel&utm_medium=extension-tab_amp-more-comingsoon&utm_campaign=AMP%20Plugin" target="_blank">
+    <li class="first"><a href="https://ampforwp.com/extensions/#utm_source=options-panel&utm_medium=extension-tab_amp-more-comingsoon&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/comments.png" /></div>
         <div class="extension_desc">
         <h2>More Coming Soon</h2>
@@ -648,6 +656,18 @@ Redux::setArgs( "redux_builder_amp", $args );
                 ),
                 'default'  => '2'
             ),
+
+            array(
+                'id'        => 'amp-opt-sticky-head',
+                'type'      => 'switch',
+                'title'     => __('Make Header UnSticky','accelerated-mobile-pages'), 
+                'required' => array(
+                  array('amp-design-selector', '=' , '3')
+                ),
+                'desc'     => __('Turning it ON will remove the sticky head from the design.', 'accelerated-mobile-pages' ),
+                'default'  => '0'
+              ),
+
             array(
                 'id'        => 'amp-opt-color-rgba-colorscheme',
                 'type'      => 'color_rgba',
@@ -681,6 +701,20 @@ Redux::setArgs( "redux_builder_amp", $args );
                       array('amp-design-selector', '=' , '3')
                  )
               ),
+
+            array(
+                'id'        => 'amp-opt-color-rgba-link',
+                'type'      => 'color_rgba',
+                'title'     => __('Anchor Link Color','accelerated-mobile-pages'),
+                'default'   => array(
+                    'color'     => '#f42f42',
+                ),
+                'required' => array(
+                  array('amp-design-selector', '=' , '3')
+                )
+              ),
+
+
             array(
                     'id'        => 'amp-opt-color-rgba-headerelements',
                     'type'      => 'color_rgba',
@@ -721,7 +755,6 @@ Redux::setArgs( "redux_builder_amp", $args );
                 'required' => array(
                   array('amp-design-selector', '=' , '3')
                 ),
-                'desc'     => __('HTTPS is required for search to work on AMP pages.', 'accelerated-mobile-pages' ),
                 'default'  => '0'
             ),
 
@@ -733,7 +766,6 @@ Redux::setArgs( "redux_builder_amp", $args );
                 'required' => array(
                   array('amp-design-selector', '=' , '2')
                 ),
-                'desc'     => __('HTTPS is required for search to work on AMP pages.', 'accelerated-mobile-pages' ),
                 'default'  => '0'
             ),
 
@@ -745,7 +777,6 @@ Redux::setArgs( "redux_builder_amp", $args );
                 'required' => array(
                   array('amp-design-selector', '=' , '1')
                 ),
-                'desc'     => __('HTTPS is required for search to work on AMP pages.', 'accelerated-mobile-pages' ),
                 'default'  => '0'
             ),
     // Call Now button
@@ -879,6 +910,21 @@ Redux::setArgs( "redux_builder_amp", $args );
     		        'validate' => 'numeric',
                 'default'  => '3',
 	        ),
+         // Pages
+             array(
+                       'id' => 'Page',
+                       'type' => 'section',
+                       'title' => __('Pages', 'accelerated-mobile-pages'),
+                       'indent' => true,
+                   ),
+         // Meta ON/OFF Pages
+             array(
+                      'id'       => 'meta_page',
+                      'type'     => 'switch',
+                      'default'  =>  '0',
+                      'title'    => __('Meta For Pages', 'accelerated-mobile-pages'),
+                      'subtitle' => __('Enable or disable the Meta on Pages'),                  
+                  ),
 
 //             array(
 //                  'id' => 'ampforwp-comments-banner',
@@ -1666,6 +1712,9 @@ Redux::setArgs( "redux_builder_amp", $args );
                             '5' => __('comScore', 'accelerated-mobile-pages' ),
                             '6' => __('Effective Measure', 'accelerated-mobile-pages' ),
                             '7' => __('StatCounter', 'accelerated-mobile-pages' ),
+                            '8' => __('Histats Analytics', 'accelerated-mobile-pages'),
+                            '9' => __('Yandex Metrika', 'accelerated-mobile-pages'),
+                            '10' => __('Chartbeat Analytics', 'accelerated-mobile-pages'),
                         ),
                         'required' => array(
                           array('amp-use-gtm-option', '=' , '0'),
@@ -1756,6 +1805,38 @@ Redux::setArgs( "redux_builder_amp", $args );
                         'required' => array(
                         array('amp-analytics-select-option', '=' , '5')),
                       ),
+                       array(
+                          'id'       => 'histats-feild',
+                          'type'     => 'text',
+                          'title'    => __( 'Histats Analytics', 'accelerated-mobile-pages' ),
+                          'required' => array(
+                            array('amp-use-gtm-option', '=' , '0'),
+                            array('amp-analytics-select-option', '=' , '8')
+                          ),
+                          'subtitle' => __( 'Enter your Histats Analytics ID.', 'accelerated-mobile-pages' ),
+                          'desc' => 'Tutorial: <a href="https://ampforwp.com/tutorials/how-to-get-histats-analytics-id/">How to get Histats Analytics ID for AMP?</a>',
+                          'default'  => '',
+                      ),
+                       array(
+                        'id'            =>'amp-Yandex-Metrika-analytics-code',
+                        'type'          => 'text',
+                        'title'         => __('Yandex Metrika Analytics ID','accelerated-mobile-pages'),
+                        'default'       => '',
+                        'required' => array(
+                            array('amp-use-gtm-option', '=' , '0'),
+                            array('amp-analytics-select-option', '=' , '9')),
+                        'subtitle' => __( 'Enter your Counter ID.', 'accelerated-mobile-pages' ),
+                      ),
+                       array(
+                        'id'            =>'amp-Chartbeat-analytics-code',
+                        'type'          => 'text',
+                        'title'         => __('Chartbeat Analytics ID','accelerated-mobile-pages'),
+                        'default'       => '',
+                        'required' => array(
+                            array('amp-use-gtm-option', '=' , '0'),
+                            array('amp-analytics-select-option', '=' , '10')),
+                        'subtitle' => __( 'Enter your Account ID.', 'accelerated-mobile-pages' ),
+                      ),
 
                       //GTM
                         array(
@@ -1815,6 +1896,29 @@ Redux::setArgs( "redux_builder_amp", $args );
               'title'    => __('Default Structured Data Logo', 'accelerated-mobile-pages'),
               'subtitle' => __('Upload the logo you want to show in Google Structured Data. ', 'accelerated-mobile-pages'),
             ),
+             array(
+                'id'       => 'ampforwp-sd-logo-dimensions',
+                'title'    => __('Custom Logo Size', 'accelerated-mobile-pages'),
+                'type'     => 'switch',
+                'default'  => 0,
+            ),
+             array(
+                'id'       => 'ampforwp-sd-logo-width',
+                'type'     => 'text',
+                'title'    => __('Logo Width', 'accelerated-mobile-pages'),
+                'desc'    => __('Default width is 600 pixels', 'accelerated-mobile-pages'),
+                'default' => '600',
+                'required'=>array('ampforwp-sd-logo-dimensions','=','1'),
+            ),
+             array(
+                'id'       => 'ampforwp-sd-logo-height',
+                'type'     => 'text',
+                'title'    => __('Logo Height', 'accelerated-mobile-pages'),
+                'desc'    => __('Default height is 60 pixels', 'accelerated-mobile-pages'),
+                'default' => '60',
+                'required'=>array('ampforwp-sd-logo-dimensions','=','1'),
+
+            ),
             array(
               'id'      => 'amp-structured-data-placeholder-image',
               'type'    => 'media',
@@ -1841,6 +1945,32 @@ Redux::setArgs( "redux_builder_amp", $args );
              ),
         )
     ) );
+
+    // Contact Form SECTION
+   Redux::setSection( $opt_name, array(
+       'title'      => __( 'Contact Form', 'accelerated-mobile-pages' ),
+          'desc'       => 'Contact form 7 forms will automatically be converted into AMP compatible.',
+       'id'         => 'amp-contact',
+       'subsection' => true,
+       'fields'     => array(
+           array(
+               'id'        =>'amp-enable-contactform',
+               'type'      => 'switch',
+               'title'     => __('Contact Form 7 Support', 'accelerated-mobile-pages'),
+               'default'   => '',
+               'true'      => 'Enabled',
+               'false'     => 'Disabled',
+           ),
+           array(
+//        'title'    => __('Notification text', 'accelerated-mobile-pages'),
+        'id'   => 'info_normal',
+        'type' => 'info',
+           'required' => array('amp-enable-contactform', '=' , '1'),
+                'desc' => '<div style="    background: #FFF9C4;padding: 12px;line-height: 1.6;margin: -35px -12px 0 -12px;"><b>ONE LAST STEP REQUIRED:</b> This feature requires <a href="https://ampforwp.com/contact-form-7/#utm_source=options-panel&utm_medium=cf7-tab_cf7_installation_link&utm_campaign=AMP%20Plugin" target="_blank">Contact Form 7 extension</a>.<br /> <div style="margin-top:4px;">(<a href="https://ampforwp.com/contact-form-7/#utm_source=options-panel&utm_medium=cf7-tab_cf7_installation_link&utm_campaign=AMP%20Plugin" target="_blank">Click here for more info</a>)</div></div>',               
+           ),
+       ),
+
+   ) );
 
     // Notifications SECTION
    Redux::setSection( $opt_name, array(
@@ -2327,6 +2457,57 @@ Redux::setSection( $opt_name, array(
    ),
 
 ) );
+
+function fb_instant_article(){
+    $feedname = '';
+    $fb_instant_article_feed = ''; 
+    $feedname = 'instant_articles';
+    $fb_instant_article_feed = trailingslashit( site_url() ).$feedname ;
+    return esc_url( $fb_instant_article_feed );
+}
+// Facebook Instant Articles
+Redux::setSection( $opt_name, array(
+   'title'      => __( 'Facebook Instant Articles', 'accelerated-mobile-pages' ),
+   'id'         => 'fb-instant-article',
+   'subsection' => true,
+   'fields'     => array(
+                     array(
+                        'id'        =>'fb-instant-article-switch',
+                        'type'      => 'switch',
+                        'title'     => __('Facebook Instant Articles Support', 'accelerated-mobile-pages'),
+                        'default'   => 0, 
+                        'true'      => 'true',
+                        'false'     => 'false',
+                        'desc' => __('Re-Save permalink when you enable this option, please have a look <a href="https://ampforwp.com/flush-rewrite-urls/">here</a> on how to do it', 'accelerated-mobile-pages'),
+                    ),    
+                    array(
+                        'id'       => 'fb-instant-article-feed-url',
+                        'type' => 'info',
+                        'style' => 'critical',
+                        'desc' => fb_instant_article(),
+                        'title'    => __('Facebook Instant Articles Feed URL', 'accelerated-mobile-pages'),
+                        'required'  => array('fb-instant-article-switch', '=', 1)
+                    ),  
+                    array(
+                        'id'       => 'fb-instant-article-ads',
+                        'type'      => 'switch',
+                        'title'     => __('Advertisement', 'accelerated-mobile-pages'),
+                        'default'   => 0, 
+                        'true'      => 'true',
+                        'false'     => 'false',
+                        'desc' => __('Switch this on to enable advertising on Instant Article pages.', 'accelerated-mobile-pages'),
+                        'required'  => array('fb-instant-article-switch', '=', 1)
+                    ),
+                    array(
+                        'id'       => 'fb-instant-article-ad-id',
+                        'type'     => 'text',
+                        'title'    => __('Enter your Audience Network Placement ID', 'accelerated-mobile-pages'),
+                        'subtitle' => __('You can find out more about this <a href="https://developers.facebook.com/docs/instant-articles/monetization/audience-network">here</a>. ', 'accelerated-mobile-pages'),
+                        'required'  => array('fb-instant-article-ads', '=', 1)
+                    ),
+    ),
+   )
+);
 
 
 // Extension Section
