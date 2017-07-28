@@ -59,5 +59,28 @@
             });
         });
 
+
+        /* Init OWL carousel home page. */
+        $(".owl-carousel").owlCarousel({
+            loop:true,
+            nav:true,
+            margin:0,
+            // autoWidth:true,
+            // autoplay:true,
+            // autoplayTimeout:3000,
+            // autoplayHoverPause:true,
+            responsive:{
+                0:{
+                    items:1
+                },
+                768:{
+                    items:3
+                },
+                992:{
+                    items:7
+                }
+            }
+        });
+
     });// DOM ready
 })(jQuery);
