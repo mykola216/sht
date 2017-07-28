@@ -952,9 +952,13 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 		padding-bottom: 0.8em !important;
 		height: 26px;
 		text-align: center;
+		color: #000000 !important;
+		font: 300 14px/1.2em Open Sans, sans-serif !important;
+		line-height: 18px;
+		font-weight: 300;
 	}
 	ul.nav > li > a > span {
-		font-weight: 100 !important;
+		font-weight: 700 !important;
 	}
 }
 @media (max-width: 767px) {
