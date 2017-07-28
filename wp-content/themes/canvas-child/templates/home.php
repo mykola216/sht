@@ -211,7 +211,7 @@ $text_our_cli = get_field('text_our_clients', 'option');
                 $img = get_sub_field('img');
                 $link = get_sub_field('link');
                 ?>
-                <a href="<?php echo $link; ?>">
+                <a  href="<?php echo $link; ?>">
                     <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>">
                 </a>
             <?php endwhile; ?>

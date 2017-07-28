@@ -65,7 +65,7 @@
             loop:true,
             nav:true,
             margin:0,
-            // autoWidth:true,
+            autoWidth:true,
             // autoplay:true,
             // autoplayTimeout:3000,
             // autoplayHoverPause:true,

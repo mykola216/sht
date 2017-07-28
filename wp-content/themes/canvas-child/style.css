@@ -128,24 +128,25 @@ a.print-button {
           left: 55px; } }
 
 .advantages-header {
-  background-color: #f7f7f7;
-  max-width: 1140px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 1em; }
-  .advantages-header .adv-item {
-    display: inline-block;
-    margin-right: 40px;
-    color: #000000;
-    font-family: "Open Sans";
-    font-size: 12px;
-    font-weight: 400;
-    text-transform: uppercase;
-    line-height: 34px; }
-    .advantages-header .adv-item:before {
+  background-color: #f7f7f7; }
+  .advantages-header .wrap-adv {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1em; }
+    .advantages-header .wrap-adv .adv-item {
       display: inline-block;
-      content: url("images/v-header.png");
-      margin-right: 11px; }
+      margin-right: 40px;
+      color: #000000;
+      font-family: "Open Sans";
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 34px; }
+      .advantages-header .wrap-adv .adv-item:before {
+        display: inline-block;
+        content: url("images/v-header.png");
+        margin-right: 11px; }
 
 #navigation {
   margin: 0;
@@ -292,17 +293,41 @@ body.archive .product-excerpt {
 .products.recent .caption {
   display: none; }
 
-.clients .wrap-loop a {
-  display: inline-block;
-  width: 150px;
-  height: 150px;
-  border: 1px solid #e7e7e7;
-  background-color: #ffffff; }
-  .clients .wrap-loop a img {
-    height: auto;
-    width: auto;
-    margin-left: auto;
-    margin-right: auto; }
+.clients .wrap-loop {
+  max-width: 1065px;
+  margin-left: auto;
+  margin-right: auto; }
+  .clients .wrap-loop a {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    border: 1px solid #e7e7e7;
+    background-color: #ffffff;
+    position: relative; }
+    .clients .wrap-loop a img {
+      height: auto;
+      width: auto;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 37%; }
+  .clients .wrap-loop .owl-nav.disabled {
+    display: block;
+    position: relative; }
+    .clients .wrap-loop .owl-nav.disabled .owl-prev, .clients .wrap-loop .owl-nav.disabled .owl-next {
+      position: absolute;
+      top: -98px;
+      width: 34px;
+      height: 34px;
+      background: url("images/arrow-carousel.png") no-repeat center;
+      text-indent: -9999999px; }
+    .clients .wrap-loop .owl-nav.disabled .owl-prev {
+      left: -40px; }
+    .clients .wrap-loop .owl-nav.disabled .owl-next {
+      right: -40px;
+      transform: rotate(180deg); }
 
 /* nav_after module*/
 #nav_after_module {
