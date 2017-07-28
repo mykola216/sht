@@ -15,6 +15,9 @@ global $st_options;
 
 $text_our_team = get_field('our_team_home_text', 'option');
 $img_our_team = get_field('our_team_home', 'option');
+$title_our_cli = get_field('title_our_clients', 'option');
+$link_our_cli = get_field('link_our_clients', 'option');
+$text_our_cli = get_field('text_our_clients', 'option');
 
 ?>
 
@@ -197,3 +200,21 @@ $img_our_team = get_field('our_team_home', 'option');
 
 <!--Output the sharethis module-->
 <?php wc_get_template_part( 'templates/module', 'sharethis' ); ?>
+
+<section class="clients">
+    <a href="<?php echo $link_our_cli; ?>" class="home-title-module"><?php echo $title_our_cli; ?></a>
+    <?php echo $text_our_cli; ?>
+
+    <?php if ( have_rows('list_of_our_clients_repeater', 'option') ) : ?>
+        <div class="wrap-loop owl-carousel">
+            <?php while ( have_rows('list_of_our_clients_repeater', 'option') ) : the_row();
+                $img = get_sub_field('img');
+                $link = get_sub_field('link');
+                ?>
+                <a href="<?php echo $link; ?>">
+                    <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>">
+                </a>
+            <?php endwhile; ?>
+        </div>
+    <?php endif; ?>
+</section>
