@@ -10,9 +10,9 @@
 
 $d_s_logo = get_field('d_s_logo');
 $d_s_logo_image_url = $d_s_logo['url'];
-$d_s_logo_link = get_field('d_s_logo_link');
-$d_s_work_time = get_field('d_s_work_time');
-$d_s_phone_number = get_field('d_s_phone_number');
+$d_s_logo_link = get_field('d_s_logo_link', 'option');
+$d_s_work_time = get_field('d_s_work_time', 'option');
+$d_s_phone_number = get_field('d_s_phone_number', 'option');
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
