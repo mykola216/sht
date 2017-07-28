@@ -35,15 +35,17 @@ $d_s_phone_number = get_field('d_s_phone_number');
     </div>
 </section>
 <section class="advantages-header hidden-xs">
-    <?php $counter = 0; ?>
-    <?php if ( have_rows('advantages_repeater', 'option') ) : ?>
-            <?php while ( have_rows('advantages_repeater', 'option') ) : the_row();
-                $text = get_sub_field('text');
-                ?>
-                <div class="adv-item"><?php echo $text; ?></div>
-            <?php endwhile; ?>
+    <div class="wrap-adv">
+        <?php $counter = 0; ?>
+        <?php if ( have_rows('advantages_repeater', 'option') ) : ?>
+                <?php while ( have_rows('advantages_repeater', 'option') ) : the_row();
+                    $text = get_sub_field('text');
+                    ?>
+                    <div class="adv-item"><?php echo $text; ?></div>
+                <?php endwhile; ?>
 
-    <?php endif; ?>
+        <?php endif; ?>
+    </div>
 </section>
 <div id="wrapper">
 
