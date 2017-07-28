@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $st_options;
 ?>
 
-<div id="nav_after_module">
-	<span><?php echo esc_html( $st_options['working_time'] ); ?></span>
-	<?php get_search_form(); ?>
-</div>
+<!--div id="nav_after_module">
+	<span><?php //echo esc_html( $st_options['working_time'] ); ?></span>
+	<?php //get_search_form(); ?>
+</div!-->
