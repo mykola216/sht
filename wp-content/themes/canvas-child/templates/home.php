@@ -25,15 +25,19 @@ $text_our_cli = get_field('text_our_clients', 'option');
 	<?php echo do_shortcode( $st_options['slider_shortcode'] ); ?>
 </div>
 <section class="advantages-header visible-xs">
-    <?php if ( have_rows('advantages_repeater', 'option') ) : ?>
-        <?php while ( have_rows('advantages_repeater', 'option') ) : the_row();
-            $text = get_sub_field('text');
-            ?>
-            <div class="adv-item"><?php echo $text; ?></div>
-        <?php endwhile; ?>
+    <div class="wrap-adv">
+        <?php $counter = 0; ?>
+        <?php if ( have_rows('advantages_repeater', 'option') ) : ?>
+            <?php while ( have_rows('advantages_repeater', 'option') ) : the_row();
+                $text = get_sub_field('text');
+                ?>
+                <div class="adv-item"><?php echo $text; ?></div>
+            <?php endwhile; ?>
 
-    <?php endif; ?>
+        <?php endif; ?>
+    </div>
 </section>
+
 
 <a href="<?php echo  $st_options['best_sellers_url']; ?>" class="home-title-module"><?php echo $st_options['best_sellers_title']; ?></a>
 <!--Best Selling Products-->
@@ -211,7 +215,7 @@ $text_our_cli = get_field('text_our_clients', 'option');
                 $img = get_sub_field('img');
                 $link = get_sub_field('link');
                 ?>
-                <a  href="<?php echo $link; ?>">
+                <a  href="<?php echo $link; ?>" rel="nofollow">
                     <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>">
                 </a>
             <?php endwhile; ?>
