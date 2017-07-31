@@ -1469,4 +1469,8 @@ body #wrapper #content .button.gform_button_select_files:focus {
     border: 1px solid #eee !important; } }
 @media (min-width: 0px) and (max-width: 767px) {
   .nav-toggle.icon a {
-    display: none; } }
+    display: none; }
+
+  .nav-toggle:before {
+    content: url("images/mobile-menu-sht.png");
+    padding: 6px 7px 2px 2px; } }

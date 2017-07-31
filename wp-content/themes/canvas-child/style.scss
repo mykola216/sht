@@ -1676,4 +1676,8 @@ body #wrapper #content .button.gform_button_select_files:focus{
 	.nav-toggle.icon a {
 		display: none;
 	}
+	.nav-toggle:before {
+		content: url("images/mobile-menu-sht.png");
+		padding: 6px 7px 2px 2px;
+	}
 }
