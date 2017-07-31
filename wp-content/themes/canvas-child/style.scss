@@ -222,6 +222,9 @@ a.print-button/*:not(#print_button_id)*/ {
 			font-weight: 400;
 			text-transform: uppercase;
 			line-height: 34px;
+			@include mobile {
+				margin-right: 10px;
+			}
 			a {
 				color: #000 !important;
 			}
@@ -298,7 +301,7 @@ body.archive .product-excerpt{
 	}
 	@include mobile {
 		margin-top: 30px;
-		font-size: 24px;
+		font-size: 20px;
 		line-height: 35px;
 	}
 }
@@ -566,6 +569,11 @@ body.archive .product-excerpt{
 .header-widget .widget {
 	margin: 0 0 0 0;
 }
+.header-widget {
+	@include mobile {
+		margin: 0;
+	}
+}
 .header-widget .widget_search {
 	width: 100%;
 	max-width: 288px;
@@ -588,13 +596,17 @@ body.archive .product-excerpt{
 	}
 	@include note-net {
 		position: absolute;
-		top: 71px;
+		top: 48px;
 		left: 0;
-		right: -70px;
+		right: 0;
 		margin-right: auto !important;
+	}
+	@include netbook {
+		right: -63px;
 	}
 	@include mobile {
 		max-width: none;
+		margin-bottom: 10px !important;
 	}
 }
 .header-widget .widget.widget_w3cm-microcart {
@@ -624,7 +636,7 @@ body.archive .product-excerpt{
 		width: 32px;
 		height: 32px;
 	}
-	a[title='View Cart'] {
+	a.mini-cart-items {
 		color: #ffffff;
 		font-family: Helvetica;
 		font-size: 11px;
@@ -1128,6 +1140,9 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 }
 #logo {
 	margin-top: 27px;
+	@include tab-mob {
+		margin-top: 0;
+	}
 }
 @media (max-width: 767px) {
 	#navigation .menus.nav-icons-1 #main-nav > .menu-item .sub-menu > li > a[title='custom-i'] {
@@ -1153,6 +1168,9 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 }
 
 @media only screen and (min-width: 768px) {
+	#header {
+		margin-bottom: 40px !important;
+	}
 	#header .widget_metaslider_widget > div {
 		float: right;
 		@include netbook {
