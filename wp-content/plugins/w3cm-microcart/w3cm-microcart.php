@@ -35,7 +35,7 @@ class Microcart_Widget extends \WP_Widget {
 		$widget_content = apply_filters(
 			'w3cm-microcart-widget-content',
 			sprintf(
-				'<a href="/winkelwagen/" class="mini-cart-icon"></a> <a href="%s" title="%s">%s</a>',
+				'<a href="/winkelwagen/" class="mini-cart-icon"></a> <a href="%s" class="mini-cart-items" title="%s">%s</a>',
 				$cart->get_cart_url(),
 				__('View Cart', 'woocommerce'),
 				$items
