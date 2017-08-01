@@ -3,8 +3,8 @@ Contributors: msaari
 Donate link: https://www.relevanssi.com/buy-premium/
 Tags: search, relevance, better search
 Requires at least: 4.0
-Tested up to: 4.7.5
-Stable tag: 3.5.10
+Tested up to: 4.9
+Stable tag: 3.5.11.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -267,6 +267,18 @@ Each document database is full of useless words. All the little words that appea
 * Mohib Ebrahim for relentless bug hunting.
 
 == Changelog ==
+
+= 3.5.11.1 =
+* New filter: `relevanssi_allow_one_letter_highlights` lets you allow one-letter highlights. Just make the filter function return `true`.
+* New filter: `relevanssi_block_one_letter_searches` by default blocks one-letter searches. If you want to enable them, add a filter function that always returns `false`.
+* Fixed an undefined variable notice.
+
+= 3.5.11 =
+* Synonym indexing failed if synonyms contained a forward slash.
+* Highlighting HTML tags has been improved further.
+* New filter: `relevanssi_tag_before_tokenize` allows you to access tag content before indexing.
+* Relevanssi now actively blocks one-letter search terms, as they are generally pointless and can cause "out of memory" issues. One-letter search terms are no longer highlighted, either. These are usually caused by cases like "word's" being interpreted as "word s".
+* New filter: `relevanssi_disable_shortcodes_excerpt` lets you add more shortcodes to be disabled before excerpts are built.
 
 = 3.5.10 =
 * Some users got a fatal parse error. That shouldn't happen anymore.
@@ -1050,6 +1062,12 @@ Each document database is full of useless words. All the little words that appea
 * First published version.
 
 == Upgrade notice ==
+
+= 3.5.11.1 =
+* Minor bug fix, kills an error notice.
+
+= 3.5.11 =
+* Improvements in excerpts, new filters.
 
 = 3.5.10 =
 * Prevented a fatal error for some users, small bug fixes.

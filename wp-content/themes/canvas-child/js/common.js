@@ -59,5 +59,35 @@
             });
         });
 
+
+        /* Init OWL carousel home page. */
+        $(".owl-carousel").owlCarousel({
+            loop:true,
+            nav:true,
+            margin:0,
+            autoWidth:true,
+            // autoplay:true,
+            // autoplayTimeout:3000,
+            // autoplayHoverPause:true,
+            responsive:{
+                0:{
+                    items:1
+                },
+                768:{
+                    items:3
+                },
+                1198:{
+                    items:7
+                }
+            }
+        });
+
     });// DOM ready
 })(jQuery);
+(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/nl_NL/sdk.js#xfbml=1&version=v2.10";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));

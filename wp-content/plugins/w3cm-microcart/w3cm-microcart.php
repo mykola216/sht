@@ -28,19 +28,17 @@ class Microcart_Widget extends \WP_Widget {
 		$cart = $woocommerce->cart;
 
 		$items = sprintf(
-			_n('%d item', '%d items', $cart->cart_contents_count, 'woothemes'),
+			_n('%d', '%d', $cart->cart_contents_count, 'woothemes'),
 			$cart->cart_contents_count
 		);
 
 		$widget_content = apply_filters(
 			'w3cm-microcart-widget-content',
 			sprintf(
-				'%s: <a href="%s" title="%s">%s</a> %s',
-				__('Cart', 'woocommerce'),
+				'<a href="/winkelwagen/" class="mini-cart-icon"></a> <a href="%s" class="mini-cart-items" title="%s">%s</a>',
 				$cart->get_cart_url(),
 				__('View Cart', 'woocommerce'),
-				$items,
-				$cart->get_cart_total()
+				$items
 			)
 		);
 

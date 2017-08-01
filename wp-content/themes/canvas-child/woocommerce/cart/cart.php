@@ -4,15 +4,16 @@
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/cart/cart.php.
  *
- * HOWEVER, on occasion WooCommerce will need to update template files and you (the theme developer).
- * will need to copy the new files to your theme to maintain compatibility. We try to do this.
- * as little as possible, but it does happen. When this occurs the version of the template file will.
- * be bumped and the readme will list any important changes.
+ * HOWEVER, on occasion WooCommerce will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
  *
- * @see     http://docs.woothemes.com/document/template-structure/
+ * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.3.8
+ * @version 3.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -74,7 +75,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						?>
 					</td>
 
-					<td class="product-name" data-title="<?php _e( 'Product', 'woocommerce' ); ?>">
+					<td class="product-name" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
 						<?php
 							if ( ! $_product->is_visible() ) {
 								echo apply_filters( 'woocommerce_cart_item_name', $_product->get_title(), $cart_item, $cart_item_key ) . '&nbsp;';
@@ -92,7 +93,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						?>
 					</td>
 
-					<td class="product-price" data-title="<?php _e( 'Price', 'woocommerce' ); ?>">
+					<td class="product-price" data-title="<?php esc_attr_e( 'Price', 'woocommerce' ); ?>">
 						<?php
 							echo apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key );
 						?>
@@ -115,7 +116,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						?>
 					</td>
 
-					<td class="product-subtotal" data-title="<?php _e( 'Total', 'woocommerce' ); ?>">
+					<td class="product-subtotal" data-title="<?php esc_attr_e( 'Total', 'woocommerce' ); ?>">
 						<?php
 							echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key );
 						?>
