@@ -327,7 +327,8 @@ body.archive .product-excerpt {
     height: 150px;
     border: 1px solid #e7e7e7;
     background-color: #ffffff;
-    position: relative; }
+    position: relative;
+    transition: 0.4s; }
     .clients .wrap-loop a img {
       height: auto;
       width: auto;
@@ -337,6 +338,8 @@ body.archive .product-excerpt {
       left: 0;
       right: 0;
       top: 37%; }
+    .clients .wrap-loop a:hover, .clients .wrap-loop a:focus {
+      filter: grayscale(100%); }
   .clients .wrap-loop .owl-nav.disabled {
     display: block;
     position: relative; }
@@ -545,7 +548,7 @@ body.archive .product-excerpt {
       top: -43px; }
       .header-widget .widget.widget_w3cm-microcart #cart-widget-wishlist-link {
         background: url("images/wishlist-icon-header-mobile.png") no-repeat; }
-      .header-widget .widget.widget_w3cm-microcart a[title='View Cart'] {
+      .header-widget .widget.widget_w3cm-microcart a.mini-cart-items {
         background-color: #fff;
         border: 5px solid #fff;
         color: #000; } }
@@ -973,7 +976,8 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 @media (max-width: 767px) {
   ul.nav > li > a {
     font-weight: 700;
-    font-size: 16px; }
+    font-size: 17px;
+    text-transform: uppercase; }
 
   ul.nav > li > a > br {
     display: none; } }
@@ -985,7 +989,7 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
   padding-left: 50px !important;
   background-position: 15px 4px !important;
   margin-bottom: -1px;
-  background-color: #999 !important; }
+  background-color: rgba(153, 153, 153, 0.25) !important; }
 
 #logo {
   margin-top: 27px; }
@@ -1010,6 +1014,9 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
     padding: .5em 0.5em; } }
 #slider {
   overflow: hidden; }
+
+#navigation ul#main-nav > li.menu-item:first-child {
+  display: none; }
 
 @media only screen and (min-width: 768px) {
   #header {
@@ -1051,9 +1058,6 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 
   ul.nav ul {
     width: 16em; }
-
-  #navigation ul#main-nav > li.menu-item:first-child {
-    display: none; }
 
   #navigation .cart.no-rss-link {
     display: none; }
