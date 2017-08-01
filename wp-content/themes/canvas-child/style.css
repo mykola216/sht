@@ -481,7 +481,7 @@ body.archive .product-excerpt {
   @media (min-width: 992px) {
     .header-widget .widget_search {
       position: absolute;
-      top: 48px;
+      top: 49px;
       left: 0;
       right: 0;
       margin-right: auto !important; } }
