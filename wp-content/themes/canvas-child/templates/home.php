@@ -39,7 +39,7 @@ $text_our_cli = get_field('text_our_clients', 'option');
 </section>
 
 
-<a href="<?php echo  $st_options['best_sellers_url']; ?>" class="home-title-module"><?php echo $st_options['best_sellers_title']; ?></a>
+<a href="<?php echo  $st_options['best_sellers_url']; ?>" class="home-title-module without-border"><?php echo $st_options['best_sellers_title']; ?></a>
 <!--Best Selling Products-->
 <?php
 	canvas_child_top_products( array(
@@ -180,7 +180,6 @@ $text_our_cli = get_field('text_our_clients', 'option');
 	</div>
 </div>
 
-<hr>
 
 <!-- Our Team Module-->
 <section class="our-team">
