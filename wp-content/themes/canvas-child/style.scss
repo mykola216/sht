@@ -296,6 +296,9 @@ body.archive .product-excerpt{
 	color: #000000 !important;
 	border-top: 1px solid #aaaaaa;
 	text-decoration: none !important;
+	&.without-border {
+		border-top: 0;
+	}
 	&:hover {
 		text-decoration: none !important;
 	}
@@ -377,10 +380,16 @@ body.archive .product-excerpt{
 			}
 			&.large-img {
 				margin-bottom: 15px;
+				img {
+					max-height: 540px;
+				}
 			}
 			&.small-img  {
 				margin-bottom: 19px;
 				float: right;
+				img {
+					max-height: 260px;
+				}
 			}
 			&.one-row:last-child {
 				float: left;
@@ -430,6 +439,7 @@ body.archive .product-excerpt{
 			background-color: #ffffff;
 			position: relative;
 			transition: 0.4s;
+			filter: grayscale(100%);
 			img {
 				height: auto;
 				width: auto;
@@ -438,11 +448,11 @@ body.archive .product-excerpt{
 				position: absolute;
 				left: 0;
 				right: 0;
-				top: 37%;
+				top: 18%;
 			}
 			&:hover,
 			&:focus {
-				filter: grayscale(100%);
+				filter: grayscale(0);
 			}
 		}
 		.owl-nav.disabled {
