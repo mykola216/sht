@@ -353,6 +353,8 @@ body.archive .product-excerpt {
   .clients .wrap-loop .owl-nav.disabled {
     display: block;
     position: relative; }
+  .clients .wrap-loop .owl-nav {
+    position: relative; }
   .clients .wrap-loop .owl-prev, .clients .wrap-loop .owl-next {
     position: absolute;
     top: -98px;
