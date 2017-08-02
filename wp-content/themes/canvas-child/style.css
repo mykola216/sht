@@ -317,63 +317,59 @@ body.archive .product-excerpt {
 .products.recent .caption {
   display: none; }
 
-.clients .wrap-loop {
-  max-width: 1065px;
-  margin-left: auto;
-  margin-right: auto; }
-  @media (min-width: 992px) and (max-width: 1199px) {
-    .clients .wrap-loop {
-      max-width: 762px; } }
-  @media (min-width: 768px) and (max-width: 991px) {
-    .clients .wrap-loop {
-      max-width: 610px; } }
-  @media (min-width: 0px) and (max-width: 767px) {
-    .clients .wrap-loop {
-      max-width: 153px; } }
-  .clients .wrap-loop a {
-    display: inline-block;
-    width: 150px;
-    height: 150px;
-    border: 1px solid #e7e7e7;
-    background-color: #ffffff;
-    position: relative;
-    transition: 0.4s;
-    filter: grayscale(100%); }
-    .clients .wrap-loop a img {
-      height: auto;
-      width: auto;
-      margin-left: auto;
-      margin-right: auto;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 18%; }
-    .clients .wrap-loop a:hover, .clients .wrap-loop a:focus {
-      filter: grayscale(0); }
-  .clients .wrap-loop .owl-nav.disabled {
-    display: block;
-    position: relative; }
-  .clients .wrap-loop .owl-nav {
-    position: relative; }
-  .clients .wrap-loop .owl-prev, .clients .wrap-loop .owl-next {
-    position: absolute;
-    top: -98px;
-    width: 34px;
-    height: 34px;
-    background: url("images/arrow-carousel.png") no-repeat center;
-    text-indent: -9999999px;
-    z-index: 1; }
-    @media (min-width: 768px) and (max-width: 1199px) {
-      .clients .wrap-loop .owl-prev, .clients .wrap-loop .owl-next {
-        top: 60px; } }
+.clients {
+  overflow-x: hidden; }
+  .clients .wrap-loop {
+    max-width: 1065px;
+    margin-left: auto;
+    margin-right: auto; }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .clients .wrap-loop {
+        max-width: 762px; } }
+    @media (min-width: 768px) and (max-width: 991px) {
+      .clients .wrap-loop {
+        max-width: 610px; } }
     @media (min-width: 0px) and (max-width: 767px) {
-      .clients .wrap-loop .owl-prev, .clients .wrap-loop .owl-next {
-        top: 60px; } }
-  .clients .wrap-loop .owl-prev {
-    left: -40px; }
-  .clients .wrap-loop .owl-next {
-    right: -40px;
-    transform: rotate(180deg); }
+      .clients .wrap-loop {
+        max-width: 153px; } }
+    .clients .wrap-loop a {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+      border: 1px solid #e7e7e7;
+      background-color: #ffffff;
+      position: relative;
+      transition: 0.4s;
+      filter: grayscale(100%); }
+      .clients .wrap-loop a img {
+        height: auto;
+        width: auto;
+        margin-left: auto;
+        margin-right: auto;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 18%; }
+      .clients .wrap-loop a:hover, .clients .wrap-loop a:focus {
+        filter: grayscale(0); }
+    .clients .wrap-loop .owl-nav.disabled {
+      display: block;
+      position: relative; }
+    .clients .wrap-loop .owl-nav {
+      position: relative; }
+    .clients .wrap-loop .owl-prev, .clients .wrap-loop .owl-next {
+      position: absolute;
+      top: -98px;
+      width: 34px;
+      height: 34px;
+      background: url("images/arrow-carousel.png") no-repeat center;
+      text-indent: -9999999px;
+      z-index: 1; }
+    .clients .wrap-loop .owl-prev {
+      left: -37px; }
+    .clients .wrap-loop .owl-next {
+      right: -37px;
+      transform: rotate(180deg); }
 
 /* nav_after module*/
 #nav_after_module {
