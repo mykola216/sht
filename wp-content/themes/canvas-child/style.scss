@@ -418,6 +418,7 @@ body.archive .product-excerpt{
 	display: none;
 }
 .clients {
+	overflow-x: hidden;
 	.wrap-loop {
 		max-width: 1065px;
 		margin-left: auto;
@@ -470,18 +471,12 @@ body.archive .product-excerpt{
 			background: url("images/arrow-carousel.png") no-repeat center;
 			text-indent: -9999999px;
 			z-index: 1;
-			@include net-tablet {
-				top: 60px;
-			}
-			@include mobile {
-				top: 60px;
-			}
 		}
 		.owl-prev {
-			left: -40px;
+			left: -37px;
 		}
 		.owl-next {
-			right: -40px;
+			right: -37px;
 			transform: rotate(180deg);
 		}
 	}
