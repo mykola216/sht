@@ -432,6 +432,7 @@ body.archive .product-excerpt{
 		@include mobile {
 			max-width: 153px;
 		}
+
 		a {
 			display: inline-block;
 			width: 150px;
@@ -608,6 +609,9 @@ body.archive .product-excerpt{
 			height: 100%;
 			padding: 0 0 0 11px;
 			width: 79%;
+			&.active {
+				color: #000;
+			}
 		}
 	}
 	@include note-net {
