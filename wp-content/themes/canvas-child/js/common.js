@@ -82,6 +82,10 @@
             }
         });
 
+
+        $(".searchform").on('click', 'input', function () {
+           $(this).addClass('active');
+        });
     });// DOM ready
 })(jQuery);
 (function(d, s, id) {
