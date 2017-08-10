@@ -36,14 +36,9 @@ get_header();
 
                 <?php if(is_page(2677)) :
 
-                $title_our_cli = get_field('title_our_clients', 'option');
-                $link_our_cli = get_field('link_our_clients', 'option');
-                $text_our_cli = get_field('text_our_clients', 'option');
                 ?>
 
                     <section class="clients">
-                        <a href="<?php echo $link_our_cli; ?>" class="home-title-module"><?php echo $title_our_cli; ?></a>
-                        <?php echo $text_our_cli; ?>
 
                         <?php if ( have_rows('page_list_of_our_clients_repeater') ) : ?>
                             <div class="wrap-loop owl-carousel">
