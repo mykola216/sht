@@ -1016,7 +1016,7 @@ function canvas_child_add_сhange_button( $html ) {
 	$html .= sprintf(
 		'<a href="%s" class="button">%s</a>',
 		WC()->cart->get_cart_url(),
-		__('Update Cart', 'woocommerce')
+		__('Winkelmand bijwerken', 'woocommerce')
 	);
 
 	return $html;
