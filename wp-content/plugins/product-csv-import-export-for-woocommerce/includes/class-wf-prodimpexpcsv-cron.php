@@ -51,6 +51,13 @@ class WF_ProdImpExpCsv_Cron {
 
     public function wf_scheduled_export_products() {
         include_once( 'exporter/class-wf-prodimpexpcsv-exporter.php' );
+        
+        if (isset($this->settings['pro_auto_export_profile'])){
+            $_POST['auto_export_profile'] = $this->settings['pro_auto_export_profile'];
+        }else{
+            $_POST['auto_export_profile'] = '';
+        }
+         
         WF_ProdImpExpCsv_Exporter::do_export('product');
     }
 

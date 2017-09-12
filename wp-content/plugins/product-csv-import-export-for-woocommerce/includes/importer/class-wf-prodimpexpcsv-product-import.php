@@ -708,13 +708,13 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 	        $query .= ' AND post_title = %s';
 	        $args[] = $post_title;
 	    }
-            */
+            
 
 	    if ( ! empty ( $post_name ) ) {
 	    	$query .= ' AND post_name = %s';
 	    	$args[] = $post_name;
 	    }
-
+            */
 	    if ( ! empty ( $args ) ) {
 	    	$posts_that_exist = $wpdb->get_col( $wpdb->prepare( $query, $args ) );
 
@@ -1481,17 +1481,15 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 		if($ftp_conn == false){
 			$error_message = "There is connection problem\n";
 		}
-		
-		if(empty($error_message)){
-			if(ftp_login($ftp_conn, $ftp_user, $ftp_password) == false){
+		else
+		{
+			if(! @ftp_login($ftp_conn, $ftp_user, $ftp_password)){
 				$error_message = "Not able to login \n";
 			}
 		}
-
-		ftp_pasv($ftp_conn, TRUE);
 		
 		if(empty($error_message)){
-
+			ftp_pasv($ftp_conn, TRUE);
 			if (ftp_get($ftp_conn, ABSPATH.$local_file, $server_file, FTP_BINARY)) {
 				$error_message =  "";
 				$success = true;
@@ -1500,7 +1498,9 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 			}
 		}
 		
+		if($ftp_conn != false){
 		ftp_close($ftp_conn);
+		}
 		if($success){
 			$this->file_url = $local_file;
 		}else{

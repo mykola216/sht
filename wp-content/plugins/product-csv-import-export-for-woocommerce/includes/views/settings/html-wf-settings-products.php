@@ -10,12 +10,14 @@ $pro_enable_ftp_ie         	= isset( $settings['pro_enable_ftp_ie'] ) ? $setting
 $pro_auto_export         	= isset( $settings['pro_auto_export'] ) ? $settings['pro_auto_export'] : 'Disabled';
 $pro_auto_export_start_time = isset( $settings['pro_auto_export_start_time'] ) ? $settings['pro_auto_export_start_time'] : '';
 $pro_auto_export_interval   = isset( $settings['pro_auto_export_interval'] ) ? $settings['pro_auto_export_interval'] : '';
+$pro_auto_export_profile    = isset( $settings['pro_auto_export_profile'] ) ? $settings['pro_auto_export_profile'] : '';
 
 $pro_auto_import         	= isset( $settings['pro_auto_import'] ) ? $settings['pro_auto_import'] : 'Disabled';
 $pro_auto_import_start_time = isset( $settings['pro_auto_import_start_time'] ) ? $settings['pro_auto_import_start_time'] : '';
 $pro_auto_import_interval   = isset( $settings['pro_auto_import_interval'] ) ? $settings['pro_auto_import_interval'] : '';
 $pro_auto_import_profile    = isset( $settings['pro_auto_import_profile'] ) ? $settings['pro_auto_import_profile'] : '';
 $pro_auto_import_merge    = isset( $settings['pro_auto_import_merge'] ) ? $settings['pro_auto_import_merge'] : 0;
+$pro_auto_import_skip    = isset( $settings['pro_auto_import_skip'] ) ? $settings['pro_auto_import_skip'] : 0;
 
 //review
 
@@ -151,6 +153,27 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 							<input type="text" name="pro_auto_export_interval" id="pro_auto_export_interval"  value="<?php echo $pro_auto_export_interval; ?>"  />
 						</td>
 					</tr>
+                                        
+                                        <?php
+                                        $pro_exp_mapping_from_db = get_option('xa_prod_csv_export_mapping');
+                                        if (!empty($pro_exp_mapping_from_db)) {
+                                            ?>
+                                            <tr>
+                                                <th>
+                                                    <label for="pro_auto_export_profile"><?php _e('Select an export mapping file.'); ?></label>
+                                                </th>
+                                                <td>
+                                                    <select name="pro_auto_export_profile">
+                                                        <option value="">--Select--</option>
+                                                        <?php foreach ($pro_exp_mapping_from_db as $key => $value) { ?>
+                                                            <option value="<?php echo $key; ?>" <?php selected($key, $pro_auto_export_profile); ?>><?php echo $key; ?></option>
+
+                                                        <?php } ?>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                        
 				</tbody>
 				
 				
@@ -194,6 +217,14 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 						</th>
 						<td>
 							<input type="checkbox" name="pro_auto_import_merge" id="pro_auto_import_merge"  class="checkbox" <?php checked( $pro_auto_import_merge , 1 ); ?> />
+						</td>
+					</tr>
+                                        <tr>
+						<th>
+							<label for="pro_auto_import_skip"><?php _e( 'Skip new product', 'wf_csv_import_export' ); ?></label>
+						</th>
+						<td>
+							<input type="checkbox" name="pro_auto_import_skip" id="pro_auto_import_skip"  class="checkbox" <?php checked( $pro_auto_import_skip , 1 ); ?> />
 						</td>
 					</tr>
 					
