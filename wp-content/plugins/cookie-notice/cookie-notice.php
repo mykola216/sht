@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cookie Notice
 Description: Cookie Notice allows you to elegantly inform users that your site uses cookies and to comply with the EU cookie law regulations.
-Version: 1.2.38
+Version: 1.2.39
 Author: dFactory
 Author URI: http://www.dfactory.eu/
 Plugin URI: http://www.dfactory.eu/plugins/cookie-notice/
@@ -34,7 +34,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/upgrade.php' );
  * Cookie Notice class.
  *
  * @class Cookie_Notice
- * @version	1.2.38
+ * @version	1.2.39
  */
 class Cookie_Notice {
 
@@ -50,6 +50,7 @@ class Cookie_Notice {
 			'refuse_text'					=> '',
 			'refuse_opt'					=> 'no',
 			'refuse_code'					=> '',
+			'redirection'					=> false,
 			'see_more'						=> 'no',
 			'link_target'					=> '_blank',
 			'time'							=> 'month',
@@ -70,7 +71,7 @@ class Cookie_Notice {
 			'translate'						=> true,
 			'deactivation_delete'			=> 'no'
 		),
-		'version'							=> '1.2.38'
+		'version'							=> '1.2.39'
 	);
 	private $positions 			= array();
 	private $styles 			= array();
@@ -296,6 +297,7 @@ class Cookie_Notice {
 		add_settings_field( 'cn_link_target', __( 'Link target', 'cookie-notice' ), array( $this, 'cn_link_target' ), 'cookie_notice_options', 'cookie_notice_configuration' );
 		add_settings_field( 'cn_refuse_opt', __( 'Refuse button', 'cookie-notice' ), array( $this, 'cn_refuse_opt' ), 'cookie_notice_options', 'cookie_notice_configuration' );
 		add_settings_field( 'cn_refuse_code', __( 'Script blocking', 'cookie-notice' ), array( $this, 'cn_refuse_code' ), 'cookie_notice_options', 'cookie_notice_configuration' );
+		add_settings_field( 'cn_redirection', __( 'Reloading', 'cookie-notice' ), array( $this, 'cn_redirection' ), 'cookie_notice_options', 'cookie_notice_configuration' );
 		add_settings_field( 'cn_on_scroll', __( 'On scroll', 'cookie-notice' ), array( $this, 'cn_on_scroll' ), 'cookie_notice_options', 'cookie_notice_configuration' );
 		add_settings_field( 'cn_time', __( 'Cookie expiry', 'cookie-notice' ), array( $this, 'cn_time' ), 'cookie_notice_options', 'cookie_notice_configuration' );
 		add_settings_field( 'cn_script_placement', __( 'Script placement', 'cookie-notice' ), array( $this, 'cn_script_placement' ), 'cookie_notice_options', 'cookie_notice_configuration' );
@@ -362,7 +364,7 @@ class Cookie_Notice {
 			</div>
 		</fieldset>';
 	}
-	
+
 	/**
 	 * Non functional cookies code.
 	 */
@@ -372,6 +374,14 @@ class Cookie_Notice {
 				<textarea name="cookie_notice_options[refuse_code]" class="large-text" cols="50" rows="8">' . html_entity_decode( trim( wp_kses( $this->options['general']['refuse_code'], apply_filters( 'cn_refuse_code_allowed_html', array( 'script' => array( 'type' => array(), 'src' => array(), 'charset' => array(), 'async' => array() ) ) ) ) ) ) . '</textarea>
 				<p class="description">' . __( 'Enter non functional cookies Javascript code here (for e.g. Google Analitycs) to be used after cookies are accepted.', 'cookie-notice' ) . '</br>' . __( 'To get the cookie notice status use <code>cn_cookies_accepted()</code> function.', 'cookie-notice' ) . '</p>
 			</div>';
+	}
+
+	/**
+	 * Redirection on cookie accept.
+	 */
+	public function cn_redirection() {
+		echo '
+			<label><input id="cn_redirection" type="checkbox" name="cookie_notice_options[redirection]" value="1" ' . checked( true, $this->options['general']['redirection'], false ) . ' />' . __( 'Enable to reload the page after cookies are accepted.', 'cookie-notice' ) . '</label>';
 	}
 
 	/**
@@ -596,7 +606,6 @@ class Cookie_Notice {
 			return $input;
 
 		if ( isset( $_POST['save_cookie_notice_options'] ) ) {
-
 			// position
 			$input['position'] = sanitize_text_field( isset( $input['position'] ) && in_array( $input['position'], array_keys( $this->positions ) ) ? $input['position'] : $this->defaults['general']['position'] );
 
@@ -629,7 +638,10 @@ class Cookie_Notice {
 			
 			// on scroll
 			$input['on_scroll'] = (bool) isset( $input['on_scroll'] ) ? 'yes' : 'no';
-			
+
+			// on scroll
+			$input['redirection'] = isset( $input['redirection'] );
+
 			// on scroll offset
 			$input['on_scroll_offset'] = absint( isset( $input['on_scroll_offset'] ) && $input['on_scroll_offset'] !== '' ? $input['on_scroll_offset'] : $this->defaults['general']['on_scroll_offset'] );
 
@@ -716,7 +728,7 @@ class Cookie_Notice {
 				. '<div class="cookie-notice-container"><span id="cn-notice-text">'. $options['message_text'] .'</span>'
 				. '<a href="#" id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie ' . $options['button_class'] . ($options['css_style'] !== 'none' ? ' ' . $options['css_style'] : '') . '">' . $options['accept_text'] . '</a>'
 				. ($options['refuse_opt'] === 'yes' ? '<a href="#" id="cn-refuse-cookie" data-cookie-set="refuse" class="cn-set-cookie ' . $options['button_class'] . ($options['css_style'] !== 'none' ? ' ' . $options['css_style'] : '') . '">' . $options['refuse_text'] . '</a>' : '' )
-				. ($options['see_more'] === 'yes' ? '<a href="' . ($options['see_more_opt']['link_type'] === 'custom' ? $options['see_more_opt']['link'] : get_permalink( $options['see_more_opt']['id'] )) . '" target="' . $options['link_target'] . '" id="cn-more-info" class="' . $options['button_class'] . ($options['css_style'] !== 'none' ? ' ' . $options['css_style'] : '') . '">' . $options['see_more_opt']['text'] . '</a>' : '') . '
+				. ($options['see_more'] === 'yes' ? '<a href="' . ($options['see_more_opt']['link_type'] === 'custom' ? $options['see_more_opt']['link'] : get_permalink( $options['see_more_opt']['id'] )) . '" target="' . $options['link_target'] . '" id="cn-more-info" class="cn-more-info ' . $options['button_class'] . ($options['css_style'] !== 'none' ? ' ' . $options['css_style'] : '') . '">' . $options['see_more_opt']['text'] . '</a>' : '') . '
 				</div>
 			</div>';
 
@@ -833,16 +845,20 @@ class Cookie_Notice {
 		);
 
 		wp_localize_script(
-			'cookie-notice-front', 'cnArgs', array(
-				'ajaxurl'				=> admin_url( 'admin-ajax.php' ),
-				'hideEffect'			=> $this->options['general']['hide_effect'],
-				'onScroll'				=> $this->options['general']['on_scroll'],
-				'onScrollOffset'		=> $this->options['general']['on_scroll_offset'],
-				'cookieName'			=> self::$cookie['name'],
-				'cookieValue'			=> self::$cookie['value'],
-				'cookieTime'			=> $this->times[$this->options['general']['time']][1],
-				'cookiePath'			=> ( defined( 'COOKIEPATH' ) ? COOKIEPATH : '' ),
-				'cookieDomain'			=> ( defined( 'COOKIE_DOMAIN' ) ? COOKIE_DOMAIN : '' )
+			'cookie-notice-front',
+			'cnArgs',
+			array(
+				'ajaxurl'			=> admin_url( 'admin-ajax.php' ),
+				'hideEffect'		=> $this->options['general']['hide_effect'],
+				'onScroll'			=> $this->options['general']['on_scroll'],
+				'onScrollOffset'	=> $this->options['general']['on_scroll_offset'],
+				'cookieName'		=> self::$cookie['name'],
+				'cookieValue'		=> self::$cookie['value'],
+				'cookieTime'		=> $this->times[$this->options['general']['time']][1],
+				'cookiePath'		=> ( defined( 'COOKIEPATH' ) ? COOKIEPATH : '' ),
+				'cookieDomain'		=> ( defined( 'COOKIE_DOMAIN' ) ? COOKIE_DOMAIN : '' ),
+				'redirection'		=> $this->options['general']['redirection'],
+				'cache'				=> defined( 'WP_CACHE' ) && WP_CACHE
 			)
 		);
 

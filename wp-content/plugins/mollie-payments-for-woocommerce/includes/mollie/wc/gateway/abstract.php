@@ -49,6 +49,7 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
         $this->id           = strtolower(get_class($this));
         // Set gateway title (visible in admin)
         $this->method_title = 'Mollie - ' . $this->getDefaultTitle();
+        $this->method_description = $this->getSettingsDescription();
 
         // Load the settings.
         $this->init_form_fields();
@@ -135,8 +136,15 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function getIconUrl ()
     {
-        return Mollie_WC_Plugin::getPluginUrl('/assets/images/' . $this->getMollieMethodId() . '.png');
+        return Mollie_WC_Plugin::getPluginUrl('assets/images/' . $this->getMollieMethodId() . '.png');
     }
+
+	/**
+	 * @return string
+	 */
+	public function getIssuerIconUrl( $issuer_id ) {
+		return Mollie_WC_Plugin::getPluginUrl( 'assets/images/' . $issuer_id . '.png' );
+	}
 
     protected function _initIcon ()
     {
@@ -345,13 +353,28 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
 		        Mollie_WC_Plugin::debug( $this->id . ': Payment ' . $payment->id . ' (' . $payment->mode . ') created for order ' . $order->get_id() );
 	        }
 
-            // Set initial status
-            // Status is only updated if the new status is not the same as the default order status (pending)
-            $this->updateOrderStatus(
-                $order,
-                $initial_order_status,
-                __('Awaiting payment confirmation.', 'mollie-payments-for-woocommerce') . "\n"
-            );
+	        // Update initial order status for payment methods where the payment status will be delivered after a couple of days.
+	        // See: https://www.mollie.com/nl/docs/status#expiry-times-per-payment-method
+	        // Status is only updated if the new status is not the same as the default order status (pending)
+	        if ( ( $payment->method == 'banktransfer' ) || ( $payment->method == 'directdebit' ) ) {
+
+		        // Don't change the status of the order if it's Partially Paid
+		        // This adds support for WooCommerce Deposits (by Webtomizer)
+		        // See https://github.com/mollie/WooCommerce/issues/138
+
+		        $order_status = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? $order->status : $order->get_status();
+
+		        if ( $order_status != 'wc-partially-paid ' ) {
+
+			        $this->updateOrderStatus(
+				        $order,
+				        $initial_order_status,
+				        __( 'Awaiting payment confirmation.', 'mollie-payments-for-woocommerce' ) . "\n"
+			        );
+
+		        }
+	        }
+
 
             $order->add_order_note(sprintf(
             /* translators: Placeholder 1: Payment method title, placeholder 2: payment ID */
@@ -360,7 +383,11 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
                 $payment->id . ($payment->mode == 'test' ? (' - ' . __('test mode', 'mollie-payments-for-woocommerce')) : '')
             ));
 
-            Mollie_WC_Plugin::debug("Redirect user to payment URL: {$payment->getPaymentUrl()}");
+	        if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+		        Mollie_WC_Plugin::debug( "For order " . $order->id . " redirect user to payment URL: {$payment->getPaymentUrl()}" );
+	        } else {
+		        Mollie_WC_Plugin::debug( "For order " . $order->get_id() . " redirect user to payment URL: {$payment->getPaymentUrl()}" );
+	        }
 
             return array(
                 'result'   => 'success',
@@ -608,8 +635,8 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
             return;
         }
 
-        $order_id    = $_GET['order_id'];
-        $key         = $_GET['key'];
+	    $order_id = sanitize_text_field( $_GET['order_id'] );
+	    $key      = sanitize_text_field( $_GET['key'] );
 
         $data_helper = Mollie_WC_Plugin::getDataHelper();
         $order       = $data_helper->getWcOrder($order_id);
@@ -629,14 +656,14 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         // No Mollie payment id provided
-        if (empty($_REQUEST['id']))
+        if (empty($_POST['id']))
         {
             Mollie_WC_Plugin::setHttpResponseCode(400);
             Mollie_WC_Plugin::debug(__METHOD__ . ': No payment ID provided.', true);
             return;
         }
 
-        $payment_id = $_REQUEST['id'];
+	    $payment_id = sanitize_text_field( $_POST['id'] );
         $test_mode  = $data_helper->getActiveMolliePaymentMode($order_id) == 'test';
 
         // Load the payment from Mollie, do not use cache
@@ -654,15 +681,6 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
         {
             Mollie_WC_Plugin::setHttpResponseCode(400);
             Mollie_WC_Plugin::debug(__METHOD__ . ": Order ID does not match order_id in payment metadata. Payment ID {$payment->id}, order ID $order_id");
-            return;
-        }
-
-        // Payment requires different gateway, payment method changed on Mollie platform?
-        $isValidPaymentMethod = $this->isValidPaymentMethod($payment);
-        if (!$isValidPaymentMethod)
-        {
-            Mollie_WC_Plugin::setHttpResponseCode(400);
-            Mollie_WC_Plugin::debug($this->id . ": Invalid gateway. This gateways can process Mollie " . $this->getMollieMethodId() . " payments. This payment has payment method " . $payment->method, true);
             return;
         }
 
@@ -719,22 +737,21 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
 	}
 
     /**
-     * @param $payment
-     * @return bool
-     */
-    protected function isValidPaymentMethod($payment)
-    {
-        $isValidPaymentMethod =  $payment->method == $this->getMollieMethodId();
-        return $isValidPaymentMethod;
-    }
-
-    /**
      * @param WC_Order $order
      * @param Mollie_API_Object_Payment $payment
      */
     protected function onWebhookPaid(WC_Order $order, Mollie_API_Object_Payment $payment)
     {
-        Mollie_WC_Plugin::debug(__METHOD__ . ' called.');
+
+	    // Get order ID in the correct way depending on WooCommerce version
+	    if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+		    $order_id = $order->id;
+	    } else {
+		    $order_id = $order->get_id();
+	    }
+
+	    // Add messages to log
+	    Mollie_WC_Plugin::debug( __METHOD__ . ' called for order ' . $order_id );
 
         // WooCommerce 2.2.0 has the option to store the Payment transaction id.
         $woo_version = get_option('woocommerce_version', 'Unknown');
@@ -755,6 +772,10 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
             $paymentMethodTitle,
             $payment->id . ($payment->mode == 'test' ? (' - ' . __('test mode', 'mollie-payments-for-woocommerce')) : '')
         ));
+
+	    // Remove (old) cancelled payments from this order
+	    Mollie_WC_Plugin::getDataHelper()->unsetCancelledMolliePaymentId( $order_id );
+
     }
 
     /**
@@ -777,18 +798,21 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
      */
     protected function onWebhookCancelled(WC_Order $order, Mollie_API_Object_Payment $payment)
     {
-        Mollie_WC_Plugin::debug(__METHOD__ . ' called.');
 
-	    // Unset active Mollie payment id
+	    // Get order ID in the correct way depending on WooCommerce version
 	    if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
-		    Mollie_WC_Plugin::getDataHelper()
-		                    ->unsetActiveMolliePayment($order->id)
-		                    ->setCancelledMolliePaymentId($order->id, $payment->id);
+		    $order_id = $order->id;
 	    } else {
-		    Mollie_WC_Plugin::getDataHelper()
-		                    ->unsetActiveMolliePayment($order->get_id())
-		                    ->setCancelledMolliePaymentId($order->get_id(), $payment->id);
+		    $order_id = $order->get_id();
 	    }
+
+	    // Add messages to log
+	    Mollie_WC_Plugin::debug( __METHOD__ . ' called for order ' . $order_id );
+
+	    Mollie_WC_Plugin::getDataHelper()
+		                    ->unsetActiveMolliePayment( $order_id, $payment->id )
+		                    ->setCancelledMolliePaymentId( $order_id, $payment->id );
+
 
         // New order status
         $new_order_status = self::STATUS_PENDING;
@@ -819,7 +843,36 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
      */
     protected function onWebhookExpired(WC_Order $order, Mollie_API_Object_Payment $payment)
     {
-        Mollie_WC_Plugin::debug(__METHOD__ . ' called.');
+
+	    // Get order ID in correct way depending on WooCommerce version
+	    if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+		    $order_id = $order->id;
+		    $mollie_payment_id = get_post_meta( $order_id, '_mollie_payment_id', $single = true );
+	    } else {
+		    $order_id = $order->get_id();
+		    $mollie_payment_id = $order->get_meta( '_mollie_payment_id', true );
+	    }
+
+	    // Add messages to log
+	    Mollie_WC_Plugin::debug( __METHOD__ . ' called for order ' . $order_id );
+
+	    // Get payment method title for use in log messages and order notes
+	    $paymentMethodTitle = $this->getPaymentMethodTitle($payment);
+
+	    // Check that this payment is the most recent, based on Mollie Payment ID from post meta, do not cancel the order if it isn't
+	    if ( $mollie_payment_id != $payment->id) {
+		    Mollie_WC_Plugin::debug( __METHOD__ . ' called for order ' . $order_id . ' and payment ' . $payment->id . ', not processed because of a newer pending payment ' . $mollie_payment_id );
+
+		    $order->add_order_note(sprintf(
+		    /* translators: Placeholder 1: payment method title, placeholder 2: payment ID */
+			    __('%s payment expired (%s) but order not cancelled because of another pending payment (%s).', 'mollie-payments-for-woocommerce'),
+			    $paymentMethodTitle,
+			    $payment->id . ($payment->mode == 'test' ? (' - ' . __('test mode', 'mollie-payments-for-woocommerce')) : ''),
+			    $mollie_payment_id
+		    ));
+
+	    	return;
+	    }
 
         // New order status
         $new_order_status = self::STATUS_CANCELLED;
@@ -833,49 +886,56 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
         // Cancel order
         $this->updateOrderStatus($order, $new_order_status);
 
-        $paymentMethodTitle = $this->getPaymentMethodTitle($payment);
-
         $order->add_order_note(sprintf(
         /* translators: Placeholder 1: payment method title, placeholder 2: payment ID */
             __('%s payment expired (%s).', 'mollie-payments-for-woocommerce'),
             $paymentMethodTitle,
             $payment->id . ($payment->mode == 'test' ? (' - ' . __('test mode', 'mollie-payments-for-woocommerce')) : '')
         ));
+
+	    // Remove (old) cancelled payments from this order
+	    Mollie_WC_Plugin::getDataHelper()->unsetCancelledMolliePaymentId( $order_id );
+
     }
 
     /**
      * @param WC_Order $order
      * @return string
      */
-    public function getReturnRedirectUrlForOrder(WC_Order $order)
-    {
-        $data_helper = Mollie_WC_Plugin::getDataHelper();
+	public function getReturnRedirectUrlForOrder( WC_Order $order ) {
+		$data_helper = Mollie_WC_Plugin::getDataHelper();
 
-	    $hasCancelledMolliePayment = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? $data_helper->hasCancelledMolliePayment($order->id) : $data_helper->hasCancelledMolliePayment($order->get_id());;
 
-        if ($hasCancelledMolliePayment)
-        {
-            Mollie_WC_Plugin::addNotice(__('You have cancelled your payment. Please complete your order with a different payment method.', 'mollie-payments-for-woocommerce'));
+		if ( $this->orderNeedsPayment( $order ) ) {
 
-            if (method_exists($order, 'get_checkout_payment_url'))
-            {
-                /*
-                 * Return to order payment page
-                 */
-                return $order->get_checkout_payment_url(false);
-            }
+			$hasCancelledMolliePayment = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? $data_helper->hasCancelledMolliePayment( $order->id ) : $data_helper->hasCancelledMolliePayment( $order->get_id() );;
 
-            /*
-             * Return to cart
-             */
-            return WC()->cart->get_checkout_url();
-        }
+			if ( $hasCancelledMolliePayment ) {
 
-        /*
-         * Return to order received page
-         */
-        return $this->get_return_url($order);
-    }
+				Mollie_WC_Plugin::addNotice( __( 'You have cancelled your payment. Please complete your order with a different payment method.', 'mollie-payments-for-woocommerce' ) );
+
+				if ( method_exists( $order, 'get_checkout_payment_url' ) ) {
+					/*
+					 * Return to order payment page
+					 */
+					return $order->get_checkout_payment_url( false );
+				}
+
+				/*
+				 * Return to cart
+				 */
+
+				return WC()->cart->get_checkout_url();
+
+			}
+		}
+
+		/*
+		 * Return to order received page
+		 */
+
+		return $this->get_return_url( $order );
+	}
 
     /**
      * Process a refund if supported
@@ -1248,6 +1308,11 @@ abstract class Mollie_WC_Gateway_Abstract extends WC_Payment_Gateway
      * @return string
      */
     abstract public function getDefaultTitle ();
+
+    /**
+     * @return string
+     */
+    abstract protected function getSettingsDescription ();
 
     /**
      * @return string

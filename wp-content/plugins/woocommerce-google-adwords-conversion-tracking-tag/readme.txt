@@ -3,8 +3,8 @@ Contributors: alekv
 Donate link: http://www.wolfundbaer.ch/donations/
 Tags: woocommerce, woocommerce conversion tracking, google adwords, adwords, conversion, conversion value, conversion tag, conversion pixel, conversion value tracking, conversion tracking, conversion tracking adwords, conversion tracking pixel, conversion tracking script, track conversions, tracking code manager
 Requires at least: 3.1
-Tested up to: 4.8
-Stable tag: 1.4.1
+Tested up to: 4.8.1
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ This plugin <strong>tracks the value of WooCommerce orders in Google AdWords</st
 <strong>Requirements</strong>
 
 * The payment gateway **must** support on-site payments. If you want to use an off-site payment solution like the free PayPal extension you need to make sure that the visitor is being redirected back to the WooCommerce thankyou page after the successful transaction. Only if the redirection is set up properly and the visitor doesn't stop the redirection, only then the conversion will be counted.
+* As this is a free plugin we only support recent versions of WooCommerce, WordPress and PHP. We don't maintain backward compatibility.
 
 <strong>Other plugins</strong>
 
@@ -35,13 +36,10 @@ If you like this plugin you might like that one too: https://wordpress.org/plugi
  
 == Installation ==
 
-1. Upload the WGACT Plugin directory into your `/wp-content/plugins/` directory
+1. Upload the plugin directory into your plugins directory `/wp-content/plugins/`
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Get the AdWords conversion ID and the conversion label. You will find both values in the AdWords conversion tracking code. 
-4. In the WordPress admin panel go to settings and then into the WGACT Plugin Menu. Please enter the conversion ID and the conversion label into their respective fields.
-5. Delete any other instances of the AdWords tracking code which tracks sales. (You might have several AdWords tracking codes, eg. tracking newsletter applications. Keep those.)
-6. Delete the cache on your server and on your browser.
-7. Check if the AdWords tag is running fine by placing a test order (ideally click on one of your AdWords ads first) and then check with the Google Tag Assistant browser plugin if the tag has been inserted correctly on the thank you page. Bear in mind that the code is only visible if you are not logged in as admin or shop manager. You will have to log out first.
+3. Get the AdWords conversion ID and the conversion label. You will find both values in the AdWords conversion tracking code.
+4. In the WordPress admin panel go to WooCommerce and then into the 'AdWords Conversion Tracking' menu. Please enter the conversion ID and the conversion label into their respective fields.
 
 == Frequently Asked Questions ==
 
@@ -53,6 +51,16 @@ If you like this plugin you might like that one too: https://wordpress.org/plugi
 4. Wait until the conversion shows up in AdWords.
 
 With the Google Tag Assistant you will also be able to see the tag fired on the thankyou page.
+
+= Google Tag Assistant reports that the plugin uses a non-optimized or not standard way of implementation (and suggests to use script based tracking). Why is that so? =
+
+The plugin currently uses only the image pixel based conversion tracking. The reason is a WordPress filter that changes and disables the script based tracking. Unfortunately that filter cannot be turned off. The problem has been reported as a bug long time ago: https://core.trac.wordpress.org/ticket/3670
+
+There is an experimental way to circumvent above mentioned filter, but it possibly will not work for all installations, probably even breaking some themes. So we stuck with the image based pixel for maximum compatibility.
+
+The image pixel conversion tracking works absolutely fine so far. So you can keep using it.
+
+Once we find a way to implement the script based tracking while keeping the same maximum compatibility level, we will release that to the public.
 
 = I get a fatal error and I am running old versions of WordPress and/or WooCommerce. What can I do? =
 
@@ -72,6 +80,10 @@ You can send the link to the front page of your shop too if you think it would b
 
 == Changelog ==
 
+= 1.4.3 =
+* Tweak: Remove campaign URL parameter
+= 1.4.2 =
+* Fix: Backward compatibility for $order->get_currency()
 = 1.4.1 =
 * Tweak: Making the plugin PHP 5.4 backwards compatible
 * Fix: Fixing double counting check logic

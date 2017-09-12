@@ -1,37 +1,67 @@
 === Mollie Payments for WooCommerce ===
 Contributors: daanvm, davdebcom, l.vangunst, ndijkstra, robin-mollie
-Tags: mollie, payments, woocommerce, e-commerce, webshop, psp, ideal, sofort, credit card, creditcard, visa, mastercard, mistercash, bancontact, bitcoin, paysafecard, direct debit, incasso, sepa, banktransfer, overboeking, betalingen, recurring, subscriptions
+Tags: mollie, payments, woocommerce, payment gateway, e-commerce, credit card, ideal, sofort, bancontact, bitcoin, direct debit, subscriptions
 Requires at least: 3.8
-Tested up to: 4.8
-Stable tag: 2.6.0
+Tested up to: 4.9
+Requires PHP: 5.3
+Stable tag: 2.7.0
+Requires PHP: 5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Accept payments in WooCommerce with the official Mollie plugin
+Accept all major payment methods in WooCommerce today. Credit cards, iDEAL, bitcoin and more! Fast, safe and intuitive.
 
 == Description ==
 
-This plugin will add support for the following Mollie payments methods to your WooCommerce webshop:
+Quickly integrate all major payment methods in WooCommerce, wherever you need them. Simply drop them ready-made into your WooCommerce webshop with this powerful plugin by Mollie. Mollie is dedicated to making payments better for WooCommerce.
 
-* iDEAL
-* Bank transfer
-* Credit card
-* Bancontact / Mister Cash
-* PayPal
-* SOFORT banking
-* Belfius Direct Net
-* Bitcoin
-* paysafecard
-* KBC/CBC Payment Button
+> Next level payments, for WooCommerce
 
-Please go to the [signup page](https://www.mollie.com/nl/signup) to create a new Mollie account and start receiving payments in a couple of minutes. Contact info@mollie.com if you have any questions or comments about this plugin.
+No need to spend weeks on paperwork or security compliance procedures. No more lost conversions because you don’t support a shopper’s favorite payment method or because they don’t feel safe. We made payments intuitive and safe for merchants and their customers.
 
-= Features = 
+= PAYMENT METHODS =
+
+Credit cards:
+
+* VISA (International)
+* MasterCard (International)
+* American Express (International)
+* Cartes Bancaires (France)
+* CartaSi (Italy)
+
+Debit cards:
+
+* V Pay (International)
+* Maestro (International)
+
+Alternative payment methods:
+
+* iDEAL (Netherlands)
+* Bancontact (Belgium)
+* PayPal (International)
+* SOFORTbanking (EU)
+* Belfius (Belgium)
+* KBC/CBC payment button (Belgium)
+* SEPA - Credit Transfer (EU)
+* SEPA - Direct Debit (EU)
+* Bitcoin (International)
+* Paysafecard (International)
+* Gift cards (Netherlands)
+
+Please go to the [signup page](https://www.mollie.com/signup) to create a new Mollie account and start receiving payments in a couple of minutes. Contact info@mollie.com if you have any questions or comments about this plugin.
+
+> Our pricing is always per transaction. No startup fees, no monthly fees, and no gateway fees. No hidden fees, period.
+
+= FEATURES =
 
 * Support for all available Mollie payment methods
-* Compatible with WooCommerce Subscriptions for recurring payments
-* Edit order, title, description for every payment method
-* Refunds (WooCommerce 2.2+)
+* Compatible with WooCommerce Subscriptions for recurring payments (credit card, iDEAL, SEPA Direct Debit)
+* Transparent pricing. No startup fees, no monthly fees, and no gateway fees. No hidden fees, period.
+* Edit the order, title and description of every payment method in WooCommerce checkout
+* Support for full and partial payment refunds (WooCommerce 2.2+)
+* Configurable pay outs: daily, weekly, monthly - whatever you prefer
+* [Powerful dashboard](https://www.mollie.com/en/features/dashboard) on mollie.com to easily keep track of your payments.
+* Fast in-house support. You will always be helped by someone who knows our products intimately.
 * Multiple translations: English, Dutch, German and French
 * Event log for debugging purposes
 * WordPress Multisite support
@@ -78,14 +108,14 @@ Where possible, also include the Mollie log file. You can find the Mollie log fi
 2. Change the title and description for every payment gateway. Some gateways have special options.
 3. The available payment gateways in the checkout.
 4. The order received page will display the payment status and customer details if available.
-5. The order received page for the gateway banktransfer will display payment instructions.
+5. The order received page for the gateway bank transfer will display payment instructions.
 6. Some payment methods support refunds. The 'Refund' button will be available when the payment method supports refunds.
 
 == Installation ==
 
 = Minimum Requirements =
 
-* PHP version 5.2 or greater
+* PHP version 5.3 or greater
 * PHP extensions enabled: cURL, JSON
 * WordPress 3.8 or greater
 * WooCommerce 2.1.0 or greater
@@ -112,6 +142,33 @@ Please contact info@mollie.com if you need help installing the Mollie WooCommerc
 Automatic updates should work like a charm; as always though, ensure you backup your site just in case.
 
 == Changelog ==
+
+= 2.7.0 - 07/09/2017 =
+
+* New - Support for gift cards! See: https://www.mollie.com/en/blog/post/mollie-launches-gift-cards/
+* New - Also show issuers (banks) for KBC payment method
+
+* Fix - Add better support for WooCommerce Deposits (by Webtomizer)
+* Fix - Subscriptions would be set to 'On Hold' during SEPA Direct Debit payments, those subscriptions are now set to 'Active'
+* Fix - Multiple issues that occurred when users had multiple (unpaid) payments per order
+* Fix - Remove SEPA Direct Debit (only used for Mollie recurring) as visible gateway in checkout and settings
+* Fix - Tested with WordPress 4.9 Alpha and WooCommerce 3.1
+* Fix - Remove existing language files from plugin so they can be managed via https://translate.wordpress.org/projects/wp-plugins/mollie-payments-for-woocommerce
+* Fix - Use better customer name when name is sent to Mollie (use full name and last name if available)
+* Fix - Don't update orders to cancelled status for expired payments if there are still pending payments for same order
+* Fix - Show correct return page to customer when they have placed multiple payments for single order
+* Fix - For subscription renewal orders, update payment method (from iDEAL, Belfius etc) to SEPA Direct Debit when needed
+* Fix - Add message that SEPA Direct Debit is required when using WooCommerce Subscriptions with iDEAL
+
+* Dev - Stop checking change of payment methods with isValidPaymentMethod
+* Dev - Add support for new WooCommerce version check
+* Dev - In setActiveMolliePayment use update_post_meta so payment is always updated to latest
+* Dev - In unsetActiveMolliePayment, a payment calling that function should only be able to unset itself
+* Dev - Improve log messages (WooCommerce > System status > Logs > mollie-payments-for-woocommerce)
+* Dev - Security improvement: sanitize getting ID's via POST and use $_POST instead of $_REQUEST
+* Dev - Only show "Check Subscription Status" tool if WooCommerce Subscriptions is installed
+* Dev - Fix PHP warnings about unserialize() by using serialize() before storing object as transient
+* Dev - Move load_plugin_textdomain to own function and load on plugins_loaded action
 
 = 2.6.0 - 07/06/2017 =
 * Add support for WooCommerce 3.0 (backwards compatible with older versions of WooCommerce)

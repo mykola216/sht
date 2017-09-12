@@ -7,6 +7,9 @@ add_action('amp_post_template_css', 'ampforwp_additional_style_input_2');
 
 function ampforwp_additional_style_input_2( $amp_template ) {
 	global $redux_builder_amp;
+	global $post;
+	$post_id = '';
+	$post_id = $post->ID;
 	$get_customizer = new AMP_Post_Template( $post_id );
 	// Get content width
 	$content_max_width       = absint( $get_customizer->get( 'content_max_width' ) );
@@ -140,12 +143,14 @@ figcaption{ font-size: 11px; margin-bottom: 11px; background: #eee; padding: 6px
 .amp-wp-author:before{ content: "By "; color: #555; }
 .amp-wp-author{ margin-right: 1px; }
 .amp-wp-meta{ font-size: 12px; color: #555; }
+.amp-wp-author-name:before{content:'By';}
 .amp-ad-wrapper{ text-align: center }
 .single-post main{ padding:12px 15% 10px 15% }
 .the_content p{ margin-top: 5px; color: #333; font-size: 15px; line-height: 26px; margin-bottom: 15px; }
 .amp-wp-tax-tag{ font-size: 13px; border: 0; display: inline-block; margin: 0.5em 0px 0.7em 0px; width: 100%; }
 main .amp-wp-content.featured-image-content{ padding: 0px; border: 0; margin-bottom: 0; box-shadow: none }
 .amp-wp-article-featured-image amp-img {margin: 0 auto;}
+.amp-wp-article-featured-image.wp-caption .wp-caption-text{color: #696969; font-size: 11px; line-height: 15px; background: #eee; margin: 0; padding: .66em .75em; text-align: center;}
 .amp-wp-content.post-pagination-meta{ max-width: 1030px; }
 .single-post .ampforwp-social-icons.ampforwp-social-icons-wrapper{ display: block; margin: 2em auto 0.9em auto ; max-width: 1030px; }
 .amp-wp-article-header.amp-wp-article-category.ampforwp-meta-taxonomy{ margin: 10px auto; max-width: 1030px; } .ampforwp_single_excerpt { margin-bottom:15px; font-size: 15px;}
@@ -283,5 +288,12 @@ amp-user-notification button { background-color:  <?php echo sanitize_hex_color(
 @media (min-width: 768px) and (max-width: 1600px) {.tablepress { overflow-x: none; } }
 @media (min-width: 320px) and (max-width: 767px) {.tablepress { display: inline-block; overflow-x: scroll; } }
 <?php }  ?>
-
+.design_2_wrapper .amp-loop-list .amp-wp-meta {display: none;}
+.breadcrumb{line-height: 1;margin-bottom:6px;}
+.breadcrumb ul, .category-single ul{padding:0; margin:0;}
+.breadcrumb ul li{display:inline;}
+.breadcrumb ul li a{font-size:12px;}
+.breadcrumb ul li a::after {content: "►";display: inline-block;font-size: 8px;padding: 0 6px 0 7px;vertical-align: middle;opacity: 0.5;position:relative;top: -0.5px;}
+.breadcrumb ul li:hover a::after{color:#c3c3c3;}
+.breadcrumb ul li:last-child a::after{display:none;}
 <?php echo $redux_builder_amp['css_editor']; } ?>

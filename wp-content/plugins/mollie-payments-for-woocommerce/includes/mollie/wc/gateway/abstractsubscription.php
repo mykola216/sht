@@ -158,6 +158,66 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
 	    }
     }
 
+	/**
+	 * @param $renewal_order
+	 * @param $payment
+	 *
+	 * @return void
+	 */
+	public function update_subscription_status_for_direct_debit( $renewal_order, $payment ) {
+
+		// Get renewal order id
+		$renewal_order_id  = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? $renewal_order->id : $renewal_order->get_id();
+
+		// Make sure order is a renewal order with subscription
+		if ( wcs_order_contains_renewal( $renewal_order_id ) ) {
+
+			// Get required information about order and subscription
+			$renewal_order     = Mollie_WC_Plugin::getDataHelper()->getWcOrder( $renewal_order_id );
+			$mollie_payment_id = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? get_post_meta( $renewal_order_id, '_mollie_payment_id', $single = true ) : $renewal_order->get_meta( '_mollie_payment_id', $single = true );
+			$subscription_id   = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? get_post_meta( $renewal_order_id, '_subscription_renewal', $single = true ) : $renewal_order->get_meta( '_subscription_renewal', $single = true );
+			$subscription      = wcs_get_subscription( $subscription_id );
+			$current_method    = ( version_compare( WC_VERSION, '3.0', '<' ) ) ? get_post_meta( $renewal_order_id, '_payment_method', $single = true ) : $subscription->get_payment_method();
+
+			// Check that subscription status isn't already active
+			if ( $subscription->get_status() == 'active' ) {
+				return;
+			}
+
+			// Check that payment method is SEPA Direct Debit or similar
+			$methods_needing_update = array (
+				'mollie_wc_gateway_directdebit',
+				'mollie_wc_gateway_ideal',
+				'mollie_wc_gateway_mistercash',
+				'mollie_wc_gateway_bancontact',
+				'mollie_wc_gateway_sofort',
+				'mollie_wc_gateway_kbc',
+				'mollie_wc_gateway_belfius',
+			);
+
+			if ( in_array( $current_method, $methods_needing_update ) == false ) {
+				return;
+			}
+
+			// Check that a new payment is made for renewal order
+			if ( $mollie_payment_id == null ) {
+				return;
+			}
+
+			// Update subscription to Active
+			$subscription->update_status( 'active' );
+
+			// Add order note to subscription explaining the change
+			$subscription->add_order_note(
+			/* translators: Placeholder 1: Payment method title, placeholder 2: payment ID */
+				__( 'Updated subscription from \'On hold\' to \'Active\' until payment fails, because a SEPA Direct Debit payment takes some time to process.', 'mollie-payments-for-woocommerce' )
+			);
+
+		}
+		return;
+
+	}
+
     /**
      * @param $amount_to_charge
      * @param $renewal_order
@@ -210,7 +270,7 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
             // Create Mollie payment with customer id.
             try
             {
-                Mollie_WC_Plugin::debug($this->id . ': Fetch mandate' . $renewal_order_id);
+                Mollie_WC_Plugin::debug($this->id . ': Fetch mandate ' . $renewal_order_id);
                 $mandates =  Mollie_WC_Plugin::getApiHelper()->getApiClient($test_mode)->customers_mandates->withParentId($customer_id)->all();
                 $validMandate = false;
                 foreach ($mandates as $mandate) {
@@ -225,7 +285,7 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
                     $payment = Mollie_WC_Plugin::getApiHelper()->getApiClient($test_mode)->payments->create($data);
                 } else {
                     Mollie_WC_Plugin::debug($this->id . 'Payment problem ' . $renewal_order_id);
-                    throw new Mollie_API_Exception(__('Payment cannot be processed.', 'mollie-payments-for-woocommerce-mandate-problem'));
+                    throw new Mollie_API_Exception(__('Payment cannot be processed, no valid mandate.', 'mollie-payments-for-woocommerce-mandate-problem'));
                 }
             }
             catch (Mollie_API_Exception $e)
@@ -239,6 +299,33 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
                 unset($data['customerId']);
                 $payment = Mollie_WC_Plugin::getApiHelper()->getApiClient($test_mode)->payments->create($data);
             }
+
+	        // Update payment method to actual payment method used for renewal order, this is
+	        // for subscriptions where the first order used methods like iDEAL as first payment and
+	        // later renewal orders switch to SEPA Direct Debit.
+
+	        $methods_needing_update = array (
+		        'mollie_wc_gateway_ideal',
+		        'mollie_wc_gateway_mistercash',
+		        'mollie_wc_gateway_bancontact',
+		        'mollie_wc_gateway_sofort',
+		        'mollie_wc_gateway_kbc',
+		        'mollie_wc_gateway_belfius',
+	        );
+
+	        $current_method = get_post_meta( $renewal_order_id, '_payment_method', $single = true );
+
+	        if ( in_array( $current_method, $methods_needing_update ) && $payment->method == 'directdebit' ) {
+		        if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+			        update_post_meta( $renewal_order_id, '_payment_method', 'mollie_wc_gateway_directdebit' );
+			        update_post_meta( $renewal_order_id, '_payment_method_title', 'SEPA Direct Debit' );
+		        } else {
+			        $renewal_order->update_meta_data( '_payment_method', 'mollie_wc_gateway_directdebit' );
+			        $renewal_order->update_meta_data( '_payment_method_title', 'SEPA Direct Debit' );
+			        $renewal_order->save();
+		        }
+	        }
+
             Mollie_WC_Plugin::debug($this->id . ': Created payment for order ' . $renewal_order_id. ' payment json response '.json_encode($payment));
             Mollie_WC_Plugin::getDataHelper()->unsetActiveMolliePayment($renewal_order_id);
             // Set active Mollie payment
@@ -247,6 +334,7 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
             // Set Mollie customer
             $this->setUserMollieCustomerId($renewal_order_id, $payment->customerId);
 
+            // Tell WooCommerce a new payment was created for the order/subscription
             do_action(Mollie_WC_Plugin::PLUGIN_ID . '_payment_created', $payment, $renewal_order);
 
             Mollie_WC_Plugin::debug($this->id . ': Payment ' . $payment->id . ' (' . $payment->mode . ') created for order ' . $renewal_order_id);
@@ -255,6 +343,8 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
             // Status is only updated if the new status is not the same as the default order status (pending)
             $this->_updateScheduledPaymentOrder($renewal_order, $initial_order_status, $payment);
 
+            // Update status of subscriptions with payment method SEPA Direct Debit or similar
+	        $this->update_subscription_status_for_direct_debit( $renewal_order, $payment );
 
             return array(
                 'result'   => 'success',
@@ -452,12 +542,19 @@ abstract class Mollie_WC_Gateway_AbstractSubscription extends Mollie_WC_Gateway_
         {
             $userdata = get_userdata($user_id);
 
-            $customer = Mollie_WC_Plugin::getApiHelper()->getApiClient($test_mode)->customers->create(array(
-                'name'     => trim($userdata->user_nicename),
-                'email'    => trim($userdata->user_email),
-                'locale'   => trim($this->getCurrentLocale()),
-                'metadata' => array('user_id' => $user_id),
-            ));
+	        // Get the best name for use as Mollie Customer name
+	        $user_full_name = $userdata->first_name . ' ' . $userdata->last_name;
+
+	        if ( strlen( trim( $user_full_name ) ) == null ) {
+		        $user_full_name = $userdata->display_name;
+	        }
+
+	        $customer = Mollie_WC_Plugin::getApiHelper()->getApiClient( $test_mode )->customers->create( array (
+		        'name'     => trim( $user_full_name ),
+		        'email'    => trim( $userdata->user_email ),
+		        'locale'   => trim( $this->getCurrentLocale() ),
+		        'metadata' => array ( 'user_id' => $user_id ),
+	        ) );
 
 
             $customer_id = $customer->id;

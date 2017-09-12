@@ -81,7 +81,7 @@
 }
 #fields_control .div_meta label {
     display: inline-block;
-    padding: 0px; 
+    padding: 0px;
     min-width: 100px;
 }
 #order_fields { list-style-type: none; margin: 0; padding: 0; width: 490px; }
@@ -144,7 +144,7 @@ input.date{
 }
 
 #sort_products,#sort_coupons{
-    list-style-type: none;  
+    list-style-type: none;
 }
 
 .btn-edit{
@@ -202,7 +202,7 @@ input.date{
     float: left;
 }
 #custom_interval{
-    display: none;   
+    display: none;
 }
 
 #schedule-1{
@@ -370,7 +370,7 @@ input.date{
 
 .email_body_textarea
 {
-    height: 451px; 
+    height: 451px;
     width: 736px;
 }
 #modal-email-body
@@ -526,4 +526,10 @@ input.date{
 
 .hide {
     display: none !important;
+}
+
+
+.without-dropdown.select2-dropdown,
+.without-dropdown .select2-search--inline {
+    display: none;
 }

@@ -2,7 +2,6 @@
 
 	// set Cookie Notice
 	$.fn.setCookieNotice = function ( cookie_value ) {
-
 		var cnTime = new Date(),
 			cnLater = new Date(),
 			cnDomNode = $( '#cookie-notice' ),
@@ -34,6 +33,23 @@
 			} );
 		} else {
 			cnSelf.removeCookieNotice();
+		}
+
+		if ( cookie_value && cnArgs.redirection === '1' ) {
+			var url = window.location.protocol + '//',
+				hostname = window.location.host + '/' + window.location.pathname;
+
+			if ( cnArgs.cache === '1' ) {
+				url = url + hostname.replace( '//', '/' ) + ( window.location.search === '' ? '?' : window.location.search + '&' ) + 'cn-reloaded=1' + window.location.hash;
+
+				window.location.href = url;
+			} else {
+				url = url + hostname.replace( '//', '/' ) + window.location.search + window.location.hash;
+
+				window.location.reload( true );
+			}
+
+			return;
 		}
 	};
 

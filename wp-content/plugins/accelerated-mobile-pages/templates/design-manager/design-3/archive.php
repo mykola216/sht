@@ -1,19 +1,10 @@
-<?php global $redux_builder_amp;  ?>
+<?php global $redux_builder_amp; global $wp;  ?>
 <!doctype html>
 <html amp <?php echo AMP_HTML_Utils::build_attributes_string( $this->get( 'html_tag_attributes' ) ); ?>>
 <head>
 	<meta charset="utf-8">
   <link rel="dns-prefetch" href="https://cdn.ampproject.org">
 	<?php
-	global $redux_builder_amp;
-	if ( is_home() || is_front_page()  || ( is_archive() && $redux_builder_amp['ampforwp-archive-support'] ) ){
-		global $wp;
-		$current_archive_url = home_url( $wp->request );
-		$amp_url 	= trailingslashit($current_archive_url);
-		$remove 	= '/'. AMPFORWP_AMP_QUERY_VAR;
-		$amp_url 	= str_replace($remove, '', $amp_url) ;
-	} 
-
 	if ( is_archive() ) {
 		$description 	= get_the_archive_description();
 		$sanitizer = new AMPFORWP_Content( $description, array(), 
@@ -29,7 +20,6 @@
 					)
 				) ) );
 	} ?>
-	<link rel="canonical" href="<?php echo $amp_url ?>">
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 	<?php
 	$amp_component_scripts = $sanitizer->amp_scripts;
@@ -44,6 +34,7 @@
 	</style>
 </head>
 <body class="amp_home_body archives_body design_3_wrapper">
+<?php do_action('ampforwp_body_beginning', $this); ?>
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 
 <?php do_action( 'ampforwp_after_header', $this );
@@ -78,10 +69,12 @@ if ( get_query_var( 'paged' ) ) {
  			the_archive_title( '<h3 class="amp-wp-content page-title">', '</h3>' );
  			
 			$arch_desc 		= $sanitizer->get_amp_content();
-			if( $arch_desc ) {  ?>
-				<div class="amp-wp-content taxonomy-description">
-					<?php echo $arch_desc ; ?>
-			  </div> <?php
+			if( $arch_desc ) {  
+				if($wp->query_vars['paged'] <= '1') {?>
+					<div class="amp-wp-content taxonomy-description">
+						<?php echo $arch_desc ; ?>
+				  </div> <?php
+				}
 			}
  		} ?>
 
@@ -107,6 +100,7 @@ if ( get_query_var( 'paged' ) ) {
 						<amp-img
 						layout="responsive"
 						src=<?php echo $thumb_url ?>
+						<?php ampforwp_thumbnail_alt(); ?>
 						width=450
 						height=270
 					></amp-img>
