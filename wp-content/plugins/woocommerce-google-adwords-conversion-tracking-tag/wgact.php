@@ -5,10 +5,15 @@
  * Description:  Google AdWords dynamic conversion value tracking for WooCommerce.
  * Author:       Wolf+Bär GmbH
  * Author URI:   https://wolfundbaer.ch
- * Version:      1.4.1
+ * Version:      1.4.3
  * License:      GPLv2 or later
  * Text Domain:  woocommerce-google-adwords-conversion-tracking-tag
  **/
+
+// TODO add validation for the input fields. Try to use jQuery validation in the form.
+// TODO add sanitization to the output
+// TODO in case Google starts to use alphabetic characters in the conversion ID, output the conversion ID with ''
+// TODO change Wolf+Bär GmbH to Wolf+Bär Agency
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -257,7 +262,7 @@ class WGACT {
 						<?php esc_html_e( 'Profit Driven Marketing by Wolf+Bär', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
 					</span>
 					<span style="float: right;">
-						<a href="https://wolfundbaer.ch/?utm_source=WGACT&utm_medium=plugin&utm_campaign=WGACT-Plugin"
+						<a href="https://wolfundbaer.ch/"
 						   target="_blank" style="color: white">
 							<?php esc_html_e( 'Visit us here: https://wolfundbaer.ch', 'woocommerce-google-adwords-conversion-tracking-tag' ) ?>
 						</a>
@@ -377,12 +382,13 @@ class WGACT {
 		// Only run conversion script if the payment has not failed. (has_status('completed') is too restrictive)
 		// And use the order meta to check if the conversion code has already run for this order ID. If yes, don't run it again.
 		// Also don't run the pixel if an admin or shop manager is logged in.
+        // TODO $order->get_order_currency() is deprecated. Switch to $order->get_currency() at a later point somewhen in 2018
 		if ( ! $order->has_status( 'failed' ) && ( ( get_post_meta( $order_id, '_WGACT_conversion_pixel_fired', true ) != "true" ) ) && ! current_user_can( 'edit_others_pages' ) ) {
 			?>
 
 			<div style="display:inline;">
 				<img height="1" width="1" style="border-style:none;" alt=""
-				     src="//www.googleadservices.com/pagead/conversion/<?php echo $conversion_id; ?>/?value=<?php echo $order_total; ?>&amp;currency_code=<?php echo $order->get_currency(); ?>&amp;label=<?php echo $conversion_label; ?>&amp;guid=ON&amp;oid=<?php echo $order_id; ?>&amp;script=0"/>
+				     src="//www.googleadservices.com/pagead/conversion/<?php echo $conversion_id; ?>/?value=<?php echo $order_total; ?>&amp;currency_code=<?php echo $order->get_order_currency(); ?>&amp;label=<?php echo $conversion_label; ?>&amp;guid=ON&amp;oid=<?php echo $order_id; ?>&amp;script=0"/>
 			</div>
 
 
