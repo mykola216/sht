@@ -73,6 +73,31 @@
                     <p style="font-size: 12px"><?php _e('Column seperator for exported file', 'wf_csv_import_export'); ?></p>
                 </td>
             </tr>
+            
+            
+
+            <?php
+            
+            $export_mapping_from_db = get_option('xa_prod_csv_export_mapping');
+            if (!empty($export_mapping_from_db)) {
+                ?>
+                <tr>
+                    <th>
+                        <label for="export_profile"><?php _e('Select a mapping file for export.' , 'wf_csv_import_export'); ?></label>
+                    </th>
+                    <td>
+                        <select name="export_profile">
+                            <option value="">--Select--</option>
+                            <?php foreach ($export_mapping_from_db as $key => $value) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $key; ?></option>
+
+                            <?php } ?>
+                        </select>
+                    </td>
+                </tr>
+            <?php } ?>
+            
+            
             <tr>
                 <th>
                     <label for="v_columns"><?php _e('Columns', 'wf_csv_import_export'); ?></label>
@@ -133,7 +158,18 @@
                 <td>
                     <input type="checkbox" name="include_hidden_meta" id="v_include_hidden_meta" class="checkbox" />
                 </td>
+            </tr><br/><br/>
+            
+            
+             <tr>
+                <th>
+                    <label for="v_new_profile"><?php _e('Save the export mapping', 'wf_csv_import_export'); ?></label>
+                </th>
+                <td>
+                    <input type="text" name="new_profile" id="v_new_profile" class="input-text" />
+                </td>
             </tr>
+            
         </table>
         <p class="submit"><input type="submit" class="button button-primary" value="<?php _e('Export Products', 'wf_csv_import_export'); ?>" /></p>
     </form>

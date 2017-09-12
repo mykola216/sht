@@ -11,6 +11,7 @@ class WF_ProdImpExpCsv_AJAX_Handler {
 	public function __construct() {
 		add_action( 'wp_ajax_woocommerce_csv_import_request', array( $this, 'csv_import_request' ) );
 		add_action( 'wp_ajax_woocommerce_csv_import_regenerate_thumbnail', array( $this, 'regenerate_thumbnail' ) );
+                add_action( 'wp_ajax_product_csv_export_mapping_change', array( $this, 'export_mapping_change_columns' ) );
 	}
 	
 	/**
@@ -63,7 +64,70 @@ class WF_ProdImpExpCsv_AJAX_Handler {
 	 */
 	public function die_json_error_msg( $id, $message ) {
         die( json_encode( array( 'error' => sprintf( __( '&quot;%1$s&quot; (ID %2$s) failed to resize. The error message was: %3$s', 'regenerate-thumbnails' ), esc_html( get_the_title( $id ) ), $id, $message ) ) ) );
-    }	
+    }
+    
+                    
+    /**
+     * Ajax event for changing mapping of export CSV
+     */
+    public function export_mapping_change_columns() {
+
+        $selected_profile = !empty($_POST['v_new_profile']) ? $_POST['v_new_profile'] : '';
+        
+        $post_columns = array();
+        if (!$selected_profile) {
+            $post_columns = include( 'exporter/data/data-wf-post-columns.php' );
+
+            $post_columns['images'] = 'Images (featured and gallery)';
+            $post_columns['file_paths'] = 'Downloadable file paths';
+            $post_columns['taxonomies'] = 'Taxonomies (cat/tags/shipping-class)';
+            $post_columns['attributes'] = 'Attributes';
+            $post_columns['meta'] = 'Meta (custom fields)';
+            $post_columns['product_page_url'] = 'Product Page URL';
+            if (function_exists('woocommerce_gpf_install'))
+                $post_columns['gpf'] = 'Google Product Feed fields';
+        }
+
+        $export_profile_array = get_option('xa_prod_csv_export_mapping');
+
+        if (!empty($export_profile_array[$selected_profile])) {
+            $post_columns = $export_profile_array[$selected_profile];
+        }
+
+
+        $res = "<tr>
+                      <td style='padding: 10px;'>
+                          <a href='#' id='pselectall' onclick='return false;' >Select all</a> &nbsp;/&nbsp;
+                          <a href='#' id='punselectall' onclick='return false;'>Unselect all</a>
+                      </td>
+                  </tr>
+                  
+                <th style='text-align: left;'>
+                    <label for='v_columns'>Column</label>
+                </th>
+                <th style='text-align: left;'>
+                    <label for='v_columns_name'>Column Name</label>
+                </th>";
+
+
+        foreach ($post_columns as $pkey => $pcolumn) {
+
+            $res.="<tr>
+                <td>
+                    <input name= 'columns[$pkey]' type='checkbox' value='$pkey' checked>
+                    <label for='columns[$pkey]'>$pkey</label>
+                </td>
+                <td>";
+
+            $res.="<input type='text' name='columns_name[$pkey]'  value='$pcolumn' class='input-text' />
+                </td>
+            </tr>";
+        }
+
+        echo $res;
+        exit;
+    }
+
 }
 
 new WF_ProdImpExpCsv_AJAX_Handler();
