@@ -984,7 +984,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$settings[ 'rev_ftp_server_path' ]	= $ftp_server_path;
 		
 		
-		$local_file = 'wp-content/plugins/product-reviews-import-export-for-woocommerce/temp-import-review.csv';
+		$local_file = 'wp-content/plugins/product-csv-import-export-for-woocommerce/temp-import-review.csv';
 		$server_file = $ftp_server_path;
 					   
 		update_option( 'wf_review_import_ftp', $settings );

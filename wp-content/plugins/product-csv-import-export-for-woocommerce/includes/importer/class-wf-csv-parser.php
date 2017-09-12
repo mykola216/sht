@@ -243,7 +243,7 @@ class WF_CSV_Parser {
 		
 
 		$this->post_defaults['post_type'] = 'product';
-		if($item['parent_sku'] !== '' && $item['parent_sku'] !== null){
+		if(!empty($item['parent_sku'])){
 			$prod_id = wc_get_product_id_by_sku( $item['parent_sku'] );
 			$prod    = wc_get_product( $prod_id );
 			if(WC()->version < '2.7.0')
@@ -1022,7 +1022,14 @@ class WF_CSV_Parser {
 		return $product;
 	}
 	function hf_currency_formatter($price){
-		$decimal_seperator = wc_get_price_decimal_separator();
-		return preg_replace("[^0-9\\'.$decimal_seperator.']", "", $price);
+            if(WC()->version < '2.3')
+            {
+                $separator = get_option( 'woocommerce_price_decimal_sep' ) ;
+                $decimal_seperator = $separator ? stripslashes( $separator ) : '.';
+            }else
+            {
+                $decimal_seperator = wc_get_price_decimal_separator();
+            }
+            return preg_replace("[^0-9\\'.$decimal_seperator.']", "", $price);
 	}
 }

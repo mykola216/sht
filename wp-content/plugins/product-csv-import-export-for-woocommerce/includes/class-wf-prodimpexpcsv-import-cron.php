@@ -89,6 +89,7 @@ class WF_ProdImpExpCsv_ImportCron {
                 $GLOBALS['WF_CSV_Product_Import']->hf_log_data_change( 'csv-import', __( 'Failed processing import. Reason:'.$this->error_message, 'wf_csv_import_export' ) );
             }
         if($this->settings['pro_auto_import_merge']){ $_GET['merge'] = 1; } else { $_GET['merge'] = 0; }    
+        if($this->settings['pro_auto_import_skip']){ $_GET['skip_new'] = 1; } else { $_GET['skip_new'] = 0; }    
           
         //echo wp_next_scheduled('wf_woocommerce_csv_im_ex_auto_import_products').'<br/>';
         //echo date('Y-m-d H:i:s' , wp_next_scheduled('wf_woocommerce_csv_im_ex_auto_import_products'));
