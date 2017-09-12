@@ -16,8 +16,6 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 
 
 		if ( $mode != 'preview' ) {
-			//try speedup and reduce memory usage, it works only if sqlite3 was installed 
-			PHPExcel_Settings::setCacheStorageMethod( PHPExcel_CachedObjectStorageFactory::cache_to_sqlite3 );
 			//fallback to PCLZip
 			if( !class_exists('ZipArchive') )
 				PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
@@ -29,6 +27,8 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 				$this->objPHPExcel = new PHPExcel();
 			}
 			$this->objPHPExcel->setActiveSheetIndex( 0 );
+
+			do_action('woe_xls_PHPExcel_setup', $this->objPHPExcel, $settings);
 
 			$this->last_row = $this->objPHPExcel->getActiveSheet()->getHighestRow();
 
@@ -132,18 +132,28 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 		} else {
 			do_action ( 'woe_xls_print_footer', $this->objPHPExcel, $this );
 			if ( $this->settings['auto_width'] ) {
-				$sheet = $this->objPHPExcel->getActiveSheet();
-				$cellIterator = $sheet->getRowIterator()->current()->getCellIterator();
-				$cellIterator->setIterateOnlyExistingCells(true);
-				foreach ($cellIterator as $cell) {
-					$sheet->getColumnDimension($cell->getColumn())->setAutoSize(true);
+				try {
+					$sheet = $this->objPHPExcel->getActiveSheet();
+					$cellIterator = $sheet->getRowIterator()->current()->getCellIterator();
+					$cellIterator->setIterateOnlyExistingCells(true);
+					foreach ($cellIterator as $cell) {
+						$sheet->getColumnDimension($cell->getColumn())->setAutoSize(true);
+					}
+					$sheet->calculateColumnWidths();
+				} catch (Exception $e) {
+					//do nothing here , adjustment failed gracefully
 				}
-				$sheet->calculateColumnWidths();
 			}
 
 			$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
 			$objWriter->save( $this->filename );
 		}
+	}
+	
+	//just save Excel file 
+	public function finish_partial() {
+		$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->settings['use_xls_format'] ? 'Excel5' : 'Excel2007');
+		$objWriter->save( $this->filename );
 	}
 
 	public function truncate() {

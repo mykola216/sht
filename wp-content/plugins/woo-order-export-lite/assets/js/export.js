@@ -1,3 +1,8 @@
+var select2WODropdownOpts = {
+    containerCssClass : 'without-dropdown',
+    dropdownCssClass: 'without-dropdown',
+}
+
 
 function bind_events() {
 
@@ -13,12 +18,17 @@ function bind_events() {
 
         jQuery.post( ajaxurl, data, function( response ) {
             jQuery( '#select_custom_fields' ).remove();
+            jQuery( '#select_custom_fields--select2 select' ).select2('destroy');
+            jQuery( '#select_custom_fields, #select_custom_fields--select2' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="select_custom_fields" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_custom_fields' ) );
+                var $select = jQuery( '<div id="select_custom_fields--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                    + '<select id="select_custom_fields">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_custom_fields' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="select_custom_fields" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_custom_fields' ) );
@@ -80,13 +90,18 @@ function bind_events() {
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#select_attributes' ).remove();
+            jQuery( '#select_attributes--select2 select' ).select2('destroy');
+            jQuery( '#select_attributes, #select_attributes--select2' ).remove();
+
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="select_attributes" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_attributes' ) );
+                var $select = jQuery( '<div id="select_attributes--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                    + '<select id="select_attributes">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_attributes' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="select_attributes" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_attributes' ) );
@@ -112,7 +127,7 @@ function bind_events() {
             if ( f ) {
 
                 jQuery( '#attributes_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
-                jQuery( '#attributes_check' ).select2();
+                jQuery( '#attributes_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#attributes_check option' ).each( function() {
                     jQuery( '#attributes_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
@@ -139,33 +154,39 @@ function bind_events() {
     //PRODUCT ATTRIBUTES END
 
     jQuery( '#itemmeta' ).change( function() {
+		var selected64 = jQuery( this ).find(":selected").data("base64");
 
         jQuery( '#select_itemmeta' ).attr( 'disabled', 'disabled' );
         var data = {
-            'item': jQuery( this ).val(),
+            'item': window.atob(selected64),
             method: "get_products_itemmeta_values",
             action: "order_exporter"
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#select_itemmeta' ).remove();
+            jQuery( '#select_itemmeta--select2 select' ).select2('destroy');
+            jQuery( '#select_itemmeta, #select_itemmeta--select2' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="select_itemmeta" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_itemmeta' ) );
+                var $select = jQuery( '<div id="select_itemmeta--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                    + '<select id="select_itemmeta">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_itemmeta' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="select_itemmeta" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_itemmeta' ) );
             }
         }, 'json' );
     } );
-    
+
     jQuery( '#add_itemmeta' ).click( function() {
 
         var val = !jQuery( "#select_itemmeta" ).is(':disabled') ? jQuery( "#select_itemmeta" ).val() : jQuery( "#text_itemmeta" ).val();
-        var val2 = jQuery( '#itemmeta' ).val();
+		var selected64 = jQuery( '#itemmeta' ).find(":selected").data("base64");
+        var val2 = window.atob(selected64).replace(/&/g,'&amp;');
         var val_op = jQuery( '#itemmeta_compare' ).val();
         if ( val != null && val2 != null && val.length && val2.length ) {
             val = val2 + ' ' + val_op + ' ' + val;
@@ -180,10 +201,10 @@ function bind_events() {
             if ( f ) {
 
                 jQuery( '#itemmeta_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
-                jQuery( '#itemmeta_check' ).select2();
+                jQuery( '#itemmeta_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#itemmeta_check option' ).each( function() {
-                    jQuery( '#itemmeta_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
+                    jQuery( '#itemmeta_check option[value=\"' + jQuerySelectorEscape(jQuery( this ).val()) + '\"]:not(:last)' ).remove();
                 } );
 
                 jQuery( "input#select_itemmeta" ).val( '' );
@@ -216,13 +237,17 @@ function bind_events() {
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#select_taxonomies' ).remove();
+            jQuery( '#select_taxonomies--select2 select' ).select2('destroy');
+            jQuery( '#select_taxonomies, #select_taxonomies--select2' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="select_taxonomies" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_taxonomies' ) );
+                var $select = jQuery( '<div id="select_taxonomies--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                    + '<select id="select_taxonomies">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_taxonomies' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="select_taxonomies" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_taxonomies' ) );
@@ -248,7 +273,7 @@ function bind_events() {
             if ( f ) {
 
                 jQuery( '#taxonomies_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
-                jQuery( '#taxonomies_check' ).select2();
+                jQuery( '#taxonomies_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#taxonomies_check option' ).each( function() {
                     jQuery( '#taxonomies_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
@@ -285,13 +310,17 @@ function bind_events() {
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#select_product_custom_fields' ).remove();
+            jQuery( '#select_product_custom_fields--select2 select' ).select2('destroy');
+            jQuery( '#select_product_custom_fields, #select_product_custom_fields--select2' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="select_product_custom_fields" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_product_custom_fields' ) );
+                var $select = jQuery( '<div id="select_product_custom_fields--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                    + '<select id="select_product_custom_fields">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_product_custom_fields' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="select_product_custom_fields" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_product_custom_fields' ) );
@@ -316,7 +345,7 @@ function bind_events() {
             if ( f ) {
 
                 jQuery( '#product_custom_fields_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
-                jQuery( '#product_custom_fields_check' ).select2();
+                jQuery( '#product_custom_fields_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#product_custom_fields_check option' ).each( function() {
                     jQuery( '#product_custom_fields_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
@@ -340,8 +369,8 @@ function bind_events() {
             jQuery( "#text_product_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
         }
     });
-	//end of change 
-	
+	//end of change
+
 
     jQuery( '#orders_add_custom_field' ).click( function() {
         jQuery( "#fields_control > div" ).hide();
@@ -352,7 +381,7 @@ function bind_events() {
     } );
     jQuery( '#orders_add_custom_meta' ).click( function() {
 		jQuery('#custom_meta_order_mode_used').attr('checked', false);
-		jQuery('#custom_meta_order_mode_used').change();		
+		jQuery('#custom_meta_order_mode_used').change();
         jQuery( "#fields_control > div" ).hide();
         jQuery( "#fields_control .div_meta" ).show();
 
@@ -409,7 +438,7 @@ function bind_events() {
             }, 'json' );
         }
     });
-	
+
     jQuery('input[name=custom_meta_products_mode]').change(function() {
         if (jQuery(this).val() == 'all') {
             var options = '<option></option>';
@@ -462,8 +491,8 @@ function bind_events() {
 
     jQuery( '#button_custom_meta' ).click( function() {
         var label = jQuery( '#select_custom_meta_order' ).val();
-        var colname = jQuery( '#colname_custom_meta' ).val();        
-		if (! label) //try custom text 
+        var colname = jQuery( '#colname_custom_meta' ).val();
+		if (! label) //try custom text
 			label = jQuery( '#text_custom_meta_order' ).val();;
         if ( !label )
         {
@@ -490,18 +519,22 @@ function bind_events() {
         jQuery( '#text_shipping_locations' ).attr( 'disabled', 'disabled' );
         var data = {
             'item': jQuery( this ).val(),
-            method: "get_products_shipping_values",
+            method: "get_order_shipping_values",
             action: "order_exporter"
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#text_shipping_locations' ).remove();
+            jQuery( '#text_shipping_locations--select2 select' ).select2('destroy');
+            jQuery( '#text_shipping_locations, #text_shipping_locations--select2' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="text_shipping_locations" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_shipping_locations' ) );
+
+                var $select = jQuery( '<div id="text_shipping_locations--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;"><select id="text_shipping_locations">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_shipping_locations' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="text_shipping_locations" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_shipping_locations' ) );
@@ -527,7 +560,7 @@ function bind_events() {
             if ( f ) {
 
                 jQuery( '#shipping_locations_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
-                jQuery( '#shipping_locations_check' ).select2();
+                jQuery( '#shipping_locations_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#shipping_locations_check option' ).each( function() {
                     jQuery( '#shipping_locations_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
@@ -545,18 +578,22 @@ function bind_events() {
         jQuery( '#text_billing_locations' ).attr( 'disabled', 'disabled' );
         var data = {
             'item': jQuery( this ).val(),
-            method: "get_products_billing_values",
+            method: "get_order_billing_values",
             action: "order_exporter"
         };
 
         jQuery.post( ajaxurl, data, function( response ) {
-            jQuery( '#text_billing_locations' ).remove();
+            jQuery( '#text_billing_locations--select2 select' ).select2('destroy');
+            jQuery( '#text_billing_locations, #text_billing_locations--select2' ).remove();
             if ( response ) {
                 var options = '';
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                jQuery( '<select id="text_billing_locations" style="margin-top: 0px;margin-right: 6px;">' + options + '</select>' ).insertBefore( jQuery( '#add_billing_locations' ) );
+                var $select = jQuery( '<div id="text_billing_locations--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                    + '<select id="text_billing_locations">' + options + '</select></div>' );
+                $select.insertBefore( jQuery( '#add_billing_locations' ) )
+                $select.find('select').select2({ tags: true });
             }
             else {
                 jQuery( '<input type="text" id="text_billing_locations" style="margin-right: 8px;">' ).insertBefore( jQuery( '#add_billing_locations' ) );
@@ -582,7 +619,7 @@ function bind_events() {
             if ( f ) {
 
                 jQuery( '#billing_locations_check' ).append( '<option selected="selected" value="' + val + '">' + val + '</option>' );
-                jQuery( '#billing_locations_check' ).select2();
+                jQuery( '#billing_locations_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#billing_locations_check option' ).each( function() {
                     jQuery( '#billing_locations_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove();
@@ -659,12 +696,12 @@ function formatItem( item ) {
 }
 
 function add_custom_field( to, index_p, format, colname, value ) {
-    
+
     value   = escapeStr(value);
     colname = escapeStr(colname);
     var arr = jQuery( 'input[name*=' + index_p + '\\[label\\]\\[custom_field]' );
     var count = arr.length;
-    
+
     var max = 0;
     for(var i=0; i<count; i++) {
         var n = parseInt(arr[i].name.replace(index_p+'[label][custom_field_', '').replace(']','')); // fixed for popups
@@ -691,10 +728,10 @@ function add_custom_field( to, index_p, format, colname, value ) {
 }
 
 function add_custom_meta( to, index_p, format, label, colname ) {
- 
+
     label   = escapeStr(label);
     colname = escapeStr(colname);
- 
+
 //    console.log();
     var row = '<li class="mapping_row segment_modal_' + index_p + '">\
                                                         <div class="mapping_col_1">\
@@ -725,38 +762,38 @@ function select2_inits()
     jQuery( "#attributes" ).select2( {
         width: 150
     } );
-    jQuery( "#attributes_check" ).select2();
+    jQuery( "#attributes_check" ).select2(select2WODropdownOpts);
     jQuery( "#itemmeta" ).select2( {
         width: 220
     } );
-    jQuery( "#itemmeta_check" ).select2();
+    jQuery( "#itemmeta_check" ).select2(select2WODropdownOpts);
 
     jQuery( "#custom_fields" ).select2( {
         width: 150
     } );
     jQuery( "#custom_fields_check" ).select2();
-	
+
     jQuery( "#product_custom_fields" ).select2( {
         width: 150
     } );
-    jQuery( "#product_custom_fields_check" ).select2();
-	
+    jQuery( "#product_custom_fields_check" ).select2(select2WODropdownOpts);
 
-	
+
+
     jQuery( "#taxonomies" ).select2( {
         width: 150
     } );
-    jQuery( "#taxonomies_check" ).select2();
+    jQuery( "#taxonomies_check" ).select2(select2WODropdownOpts);
 
     jQuery( "#shipping_locations" ).select2( {
         width: 150
     } );
-    jQuery( "#shipping_locations_check" ).select2();
+    jQuery( "#shipping_locations_check" ).select2(select2WODropdownOpts);
 
     jQuery( "#billing_locations" ).select2( {
         width: 150
     } );
-    jQuery( "#billing_locations_check" ).select2();
+    jQuery( "#billing_locations_check" ).select2(select2WODropdownOpts);
 
 
 
@@ -916,7 +953,7 @@ function select2_inits()
     } );
 }
 
-function escapeStr(str) 
+function escapeStr(str)
 {
     var entityMap = {
         "&": "&amp;",
@@ -930,5 +967,23 @@ function escapeStr(str)
     return String(str).replace(/[&<>"'\/]/g, function (s) {
       return entityMap[s];
     });
-    
+
+}
+
+function jQuerySelectorEscape(expression) {
+      return expression.replace(/[!"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~]/g, '\\$&');
+}
+
+//for warning 
+function setup_alert_date_filter() {
+	default_date_filter_color = jQuery( "#my-date-filter" ).css('color');
+	try_color_date_filter();
+	jQuery( '#from_date' ).change( function() { try_color_date_filter(); });
+	jQuery( '#to_date' ).change( function() { try_color_date_filter(); });
+}
+function try_color_date_filter() {
+	var color = default_date_filter_color;	
+	if( jQuery( "#from_date" ).val() || jQuery( "#to_date" ).val() ) 
+		 color = 'red'; 
+	jQuery( "#my-date-filter" ).css('color', color);
 }

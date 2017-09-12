@@ -34,8 +34,15 @@ abstract class WOE_Formatter {
 
 	public function finish() {
 		fclose( $this->handle );
-		do_action("woe_formatter_finish");
-		do_action("woe_formatter_" .$this->format. "_finished");
+		do_action("woe_formatter_finish", $this);
+		do_action("woe_formatter_" .$this->format. "_finished", $this);
+	}
+	
+	public function finish_partial() {
+		// child must fully implement this method
+		fclose( $this->handle );
+		do_action("woe_formatter_finish_partial", $this);
+		do_action("woe_formatter_" .$this->format. "_finished_partially", $this);
 	}
 
 	public function truncate() {
