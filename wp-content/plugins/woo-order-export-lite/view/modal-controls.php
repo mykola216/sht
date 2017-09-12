@@ -11,7 +11,7 @@
         <label><?php _e('Taxonomy', 'woocommerce-order-export')?>:</label><select id='select_custom_taxonomies_products'>
             <option></option>
             <?php
-            foreach (WC_Order_Export_Data_Extractor::get_product_taxonomies() as $tax_id => $tax_name) {
+            foreach (WC_Order_Export_Data_Extractor_UI::get_product_taxonomies() as $tax_id => $tax_name) {
                 echo "<option value='__$tax_name' >__$tax_name</option>";
             };
             ?>
