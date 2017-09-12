@@ -24,6 +24,11 @@ class Mollie_WC_Helper_Data
      */
     protected static $api_issuers;
 
+	/**
+	 * @var Mollie_API_Object_Method[]
+	 */
+	protected static $method_issuers;
+
     /**
      * @var Mollie_WC_Helper_Api
      */
@@ -205,6 +210,12 @@ class Mollie_WC_Helper_Data
             'api_methods_live',
             'api_issuers_test',
             'api_issuers_live',
+            'ideal_issuers_test',
+            'ideal_issuers_live',
+	        'kbc_issuers_test',
+            'kbc_issuers_live',
+	        'giftcard_issuers_test',
+            'giftcard_issuers_live',
         );
 
         $languages   = array_keys(apply_filters('wpml_active_languages', array()));
@@ -236,7 +247,7 @@ class Mollie_WC_Helper_Data
 
             if ($use_cache)
             {
-                $payment = @unserialize(get_transient($transient_id));
+                $payment = unserialize(get_transient($transient_id));
 
                 if ($payment && $payment instanceof Mollie_API_Object_Payment)
                 {
@@ -246,7 +257,7 @@ class Mollie_WC_Helper_Data
 
             $payment = $this->api_helper->getApiClient($test_mode)->payments->get($payment_id);
 
-            set_transient($transient_id, $payment, MINUTE_IN_SECONDS * 5);
+            set_transient($transient_id, serialize($payment), MINUTE_IN_SECONDS * 5);
 
             return $payment;
         }
@@ -332,7 +343,7 @@ class Mollie_WC_Helper_Data
 
             if ($use_cache)
             {
-                $cached = @unserialize(get_transient($transient_id));
+                $cached = unserialize(get_transient($transient_id));
 
                 if ($cached && $cached instanceof Mollie_API_Object_List)
                 {
@@ -342,7 +353,7 @@ class Mollie_WC_Helper_Data
 
             $result = $this->api_helper->getApiClient($test_mode)->methods->all(0,0,$filters);
 
-            set_transient($transient_id, $result, MINUTE_IN_SECONDS * 5);
+            set_transient($transient_id, serialize($result), MINUTE_IN_SECONDS * 5);
 
             return $result;
         }
@@ -404,7 +415,7 @@ class Mollie_WC_Helper_Data
 
             if (empty(self::$api_issuers))
             {
-                $cached = @unserialize(get_transient($transient_id));
+                $cached = unserialize(get_transient($transient_id));
 
                 if ($cached && $cached instanceof Mollie_API_Object_List)
                 {
@@ -414,7 +425,7 @@ class Mollie_WC_Helper_Data
                 {
                     self::$api_issuers = $this->api_helper->getApiClient($test_mode)->issuers->all();
 
-                    set_transient($transient_id, self::$api_issuers, MINUTE_IN_SECONDS * 5);
+                    set_transient($transient_id, serialize(self::$api_issuers), MINUTE_IN_SECONDS * 5);
                 }
             }
 
@@ -444,6 +455,44 @@ class Mollie_WC_Helper_Data
         return array();
     }
 
+
+	/**
+	 * Get issuers for payment method (e.g. for iDEAL, KBC/CBC payment button, gift cards)
+	 *
+	 * @param bool        $test_mode (default: false)
+	 * @param string|null $method
+	 *
+	 * @return array|Mollie_API_Object_Issuer[]|Mollie_API_Object_List
+	 */
+	public function getMethodIssuers( $test_mode = false, $method = null ) {
+		$locale = $this->getCurrentLocale();
+
+		try {
+			$transient_id = $this->getTransientId( $method . '_' . 'issuers_' . ( $test_mode ? 'test' : 'live' ) . "_$locale" );
+
+			if ( empty( $method_issuers ) ) {
+				$cached = unserialize( get_transient( $transient_id ) );
+
+				if ( $cached && $cached instanceof Mollie_API_Object_Method ) {
+					$method_issuers = $cached;
+				} else {
+
+					$method_issuers = $this->api_helper->getApiClient( $test_mode )->methods->get( "$method", array ( "include" => "issuers" ) );
+
+					set_transient( $transient_id, serialize( $method_issuers ), MINUTE_IN_SECONDS * 5 );
+				}
+			}
+
+			return $method_issuers;
+
+		}
+		catch ( Mollie_API_Exception $e ) {
+			Mollie_WC_Plugin::debug( __FUNCTION__ . ": Could not load " . $method . " issuers (" . ( $test_mode ? 'test' : 'live' ) . "): " . $e->getMessage() . ' (' . get_class( $e ) . ')' );
+		}
+
+		return array ();
+	}
+
     /**
      * Save active Mollie payment id for order
      *
@@ -454,13 +503,13 @@ class Mollie_WC_Helper_Data
     public function setActiveMolliePayment ($order_id, Mollie_API_Object_Payment $payment)
     {
 	    if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
-		    add_post_meta( $order_id, '_mollie_payment_id', $payment->id, $single = true );
-		    add_post_meta( $order_id, '_mollie_payment_mode', $payment->mode, $single = true );
+		    update_post_meta( $order_id, '_mollie_payment_id', $payment->id, $single = true );
+		    update_post_meta( $order_id, '_mollie_payment_mode', $payment->mode, $single = true );
 
 		    delete_post_meta( $order_id, '_mollie_cancelled_payment_id' );
 
 		    if ( $payment->customerId ) {
-			    add_post_meta( $order_id, '_mollie_customer_id', $payment->customerId, $single = true );
+			    update_post_meta( $order_id, '_mollie_customer_id', $payment->customerId, $single = true );
 		    }
 
 	    } else {
@@ -509,6 +558,8 @@ class Mollie_WC_Helper_Data
      */
     public function getUserMollieCustomerId ($user_id, $test_mode = FALSE)
     {
+    	// Guest users can't buy subscriptions and don't need a Mollie customer ID
+	    // https://github.com/mollie/WooCommerce/issues/132
         if (empty($user_id))
         {
             return NULL;
@@ -527,12 +578,20 @@ class Mollie_WC_Helper_Data
             {
                 $userdata = get_userdata($user_id);
 
-                $customer = $this->api_helper->getApiClient($test_mode)->customers->create(array(
-                    'name'     => trim($userdata->user_nicename),
-                    'email'    => trim($userdata->user_email),
-                    'locale'   => trim($this->getCurrentLocale()),
-                    'metadata' => array('user_id' => $user_id),
-                ));
+	            // Get the best name for use as Mollie Customer name
+	            $user_full_name = $userdata->first_name . ' ' . $userdata->last_name;
+
+	            if ( strlen( trim( $user_full_name ) ) == null ) {
+		            $user_full_name = $userdata->display_name;
+	            }
+
+	            // Create the Mollie Customer
+	            $customer = $this->api_helper->getApiClient( $test_mode )->customers->create( array (
+		            'name'     => trim( $user_full_name ),
+		            'email'    => trim( $userdata->user_email ),
+		            'locale'   => trim( $this->getCurrentLocale() ),
+		            'metadata' => array ( 'user_id' => $user_id ),
+	            ) );
 
                 $this->setUserMollieCustomerId($user_id, $customer->id);
 
@@ -549,26 +608,40 @@ class Mollie_WC_Helper_Data
         return $customer_id;
     }
 
-    /**
-     * Delete active Mollie payment id for order
-     *
-     * @param int $order_id
-     * @return $this
-     */
-    public function unsetActiveMolliePayment ($order_id)
-    {
-	    if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
-		    delete_post_meta($order_id, '_mollie_payment_id');
-		    delete_post_meta($order_id, '_mollie_payment_mode');
-	    } else {
-		    $order = Mollie_WC_Plugin::getDataHelper()->getWcOrder( $order_id );
-		    $order->delete_meta_data( '_mollie_payment_id' );
-		    $order->delete_meta_data( '_mollie_payment_mode' );
-		    $order->save();
-	    }
+	/**
+	 * Delete active Mollie payment id for order
+	 *
+	 * @param int    $order_id
+	 * @param string $payment_id
+	 *
+	 * @return $this
+	 */
+	public function unsetActiveMolliePayment( $order_id, $payment_id = NULL ) {
 
-        return $this;
-    }
+		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+
+			// Only remove Mollie payment details if they belong to this payment, not when a new payment was already placed
+			$mollie_payment_id = get_post_meta( $order_id, '_mollie_payment_id', $single = true );
+
+			if ( $mollie_payment_id == $payment_id ) {
+				delete_post_meta( $order_id, '_mollie_payment_id' );
+				delete_post_meta( $order_id, '_mollie_payment_mode' );
+			}
+		} else {
+
+			// Only remove Mollie payment details if they belong to this payment, not when a new payment was already placed
+			$order             = Mollie_WC_Plugin::getDataHelper()->getWcOrder( $order_id );
+			$mollie_payment_id = $order->get_meta( '_mollie_payment_id', true );
+
+			if ( $mollie_payment_id == $payment_id ) {
+				$order->delete_meta_data( '_mollie_payment_id' );
+				$order->delete_meta_data( '_mollie_payment_mode' );
+				$order->save();
+			}
+		}
+
+		return $this;
+	}
 
     /**
      * Get active Mollie payment id for order
@@ -655,6 +728,35 @@ class Mollie_WC_Helper_Data
 
         return $this;
     }
+
+	/**
+	 * @param int $order_id
+	 *
+	 * @return null
+	 */
+	public function unsetCancelledMolliePaymentId( $order_id ) {
+
+		// If this order contains a cancelled (previous) payment, remove it.
+		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+			$mollie_cancelled_payment_id = get_post_meta( $order_id, '_mollie_cancelled_payment_id', $single = true );
+
+			if ( ! empty( $mollie_cancelled_payment_id ) ) {
+				delete_post_meta( $order_id, '_mollie_cancelled_payment_id' );
+			}
+		} else {
+
+			$order                       = Mollie_WC_Plugin::getDataHelper()->getWcOrder( $order_id );
+			$mollie_cancelled_payment_id = $order->get_meta( '_mollie_cancelled_payment_id', true );
+
+			if ( ! empty( $mollie_cancelled_payment_id ) ) {
+				$order = Mollie_WC_Plugin::getDataHelper()->getWcOrder( $order_id );
+				$order->delete_meta_data( '_mollie_cancelled_payment_id' );
+				$order->save();
+			}
+		}
+
+		return null;
+	}
 
     /**
      * @param int $order_id
