@@ -1,3 +1,5 @@
+<?php global $redux_builder_amp;
+if(isset($redux_builder_amp['ampforwp-amp-menu']) && $redux_builder_amp['ampforwp-amp-menu']){ ?>
 <amp-sidebar id='sidebar'
     layout="nodisplay"
     side="left">
@@ -77,14 +79,16 @@
           </div>
   </div>
 </amp-sidebar>
-
+<?php } ?>
 <div id="designthree" class="designthree main_container">
 <header class="container">
   <div id="headerwrap">
       <div id="header">
+      <?php if(isset($redux_builder_amp['ampforwp-amp-menu']) && $redux_builder_amp['ampforwp-amp-menu']){ ?>
         <div class="hamburgermenu">
             <button class="toast pull-left" on='tap:sidebar.toggle'><span></span></button>
         </div>
+        <?php } ?>
         <div class="headerlogo">
         <?php global $redux_builder_amp;
         do_action('ampforwp_header_top_design3');
@@ -115,11 +119,11 @@
 
             <?php if($redux_builder_amp['ampforwp-custom-logo-dimensions'] == true)  { ?>
 
-                <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="<?php echo $redux_builder_amp['opt-media-width']; ?>" height="<?php echo $redux_builder_amp['opt-media-height']; ?>" alt="logo" class="amp-logo"></amp-img>
+                <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="<?php echo $redux_builder_amp['opt-media-width']; ?>" height="<?php echo $redux_builder_amp['opt-media-height']; ?>" alt="<?php bloginfo('name'); ?>" class="amp-logo"></amp-img>
 
             <?php } else { ?>
 
-                <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="190" height="36" alt="logo" class="amp-logo"></amp-img>
+                <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="190" height="36" alt="<?php bloginfo('name'); ?>" class="amp-logo"></amp-img>
 
             <?php } ?>
 

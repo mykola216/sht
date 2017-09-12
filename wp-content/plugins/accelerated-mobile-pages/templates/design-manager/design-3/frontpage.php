@@ -1,24 +1,19 @@
 <?php global $redux_builder_amp;
  global $wp;
-$post_id = $redux_builder_amp['amp-frontpage-select-option-pages'];
+ //WPML Static Front Page Support #1111
+ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+ if( is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' )){
+ 	$post_id = get_option('page_on_front');
+ 	
+ }
+ else{
+ 	$post_id = $redux_builder_amp['amp-frontpage-select-option-pages'];
+ }
 $template = new AMP_Post_Template( $post_id );?>
 <!doctype html>
 <html amp <?php echo AMP_HTML_Utils::build_attributes_string( $this->get( 'html_tag_attributes' ) ); ?>>
 <head>
-	<meta charset="utf-8"> <?php
-	$query_arg_array = $wp->query_vars;
-  $page = '' ;
-  if( array_key_exists( "page" , $query_arg_array  ) ) {
-	   $page = $wp->query_vars['page'];
-  }
-
-  if ( $page >= '2') { ?>
-		<link rel="canonical" href="<?php
-		echo trailingslashit( home_url() ) . '?page=' . $page ?>"> <?php
-	} else { ?>
-		<link rel="canonical" href="<?php
-		echo  trailingslashit( home_url() ) ?>"> <?php
-	} ?>
+	<meta charset="utf-8"> 
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 	<?php
 		$amp_custom_content_enable = get_post_meta($template->data['post_id'], 'ampforwp_custom_content_editor_checkbox', true);
@@ -36,8 +31,8 @@ $template = new AMP_Post_Template( $post_id );?>
 	<?php do_action( 'amp_post_template_css', $this ); ?>
 	</style>
 </head>
-<body class="single-post design_3_wrapper">
-	
+<body class="single-post <?php ampforwp_the_body_class(); ?> design_3_wrapper">
+	<?php do_action('ampforwp_body_beginning', $this); ?>
 	<?php $this->load_parts( array( 'header-bar' ) ); ?>
 
 	<?php do_action( 'ampforwp_design_3_frontpage_title', $template ); ?>

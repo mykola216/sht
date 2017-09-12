@@ -3,28 +3,18 @@
 <html amp <?php echo AMP_HTML_Utils::build_attributes_string( $this->get( 'html_tag_attributes' ) ); ?>>
 <head>
 	<meta charset="utf-8">
-  <link rel="dns-prefetch" href="https://cdn.ampproject.org">
-	<?php
-	global $redux_builder_amp;
-	if ( is_home() || is_front_page()  || ( is_archive() && $redux_builder_amp['ampforwp-archive-support'] ) ){
-		global $wp;
-		$current_archive_url = home_url( $wp->request );
-		$amp_url 	= trailingslashit($current_archive_url);
-		$remove 	= '/'. AMPFORWP_AMP_QUERY_VAR;
-		$amp_url 	= str_replace($remove, '', $amp_url) ;
-	} ?>
-	<link rel="canonical" href="<?php echo $amp_url ?>">
+	<link rel="dns-prefetch" href="https://cdn.ampproject.org">
 	<?php do_action( 'amp_post_template_head', $this ); ?>
-
 	<style amp-custom>
-	<?php $this->load_parts( array( 'style' ) ); ?>
-	<?php do_action( 'amp_post_template_css', $this ); ?>
+		<?php $this->load_parts( array( 'style' ) ); ?>
+		<?php do_action( 'amp_post_template_css', $this ); ?>
 	</style>
 </head>
 <body class="amp_home_body design_2_wrapper">
+<?php do_action('ampforwp_body_beginning', $this); ?>
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 <?php do_action( 'ampforwp_after_header', $this ); ?>
-<?php do_action('ampforwp_home_above_loop'); ?>
+<?php do_action('ampforwp_home_above_loop') ?>
 <main>
 	<?php do_action('ampforwp_post_before_loop') ?>
 
@@ -68,6 +58,7 @@
 				<div class="home-post_image">
 					<a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>">
 						<amp-img src=<?php echo $thumb_url ?>
+							<?php ampforwp_thumbnail_alt(); ?>
 							<?php if( $redux_builder_amp['ampforwp-homepage-posts-image-modify-size'] ) { ?>
 							 width=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-width'] ?>
 							 height=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-height'] ?>
@@ -103,6 +94,21 @@
 		        <p><?php echo wp_trim_words( strip_shortcodes( $content ) , '15'  ); ?></p>
 
 		    </div>
+			<div class="amp-wp-meta">
+				<?php  $this->load_parts( apply_filters( 'amp_post_template_meta_parts', array( 'meta-author') ) ); ?>
+				<time> <?php
+					$post_date =  human_time_diff( get_the_time('U', get_the_ID() ), current_time('timestamp') ) .' '. ampforwp_translation( $redux_builder_amp['amp-translator-ago-date-text'],'ago' );
+					$post_date = apply_filters('ampforwp_modify_post_date',$post_date);
+					echo  $post_date ; ?>
+				</time>
+				<?php $post_author = $this->get( 'post_author' ); ?>
+				<div class="amp-wp-author-name">
+					<?php
+					$author_name =get_the_author();
+					echo esc_html( $author_name); ?>
+				</div>
+			</div>
+
             <div class="cb"></div>
 	</div>
 

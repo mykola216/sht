@@ -24,11 +24,11 @@
       <?php if (true == ($redux_builder_amp['opt-media']['url'])) {  ?>
             <?php if($redux_builder_amp['ampforwp-custom-logo-dimensions'] == true)  { ?>
 
-            <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="<?php echo $redux_builder_amp['opt-media-width']; ?>" height="<?php echo $redux_builder_amp['opt-media-height']; ?>" alt="logo" class="amp-logo"></amp-img>
+            <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="<?php echo $redux_builder_amp['opt-media-width']; ?>" height="<?php echo $redux_builder_amp['opt-media-height']; ?>" alt="<?php bloginfo('name'); ?>" class="amp-logo"></amp-img>
 
           <?php } else { ?>
 
-            <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="190" height="36" alt="logo" class="amp-logo"></amp-img>
+            <amp-img src="<?php echo $redux_builder_amp['opt-media']['url']; ?>" width="190" height="36" alt="<?php bloginfo('name'); ?>" class="amp-logo"></amp-img>
 
           <?php } ?>
       <?php } else {
@@ -57,7 +57,7 @@
             <amp-img src="<?php echo esc_url( $site_icon_url ); ?>" width="32" height="32" class="amp-wp-site-icon"></amp-img>
         <?php endif; ?>
     </a>
-
+    <?php if(isset($redux_builder_amp['ampforwp-amp-menu']) && $redux_builder_amp['ampforwp-amp-menu']){ ?>
     <div on='tap:sidebar.toggle' role="button" tabindex="0" class="nav_container">
         <a href="#" class="toggle-text">
             <span></span>
@@ -65,6 +65,7 @@
             <span></span>
         </a>
     </div>
+    <?php } ?>
     <?php do_action('ampforwp_header_search'); ?>
     <?php do_action('ampforwp_call_button');
     do_action('ampforwp_header_bottom_design1'); ?>
@@ -73,6 +74,7 @@
 
   </div>
 </header>
+<?php if(isset($redux_builder_amp['ampforwp-amp-menu']) && $redux_builder_amp['ampforwp-amp-menu']){ ?>
 <amp-sidebar id='sidebar'
     layout="nodisplay"
     side="right">
@@ -84,6 +86,5 @@
         echo strip_tags( $menu , '<ul><li><a>'); ?>
   </div>
 </amp-sidebar>
-
-<?php
+<?php }
 do_action('ampforwp_design_1_after_header');

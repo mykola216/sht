@@ -126,15 +126,17 @@ function ampforwp_add_design3_required_scripts( $data ) {
 	$amp_menu_has_child = get_transient( 'ampforwp_has_nav_child' );
 
 	// Add Scripts only when AMP Menu is Enabled
-	if( has_nav_menu( 'amp-menu' ) ) {
-		if ( empty( $data['amp_component_scripts']['amp-accordion'] ) ) {
-			$data['amp_component_scripts']['amp-accordion'] = 'https://cdn.ampproject.org/v0/amp-accordion-0.1.js';
+	if(isset($redux_builder_amp['ampforwp-amp-menu']) && $redux_builder_amp['ampforwp-amp-menu']){ 
+		if( has_nav_menu( 'amp-menu' ) ) {
+			if ( empty( $data['amp_component_scripts']['amp-accordion'] ) ) {
+				$data['amp_component_scripts']['amp-accordion'] = 'https://cdn.ampproject.org/v0/amp-accordion-0.1.js';
+			}
 		}
 	}
 	// Add Scripts only when Homepage AMP Featured Slider is Enabled
 	if( is_home() ) {
-
-		if ( $redux_builder_amp['amp-design-3-featured-slider'] == 1 && $redux_builder_amp['amp-design-selector'] == 3 && $redux_builder_amp['amp-frontpage-select-option'] == 0 ) {
+ 
+		if ( $redux_builder_amp['amp-design-3-featured-slider'] == 1 && $redux_builder_amp['amp-design-selector'] == 3 && $redux_builder_amp['amp-frontpage-select-option'] == 0 ||  get_option( 'page_for_posts' ) && get_queried_object_id() ) {
 
 			if ( empty( $data['amp_component_scripts']['amp-carousel'] ) ) {
 				$data['amp_component_scripts']['amp-carousel'] = 'https://cdn.ampproject.org/v0/amp-carousel-0.1.js';

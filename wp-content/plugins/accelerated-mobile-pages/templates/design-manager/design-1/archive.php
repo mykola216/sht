@@ -1,19 +1,10 @@
-<?php global $redux_builder_amp;  ?>
+<?php global $redux_builder_amp; global $wp;  ?>
 <!doctype html>
 <html amp <?php echo AMP_HTML_Utils::build_attributes_string( $this->get( 'html_tag_attributes' ) ); ?>>
 <head>
 	<meta charset="utf-8">
     <link rel="dns-prefetch" href="https://cdn.ampproject.org">
 	<?php
-	global $redux_builder_amp;
-	if ( is_home() || is_front_page() || is_archive() ){
-		global $wp;
-		$current_archive_url 	= home_url( $wp->request );
-		$amp_url 				= trailingslashit($current_archive_url);
-		$remove 				= '/'. AMPFORWP_AMP_QUERY_VAR;
-		$amp_url 				= str_replace($remove, '', $amp_url) ;
-	}
-
 	if ( is_archive() ) {
 		$description 	= get_the_archive_description();
 		$sanitizer = new AMPFORWP_Content( $description, array(), 
@@ -29,8 +20,6 @@
 					)
 				) ) );
 	} ?>
-	<link rel="canonical" href="<?php echo $amp_url ?>">
-	
 	<?php do_action( 'amp_post_template_head', $this ); ?>
 	<?php
 	$amp_component_scripts = $sanitizer->amp_scripts;
@@ -46,7 +35,7 @@
 </head>
 
 <body class="<?php echo esc_attr( $this->get( 'body_class' ) ); ?> design_1_wrapper">
-
+<?php do_action('ampforwp_body_beginning', $this); ?>
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 
 <article class="amp-wp-article ampforwp-custom-index amp-wp-home">
@@ -57,11 +46,13 @@
 	    the_archive_title( '<h3 class="page-title">', '</h3>' );
 	    
 			$arch_desc 		= $sanitizer->get_amp_content();
-			if( $arch_desc ) {  ?>
-				<div class="amp-wp-content taxonomy-description">
-					<?php echo $arch_desc ; ?>
-			  </div> <?php
-			}
+			if( $arch_desc ) {  
+				if($wp->query_vars['paged'] <= '1') {?>
+					<div class="amp-wp-content taxonomy-description">
+						<?php echo $arch_desc ; ?>
+				    </div> <?php
+				}
+			}	
 	  } ?>
 
 		<?php  if ( have_posts() ) : while ( have_posts() ) : the_post();
@@ -101,6 +92,7 @@
 							<a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>">
 								<amp-img
 									src=<?php echo $thumb_url ?>
+									<?php ampforwp_thumbnail_alt(); ?>
 									<?php if( $redux_builder_amp['ampforwp-homepage-posts-image-modify-size'] ) { ?>
 										width=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-width'] ?>
 										height=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-height'] ?>
@@ -117,7 +109,9 @@
 						}else{
 							$content = get_the_content();
 						} ?>
-					<p><?php echo wp_trim_words( strip_shortcodes( $content ) , '20'); ?></p>
+					<p><?php global $redux_builder_amp;
+								$excertp_length = $redux_builder_amp['amp-design-1-excerpt'];
+								echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); ?></p>
 				</div>
 	        </div>
 	    <?php endwhile;  ?>

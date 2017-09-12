@@ -20,20 +20,20 @@
 		add_action( 'init', 'ampforwp_menu' );
 	}
 
-	// 1.2 Footer Menu
-	global $redux_builder_amp;
-	if ( $redux_builder_amp['amp-design-selector'] == 1 ||
-		 $redux_builder_amp['amp-design-selector'] == 2 || 
-		 $redux_builder_amp['amp-design-selector'] == 3) {
-	 	add_action( 'init', 'ampforwp_footermenu' );
-	}
+	// 1.2 Footer Menu	
+	add_action( 'init', 'ampforwp_footermenu' );
 	if (! function_exists( 'ampforwp_footermenu') ) {
 		function ampforwp_footermenu() {
-		  register_nav_menus(
-		    array(
-		      'amp-footer-menu' => __( 'AMP Footer Menu','accelerated-mobile-pages' ),
-		    )
-		  );
+			global $redux_builder_amp;	 
+			if ( (isset($redux_builder_amp['amp-design-selector'])) && $redux_builder_amp['amp-design-selector'] == 1 ||
+				 $redux_builder_amp['amp-design-selector'] == 2 || 
+				 $redux_builder_amp['amp-design-selector'] == 3 ) {			
+				register_nav_menus(
+					array(
+					  'amp-footer-menu' => __( 'AMP Footer Menu','accelerated-mobile-pages' ),
+					)
+				);
+			}
 		}
 	}
 
@@ -47,5 +47,4 @@
 		wp_register_style( 'ampforwp_admin_css', untrailingslashit(AMPFORWP_PLUGIN_DIR_URI) . '/includes/admin-style.css', false, '1.0.0' );
         wp_enqueue_style( 'ampforwp_admin_css' );
 	}
-
 ?>
