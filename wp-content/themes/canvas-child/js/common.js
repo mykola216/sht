@@ -85,7 +85,7 @@
 
         $(".searchform").on('click', 'input', function () {
            $(this).addClass('active');
-        });
+        }).append('<input type="hidden" name="post_type" value="product">');
     });// DOM ready
 })(jQuery);
 (function(d, s, id) {
