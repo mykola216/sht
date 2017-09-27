@@ -30,7 +30,7 @@ $d_s_phone_number = get_field('d_s_phone_number', 'option');
     <div class="flex-container">
         <a href="<?php echo $d_s_logo_link; ?>" target="_blank" class="d-s-logo" style="background-image: url('<?php echo $d_s_logo_image_url; ?>')"></a>
         <h6 class="d-s-work-time"><?php echo $d_s_work_time; ?></h6>
-        <h6 class="d-s-contact">Maatwerk <span></span> <a href="<?php echo get_permalink(1816); ?>">Contact</a></h6>
+        <h6 class="d-s-contact"><a href="<?php echo home_url('bestellen-op-maat'); ?>">Maatwerk</a> <span></span> <a href="<?php echo get_permalink(1816); ?>">Contact</a></h6>
         <a href="tel:<?php echo $d_s_phone_number; ?>" class="d-s-phone"><?php echo $d_s_phone_number; ?></a>
     </div>
 </section>

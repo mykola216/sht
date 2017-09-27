@@ -13,10 +13,10 @@
 
     function canvas_child_tooltip() {
         $(".canvas-child-tooltip").tooltip({
-            show: 500,
-            hide: 1000,
+            show: 400,
+            hide: { delay: 3000, duration: 400 },
             content: function () {
-                return jQuery(this).prop('title');
+                return $(this).attr('title');
             }
         });
     }
