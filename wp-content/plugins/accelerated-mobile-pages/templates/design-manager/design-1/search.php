@@ -25,7 +25,7 @@
 </head>
 
 <body class="<?php echo esc_attr( $this->get( 'body_class' ) ); ?> design_1_wrapper">
-
+<?php do_action('ampforwp_body_beginning', $this); ?>
 <?php $this->load_parts( array( 'header-bar' ) ); ?>
 
 <article class="amp-wp-article ampforwp-custom-index amp-wp-home">
@@ -90,7 +90,9 @@
 						}else{
 							$content = get_the_content();
 						} ?>
-					<p><?php echo wp_trim_words( strip_shortcodes( $content ) , '20'); ?></p>
+					<p><?php global $redux_builder_amp;
+								$excertp_length = $redux_builder_amp['amp-design-1-excerpt'];
+								echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); ?></p>
 				</div>
 	        </div>
 	    <?php endwhile;  ?>

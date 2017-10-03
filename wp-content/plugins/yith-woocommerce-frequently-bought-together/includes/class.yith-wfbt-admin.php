@@ -396,9 +396,16 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 				foreach ( $posts as $post ) {
 					$product = wc_get_product( $post );
 					// exclude variable product
-					if( $product->is_type( 'variable' ) ) {
+					if( ! $product || $product->is_type( 'variable' ) ) {
 						continue;
 					}
+
+					if( $product->is_type( 'variation' ) ) {
+					    $parent = wp_get_post_parent_id( $post );
+					    if( ! wc_get_product( $parent ) ) {
+					        continue;
+                        }
+                    }
 
 					$found_products[ $post ] = rawurldecode( $product->get_formatted_name() );
 				}

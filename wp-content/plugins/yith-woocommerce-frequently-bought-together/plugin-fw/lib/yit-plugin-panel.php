@@ -77,7 +77,9 @@ if ( ! class_exists( 'YIT_Plugin_Panel' ) ) {
 	                'position'    => null
                 );
 
-                $this->settings         = wp_parse_args( $args, $default_args );
+                $args = apply_filters( 'yit_plugin_fw_panel_option_args', wp_parse_args( $args, $default_args ) );
+
+                $this->settings         = $args;
                 $this->_tabs_path_files = $this->get_tabs_path_files();
 
                 if ( isset( $this->settings['create_menu_page'] ) && $this->settings['create_menu_page'] ) {

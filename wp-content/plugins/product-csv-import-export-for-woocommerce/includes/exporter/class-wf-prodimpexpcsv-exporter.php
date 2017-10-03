@@ -25,13 +25,34 @@ class WF_ProdImpExpCsv_Exporter {
                 $sortcolumn                  = ! empty( $_POST['sortcolumn'] ) ? $_POST['sortcolumn']  : 'post_parent,ID';
                 $delimiter                   = ! empty( $_POST['delimiter'] ) ? $_POST['delimiter']  : ',';
 		$csv_columns                 = include( 'data/data-wf-post-columns.php' );
-                $user_columns_name           = ! empty( $_POST['columns_name'] ) ? $_POST['columns_name'] : $csv_columns;
+                $user_columns_name           = ! empty( $_POST['columns_name'] ) ? $_POST['columns_name'] : $csv_columns;                                
 		$product_ptaxonomies         = get_object_taxonomies( 'product', 'name' );
                 $product_vtaxonomies         = get_object_taxonomies( 'product_variation', 'name' );
                 $product_taxonomies          = array_merge($product_ptaxonomies, $product_vtaxonomies);
 		$export_columns              = ! empty( $_POST['columns'] ) ? $_POST['columns'] : '';
 		$include_hidden_meta         = ! empty( $_POST['include_hidden_meta'] ) ? true : false;
-		
+
+                $new_profile                   = ! empty( $_POST['new_profile'] ) ? $_POST['new_profile']  : '';
+                if($new_profile!== ''){
+                                    
+                        $mapped = array();
+                        if(!empty($export_columns)){
+                            foreach($export_columns as $key => $value) {
+                               $mapped[$key] = $user_columns_name[$key];
+                            }
+                        }
+
+                        $export_profile_array = get_option('xa_prod_csv_export_mapping');
+                        $export_profile_array[$new_profile] = $mapped;
+                        update_option('xa_prod_csv_export_mapping', $export_profile_array);	
+                }
+                
+                if(isset($_POST['auto_export_profile'])){
+                    $export_profile_array = get_option('xa_prod_csv_export_mapping');
+                    $user_columns_name = $export_profile_array[$_POST['auto_export_profile']];
+                    $export_columns = $user_columns_name;
+                }
+                
 		$exclude_hidden_meta_columns = include( 'data/data-wf-hidden-meta-columns.php' );
 
 		if ( $limit > $export_limit )
@@ -100,11 +121,13 @@ class WF_ProdImpExpCsv_Exporter {
 		// Export header rows
 		foreach ( $csv_columns as $column => $value ) {
                     
-                        $temp_head =    esc_attr( $user_columns_name[$column] );
-                        if (strpos($temp_head, 'yoast') === false) {
+                    if(!isset($user_columns_name[$column]))                        
+                       continue;
+                    $temp_head =    esc_attr( $user_columns_name[$column] );
+                    if (strpos($temp_head, 'yoast') === false) {
                             $temp_head = ltrim($temp_head, '_');
-                        }
-			if ( ! $export_columns || in_array( $column, $export_columns ) ) $row[] = $temp_head;
+                    }
+                    if ( ! $export_columns || in_array( $value, $export_columns ) || in_array( $column, $export_columns )) $row[] = $temp_head;
 		}
 
 		// Handle special fields like taxonomies
@@ -334,7 +357,7 @@ class WF_ProdImpExpCsv_Exporter {
 
 				// Get column values
 				foreach ( $csv_columns as $column => $value ) {
-					if ( ! $export_columns || in_array( $column, $export_columns ) ) {
+					if ( ! $export_columns || in_array( $value, $export_columns ) || in_array( $column, $export_columns )) {
 
 						if ($column == '_regular_price' && empty( $product->meta->$column ) ) {
 							$column = '_price';
@@ -494,10 +517,10 @@ class WF_ProdImpExpCsv_Exporter {
 				// WF: Adding product permalink.
 				if ( ! $export_columns || in_array( 'product_page_url', $export_columns ) ) {
 					$product_page_url = '';
-					if ( $product->ID ) {
+					if ( !empty($product->ID) ) {
 						$product_page_url = get_permalink( $product->ID );
 					}
-					if ( $product->post_parent ) {
+					if ( !empty($product->post_parent) ) {
 						$product_page_url = get_permalink( $product->post_parent );
 					}
 					$row[] = $product_page_url;

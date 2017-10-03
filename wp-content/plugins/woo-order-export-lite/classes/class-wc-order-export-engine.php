@@ -13,7 +13,7 @@ class WC_Order_Export_Engine {
 	public static function export( $settings, $filepath ) {
 		if( empty($settings['destination']['type']) ) {
 			return __( "No format selected", 'woocommerce-order-export' );
-		}	
+		}
 		$export_type = strtolower( $settings['destination']['type'] );
 		if ( ! in_array( strtoupper( $export_type ), WC_Order_Export_Admin::$export_types ) ) {
 			return __( "Wrong format", 'woocommerce-order-export' );
@@ -55,21 +55,21 @@ class WC_Order_Export_Engine {
 
 		return apply_filters( 'woe_make_filename', strtr( $mask, $subst ) );
 	}
-	
+
 	public static function tempnam( $folder, $prefix ) {
 		$filename = @tempnam( $folder, $prefix );
 		if(! $filename ) {
 			$tmp_folder = dirname( dirname ( __FILE__ ) ) . '/tmp';
-			// kill expired tmp file 
+			// kill expired tmp file
 			foreach( glob( $tmp_folder."*" ) as $f) {
 				if( time() - filemtime($f) > 24*3600 )
 					unlink( $f );
 			}
-			$filename = tempnam( $tmp_folder, $prefix );	
+			$filename = tempnam( $tmp_folder, $prefix );
 		}
 		return $filename;
 	}
-	
+
 
 	// labels for output columns
 	private static function get_labels( $fields, $format, &$static_vals ) {
@@ -219,11 +219,14 @@ class WC_Order_Export_Engine {
 		$format = strtolower( $settings['format'] );
 
 		$options = array();
+		
 		if ( $format == 'xls' AND @$settings['format_xls_populate_other_columns_product_rows']
 		     OR $format == 'csv' AND @$settings['format_csv_populate_other_columns_product_rows']
 		     OR $format == 'tsv' AND @$settings['format_tsv_populate_other_columns_product_rows'] ) {
 			$options['populate_other_columns_product_rows'] = 1;
 		}
+		$options['item_rows_start_from_new_line'] = ( $format == 'csv' AND @$settings['format_csv_item_rows_start_from_new_line'] );
+		
 		if( !empty($settings['all_products_from_order']) )
 			$options['include_products'] = false;
 		else
@@ -239,19 +242,23 @@ class WC_Order_Export_Engine {
 		else
 			$options['time_format'] = 'H:i';
 
-		//as is	
+		//as is
 		$options['export_refunds'] = $settings['export_refunds'];
 		$options['skip_refunded_items'] = $settings['skip_refunded_items'];
-		
+		$options['export_all_comments'] = $settings['export_all_comments'];
+		$options['strip_tags_product_fields'] = !empty($settings['strip_tags_product_fields']);
+
 		return $options;
 	}
-	
+
 	private static function  validate_defaults( $settings ) {
 		if( empty($settings['sort_direction']) )
 			$settings['sort_direction'] = 'DESC';
+		if( !isset($settings['skip_empty_file']) )
+			$settings['skip_empty_file'] = true;
 		return apply_filters('woe_settings_validate_defaults', $settings);
 	}
-	
+
 	private static function  try_modify_status( $order_id, $settings ) {
 		if ( isset( $settings['change_order_status_to'] ) && wc_is_order_status( $settings['change_order_status_to'] ) ) {
 			$order = new WC_Order( $order_id );
@@ -268,13 +275,13 @@ class WC_Order_Export_Engine {
 		$filename = ''
 	) {
 		global $wpdb;
-		
+
 		//for hooks
 		$settings = self::validate_defaults( $settings );
 		self::$current_job_settings = $settings;
 		self::$current_job_build_mode = $make_mode;
 		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
-		
+
 		if ( $output_mode == 'browser' ) {
 			$filename = 'php://output';
 			while ( @ob_end_clean() ) {
@@ -284,28 +291,23 @@ class WC_Order_Export_Engine {
 		}
 
 
-		//add_filter("woe_csv_output_filter",array($this,'testfilter'),10,2);
-		$formater = self::init_formater( $make_mode, $settings, $filename, $labels, $static_vals );
+		if ( $make_mode !== 'estimate' )
+			$formater = self::init_formater( $make_mode, $settings, $filename, $labels, $static_vals );
 		$format   = strtolower( $settings['format'] );
 
 		if ( $make_mode == 'finish' ) {
-			if ( $format != 'xls' ) {
-				$formater->finish();
-			}
-
+			$formater->finish();
 			return $filename;
 		}
 
 		//get IDs
 		$sql = WC_Order_Export_Data_Extractor::sql_get_order_ids( $settings );
-		if ( $make_mode == 'preview' ) {
+		if ( $make_mode == 'estimate' ) { //if estimate return total count
+			return $wpdb->get_var( str_replace( 'ID AS order_id', 'COUNT(ID) AS order_count', $sql ) );
+		} elseif ( $make_mode == 'preview' ) {
 			$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id " . $settings[ 'sort_direction' ] ). " LIMIT " . ($limit !== false ? $limit : 1);
-		} elseif ( $make_mode != 'estimate' ) {
+		} elseif ( $make_mode == 'partial' ) { 
 			$sql .= apply_filters ( "woe_sql_get_order_ids_order_by", " ORDER BY order_id " . $settings[ 'sort_direction' ] );
-		}
-
-		//UNUSED ajax get partial orders
-		if ( $make_mode == 'partial' ) {
 			$offset = intval( $offset );
 			$limit  = intval( $limit );
 			$sql .= " LIMIT $offset,$limit";
@@ -327,14 +329,13 @@ class WC_Order_Export_Engine {
 
 		$options = self::_install_options( $settings );
 
-		if ( $make_mode != 'partial' ) {
+		if ( $make_mode != 'partial' ) { // Preview or start_estimate
 			$formater->start( $header );
-		} elseif ( $format == 'json' AND $offset > 0 ) {
+			if ( $make_mode == 'start_estimate' ) { //Start return total count
+				return $wpdb->get_var( str_replace( 'ID AS order_id', 'COUNT(ID) AS order_count', $sql ) );
+			}
+		} elseif ( $format == 'json' AND $offset > 0 ) { // json partial
 			$formater->prev_added = true;
-		}
-
-		if ( $make_mode == 'estimate' ) { //if estimate return total count
-			return $wpdb->get_var( str_replace( 'ID AS order_id', 'COUNT(ID) AS order_count', $sql ) );
 		}
 
 		WC_Order_Export_Data_Extractor::prepare_for_export();
@@ -349,21 +350,24 @@ class WC_Order_Export_Engine {
 				if ($row) {
 					$formater->output( $row );
 					do_action( "woe_order_row_exported", $row, $order_id);
-				}	
+				}
 			}
 			if ( $make_mode != 'preview' )
 				do_action( "woe_order_exported", $order_id);
 		}
-		if ( $make_mode != 'partial' OR $format == 'xls' ) {
+		
+		// for modes
+		if ( $make_mode == 'partial') 
+			$formater->finish_partial();
+		elseif ( $make_mode == 'preview') 
 			$formater->finish();
-		}
 
 		return $filename;
 	}
 
 	public static function build_file_full( $settings, $filename = '', $limit = 0, $order_ids = array( ) ) {
 		global $wpdb;
-		
+
 		//for hooks
 		while ( @ob_end_clean() ) {
 		}; // remove ob_xx
@@ -419,7 +423,7 @@ class WC_Order_Export_Engine {
 				if ($row) {
 					$formater->output( $row );
 					do_action( "woe_order_row_exported", $row, $order_id);
-				}	
+				}
 			}
 			do_action( "woe_order_exported", $order_id);
 			self::try_modify_status( $order_id, $settings );
@@ -440,7 +444,7 @@ class WC_Order_Export_Engine {
 		self::$current_job_settings = $settings;
 		self::$current_job_build_mode = 'full';
 		self::$date_format = trim( $settings['date_format'] . ' ' . $settings['time_format'] );
-		
+
 		$filename = ( ! empty( $filename ) ? $filename : self::tempnam( sys_get_temp_dir(), $settings['format'] ) );
 
 		self::init_labels( $settings, $labels, $static_vals );
@@ -475,7 +479,7 @@ class WC_Order_Export_Engine {
 		$options = self::_install_options( $settings );
 
 		$result = false;
-		
+
 		WC_Order_Export_Data_Extractor::prepare_for_export();
 		foreach ( $order_ids as $order_id ) {
 			$order_id = apply_filters( "woe_order_export_started", $order_id);
@@ -518,14 +522,14 @@ class WC_Order_Export_Engine {
 		}
 		else {
 			$file = self::build_file_full( $settings, $filename, $limit, $order_ids );
-			if ( $file !== false ) 
+			if ( $file !== false )
 				$result = self::export( $settings, $file );
-			else 
+			else
 				$result = false;
 		}
-		
+
 		if ( $result === false )
-			$result  = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );		
+			$result  = __( 'Nothing to export. Please, adjust your filters', 'woocommerce-order-export' );
 		return $result;
 	}
 

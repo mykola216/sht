@@ -93,6 +93,26 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 
 == Changelog ==
 
+= 1.4.5 - 2017-09-06 =
+* Fixed activation error for PHP less than 7.0
+
+= 1.4.4 - 2017-09-04 =
+* Fixed critical bug , headers were missed
+
+= 1.4.3 - 2017-09-01 =
+* User can select which date use ( created/modified/paid/completed )  in filter "Date Range"
+* User can add new value to filters ( type text and press Enter )
+* Added filter "Any Coupon Used"
+* Added field  "Date Paid"
+* Added checkbox to export all comments ( including system messages )
+* Added checkbox to strip tags in product description/variation
+* Added checkbox to export item rows at new line ( for CSV format )
+* Tweak UI ( tooltips, reduce sections )
+* Sorted values in all dropdowns 
+* Fixed bug - Don't export draft order
+* Fixed bug - Don't create file during estimation
+* Plugin code partially refactored
+
 = 1.4.2 - 2017-07-13 =
 * Fixed critical bug in deactivation procedure
 
