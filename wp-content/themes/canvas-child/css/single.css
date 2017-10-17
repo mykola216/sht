@@ -308,3 +308,9 @@ li.kussens label:last-child{
         width: 38% !important;
     }
 }
+@media only screen and (max-width: 768px) {
+	.gform_wrapper ul.gfield_checkbox li input[type=checkbox], .gform_wrapper ul.gfield_radio li input[type=radio] {
+		width: 30px !important;
+		height: 30px !important;
+	}
+}
