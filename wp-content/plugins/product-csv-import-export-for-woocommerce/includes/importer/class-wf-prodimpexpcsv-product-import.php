@@ -261,7 +261,7 @@ class WF_ProdImpExpCsv_Product_Import extends WP_Importer {
 						$import_count      = 0;
 
 							// Get CSV positions
-						if ( ( $handle = fopen( $file, "r" ) ) !== FALSE ) {
+						if ( ( $handle = @fopen( $file, "r" ) ) !== FALSE ) {
 
 							while ( ( $postmeta = ($this->decentFgetcsv)? fgetcsv( $handle, 0, $this->delimiter , '"', '"' ) : fgetcsv( $handle, 0, $this->delimiter , '"' ) ) !== FALSE ) {
 								$count++;
@@ -521,7 +521,7 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 		@ini_set( 'auto_detect_line_endings', true );
 
 		// Get headers
-		if ( ( $handle = fopen( $file, "r" ) ) !== FALSE ) {
+		if ( ( $handle = @fopen( $file, "r" ) ) !== FALSE ) {
 
 			$row = $raw_headers = array();
 			
@@ -773,7 +773,7 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 		$post['post_type'] = 'product';
 		
 		if(isset($post['parent_sku']) && $post['parent_sku'] !== '' && $post['parent_sku'] !== null){
-			$prod_id = wc_get_product_id_by_sku( $post['parent_sku'] );
+			$prod_id = xa_wc_get_product_id_by_sku( $post['parent_sku'] );
 			$prod    = wc_get_product( $prod_id );
 			if(WC()->version < '2.7.0')
 			{
@@ -1494,7 +1494,7 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 				$error_message =  "";
 				$success = true;
 			} else {
-				$error_message = "There was a problem\n";
+				$error_message = "There was a problem while downloading the specified File <b>".$server_file."</b> .\n";
 			}
 		}
 		

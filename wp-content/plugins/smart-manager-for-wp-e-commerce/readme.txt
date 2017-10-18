@@ -1,12 +1,12 @@
 === Smart Store Manager For Your WooCommerce Shop ===
 Contributors: storeapps, niravmehta, ratnakar.dubey, Tarun.Parswani, akash123dhawade
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CPTHCDC382KVA
-Author URI: http://www.storeapps.org/
-Plugin URI: http://www.storeapps.org/
+Author URI: https://www.storeapps.org/
+Plugin URI: https://www.storeapps.org/
 Tags: woocommerce, store manager, bulk update, inline edit, manage variations, bulk edit, coupons , shop manager,  batch update,  wp ecommerce, productivity, products, variations, orders, customers, manager, pro, manager pro, pro manager, extension, premium, free, download, woocommerce customer management
 Requires at least: 2.0.2
-Tested up to: 4.7.5
-Stable tag: 3.9.23
+Tested up to: 4.8.2
+Stable tag: 3.13.0
 License: GPLv3
 
 The #1 tool to bulk update, inline edit products, orders, customers, coupons on your Woocommerce store. Easily manage your WooCommerce shop within seconds.
@@ -80,14 +80,24 @@ Smart Manager is the most powerful, flexible, feature-rich and high performance 
 * Compatible with latest versions of both [WooCommerce](http://www.woothemes.com/woocommerce/) and [WP e-Commerce](http://www.getshopped.org)
 * Available Translations: Dutch, Brazilian Portuguese, French, Romanian, German(Austria)
 * Check out [Smart Manager Pro Demo](http://demo.storeapps.org/?demo=sm-woo&utm_source=wprepo&utm_medium=web&utm_campaign=smwp_readme)
-* Questions? [Contact us](http://www.storeapps.org/support/contact-us/?utm_source=wprepo&utm_medium=web&utm_campaign=smwp_readme)
-* [Review all our WooCommerce plugins](http://www.storeapps.org/shop/?utm_source=wprepo&utm_medium=web&utm_campaign=smwp_readme)
+* Questions? [Contact us](https://www.storeapps.org/support/contact-us/?utm_source=wprepo&utm_medium=web&utm_campaign=smwp_readme)
+* [Review all our WooCommerce plugins](https://www.storeapps.org/shop/?utm_source=wprepo&utm_medium=web&utm_campaign=smwp_readme)
 
 
 > 16000+ happy users. 4.4 stars out of 5 from 80+ reviews. 5+ years track record. 
 > You won't go wrong with Smart Manager. Try it today!
 
+**Some of our other free plugins on WordPress.org**
 
+1. [Smart Reporter for WooCommerce and WP-eCommerce](https://wordpress.org/plugins/smart-reporter-for-wp-e-commerce/)
+2. [Icegram](https://wordpress.org/plugins/icegram/) - Popups, Welcome Bar, Optins and Lead Generation Plugin
+3. [Rainmaker](https://wordpress.org/plugins/icegram-rainmaker/) - Best Forms Plugin on WordPress
+4. [Email Subscribers & Newsletters](https://wordpress.org/plugins/email-subscribers/)
+5. [Email Subscribers – Group Selector](https://wordpress.org/plugins/email-subscribers-advanced-form/)
+6. [News Announcement Scroll](https://wordpress.org/plugins/news-announcement-scroll/)
+7. [Temporary Login Without Password](https://wordpress.org/plugins/temporary-login-without-password/)
+
+**Check out our paid plugins from here - [StoreApps.org](https://www.storeapps.org/)**
 
 == Installation ==
 
@@ -139,6 +149,38 @@ It also gives the warm feeling of supporting further development of the plugin.
 4. Batch Update (only in paid version)
 
 == Changelog ==
+
+= 3.13.0 (26.09.2017) =
+* Update: Option to handle number of records per call (Beta)
+* Fix: Print invoices not working properly for some of the orders (WooCommerce)
+* Fix: Product attributes & Custom taxonomies search not working (Beta)
+* Fix: Product variations not getting displayed when searching for custom taxonomies (Beta)
+* Fix: Postmeta and taxnomies not getting displayed for 'Orders' and 'Posts' dashboard (Beta)
+* Fix: State Management related fixes (Beta)
+* Fix: Some minor fixes
+
+= 3.12.0 (28.08.2017) =
+* New: Storing the state of Smart Manager (Beta) into the database - enabling same view from anywhere (Beta)
+* Fix: Some minor fixes
+
+= 3.11.1 (21.08.2017) =
+* Fix: No products showing in the products dashboard in some cases since v3.11.0 (WooCommerce)
+* Fix: Custom attributes not getting updated (Beta)
+* Fix: Some minor fixes
+
+= 3.11.0 (16.08.2017) =
+* Fix: Order totals not getting displayed properly in invoices printed using Smart Manager (WooCommerce)
+* Fix: Variations getting displayed for orphaned variations (WooCommerce)
+* Fix: Advanced search not working in other dashboards except products (Beta)
+* Fix: Advanced search not working in some cases for price and sales price fields (WooCommerce)
+* Fix: Some minor fixes
+
+= 3.10.0 (10.07.2017) =
+* New: Advanced Search functionality for all dashboards (Beta)
+* Update: Added Billing Address and Customer ID to orders CSV export (WooCommerce)
+* Fix: Some orders not getting displayed in orders dashboard (WooCommerce)
+* Fix: Line total not getting displayed in the print invoice genrated using Smart Manager in orders dashboard (WooCommerce)
+* Fix: Some minor fixes
 
 = 3.9.23 (01.05.2017) =
 * Fix: Fixes related to attributes & categories not getting displayed in the grid (WooCommerce)
@@ -713,6 +755,21 @@ It also gives the warm feeling of supporting further development of the plugin.
 * Product administration features
 
 == Upgrade Notice ==
+
+= 3.13.0 =
+Fixes related to print invoices not working properly for some of the orders (WooCommerce), product attributes and custom taxonomies search not working (Beta) along with other important fixes & updates. Recommended upgrade.
+
+= 3.12.0 =
+New feature of storing the state of Smart Manager (Beta) into the database - enabling same view from anywhere (Beta) along with other important fixes & updates. Recommended upgrade.
+
+= 3.11.1 =
+Fixes related to no products getting loaded in products dashboard in some cases, custom attributes not getting saved when edited using Smart Manager Beta along with other important fixes & updates. Recommended upgrade. 
+
+= 3.11.0 =
+Fixes related to advanced search functionality in Beta, order totals not getting displayed in invoices printed using Smart Manager (woocommerce) along with other important fixes & updates. Recommended upgrade. 
+
+= 3.10.0 =
+New feature of advanced search functionality for all dashboards(beta), billing address & customer id columns in orders csv export (woocommerce) along with other important fixes & updates. Recommended upgrade.
 
 = 3.9.23 =
 Fixes related to WooCommerce attributes & categories not getting displayed in Smart Manager grid along with other important fixes. Recommended upgrade.

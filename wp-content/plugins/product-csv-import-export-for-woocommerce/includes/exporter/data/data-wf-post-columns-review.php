@@ -20,5 +20,7 @@ return apply_filters('product_reviews_csv_product_post_columns', array(
     'rating' => 'rating',
     'verified' => 'verified',
     'title' => 'title',
+    //Product SKU associated with the comment
+    'product_SKU' => 'product_SKU',
     'comment_alter_id' => 'comment_alter_id',
 ));

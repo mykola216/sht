@@ -119,6 +119,10 @@ if(!empty($ftp_settings)){
 								<th><label><?php _e( 'Delimiter', 'wf_csv_import_export' ); ?></label><br/></th>
 								<td><input type="text" name="delimiter" placeholder="," size="2" /></td>
 							</tr>
+							<tr>
+								<th><label><?php _e( 'Use SKU', 'wf_csv_import_export' ); ?></label><br/></th>
+								<td><input type="checkbox" name="use_sku" /></td>
+							</tr>
 
 						</tbody>
 					</table>

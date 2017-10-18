@@ -508,7 +508,23 @@ Ext.onReady(function () {
                     }
                 }
             });
-        })
+
+	        var current_url = document.URL;
+
+		    if ( !jQuery(document.body).hasClass('folded') && current_url.indexOf("page=smart-manager") != -1 ) {
+		        jQuery(document.body).addClass('folded');
+		    }
+
+		    jQuery('#collapse-menu').live('click', function() {
+
+		        var current_url = document.URL;
+
+		        if ( !jQuery(document.body).hasClass('folded') && current_url.indexOf("page=smart-manager") != -1 ) {
+		            jQuery(document.body).addClass('folded');
+		        }
+		    });
+
+        });
         
         //Function to set all the states on unload
         window.onbeforeunload = function (evt) {  
@@ -3801,18 +3817,23 @@ var showCustomerDetails = function(record,rowIndex){
 
         //code to get the width of SM w.r.to width of the browser
         
-        var wWidth = 0;
+        var wWidth = 0,
+        	hHeight = 0;
 
         //code to handle the sizing od the Smart Manager Grid w.r.to collapse menu
         if ( document.documentElement.offsetWidth > 557 ) {
-	        if ( !jQuery(document.body).hasClass('folded') ) {
-	            wWidth  = document.documentElement.offsetWidth - 183;
-	        }
-	        else {
-	            wWidth  = document.documentElement.offsetWidth - 67;
-	        }
+	        // if ( !jQuery(document.body).hasClass('folded') ) {
+	        //     wWidth  = document.documentElement.offsetWidth - 183;
+	        // }
+	        // else {
+	        //     wWidth  = document.documentElement.offsetWidth - 67;
+	        // }
+
+	        wWidth  = document.documentElement.offsetWidth - 67;
+	        hHeight  = document.documentElement.offsetWidth - 110;
 	    } else {
 	    	wWidth = 1000;
+	    	hHeight = 1000;
 	    }
     
         var variation_state=""; // Variable to handle the incVariation checkbox state
@@ -3830,7 +3851,7 @@ var showCustomerDetails = function(record,rowIndex){
 	cm: eval(SM.dashboardComboBox.value.toLowerCase()+'ColumnModel'),
 	renderTo: 'editor-grid',
         width : wWidth,
-	height: 700,
+	height: hHeight,
 	stripeRows: true,
 	frame: true,
 	loadMask: mask,

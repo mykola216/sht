@@ -151,7 +151,7 @@ class WF_ProdImpExpCsv_ImportCron {
 				$this->error_message =  "";
 				$success = true;
 			} else {
-				$this->error_message = "There was a problem\n";
+				$this->error_message = "There was a problem while downloading the specified File <b>".$server_file."</b> .\n";
 			}
 		}
 		

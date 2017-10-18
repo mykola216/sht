@@ -142,12 +142,12 @@ class Smart_Manager_Admin_Welcome {
             	add_thickbox();
         	}
 
-            if ( ! method_exists( 'StoreApps_Upgrade_1_6', 'support_ticket_content' ) ) return;
+            if ( ! method_exists( 'StoreApps_Upgrade_2_0', 'support_ticket_content' ) ) return;
 
             $plugin_data = get_plugin_data( self::$plugin_file );
             $license_key = get_site_option( self::$prefix.'_license_key' );
 
-            StoreApps_Upgrade_1_6::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
+            StoreApps_Upgrade_2_0::support_ticket_content( self::$prefix, self::$sku, $plugin_data, $license_key, self::$text_domain );
     }
 
 	/**
@@ -192,10 +192,10 @@ class Smart_Manager_Admin_Welcome {
 						echo __( 'Questions? Need Help?', self::$text_domain ); 
 					?><br>
 
-					<?php if (SMPRO === true) { ?>
+					<?php if (SMBETAPRO === true) { ?>
 						<a href="options-general.php?page=smart-manager-settings" target="_blank"><?php _e( 'Settings', self::$text_domain ); ?></a> | 
 					<?php } ?>
-					<a href="http://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=welcome_page&utm_campaign=view_docs" target="_blank"><?php _e( 'Docs', self::$text_domain ); ?></a>
+					<a href="https://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=welcome_page&utm_campaign=view_docs" target="_blank"><?php _e( 'Docs', self::$text_domain ); ?></a>
 				</p>
 			</div>
 		</div>
@@ -242,13 +242,13 @@ class Smart_Manager_Admin_Welcome {
 					<div class="col">
 						<h4><?php echo __( 'Inline Editing', self::$text_domain ); ?></h4>
 						<p>
-							<?php echo sprintf(__( 'You can quickly update your products, customers and orders in the grid itself. This facilitates editing of multiple rows at a time instead of editing and sacing each row separately, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-use-inline-editing/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'You can quickly update your products, customers and orders in the grid itself. This facilitates editing of multiple rows at a time instead of editing and sacing each row separately, %s.', self::$text_domain ), '<a href="https://www.storeapps.org/docs/sm-how-to-use-inline-editing/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 					<div class="last-feature col">
 						<h4><?php echo __( 'Filter/Search Records', self::$text_domain ); ?></h4>
 						<p>
-							<?php echo sprintf(__( 'If you would like to filter the records, you can easily do the same by simply entering keyword in the “Search” field at the top of the grid (%s). If you need to have a more specific search result, then you can switch to “%s“ and then search.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-filter-records-using-simple-search/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>', '<a href="https://www.youtube.com/watch?v=hX7CcZYo060" target="_blank">' . __( 'Advanced Search', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'If you would like to filter the records, you can easily do the same by simply entering keyword in the “Search” field at the top of the grid (%s). If you need to have a more specific search result, then you can switch to “%s“ and then search.', self::$text_domain ), '<a href="https://www.storeapps.org/docs/sm-how-to-filter-records-using-simple-search/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>', '<a href="https://www.youtube.com/watch?v=hX7CcZYo060" target="_blank">' . __( 'Advanced Search', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 				</div>
@@ -256,37 +256,37 @@ class Smart_Manager_Admin_Welcome {
 					<div class="col">
 						<h4>
 							<?php 
-								if (SMPRO === true) {
+								if (SMBETAPRO === true) {
 									echo __( 'Batch Update', self::$text_domain );											
 								} else {
-									echo sprintf(__( 'Batch Update (only in %s)', self::$text_domain ), '<a href="http://www.storeapps.org/product/smart-manager/" target="_blank">' . __( 'Pro', self::$text_domain ) . '</a>' );
+									echo sprintf(__( 'Batch Update (only in %s)', self::$text_domain ), '<a href="https://www.storeapps.org/product/smart-manager/" target="_blank">' . __( 'Pro', self::$text_domain ) . '</a>' );
 								}
 							?>
 						</h4>
 						<p>
-							<?php echo sprintf(__( 'You can change / update multiple fields of the entire store OR for selected items by selecting multiple records and then simply click on “Batch Update”, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-use-batch-update/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'You can change / update multiple fields of the entire store OR for selected items by selecting multiple records and then simply click on “Batch Update”, %s.', self::$text_domain ), '<a href="https://www.storeapps.org/docs/sm-how-to-use-batch-update/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 					<div class="col">
 						<h4>
 							<?php 
-								if (SMPRO === true) {
+								if (SMBETAPRO === true) {
 									echo __( 'Duplicate Products', self::$text_domain );											
 								} else {
-									echo sprintf(__( 'Duplicate Products (only in %s)', self::$text_domain ), '<a href="http://www.storeapps.org/product/smart-manager/" target="_blank">' . __( 'Pro', self::$text_domain ) . '</a>' );
+									echo sprintf(__( 'Duplicate Products (only in %s)', self::$text_domain ), '<a href="https://www.storeapps.org/product/smart-manager/" target="_blank">' . __( 'Pro', self::$text_domain ) . '</a>' );
 								}
 							?>
 						</h4>
 						<p>
-							<?php echo sprintf(__( 'You can duplicate products of the entire store OR selected products by simply selecting products and then click on “Duplicate Products”, %s.', self::$text_domain ), '<a href="http://www.storeapps.org/docs/sm-how-to-duplicate-products/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
+							<?php echo sprintf(__( 'You can duplicate products of the entire store OR selected products by simply selecting products and then click on “Duplicate Products”, %s.', self::$text_domain ), '<a href="https://www.storeapps.org/docs/sm-how-to-duplicate-products/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_know" target="_blank">' . __( 'see how', self::$text_domain ) . '</a>' ); ?>
 						</p>
 					</div>
 					<div class="last-feature col">
 						<h4><?php 
-								if (SMPRO === true) {
+								if (SMBETAPRO === true) {
 									echo __( 'Export CSV', self::$text_domain );											
 								} else {
-									echo sprintf(__( 'Export CSV (only in %s)', self::$text_domain ), '<a href="http://www.storeapps.org/product/smart-manager/" target="_blank">' . __( 'Pro', self::$text_domain ) . '</a>' );
+									echo sprintf(__( 'Export CSV (only in %s)', self::$text_domain ), '<a href="https://www.storeapps.org/product/smart-manager/" target="_blank">' . __( 'Pro', self::$text_domain ) . '</a>' );
 								}
 							?>
 						</h4>
@@ -298,7 +298,7 @@ class Smart_Manager_Admin_Welcome {
 			</div>
 			<div class="changelog" align="center">
 				<h4><?php _e( 'Do check out Some of our other products!', self::$text_domain ); ?></h4>
-				<p><a target="_blank" href="<?php echo esc_url('http://www.storeapps.org/shop/'); ?>"><?php _e('Let me take you to product catalog', self::$text_domain); ?></a></p>
+				<p><a target="_blank" href="<?php echo esc_url('https://www.storeapps.org/shop/'); ?>"><?php _e('Let me take you to product catalog', self::$text_domain); ?></a></p>
 			</div>
 		</div>
 
@@ -400,7 +400,7 @@ class Smart_Manager_Admin_Welcome {
             					),
             				array(
             						'que' => __( 'How to add columns to Smart Manager dashboard?', self::$text_domain ),
-            						'ans' => sprintf(__( 'To show/hide columns from the Smart Manager dashboard, click the %s next to any of the column headers and simply check/uncheck the columns from the \'%s\' sub-menu. %s.', self::$text_domain ), '<code>down arrow</code>', '<code>Columns</code>', '<a href="http://www.storeapps.org/docs/sm-how-to-show-hide-columns-in-dashboard/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_faqs" target="_blank">' . __( 'See how', self::$text_domain ) . '</a>')
+            						'ans' => sprintf(__( 'To show/hide columns from the Smart Manager dashboard, click the %s next to any of the column headers and simply check/uncheck the columns from the \'%s\' sub-menu. %s.', self::$text_domain ), '<code>down arrow</code>', '<code>Columns</code>', '<a href="https://www.storeapps.org/docs/sm-how-to-show-hide-columns-in-dashboard/?utm_source=sm&utm_medium=welcome_page&utm_campaign=sm_faqs" target="_blank">' . __( 'See how', self::$text_domain ) . '</a>')
             					),
             				array(
             						'que' => __( 'How to sort on the entire database in Smart Manager?', self::$text_domain ),
@@ -437,7 +437,7 @@ class Smart_Manager_Admin_Welcome {
             			);
 
 				
-				if (SMPRO === true) {
+				if (SMBETAPRO === true) {
 					$faqs[] = array(
 								'que' => __( 'I can\'t find a way to do X...', self::$text_domain ),
 								'ans' => sprintf(__( 'Smart Manager is actively developed. If you can\'t find your favorite feature (or have a suggestion) %s. We\'d love to hear from you.', self::$text_domain ), '<a class="thickbox" href="' . admin_url('#TB_inline?inlineId=sa_smart_manager_post_query_form') .'" title="' . __( 'Submit your query', self::$text_domain ) .'">' . __( 'contact us', self::$text_domain ) . '</a>' )

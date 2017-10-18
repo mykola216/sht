@@ -5,7 +5,7 @@
  * Description: WordPress Backup Plugin
  * Author: Inpsyde GmbH
  * Author URI: http://inpsyde.com
- * Version: 3.4.1
+ * Version: 3.4.3
  * Text Domain: backwpup
  * Domain Path: /languages/
  * Network: true
@@ -64,7 +64,7 @@ if ( ! class_exists( 'BackWPup' ) ) {
 		private function __construct() {
 
 			// Nothing else matters if we're not on the main site
-			if ( ! is_main_site() ) {
+			if ( ! is_main_network() && ! is_main_site() ) {
 				return;
 			}
 			//auto loader
@@ -130,26 +130,10 @@ if ( ! class_exists( 'BackWPup' ) ) {
 				);
 				$rate_us->initiate();
 				
-				$now = new DateTime();
-				$end_discount = new DateTime( '2017-07-06' );
-				if ( $now < $end_discount ) {
-					$independence_day = new BackWPup_Admin_Notice(
-						'independence_day',
-						esc_html__( 'Save Now!', 'backwpup' ),
-						esc_html__( 'https://backwpup.com/?utm_source=BackWPup&utm_campaign=IndependenceDay&utm_medium=Link', 'backwpup' )
-					);
-					$independence_day->initiate();
-				} else {
-					$beta_tester = new BackWPup_Admin_Notice(
-						'beta_tester',
-						esc_html__( 'Join Us as a Beta Tester', 'backwpup' ),
-						esc_html__( 'https://backwpup.com/become-backwpup-beta-tester/', 'backwpup' )
-					);
-					$beta_tester->initiate();
-				}
 			}
 
 			// Phone Home
+/*
 			require_once dirname( __FILE__ ) . '/vendor/inpsyde/phone-home-client/inc/autoload.php';
 			Inpsyde_PhoneHome_FrontController::initialize_for_network(
 				'BackWPup',
@@ -163,6 +147,7 @@ if ( ! class_exists( 'BackWPup' ) ) {
 					Inpsyde_PhoneHome_Configuration::SERVER_ADDRESS     => 'https://backwpup.com/wp-json',
 				)
 			);
+*/
 
 		}
 
@@ -278,6 +263,11 @@ if ( ! class_exists( 'BackWPup' ) ) {
 				if ( file_exists( $filePath ) ) {
 					require $filePath;
 				}
+			}
+			
+			// Base32 autoloading
+			if ( strpos( $class, 'Base32' ) !== false ) {
+				require_once self::get_plugin_data( 'plugindir' ) . '/vendor/base32/src/Base32.php';
 			}
 
 		}

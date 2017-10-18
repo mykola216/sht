@@ -192,15 +192,27 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                 }
             }
         }
-        $results_trash = array();
+        $results_trash = $results_trash_parents = array();
 
         //Code to get the ids of all the products whose post_status is thrash
-        $query_trash = "SELECT ID FROM {$wpdb->prefix}posts 
+        $query_trash = "SELECT DISTINCT ID FROM {$wpdb->prefix}posts 
                         WHERE post_status = 'trash'
-                            AND post_type IN ('product')";
+                            AND post_type = 'product'";
         $results_trash = $wpdb->get_col( $query_trash );
         $rows_trash = $wpdb->num_rows;
         
+        //Code to get the ids of all the products whose parents is deleted
+        $query_trash_parents = "SELECT DISTINCT post_parent 
+                        FROM {$wpdb->prefix}posts
+                        WHERE post_parent NOT IN (SELECT ID
+                                            FROM {$wpdb->prefix}posts
+                                            WHERE post_type = 'product')
+                            AND post_type IN ('product', 'product_variation')
+                            AND post_parent > 0";
+        $results_trash_parents = $wpdb->get_col( $query_trash_parents );
+        
+        $results_trash = (count($results_trash_parents) > 0 && !empty($results_trash_parents)) ? array_merge($results_trash, $results_trash_parents): $results_trash;
+
 
         //Code to get the taxonomy id for 'simple' product_type
         $query_taxonomy_ids = "SELECT taxonomy.term_taxonomy_id as term_taxonomy_id
@@ -624,8 +636,6 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                         $advanced_search_query[$i]['cond_terms_col_name'] = (!empty($advanced_search_query[$i]['cond_terms_col_name'])) ? substr( $advanced_search_query[$i]['cond_terms_col_name'], 0, -4 ) : '';
                         $advanced_search_query[$i]['cond_terms_col_value'] = (!empty($advanced_search_query[$i]['cond_terms_col_value'])) ? substr( $advanced_search_query[$i]['cond_terms_col_value'], 0, -4 ) : '';
                         $advanced_search_query[$i]['cond_terms_operator'] = (!empty($advanced_search_query[$i]['cond_terms_operator'])) ? substr( $advanced_search_query[$i]['cond_terms_operator'], 0, -4 ) : '';
-
-
                     }
 
                     $i++;
@@ -887,13 +897,13 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                         $cond_postmeta_operator1 = (!empty($cond_postmeta_operator[$index])) ? trim($cond_postmeta_operator[$index]) : '';
 
                         if( $cond_postmeta_col_name1 == '_regular_price' || $cond_postmeta_col_name1 == '_sale_price' ) {
-                           $cond_postmeta .= "AND wp_postmeta.post_id NOT IN (SELECT post_parent 
+                           $cond_postmeta .= "AND {$wpdb->prefix}postmeta.post_id NOT IN (SELECT post_parent 
                                                                               FROM {$wpdb->prefix}posts
                                                                               WHERE post_type IN ('product', 'product_variation')
                                                                                 AND post_parent > 0)";
                         }
 
-                        $cond_postmeta_custom_att = ( $cond_postmeta_col_name1 == '_product_attributes' ) ? " OR (wp_postmeta.meta_key LIKE 'attribute%' AND wp_postmeta.meta_value ". $cond_postmeta_operator1 ." '%". $cond_postmeta_col_value1 ."%')" : '';
+                        $cond_postmeta_custom_att = ( $cond_postmeta_col_name1 == '_product_attributes' ) ? " OR ({$wpdb->prefix}postmeta.meta_key LIKE 'attribute%' AND {$wpdb->prefix}postmeta.meta_value ". $cond_postmeta_operator1 ." '%". $cond_postmeta_col_value1 ."%')" : '';
 
                         $postmeta_search_result_flag = ( $index == (sizeof($cond_postmeta_array) - 1) ) ? ', '.$index_search_string : ', 0';
 
@@ -1670,7 +1680,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                     $log_ids_arr = json_decode ( stripslashes ( $_POST['log_ids'] ) );
                     if (is_array($log_ids_arr))
                     $log_ids = implode(', ',$log_ids_arr);
-                    sm_woo_get_packing_slip( $log_ids, $log_ids_arr );
+                    sm_woo_get_packing_slip( $log_ids, $log_ids_arr, array( 'SM_IS_WOO30' => $_POST['SM_IS_WOO30'] ) );
                 }
 
                 if ( $_POST['SM_IS_WOO22'] == "true" || ( !empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true" ) ) {
@@ -1711,25 +1721,10 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
 
         $select_query = "SELECT SQL_CALC_FOUND_ROWS posts.ID as id,
                                 posts.post_excerpt as customer_provided_note,                                
-                                date_format(posts.post_date,'%Y-%m-%d, %r') AS date,
-                                GROUP_CONCAT( postmeta.meta_value 
-                                ORDER BY postmeta.meta_id
-                                SEPARATOR '###' ) AS meta_value,
-                                GROUP_CONCAT(distinct postmeta.meta_key
-                                ORDER BY postmeta.meta_id 
-                                SEPARATOR '###' ) AS meta_key
+                                date_format(posts.post_date,'%Y-%m-%d, %r') AS date
                                 $orders_select_col
-                            
                             FROM {$wpdb->prefix}posts AS posts 
-                                    $orders_join_cond
-                                    RIGHT JOIN {$wpdb->prefix}postmeta AS postmeta 
-                                            ON (posts.ID = postmeta.post_id AND postmeta.meta_key IN 
-                                                                                ('_billing_first_name' , '_billing_last_name' , '_billing_email',
-                                                                                '_shipping_first_name', '_shipping_last_name', '_shipping_address_1', '_shipping_address_2',
-                                                                                '_shipping_city', '_shipping_state', '_shipping_country','_shipping_postcode',
-                                                                                '_shipping_method', '_payment_method', '_order_items', '_order_total',
-                                                                                '_shipping_method_title', '_payment_method_title','_customer_user','_billing_phone',
-                                                                                                                                                                '_order_shipping', '_order_discount', '_cart_discount', '_order_tax', '_order_shipping_tax', '_order_currency', 'coupons'". $order_formatted ."))";
+                                    $orders_join_cond";
             
             $group_by    = " GROUP BY posts.ID";
             $limit_query = " ORDER BY posts.ID DESC $limit_string ;";
@@ -1768,7 +1763,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                                     WHERE user_email like '%$search_on%'";
                                 $result_user_email    = $wpdb->get_col ( $query_user_email);
                                 $num_rows_email       = $wpdb->num_rows;
-                                
+
                                 if($num_rows_email == 0){
                                     $query_user_email     = "SELECT DISTINCT p2.meta_value 
                                                              FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2  
@@ -1780,8 +1775,18 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                     $result_user_email    = $wpdb->get_col ( $query_user_email);
                                     $num_rows_email1      = $wpdb->num_rows;
                                 }
-                                
-                                
+
+                                // Query to bring the matching email of the Guest uers
+                                $query = "SELECT DISTINCT(p1.post_id)
+                                                         FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2  
+                                                         WHERE p1.post_id = p2.post_id 
+                                                            AND p1.meta_key = '_billing_email'
+                                                            AND p2.meta_key = '_customer_user'
+                                                            AND p2.meta_value = 0
+                                                            AND p1.meta_value like '%$search_on%'";
+                                $result_email_guest  = $wpdb->get_col ( $query );
+                                $rows_email_guest    = $wpdb->num_rows;
+                                                                
                                 
                                 //Query for getting the user_id based on the Customer phone number enetered in the Search Box
                                 $query_user_phone     = "SELECT user_id FROM {$wpdb->prefix}usermeta 
@@ -1913,32 +1918,32 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
 
                                         $post_title = array();
                                         $variation_title = array();
-                                        $search_condn = "HAVING";
+                                        // $search_condn = "HAVING";
                                         
-                                        for ($i=0;$i<sizeof($result_sku);$i++) {
-                                            $product_type = wp_get_object_terms( $result_sku[$i], 'product_type', array('fields' => 'slugs') ); // Getting the type of the product
+                                        // for ($i=0;$i<sizeof($result_sku);$i++) {
+                                        //     $product_type = wp_get_object_terms( $result_sku[$i], 'product_type', array('fields' => 'slugs') ); // Getting the type of the product
                                             
-                                            //Code to prepare the search condition for the search using SKU Code
-                                            if ($product_title[$result_sku[$i]]['post_parent'] == 0) {
-                                                $post_title [$i] = $product_title[$result_sku[$i]]['post_title'];
-                                                $search_condn .= " meta_value like '%s:4:\"name\"%\"$post_title[$i]\"%' ";
-                                                $search_condn .= "OR";
-                                            }
-                                            elseif ($product_title[$result_sku[$i]]['post_parent'] > 0) {
-                                                $temp = explode(",", $product_title[$result_sku[$i]]['variation_title']);
-                                                $post_title [$i] = $product_title[$product_title[$result_sku[$i]]['post_parent']]['post_title'];
-                                                $search_condn .= " meta_value like '%s:4:\"name\"%\"$post_title[$i]\"%' ";
-                                                $search_condn .= "AND (";
-                                                    for ($j=1;$j<sizeof($temp);$j++) {
-                                                        $search_condn .= " meta_value like '%s:10:\"meta_value\"%\"$temp[$j]\"%' ";
-                                                        $search_condn .= "OR";
-                                                    }
-                                                $search_condn = substr( $search_condn, 0, -2 ) . ")";
-                                                $search_condn .= "OR";        
-                                            }     
-                                        }
-                                        $variation_title = array_unique($variation_title);
-                                        $search_condn = substr( $search_condn, 0, -2 );
+                                        //     //Code to prepare the search condition for the search using SKU Code
+                                        //     if ($product_title[$result_sku[$i]]['post_parent'] == 0) {
+                                        //         $post_title [$i] = $product_title[$result_sku[$i]]['post_title'];
+                                        //         $search_condn .= " meta_value like '%s:4:\"name\"%\"$post_title[$i]\"%' ";
+                                        //         $search_condn .= "OR";
+                                        //     }
+                                        //     elseif ($product_title[$result_sku[$i]]['post_parent'] > 0) {
+                                        //         $temp = explode(",", $product_title[$result_sku[$i]]['variation_title']);
+                                        //         $post_title [$i] = $product_title[$product_title[$result_sku[$i]]['post_parent']]['post_title'];
+                                        //         $search_condn .= " meta_value like '%s:4:\"name\"%\"$post_title[$i]\"%' ";
+                                        //         $search_condn .= "AND (";
+                                        //             for ($j=1;$j<sizeof($temp);$j++) {
+                                        //                 $search_condn .= " meta_value like '%s:10:\"meta_value\"%\"$temp[$j]\"%' ";
+                                        //                 $search_condn .= "OR";
+                                        //             }
+                                        //         $search_condn = substr( $search_condn, 0, -2 ) . ")";
+                                        //         $search_condn .= "OR";        
+                                        //     }     
+                                        // }
+                                        // $variation_title = array_unique($variation_title);
+                                        // $search_condn = substr( $search_condn, 0, -2 );
                                     }
 
                                 } elseif ( $num_product_ids > 0 ) {
@@ -1948,45 +1953,32 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                 }
                                 
                                 //Code for handling the Email Search condition for Registered users
-                                elseif ($num_rows_email > 0) {
-                                    
-                                    // Query to bring the matching email of the Guest uers
-                                    $query = "SELECT DISTINCT p1.meta_value 
-                                                             FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2  
-                                                             WHERE p1.post_id = p2.post_id 
-                                                                AND p1.meta_key = '_billing_email'
-                                                                AND p2.meta_key = '_customer_user'
-                                                                AND p2.meta_value = 0
-                                                                AND p1.meta_value like '%$search_on%'";
-                                    $result_email_guest  = $wpdb->get_col ( $query );
-                                    $rows_email_guest    = $wpdb->num_rows;
-                                    
-                                    $query_email = "SELECT DISTINCT(p1.meta_value)
-                                                    FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2 
-                                                    WHERE p1.post_id = p2.post_id 
-                                                                AND p1.meta_key = '_billing_email'
-                                                                AND p2.meta_key = '_customer_user'
-                                                                AND p2.meta_value IN (" .implode(",",$result_user_email) . ")";
-                                    $result_email  = $wpdb->get_col ( $query_email );
-                                    
-                                    if($rows_email_guest > 0) {
-                                        for ($i=0,$j=sizeof($result_email);$i<sizeof($result_email_guest);$i++,$j++) {
-                                            $result_email[$j] = $result_email_guest[$i];
-                                        }
+                                elseif ($num_rows_email > 0 || $rows_email_guest > 0) {
+
+                                    $result_email = array();
+
+                                    if(!empty($result_user_email)) {
+                                        $query_email = "SELECT DISTINCT(p1.post_id)
+                                                        FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2 
+                                                        WHERE p1.post_id = p2.post_id 
+                                                                    AND p1.meta_key = '_billing_email'
+                                                                    AND p2.meta_key = '_customer_user'
+                                                                    AND p2.meta_value IN (" .implode(",",$result_user_email) . ")";
+                                        $result_email  = $wpdb->get_col ( $query_email );    
+                                    }
+
+                                    $result_email_guest = (!empty($rows_email_guest)) ? array_merge($result_email_guest,$result_email) : $result_email;
+
+                                    if( !empty($result_email_guest) ) {
+                                        $search_condn = " HAVING id IN (". implode(",",$result_email_guest) .") ";
                                     }
                                     
-                                    $search_condn = "HAVING";
-                                    for ( $i=0;$i<sizeof($result_email);$i++ ) {
-                                        $search_condn .= " meta_value like '%$result_email[$i]%' ";
-                                        $search_condn .= "OR";
-                                    }
-                                    $search_condn = substr( $search_condn, 0, -2 );
                                 }
                                 //Code for handling the Customer Phone number Search condition for Registered users
                                 elseif($num_rows_phone > 0){
                                     
                                     // Query to bring the matching Phone No. of the Guest uers
-                                    $query = "SELECT DISTINCT p1.meta_value 
+                                    $query = "SELECT DISTINCT(p1.post_id)
                                                              FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2  
                                                              WHERE p1.post_id = p2.post_id 
                                                                 AND p1.meta_key = '_billing_phone'
@@ -1995,8 +1987,8 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                                                 AND p1.meta_value like '%$search_on%'";
                                     $result_phone_guest  = $wpdb->get_col ( $query );
                                     $rows_phone_guest    = $wpdb->num_rows;
-                                    
-                                    $query_phone = "SELECT DISTINCT(p1.meta_value)
+
+                                    $query_phone = "SELECT DISTINCT(p1.post_id)
                                                     FROM {$wpdb->prefix}postmeta AS p1, {$wpdb->prefix}postmeta AS p2 
                                                     WHERE p1.post_id = p2.post_id 
                                                                 AND p1.meta_key = '_billing_email'
@@ -2004,18 +1996,12 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                                                 AND p2.meta_value IN (" .implode(",",$result_user_phone) . ")";
                                     $result_phone  = $wpdb->get_col ( $query_phone );
                                     
-                                    if($rows_phone_guest > 0) {
-                                        for ($i=0,$j=sizeof($result_phone);$i<sizeof($result_phone_guest);$i++,$j++) {
-                                            $result_phone[$j] = $result_phone_guest[$i];
-                                        }
+                                    $result_phone_guest = array_merge($result_phone_guest,$result_phone);
+
+                                    if( !empty($result_phone_guest) ) {
+                                        $search_condn = " HAVING id IN (". implode(",",$result_phone_guest) .") ";
                                     }
-                                    
-                                    $search_condn = "HAVING";
-                                    for ( $i=0;$i<sizeof($result_phone);$i++ ){
-                                        $search_condn .= " meta_value like '%$result_phone[$i]%' ";
-                                        $search_condn .= "OR";
-                                    }
-                                    $search_condn = substr( $search_condn, 0, -2 );
+
                                 }
                                 elseif ($num_rows_email1 > 0 || $num_rows_phone1 > 0 ) {
                                     $search_condn = " HAVING id = 0";
@@ -2024,21 +2010,20 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                     $search_condn = " HAVING term_taxonomy_id IN ($result_terms)";
                                 }
                                 else{
-                $search_condn = " HAVING id like '$search_on%'
-                                  OR date like '%$search_on%'
-                                 OR meta_value like '%$search_on%'";
-            }
+                                    $search_condn = " HAVING id like '$search_on%'
+                                                      OR date like '%$search_on%'";
+                                }
 
-            if ( $_POST['SM_IS_WOO22'] == "true" || ( !empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true" ) ) {
+                                if ( $_POST['SM_IS_WOO22'] == "true" || ( !empty($_POST['SM_IS_WOO30']) && $_POST['SM_IS_WOO30'] == "true" ) ) {
 
-                $search_on = 'wc-'.str_replace(" ", "-",$search_on);
+                                    $search_on = 'wc-'.str_replace(" ", "-",$search_on);
 
-                if (!empty($search_condn)) {
-                    $search_condn .= " OR order_status LIKE '%$search_on%'";
-                } else {
-                    $search_condn = " HAVING order_status LIKE '%$search_on%'";
-                }
-            }
+                                    if (!empty($search_condn)) {
+                                        $search_condn .= " OR order_status LIKE '%$search_on%'";
+                                    } else {
+                                        $search_condn = " HAVING order_status LIKE '%$search_on%'";
+                                    }
+                                }
 
             
             }
@@ -2059,6 +2044,40 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                 foreach ( $results as $data ) {
                                     $order_ids[] = $data['id'];
                                 }
+
+
+                                //Code to get order meta
+                                $query_postmeta = "SELECT post_id as post_id,
+                                                        meta_key AS meta_key,
+                                                        meta_value AS meta_value
+                                                    FROM {$wpdb->prefix}postmeta 
+                                                    WHERE post_id IN (". implode(",",$order_ids) .") 
+                                                        AND meta_key IN ('_billing_first_name' , '_billing_last_name' , '_billing_email',
+                                                                            '_shipping_first_name', '_shipping_last_name', '_shipping_address_1', '_shipping_address_2',
+                                                                            '_shipping_city', '_shipping_state', '_shipping_country','_shipping_postcode',
+                                                                            '_shipping_method', '_payment_method', '_order_items', '_order_total',
+                                                                            '_shipping_method_title', '_payment_method_title','_customer_user','_billing_phone',
+                                                                            '_billing_address_1', '_billing_address_2', 
+                                                                            '_order_shipping', '_order_discount', '_cart_discount', '_order_tax', '_order_shipping_tax', '_order_currency', 'coupons'". $order_formatted .")
+                                                    GROUP BY post_id, meta_key";
+
+                                    $records_postmeta = $wpdb->get_results ( $query_postmeta, 'ARRAY_A' );
+
+                                    $orders_meta_data = $customer_user_ids = array();
+
+                                    foreach ($records_postmeta as $record_postmeta) {
+                                        $key = preg_replace('/[^A-Za-z0-9\-_]/', '', $record_postmeta['meta_key']); //for formatting meta keys
+                                        $orders_meta_data[$record_postmeta['post_id']][$key] = $record_postmeta['meta_value'];
+
+                                        if( $key == '_customer_user' ) { //code to get the reg users
+                                            if ($orders_meta_data[$record_postmeta['post_id']]['_customer_user'] == 0) {
+                                                continue;
+                                            }
+                                            $customer_user_ids [] = $record_postmeta['meta_value'];
+                                        }
+
+                                    }
+
                                 
                                 if($_POST['SM_IS_WOO16'] == "false") {
                                     $order_id = implode(",",$order_ids);
@@ -2208,18 +2227,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                     }
                                 }
                 
-                $customer_user_ids = $reg_users = array();
-                foreach ( $results as $data ) {
-
-                    $meta_key = explode ( '###', $data ['meta_key'] );
-                    $meta_value = explode ( '###', $data ['meta_value'] );
-                    
-                    if(count($meta_key) == count($meta_value)) continue;
-                        $postmeta = array_combine ( $meta_key, $meta_value);
-
-                        if ($postmeta['_customer_user'] == 0) continue;
-                            $customer_user_ids [] = $postmeta['_customer_user'];
-                }
+                $reg_users = array();
 
                 if ( !empty($customer_user_ids) ) {
                     //Query to get the email id from the wp_users table for the Registered Customers
@@ -2241,29 +2249,17 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                 }
 
                 foreach ( $results as $data ) {
-                    $meta_key = explode ( '###', $data ['meta_key'] );
-                    $meta_value = explode ( '###', $data ['meta_value'] );
-                    
-                    if(count($meta_key) == count($meta_value)){
-                        $postmeta = array_combine ( $meta_key, $meta_value);
+
+                    if( !empty($orders_meta_data[$data['id']]) ){
+                        $postmeta = $orders_meta_data[$data['id']];
                                                 
                                                 //Code to replace the email of the Registered Customers with the one from the wp_users
                                                 if ( $postmeta['_customer_user'] > 0 && !empty($reg_users[$postmeta['_customer_user']]) ) {
 
                                                     $postmeta['_billing_email'] = $reg_users[$postmeta['_customer_user']]['billing_email'];
                                                     $postmeta['_billing_phone'] = $reg_users[$postmeta['_customer_user']]['billing_phone'];
-
-                                                    // for ( $index=0;$index<sizeof($result_users);$index++ ) {
-                                                    //     if ( $postmeta['_customer_user'] == $result_users[$index]['ID'] ){
-                                                    //         $postmeta['_billing_email'] = $result_users[$index]['user_email'];
-                                                    //         $postmeta['_billing_phone'] = $result_users[$index]['meta_value'];
-                                                    //         break;
-                                                    //     }
-                                                    // }
                                                 }
-                                                
                                             
-
                                                 if($_POST['SM_IS_WOO16'] == "true") {
                                                     if (is_serialized($postmeta['_order_items'])) {
                                                             $order_items = unserialize(trim($postmeta['_order_items']));
@@ -2309,7 +2305,7 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                                                 $sku_detail = (!empty($sku_detail)) ? $sku_detail : '';
                                                                 $index = (!empty($index)) ? $index : '';
 
-                                                                update_post_meta($index, $sku_detail, $meta_value);
+                                                                update_post_meta($index, $sku_detail, $prod_meta_values);
                                                                 
                                                                 $prod_meta_key_values = array_combine($prod_meta_key, $prod_meta_values);
 
@@ -2331,9 +2327,9 @@ function get_data_woo ( $post, $offset, $limit, $is_export = false ) {
                                                                     }
                                                                     
                                                                     $variation_att = ( isset( $variation_att_all [$prod_meta_key_values['_variation_id']] ) && !empty( $variation_att_all [$prod_meta_key_values['_variation_id']] ) ) ? $variation_att_all [$prod_meta_key_values['_variation_id']] : '';
-                                                                    
+
                                                                     $product_full_name = ( !empty( $variation_att ) ) ? $order_item['order_prod'] . ' (' . $variation_att . ')' : $order_item['order_prod'];
-                                                                        
+
                                                                     $data['products_name'] = (!empty($data['products_name'])) ? $data['products_name'] : '';
                                                                     $data['products_name'] .= $product_full_name.' '.$sku_detail.'['.__('Qty',$sm_text_domain).': '.$prod_meta_key_values['_qty'].']['.__('Price',$sm_text_domain).': '.($prod_meta_key_values['_line_total']/$prod_meta_key_values['_qty']).'], ';
                                                             
@@ -2607,6 +2603,8 @@ if (isset ( $_GET ['func_nm'] ) && $_GET ['func_nm'] == 'exportCsvWoo') {
                 $columns_header['_billing_last_name']       = __('Billing Last Name', $sm_text_domain);
                 $columns_header['_billing_email']           = __('Billing E-mail ID', $sm_text_domain);
                 $columns_header['_billing_phone']           = __('Billing Phone Number', $sm_text_domain);
+                $columns_header['_billing_address_1']       = __('Billing Address 1', $sm_text_domain);
+                $columns_header['_billing_address_2']       = __('Billing Address 2', $sm_text_domain);
                 $columns_header['details']                  = __('Details', $sm_text_domain);
                 $columns_header['_order_shipping']          = __('Order Shipping', $sm_text_domain);
                 $columns_header['_order_discount']          = __('Order Discount', $sm_text_domain);
@@ -2630,6 +2628,7 @@ if (isset ( $_GET ['func_nm'] ) && $_GET ['func_nm'] == 'exportCsvWoo') {
                 $columns_header['_shipping_state']          = __('Shipping State / Region', $sm_text_domain);
                 $columns_header['_shipping_country']        = __('Shippping Country', $sm_text_domain);
                 $columns_header['customer_provided_note']   = __('Customer Provided Note', $sm_text_domain);
+                $columns_header['_customer_user']           = __('Customer ID', $sm_text_domain);
             break;
     }
 
@@ -3247,6 +3246,10 @@ function woo_insert_update_data($post) {
                 for ( $i=0;$i<sizeof($result_email);$i++ ) {
                     $meta_key = explode ("###",$result_email[$i]['meta_key']);
                     $meta_value = explode ("###",$result_email[$i]['meta_value']);
+
+                    if ( count($meta_key) != count($meta_value) ) {
+                        continue;
+                    }
 
                     $postmeta[$i] = array_combine ($meta_key,$meta_value);
 

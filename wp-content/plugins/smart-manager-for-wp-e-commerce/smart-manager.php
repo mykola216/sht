@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Smart Manager
-Plugin URI: http://www.storeapps.org/product/smart-manager/
-Description: <strong>Pro Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
-Version: 3.9.23
+Plugin URI: https://www.storeapps.org/product/smart-manager/
+Description: <strong>Lite Version Installed</strong> The most popular store admin plugin for WooCommerce. 10x faster, inline updates. Price, inventory, variations management. 200+ features.
+Version: 3.13.0
 Author: StoreApps
-Author URI: http://www.storeapps.org/
+Author URI: https://www.storeapps.org/
 Requires at least: 2.0.2
-Tested up to: 4.7.5
+Tested up to: 4.8.2
 Copyright (c) 2010 - 2017 Store Apps All rights reserved.
 License: GPLv3
 Text Domain: smart-manager-for-wp-e-commerce
@@ -61,6 +61,7 @@ function smart_deactivate() {
 	process_db_indexes( $index_queries ['remove'] );
 
 	$wpdb->query( "DROP TABLE {$wpdb->prefix}sm_advanced_search_temp" );
+	$wpdb->query( "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE '_transient_sm_beta_%' OR option_name LIKE '_transient_timeout_sm_beta_%'"); //for deleting sm beta transients
 }
 
 
@@ -104,8 +105,24 @@ define( 'SM_PREFIX', 'sa_smart_manager' );
 define( 'SM_SKU', 'sm' );
 define( 'SM_PLUGIN_NAME', 'Smart Manager' );
 
+define( 'SM_PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
+define( 'SM_PLUGIN_DIRNAME', plugins_url( '', __FILE__ ) );
+define( 'SM_IMG_URL', SM_PLUGIN_DIRNAME . '/images/' );
+
+if ( ! defined( 'SM_BETA_IMG_URL' ) ) {
+	define( 'SM_BETA_IMG_URL', SM_PLUGIN_DIRNAME . '/new/assets/images/' );
+}
+
 if (!defined('STORE_APPS_URL')) {
-	define( 'STORE_APPS_URL', 'http://www.storeapps.org/' );
+	define( 'STORE_APPS_URL', 'https://www.storeapps.org/' );
+}
+
+if (!defined('SMPRO')) {
+	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
+		define ( 'SMPRO', true );
+	} else {
+		define ( 'SMPRO', false );
+	}
 }
 
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -139,18 +156,46 @@ function sm_overwrite_site_transient( $plugin_info ) {
 
 
 add_action( 'plugins_loaded', 'sm_upgrade' );
+
+// Find latest StoreApps Upgrade file
+function sm_get_latest_upgrade_class() {
+
+	$available_classes = get_declared_classes();
+    $available_upgrade_classes = array_filter( $available_classes, function ( $class_name ) {
+    																	return strpos( $class_name, 'StoreApps_Upgrade_' ) === 0;
+																    } );
+    $latest_class = 'StoreApps_Upgrade_2_0';
+    $latest_version = 0;
+    foreach ( $available_upgrade_classes as $class ) {
+    	$exploded = explode( '_', $class );
+    	$get_numbers = array_filter( $exploded, function ( $value ) {
+    												return is_numeric( $value );
+										    	} );
+    	$version = implode( '.', $get_numbers );
+    	if ( version_compare( $version, $latest_version, '>' ) ) {
+    		$latest_version = $version;
+    		$latest_class = $class;
+    	}
+    }
+
+    return $latest_class;
+}
+
 //function to handle inclusion of the SA upgrade file
 function sm_upgrade() {
-	if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
-		if ( !class_exists( 'StoreApps_Upgrade_1_6' ) ) {
-	        require_once 'pro/class-storeapps-upgrade-1-6.php';
+
+	if ( defined('SMPRO') && SMPRO === true ) {
+		if ( !class_exists( 'StoreApps_Upgrade_2_0' ) ) {
+	        require_once 'pro/class-storeapps-upgrade-2-0.php';
 	    }
+
+	    $latest_upgrade_class = sm_get_latest_upgrade_class();
 
 		$sku = SM_SKU;
 		$prefix = SM_PREFIX;
 		$plugin_name = SM_PLUGIN_NAME;
-		$documentation_link = 'http://www.storeapps.org/knowledgebase_category/smart-manager/';
-		$GLOBALS['smart_manager_upgrade'] = new StoreApps_Upgrade_1_6( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
+		$documentation_link = 'https://www.storeapps.org/knowledgebase_category/smart-manager/';
+		$GLOBALS['smart_manager_upgrade'] = new $latest_upgrade_class( __FILE__, $sku, $prefix, $plugin_name, SM_TEXT_DOMAIN, $documentation_link );
 
 		//filters for handling quick_help_widget
 		add_filter( 'sa_active_plugins_for_quick_help', 'sm_quick_help_widget', 10, 2 );
@@ -164,6 +209,20 @@ add_action ( 'admin_init', 'smart_admin_init' );
 
 //For handling media links on plugins page
 add_action( 'admin_footer', 'sm_add_plugin_style_script' );
+
+if ( defined('SMPRO') && SMPRO === false ) {
+	add_action( 'admin_init', 'sm_show_upgrade_to_pro'); //for handling Pro to Lite
+} else if ( defined('SMPRO') && SMPRO === true ) {
+	add_action( 'admin_init', 'sa_sm_activated' );
+}
+
+function sa_sm_activated() {
+    $is_check = get_option( SM_PREFIX . '_check_update', 'no' );
+    if ( $is_check === 'no' ) {
+      $response = wp_remote_get( 'https://www.storeapps.org/wp-admin/admin-ajax.php?action=check_update&plugin='.SM_SKU );
+      update_option( SM_PREFIX . '_check_update', 'yes' );
+    }
+}
 
 //Language loader
 
@@ -206,6 +265,11 @@ function sm_quick_help_widget( $active_plugins, $upgrader ) {
 * Function to to handle media links on plugin page
 */ 
 function sm_add_plugin_style_script() {
+
+	if( SMPRO === false && defined('SMPROTOLITE') && SMPROTOLITE === true ) { //request ftp credentials form
+		wp_print_request_filesystem_credentials_modal();
+	}
+
 ?>
 <script type="text/javascript">
     jQuery(function() {
@@ -355,12 +419,20 @@ function sm_add_plugin_style_script() {
 		wp_register_style ( 'sm_ext_theme_grey', plugins_url ( '/ext/ext-theme-grey.css', __FILE__ ), array ('sm_ext_all'), $ext_version );
 		wp_register_style ( 'sm_main', plugins_url ( '/sm/smart-manager.css', __FILE__ ), array ('sm_ext_theme_grey' ), $sm_plugin_info ['Version'] );
 		
-		if (file_exists ( (dirname ( __FILE__ )) . '/pro/sm.js' )) {
+		if ( defined('SMPRO') && SMPRO === true ) {
 			wp_register_script ( 'sm_functions', plugins_url ( '/pro/sm.js', __FILE__ ), array ('sm_main' ), $sm_plugin_info ['Version'] );
-			define ( 'SMPRO', true );
-		} else {
-			define ( 'SMPRO', false );
 		}
+
+		if ( ! defined( 'SMBETAPRO' ) ) { // for SM BETA
+			if (file_exists ( (dirname ( __FILE__ )) . '/new/pro/assets/js/smart-manager.js' )) { 
+				define ( 'SMBETAPRO', true );
+			} else {
+				define ( 'SMBETAPRO', false );
+			}
+		}
+
+		add_action( 'admin_notices', 'sm_add_survey');
+
 		if (SMPRO === true) {
 			include ('pro/sm-settings.php');
 			// this allows you to add something to the end of the row of information displayed for your plugin - 
@@ -394,6 +466,8 @@ function sm_add_plugin_style_script() {
 		if (is_admin() ) {
             add_action ( 'wp_ajax_sm_include_file', 'sm_include_file' ); 
             add_action ( 'wp_ajax_sm_klawoo_subscribe', 'sm_klawoo_subscribe' );
+            add_action ( 'wp_ajax_sm_submit_survey', 'sm_submit_survey' );
+            add_action ( 'wp_ajax_sm_update_to_pro', 'sm_update_to_pro' );
 
        //      if ( false !== get_option( '_sm_activation_redirect' ) ) {
        //      	// Delete the redirect transient
@@ -459,6 +533,485 @@ function sm_add_plugin_style_script() {
         exit();
     }
 
+    //Function to re-update to Pro in case of Pro to Lite
+    function sm_update_to_pro() {
+    	$sm_download_url = get_site_option( SM_PREFIX.'_download_url' );
+
+    	if ( ! empty( $sm_download_url ) ) {
+
+            include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+
+            $skin     = new WP_Ajax_Upgrader_Skin();
+            $upgrader = new Plugin_Upgrader( $skin );
+
+            $result = $upgrader->run( array(
+                'package'           => $sm_download_url,
+                'destination'       => WP_PLUGIN_DIR,
+                'clear_destination' => true,
+                'clear_working'     => true,
+                'hook_extra'        => array(
+                                            'plugin' => 'smart-manager-for-wp-e-commerce/smart-manager.php',
+                                            'type'   => 'plugin',
+                                            'action' => 'update',
+                                        ),
+            ) );
+
+            if( !empty($result) ) {
+            	die('Success');	
+            } else {
+            	die('Failed');
+            }
+            
+        }
+    }
+
+    //function to show the upgrade to Pro link only for Pro to Lite
+    function sm_show_upgrade_to_pro() {
+
+    	if ( empty($_GET['page']) || (!empty($_GET['page']) && $_GET['page'] != 'smart-manager-woo' && $_GET['page'] != 'smart-manager-wpsc') ) {
+			return;
+		}
+
+		$sm_license_key = get_site_option( SM_PREFIX.'_license_key' );
+
+		if ( !empty($sm_license_key) ) {
+			$storeapps_validation_url = 'https://www.storeapps.org/?wc-api=validate_serial_key&serial=' . urlencode( $sm_license_key ) . '&is_download=true&sku=' . SM_SKU . '&uuid=' . admin_url();
+			$resp_type = array ('headers' => array ('content-type' => 'application/text' ) );
+			$response_info = wp_remote_post( $storeapps_validation_url, $resp_type ); //return WP_Error on response failure
+
+			if (is_array( $response_info )) {
+				$response_code = wp_remote_retrieve_response_code( $response_info );
+				$response_msg = wp_remote_retrieve_response_message( $response_info );
+
+				if ($response_code == 200) {
+					$storeapps_response = wp_remote_retrieve_body( $response_info );
+					$decoded_response = json_decode( $storeapps_response );
+					if ($decoded_response->is_valid == 1) {               
+						update_site_option( SM_PREFIX.'_download_url', $decoded_response->download_url );
+						define('SMPROTOLITE', true);
+					} else {
+						define('SMPROTOLITE', false);
+					}
+				} else {
+					define('SMPROTOLITE', false);
+				}
+			}
+		}
+    }
+
+    //function to validate the license key for the Pro to Lite issue
+    function sm_validate_license_key($sm_license_key) {
+		
+    	if( empty($sm_license_key) ) {
+    		return;
+    	}
+
+		if (is_array( $response_info )) {
+			$response_code = wp_remote_retrieve_response_code( $response_info );
+			$response_msg = wp_remote_retrieve_response_message( $response_info );
+
+			if ($response_code == 200) {
+				$storeapps_response = wp_remote_retrieve_body( $response_info );
+				$decoded_response = json_decode( $storeapps_response );
+				if ($decoded_response->is_valid == 1) {
+					update_site_option( SM_PREFIX.'_license_key', $license_key );                
+					update_site_option( SM_PREFIX.'_download_url', $decoded_response->download_url );
+				}
+				return json_encode($storeapps_response);
+			}
+		}
+	}
+
+    //Function to handle SM in APP survey
+    function sm_add_survey() {
+    	
+    	if ( empty($_GET['page']) || (!empty($_GET['page']) && $_GET['page'] != 'smart-manager-woo' && $_GET['page'] != 'smart-manager-wpsc') ) {
+			return;
+		}
+
+		$sm_survey_done = get_option('sm_survey_done', false);
+
+		if( $sm_survey_done == 1 ) {
+		 	return;
+		}
+
+		// $home_url = home_url();
+		// $strlen = strlen($home_url);
+		// $res = $strlen%10;
+		// if( $res != 1 && $res != 2 ){
+		//  	return;
+		// }
+
+		?>
+		<style type="text/css">
+			
+			.sm-form-container .sm-form-field {
+				display: inline-block;
+			}
+			.sm-form-container .sm-form-field:not(:first-child) {
+				margin-left: 4%;
+			}
+			.sm-form-container {
+				background-color: rgb(42, 2, 86) !important;
+				border-radius: 0.618em;
+				margin-top: 1%;
+				padding: 1em 1em 0.5em 1em;
+				box-shadow: 0 0 7px 0 rgba(0, 0, 0, .2);
+				color: #FFF;
+				font-size: 1.1em;
+				width: 77rem;
+				height: 15rem;
+			}
+
+			.sm-form-wrapper {
+				margin-bottom:0.4em;
+			}
+			.sm-form-headline div.sm-mainheadline {
+				font-weight: bold;
+				font-size: 1.618em;
+				line-height: 1.8em;
+			}
+			.sm-form-headline div.sm-subheadline {
+				padding-bottom: 0.4em;
+				font-family: Georgia, Palatino, serif;
+				font-size: 1.2em;
+				color: #d4a000;
+			}
+			.sm-survey-options {
+				margin-top: 0.7rem;
+			}
+			.sm-form-field label {
+				font-size:0.9em;
+				margin-left: 0.2em;
+			}
+			.sm-survey-next,.sm-button {
+				box-shadow: 0 1px 0 #03a025;
+				font-weight: bold;
+				height: 2em;
+				line-height: 1em;
+			}
+			.sm-survey-next,.sm-button.primary {
+				color: #FFFFFF!important;
+				border-color: #a7c53c !important;
+				background: #a7c53c !important;
+				box-shadow: none;
+				padding: 0.5rem 1.4rem 2rem;
+				font-size: 1.2rem;
+			}
+			.sm-button.secondary {
+				color: #545454!important;
+				border-color: #d9dcda!important;
+				background: rgba(243, 243, 243, 0.83) !important;
+			}
+			.sm-msg-wrap {
+				display: none;
+				text-align: center;
+				vertical-align: middle;
+			}
+			.sm-msg-wrap .sm-msg-text {
+				padding: 3%;
+				font-size: 2em;
+			}
+			.sm-form-field.sm-left {
+				margin-bottom: 0.6em;
+			}
+			.sm-form-field.sm-right {
+				margin-left: 3%;
+				width: 67%;
+				display: inline-block;
+			}
+			.sm-profile-txt:before {
+				font-family: dashicons;
+				content: "\f345";
+				vertical-align: middle;
+			}
+			.sm-profile-txt {
+				font-size: 0.9em; 
+			}
+			.sm-right-info {
+				height: 9.5rem;
+			}
+			.sm-right-info .sm-right {
+				width: 20%;
+				display: inline-block;
+				float: right;
+				margin-top: 3.7rem;
+			}
+			.sm-right-info .sm-left {
+				display: inline-block;
+			}
+			.sm-form-wrapper form {
+				margin-top: 0.6em;
+			}
+			.sm-right-info label {
+				padding: 0 0.5em 0 0;
+				font-size: 0.8em;
+				color: rgba(239, 239, 239, 0.98);
+			}
+			.sm-list-item {
+				margin-bottom: 0.9em;
+				font-size: 1.2rem;
+				line-height: 1.5rem;
+				display: none;
+				font-weight: bold;
+				color: #ffd3a2;
+
+			}
+			.sm-list-item label{
+				font-weight: 400;
+			}
+			.sm-rocket {
+				float: right;
+				margin-top: 0.35%;
+			}
+			#sm-no {
+				box-shadow: none;
+				cursor: pointer;
+				color: #c3bfbf;
+				text-decoration: underline;
+				display: inline-block;
+				margin: 0 auto;
+				margin-left: 0.4rem;
+				margin-top: 0.7rem;
+				font-weight: 400;
+				font-size: 0.8rem;
+			}
+			.sm-clearfix:after {
+				content: ".";
+				display: block;
+				clear: both;
+				visibility: hidden;
+				line-height: 0;
+				height: 0;
+			}
+			.sm-survey-next {
+			   text-decoration: none;
+			   color: #fff;
+			}
+		</style>
+		<script type="text/javascript">
+			jQuery(function() {
+				jQuery('.sm-list-item:nth-child(1)').show();
+				jQuery('.sm-list-item:nth-child(1)').addClass('current');
+				jQuery('.sm-form-container').on('click', '.sm-survey-next', function(){
+					var count = jQuery('.sm-count-update').text();
+					if(count < 5){
+						count = parseInt(count) + 1;
+					}
+					jQuery('.sm-count-update').text(count);
+					jQuery('.sm-list-item.current').hide();
+					jQuery('.sm-list-item.current').next().show().addClass('current');
+					jQuery('.sm-list-item.current').prev('.sm-list-item').hide();
+					if(jQuery('.sm-list-item.current').is(':last-child')){
+						jQuery('.sm-survey-next').hide();
+
+					}
+				});
+
+			});
+		</script>
+
+		<?php
+
+		global $wpdb;
+
+		//Code to get all the custom post types as dashboards
+		$query_post_types = "SELECT post_type, 
+								IFNULL(COUNT(*),0) as count 
+							FROM {$wpdb->prefix}posts 
+							GROUP BY post_type";
+		$sm_dashboards = $wpdb->get_results($query_post_types, 'ARRAY_A');
+
+		$exclude_post_types = array('revision', 'product_variation', 'product', 'shop_order');
+
+		$sm_dashboards_final = array();
+
+		$sm_custom_post_types = '';
+
+		if (!empty($sm_dashboards)) {
+			foreach ($sm_dashboards as $sm_dashboard) {
+
+				$exclude = array_search($sm_dashboard['post_type'], $exclude_post_types);
+
+				$post_type_title = (!empty($dashboard_names[$sm_dashboard['post_type']])) ? $dashboard_names[$sm_dashboard['post_type']] : __(ucwords(str_replace(array('_','-'), array(' ',' '), $sm_dashboard['post_type'])), SM_TEXT_DOMAIN);
+				$post_type_title .= ' ('. $sm_dashboard['count'].' item'.(($sm_dashboard['count'] > 1) ? 's' : '').')';
+				$sm_custom_post_types .= ($exclude === false) ? '<option value="'.$sm_dashboard['post_type'].'">'.$post_type_title.'</option>' : '';
+				$sm_dashboards_final[] = $post_type_title;
+			}	
+		}
+
+		// style="font-size: 1.218em;padding-bottom: 0.5em;display: block;font-weight: bold;color: #ffd3a2;
+		
+		$sm_survey_ques = array('Have you tried our Beta that lets you manage any custom post type?',
+								'What custom post type would you love to edit using Smart Manager?',
+								'Do you routinely perform some tasks using Smart Manager? If so, then would you like to save such tasks as a template?',
+								'What pain would you like Smart Manager to solve for you?');
+
+		$sm_suvey_ques_sanitized = array();
+
+		foreach ($sm_survey_ques as $ques) {
+			$sm_suvey_ques_sanitized[] = sanitize_title($ques);
+		}
+
+		?>
+
+
+		<div class="sm-form-container wrap">
+			<div class="sm-form-wrapper">
+				<div style="width: 88.5%; float:left;">
+					<div class="sm-form-headline">
+						<div class="sm-mainheadline"><?php _e('Smart Manager', SM_TEXT_DOMAIN); ?> <u><?php _e('is getting even better!', SM_TEXT_DOMAIN); ?></u></div>
+						<div class="sm-subheadline"><?php _e('But I need you to', SM_TEXT_DOMAIN); ?> <strong><?php _e('help me prioritize', SM_TEXT_DOMAIN); ?></strong>! <?php _e('Please send your response today.', SM_TEXT_DOMAIN); ?></div>
+					</div>
+					<form name="sm-survey-form" action="#" method="POST" accept-charset="utf-8">
+						<div class="sm-container-1 sm-clearfix">	
+							<div class="sm-form-field sm-left">
+								<div class="sm-right-info">
+									<div class="sm-left">
+										<ul style="margin-top:0; height:8rem;">
+											<li class="sm-list-item"><?php _e($sm_survey_ques[0], SM_TEXT_DOMAIN); ?><br>
+												<div class="sm-survey-options">
+													<label><input checked="" type="radio" name="sm_data[<?php echo $sm_suvey_ques_sanitized[0]; ?>]" value="<?php echo sanitize_title('Yes, that is what I use');?>"><?php _e('Yes, that is what I use', SM_TEXT_DOMAIN); ?></label><br />
+													<label><input type="radio" name="sm_data[<?php echo $sm_suvey_ques_sanitized[0]; ?>]" value=value="<?php echo sanitize_title('Yes, I tried it but don\'t use it');?>"><?php _e('Yes, I tried it but don\'t use it', SM_TEXT_DOMAIN); ?></label><br />
+													<label><input type="radio" name="sm_data[<?php echo $sm_suvey_ques_sanitized[0]; ?>]" value="<?php echo sanitize_title('No, I haven\'t tried Beta');?>"><?php _e('No, I haven\'t tried Beta', SM_TEXT_DOMAIN); ?></label>
+												</div>
+											</li>
+											<li class="sm-list-item"><?php _e($sm_survey_ques[1], SM_TEXT_DOMAIN); ?><br>
+												<div class="sm-survey-options">
+													<select name="sm_data[<?php echo $sm_suvey_ques_sanitized[1]; ?>]">
+													    <option value="all_woo_post_types"><?php _e('All WooCommerce post types - Products, Orders, Customers', SM_TEXT_DOMAIN); ?></option>
+													    <option value="all_wp_post_types"><?php _e('All WordPress post types', SM_TEXT_DOMAIN); ?></option>
+													    <?php echo $sm_custom_post_types;?>
+													</select>
+												</div>
+											</li>
+											<li class="sm-list-item"><?php _e($sm_survey_ques[2], SM_TEXT_DOMAIN); ?><br>
+												<div class="sm-survey-options">
+													<label><input type="radio" name="sm_data[<?php echo $sm_suvey_ques_sanitized[2]; ?>]" value="<?php echo sanitize_title('No, I need to do something different everytime');?>"><?php _e('No, I need to do something different everytime', SM_TEXT_DOMAIN); ?></label><br />
+													<label><input checked="" type="radio" name="sm_data[<?php echo $sm_suvey_ques_sanitized[2]; ?>]" value="<?php echo sanitize_title('Yes, that would be awesome');?>"><?php _e('Yes, that would be awesome', SM_TEXT_DOMAIN); ?></label><br />
+													<label><input type="radio" name="sm_data[<?php echo $sm_suvey_ques_sanitized[2]; ?>]" value="<?php echo sanitize_title('Umm, nice idea but not useful');?>"><?php _e('Umm, nice idea but not useful', SM_TEXT_DOMAIN); ?></label>
+												</div>
+											</li>
+											<li class="sm-list-item"><?php _e($sm_survey_ques[3], SM_TEXT_DOMAIN); ?><br>
+												<div class="sm-survey-options">
+													<textarea placeholder="Write couple of things you would like to improve in Smart Manager..." name="sm_data[<?php echo $sm_suvey_ques_sanitized[3]; ?>]" rows="4" cols="50"></textarea>
+												</div>
+											</li>
+											<li class="sm-list-item">
+												<div style="margin-top: 1.5rem;">
+													<input style="width: 49.8%;vertical-align: middle;display: inline-block;height: 2rem;" placeholder="Enter your email to get early access" type="email" name="sm_data[email]" value="<?php echo get_bloginfo('admin_email'); ?>">
+													<div class="" style="display: inline-block;margin-top: 1rem;width: 100%;vertical-align: middle;">
+														<input data-val="yes" type="submit" id="sm-yes" value="Alright, built me a better Smart Manager" class="sm-button button primary">
+														<a id="sm-no" data-val="no" class="">Nah, I don't like improvements</a>
+													</div>
+												</div>
+											</li>
+										</ul>
+										<a href="#" class="sm-survey-next button primary">Next</a>
+									</div>
+									<input type="hidden" name="sm_data[post_types]" value='<?php echo implode(" | ",$sm_dashboards_final);?>'>
+									<input type="hidden" name="rm_lead_name" value="SM Survey Capture">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="sm-rocket"><img src="<?php echo SM_IMG_URL?>sm-growth-rocket.png"/></div>
+			</div>
+			<div class="sm-msg-wrap">
+				<div class="sm-msg-text sm-yes"><?php _e('Thank you!', SM_TEXT_DOMAIN); ?></div>
+				<div class="sm-msg-text sm-no"><?php _e('No issues, have a nice day!', SM_TEXT_DOMAIN); ?></div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			jQuery(function () {
+				jQuery("form[name=sm-survey-form]").on('click','.sm-button, #sm-no',function(e){
+					e.preventDefault();
+					var params = jQuery("form[name=sm-survey-form]").serializeArray();
+					var that = this;
+					params.push({name: 'btn-val', value: jQuery(this).data('val') });
+					params.push({name: 'action', value: 'sm_submit_survey' });
+					params.push({name: 'plugin-prefix', value: 'sm' });
+					jQuery.ajax({
+							method: 'POST',
+							type: 'text',
+							url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+							data: params,
+							success: function(response) {  
+								jQuery(".sm-form-container").css('height','6rem');
+								jQuery(".sm-msg-wrap").show();
+								if( jQuery(that).attr('id') =='sm-no'){
+									jQuery(".sm-msg-wrap .sm-yes").hide();
+								}else{
+									jQuery(".sm-msg-wrap .sm-no").hide();
+								}
+								jQuery(".sm-form-wrapper").hide('slow');
+								setTimeout(function(){
+										jQuery(".sm-form-container").hide('slow');
+								}, 5000);
+							}
+					});
+				})
+
+			});
+		</script>
+		<?php
+
+    }
+
+    //Function for submitting the sm survey data
+    function sm_submit_survey() {
+
+		$url = 'https://www.storeapps.org/wp-admin/admin-ajax.php';
+
+		if( !empty($_POST['btn-val']) &&  $_POST['btn-val'] == 'no' ) {
+			update_option('sm_survey_done', true);
+			exit();
+		}
+
+		if( !empty( $_POST ) ) {
+			$params = $_POST;
+			$params['domain'] = home_url();
+			$params['action'] = 'submit_survey';
+		} else {
+			exit();
+		}
+
+		$method = 'POST';
+		$qs = http_build_query( $params );
+
+		$options = array(
+			'timeout' => 15,
+			'method' => $method
+		);
+
+		if ( $method == 'POST' ) {
+			$options['body'] = $qs;
+		} else {
+			if ( strpos( $url, '?' ) !== false ) {
+				$url .= '&'.$qs;
+			} else {
+				$url .= '?'.$qs;
+			}
+		}
+
+		$response = wp_remote_request( $url, $options );
+
+		if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
+			$data = json_decode($response['body'], true);
+
+			if ( empty($data['error']) ) {
+				if(!empty($data) && !empty($data['success'])){
+					update_option('sm_survey_done', true);
+				}
+				echo ( json_encode($data) );
+				exit();     
+			}
+		}
+		exit();
+	}
+
 	// Function to handle SM IN App Promo
 	function sm_add_promo_notices() {
 
@@ -523,7 +1076,7 @@ function sm_add_plugin_style_script() {
 				                        </form>
 				                        <div id="sm_promo_valid_msg">'. $sm_promo_cond .'</div>
 				                        <div style="padding-top: 0.5em;font-size:0.8em;width:100%;float:left;">
-				                        	<div style="float:left;"><a href="http://www.storeapps.org/product/smart-manager" target=_storeapps> '. __( 'Learn more about Pro version', 'smart-manager' ) . '</a> ' . __( 'or take a', 'smart-manager' ) . ' <a href="http://demo.storeapps.org/?demo=sm-woo" target=_livedemo> ' . __( 'Live Demo', 'smart-manager' ) . ' </a>	</div>
+				                        	<div style="float:left;"><a href="https://www.storeapps.org/product/smart-manager" target=_storeapps> '. __( 'Learn more about Pro version', 'smart-manager' ) . '</a> ' . __( 'or take a', 'smart-manager' ) . ' <a href="http://demo.storeapps.org/?demo=sm-woo" target=_livedemo> ' . __( 'Live Demo', 'smart-manager' ) . ' </a>	</div>
 											<div style="float:right;"><a href="'.$current_url.'&sm_dismiss_admin_notice=1">'. $sm_promo_hide_msg .'</a></div>
 										</div>
 									</td> 
@@ -621,7 +1174,7 @@ function sm_add_plugin_style_script() {
 	function smart_admin_notices() {
 		if (! is_plugin_active( 'woocommerce/woocommerce.php' ) && ! is_plugin_active( 'wp-e-commerce/wp-shopping-cart.php' )) {
 			echo '<div id="notice" class="error"><p>';
-			echo '<b>' . __( 'Smart Manager', SM_TEXT_DOMAIN ) . '</b> ' . __( 'add-on requires', SM_TEXT_DOMAIN ) . ' <a href="http://www.storeapps.org/wpec/">' . __( 'WP e-Commerce', SM_TEXT_DOMAIN ) . '</a> ' . __( 'plugin or', SM_TEXT_DOMAIN ) . ' <a href="http://www.storeapps.org/woocommerce/">' . __( 'WooCommerce', SM_TEXT_DOMAIN ) . '</a> ' . __( 'plugin. Please install and activate it.', SM_TEXT_DOMAIN );
+			echo '<b>' . __( 'Smart Manager', SM_TEXT_DOMAIN ) . '</b> ' . __( 'add-on requires', SM_TEXT_DOMAIN ) . ' <a href="https://www.storeapps.org/wpec/">' . __( 'WP e-Commerce', SM_TEXT_DOMAIN ) . '</a> ' . __( 'plugin or', SM_TEXT_DOMAIN ) . ' <a href="https://www.storeapps.org/woocommerce/">' . __( 'WooCommerce', SM_TEXT_DOMAIN ) . '</a> ' . __( 'plugin. Please install and activate it.', SM_TEXT_DOMAIN );
 			echo '</p></div>', "\n";
 		}
 	}
@@ -804,14 +1357,6 @@ function sm_add_plugin_style_script() {
 	}
 
 	function smart_show_console() {
-
-		define( 'SM_PLUGINS_FILE_PATH', dirname( dirname( __FILE__ ) ) );
-		define( 'SM_PLUGIN_DIRNAME', plugins_url( '', __FILE__ ) );
-		define( 'SM_IMG_URL', SM_PLUGIN_DIRNAME . '/images/' );
-
-		if ( ! defined( 'SM_BETA_IMG_URL' ) ) {
-			define( 'SM_BETA_IMG_URL', SM_PLUGIN_DIRNAME . '/new/assets/images/' );
-		}
 		
 		if (WPSC_RUNNING === true) {
 			$json_filename = (IS_WPSC37) ? 'json37' : 'json38';
@@ -834,8 +1379,7 @@ function sm_add_plugin_style_script() {
 			$base_path = WP_PLUGIN_DIR . '/' . str_replace( basename( __FILE__ ), "", plugin_basename( __FILE__ ) ) . 'sm/';
 			?>
 	<div class="wrap">
-	<div id="icon-smart-manager" class="icon32"><br />
-	</div>
+	
 	<style>
 	    div#TB_window {
 	        background: lightgrey;
@@ -843,7 +1387,10 @@ function sm_add_plugin_style_script() {
 	</style>    
 	<?php if ( SMPRO === true && function_exists( 'smart_manager_support_ticket_content' ) ) smart_manager_support_ticket_content();  ?>    
 	    
-	<h2 class = "sm-h2">
+	
+
+	<div style = "margin-left: 0.25em;width: 100%;">
+			<span class = "sm-h2">
 			<?php
 	                echo 'Smart Manager ';
 					echo (SMPRO === true) ? 'Pro' : 'Lite';
@@ -851,11 +1398,8 @@ function sm_add_plugin_style_script() {
 	                $after_plug_page = '';
 	                $plug_page = '';
 			?>
-			<span style="float:right; margin: -6px -21px -20px 0px;">
-					<!-- <a href="http://www.storeapps.org/?buy-now=742&coupon=sm-festive-40-2013&utm_source=SM&utm_medium=Lite&utm_campaign=Festive2013" target="_blank"> <img src="<?php echo SM_IMG_URL . '40perc-off-sm-thanks2013.png'?>" alt="40peroff"> </a> -->
-					<a href="http://www.storeapps.org/sm-in-app-promo" target="_blank"> <img src="<?php echo SM_IMG_URL . 'sm-in-app-promo.png' ?>" alt=""> </a>
 			</span>
-	   		<p class="wrap" style="font-size: 12px; margin: 18px -21px 0px 5px;"><span style="float: right; line-height: 17px;"> <?php
+	   		<span style="float: right; line-height: 17px;"> <?php
 				if ( SMPRO === true && ! is_multisite() ) {
 	                		$before_plug_page .= '<a href="admin.php?page=smart-manager-';
 					$after_plug_page = '&action=sm-settings">Settings</a> | ';
@@ -898,13 +1442,13 @@ function sm_add_plugin_style_script() {
                 }
 
 
-	//			printf ( __ ( '%1s%2s%3s<a href="%4s" target=_storeapps>Docs</a>' , SM_TEXT_DOMAIN), $before_plug_page, $plug_page, $after_plug_page, "http://www.storeapps.org/support/documentation/" );
- 				printf ( __ ( '%1s%2s<a href="%3s" target="_blank">Docs</a>' , SM_TEXT_DOMAIN) ,$sm_beta, $before_plug_page, "http://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=sm_grid&utm_campaign=view_docs" );
+	//			printf ( __ ( '%1s%2s%3s<a href="%4s" target=_storeapps>Docs</a>' , SM_TEXT_DOMAIN), $before_plug_page, $plug_page, $after_plug_page, "https://www.storeapps.org/support/documentation/" );
+ 				printf ( __ ( '%1s%2s<a href="%3s" target="_blank">Docs</a>' , SM_TEXT_DOMAIN) ,$sm_beta, $before_plug_page, "https://www.storeapps.org/knowledgebase_category/smart-manager/?utm_source=sm&utm_medium=sm_grid&utm_campaign=view_docs" );
 				?>
 				</span><?php
-			_e( '10x productivity gains with store administration. Quickly find and update products, orders and customers', SM_TEXT_DOMAIN );
-			?></p>
-	</h2>
+			// _e( '10x productivity gains with store administration. Quickly find and update products, orders and customers', SM_TEXT_DOMAIN );
+			?>
+	</div>
 	<h6 align="right"><?php
 			if (! $is_pro_updated) {
 				$admin_url = SM_ADMIN_URL . "plugins.php";
@@ -933,11 +1477,110 @@ function sm_add_plugin_style_script() {
 	</h6>-->
 	</div>
 
+			<script type="text/javascript">
+
+				jQuery(document).ready(function(){
+					var current_url = "<?php echo admin_url('edit.php?post_type='.$_GET['post_type'].'&page='.$_GET['page']); ?>";
+					jQuery('.request-filesystem-credentials-dialog-content').find('form').attr('action',current_url+'&action=sm_update_to_pro');
+
+					jQuery('.request-filesystem-credentials-dialog-content').find('form').on('submit', function(e){
+						e.preventDefault();
+
+						jQuery( '#request-filesystem-credentials-dialog' ).hide();
+						jQuery( 'body' ).removeClass( 'modal-open' );
+
+						var params = jQuery(this).serializeArray();
+
+						setTimeout(function(){ jQuery.ajax({
+									                type : 'POST',
+									                url: (ajaxurl.indexOf('?') !== -1) ? ajaxurl + '&action=sm_include_file' : ajaxurl + '?action=sm_update_to_pro',
+									                dataType:"text",
+									                async: false,
+									                data: params,
+									                success: function(response) {
+									                	jQuery('#sm_pro_to_lite_msg').removeClass('notice-error').addClass('notice-success').html('<div style="margin:.5em 0;"><?php echo __( 'Upgraded Successfully!!!', SM_TEXT_DOMAIN ); ?></div>');
+
+									                	// Remove navigation prompt
+														window.onbeforeunload = null;
+
+									                	setTimeout(function(){ window.location.replace(current_url); }, 3000);
+									                }
+									            });
+						 }, 1000);
+						
+					});
+				});
+
+				jQuery(document).on('click','#sm_update_to_pro_link',function(e){
+					e.preventDefault();
+
+					var current_url = "<?php echo admin_url('edit.php?post_type='.$_GET['post_type'].'&page='.$_GET['page']); ?>";
+					var $modal = jQuery( '#request-filesystem-credentials-dialog' );
+					jQuery('#sm_pro_to_lite_msg_hidden').html(jQuery('#sm_pro_to_lite_msg').html());
+					jQuery('#sm_pro_to_lite_msg').html('<div style="margin:.5em 0;"><span style="margin-right:6px;color:#f56e28;animation:rotation 2s infinite linear;" class="dashicons dashicons-update"></span><?php echo __( 'Upgrading to Smart Manager Pro...', SM_TEXT_DOMAIN ); ?></div>');
+
+					// Enable navigation prompt
+					window.onbeforeunload = function() {
+					    return true;
+					};
+
+					setTimeout(function(){ jQuery.ajax({
+				                type : 'POST',
+				                url: (ajaxurl.indexOf('?') !== -1) ? ajaxurl + '&action=sm_include_file' : ajaxurl + '?action=sm_update_to_pro',
+				                dataType:"text",
+				                async: false,
+				                success: function(response) {
+
+				                	if( response == 'Success' ) {
+					                	jQuery('#sm_pro_to_lite_msg').removeClass('notice-error').addClass('notice-success').html('<div style="margin:.5em 0;"><?php echo __( 'Upgraded Successfully!!!', SM_TEXT_DOMAIN ); ?></div>');
+					                	
+					                	// Remove navigation prompt
+										window.onbeforeunload = null;
+					                	
+					                	setTimeout(function(){ window.location.replace(current_url); }, 3000);
+				                	} else {
+				                		jQuery( 'body' ).addClass( 'modal-open' );
+										$modal.show();
+										$modal.find( 'input:enabled:first' ).focus();
+				                	}
+				                }
+				            });
+					}, 1000);
+					 
+				});
+
+				jQuery(document).on('click', '[data-js-action="close"], .notification-dialog-background',function(e){
+					e.preventDefault();
+
+					// Remove navigation prompt
+					window.onbeforeunload = null;
+
+					jQuery('#sm_pro_to_lite_msg').html(jQuery('#sm_pro_to_lite_msg_hidden').html());
+
+					jQuery( '#request-filesystem-credentials-dialog' ).hide();
+					jQuery( 'body' ).removeClass( 'modal-open' );
+
+				});
+
+			</script>
+
 	<?php
-		if ( SMPRO === false && get_option('sm_dismiss_admin_notice') == '1') { ?>
+		if( SMPRO === false && defined('SMPROTOLITE') && SMPROTOLITE === true ) { ?>
+
+			<div id="sm_pro_to_lite_msg" class="update-message notice inline notice-error notice-alt" style="display:block !important;">
+				<p> <?php
+						printf( ('<b>' . __( 'Oops!', SM_TEXT_DOMAIN ) . '</b> ' . __( 'seems like your Smart Manager copy has downgraded to Lite. ', SM_TEXT_DOMAIN ) . " " . '<a id="sm_update_to_pro_link" href="">' . " " .__( 'Click here', SM_TEXT_DOMAIN ) . '</a> ')." ".__( 'to', SM_TEXT_DOMAIN )." <b>".__( 'convert it back to Pro', SM_TEXT_DOMAIN )."</b>" );
+					?>
+				</p>
+			</div>
+			<div id="sm_pro_to_lite_msg_hidden" style="display:none;"></div>
+
+			<?php
+
+		} else if ( SMPRO === false && get_option('sm_dismiss_admin_notice') == '1') { ?>
 				<div id="message" class="updated fade" style="display:block !important;">
 					<p> <?php
-						printf( ('<b>' . __( 'Important:', SM_TEXT_DOMAIN ) . '</b> ' . __( 'Upgrade to Pro to get features like \'<i>Batch Update</i>\' , \'<i>Export CSV</i>\' , \'<i>Duplicate Products</i>\' &amp; many more...', SM_TEXT_DOMAIN ) . " " . '<br /><a href="%1s" target=_storeapps>' . " " .__( 'Learn more about Pro version', SM_TEXT_DOMAIN ) . '</a> ' . __( 'or take a', SM_TEXT_DOMAIN ) . " " . '<a href="%2s" target=_livedemo>' . " " . __( 'Live Demo', SM_TEXT_DOMAIN ) . '</a>'), 'http://www.storeapps.org/product/smart-manager', 'http://demo.storeapps.org/?demo=sm-woo' );
+							printf( ('<b>' . __( 'Important:', SM_TEXT_DOMAIN ) . '</b> ' . __( 'Upgrade to Pro to get features like \'<i>Batch Update</i>\' , \'<i>Export CSV</i>\' , \'<i>Duplicate Products</i>\' &amp; many more...', SM_TEXT_DOMAIN ) . " " . '<br /><a href="%1s" target=_storeapps>' . " " .__( 'Learn more about Pro version', SM_TEXT_DOMAIN ) . '</a> ' . __( 'or take a', SM_TEXT_DOMAIN ) . " " . '<a href="%2s" target=_livedemo>' . " " . __( 'Live Demo', SM_TEXT_DOMAIN ) . '</a>'), 'https://www.storeapps.org/product/smart-manager', 'http://demo.storeapps.org/?demo=sm-woo' );							
 						?>
 					</p>
 				</div>
@@ -972,7 +1615,7 @@ function sm_add_plugin_style_script() {
 	                            }
 				}
 	                        else {
-	                            $error_message = "<b>" . __( 'Smart Manager', SM_TEXT_DOMAIN ) . "</b> " . __( 'add-on requires', SM_TEXT_DOMAIN ) . " " .'<a href="http://www.storeapps.org/wpec/">' . __( 'WP e-Commerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin or', SM_TEXT_DOMAIN ) . " " . '<a href="http://www.storeapps.org/woocommerce/">' . __( 'WooCommerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin. Please install and activate it.', SM_TEXT_DOMAIN );
+	                            $error_message = "<b>" . __( 'Smart Manager', SM_TEXT_DOMAIN ) . "</b> " . __( 'add-on requires', SM_TEXT_DOMAIN ) . " " .'<a href="https://www.storeapps.org/wpec/">' . __( 'WP e-Commerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin or', SM_TEXT_DOMAIN ) . " " . '<a href="https://www.storeapps.org/woocommerce/">' . __( 'WooCommerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin. Please install and activate it.', SM_TEXT_DOMAIN );
 	                        }
 	                    } else if (file_exists( WP_PLUGIN_DIR . '/wp-e-commerce/wp-shopping-cart.php' )) {
 	                        if (is_plugin_active( 'wp-e-commerce/wp-shopping-cart.php' )) {
@@ -1007,7 +1650,7 @@ function sm_add_plugin_style_script() {
 	                        }
 	                    }
 	                    else {
-	                        $error_message = "<b>" . __( 'Smart Manager', SM_TEXT_DOMAIN ) . "</b> " . __( 'add-on requires', SM_TEXT_DOMAIN ) . " " .'<a href="http://www.storeapps.org/wpec/">' . __( 'WP e-Commerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin or', SM_TEXT_DOMAIN ) . " " . '<a href="http://www.storeapps.org/woocommerce/">' . __( 'WooCommerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin. Please install and activate it.', SM_TEXT_DOMAIN );
+	                        $error_message = "<b>" . __( 'Smart Manager', SM_TEXT_DOMAIN ) . "</b> " . __( 'add-on requires', SM_TEXT_DOMAIN ) . " " .'<a href="https://www.storeapps.org/wpec/">' . __( 'WP e-Commerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin or', SM_TEXT_DOMAIN ) . " " . '<a href="https://www.storeapps.org/woocommerce/">' . __( 'WooCommerce', SM_TEXT_DOMAIN ) . "</a>" . " " . __( 'plugin. Please install and activate it.', SM_TEXT_DOMAIN );
 	                    }
 			
 			if ($error_message != '') {
