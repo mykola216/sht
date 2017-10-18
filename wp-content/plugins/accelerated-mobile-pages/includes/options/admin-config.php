@@ -5,11 +5,19 @@ if ( ! class_exists( 'Redux' ) ) {
 }
 // Option name where all the Redux data is stored.
 $opt_name = "redux_builder_amp";
-$amptfad = '<strong>Did you know:</strong></br ><a href="https://ampforwp.com/amp-theme-framework/"  target="_blank">You can create your own <strong>Custom theme with AMP Theme Framework</strong></a>';
+$amptfad = '<strong>DID YOU KNOW?</strong></br ><a href="https://ampforwp.com/amp-theme-framework/"  target="_blank">You can create your own <strong>Custom theme with AMP Theme Framework</strong></a>';
+// #1093 Display only If AMP Comments is Not Installed
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+   if(!is_plugin_active( 'amp-comments/amp-comments.php' )){
 $comment_AD_URL = "http://ampforwp.com/amp-comments/#utm_source=options-panel&utm_medium=comments-tab&utm_campaign=AMP%20Plugin";
-$cta_AD_URL = "http://ampforwp.com/call-to-action/#utm_source=options-panel&utm_medium=call-to-action_banner_in_notification_bar&utm_campaign=AMP%20Plugin";
 $comment_desc = '<a href="'.$comment_AD_URL.'"  target="_blank"><img class="ampforwp-ad-img-banner" src="'.AMPFORWP_IMAGE_DIR . '/comments-banner.png" width="560" height="85" /></a>';
+}
+// If CTA is not Activated
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+   if(!is_plugin_active( 'AMP-cta/amp-cta.php' )){
+$cta_AD_URL = "http://ampforwp.com/call-to-action/#utm_source=options-panel&utm_medium=call-to-action_banner_in_notification_bar&utm_campaign=AMP%20Plugin";
 $cta_desc = '<a href="'.$cta_AD_URL.'"  target="_blank"><img class="ampforwp-ad-img-banner" src="'.AMPFORWP_IMAGE_DIR . '/cta-banner.png" width="560" height="85" /></a>';
+}
 $extension_listing = '
 <div class="extension_listing">
 <p style="font-size:13px">Take your AMP to the next level with these premium extensions which gives you advanced features.</p>
@@ -109,8 +117,8 @@ $extension_listing = '
     <li class="first"><a href="https://ampforwp.com/extensions/#utm_source=options-panel&utm_medium=extension-tab_amp-more-comingsoon&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/comments.png" /></div>
         <div class="extension_desc">
-        <h2>More Coming Soon</h2>
-        <p>Improvements in progress.</p>
+        <h2>View All Extensions</h2>
+        <p>See all the extensions available for AMP</p>
         </div>
     </a></li>
 
@@ -203,9 +211,9 @@ $gettingstarted_extension_listing = '
     <li class="second"><a href="https://ampforwp.com/extensions/#utm_source=options-panel&utm_medium=gettingstarted_amp-more-comingsoon&utm_campaign=AMP%20Plugin" target="_blank">
         <div class="align_left"><img src="'.AMPFORWP_IMAGE_DIR . '/comments.png" /></div>
         <div class="extension_desc">
-        <h2>More Coming Soon</h2>
-        <p>Improvements in progress.</p>
-        </div>
+        <h2>View All Extensions</h2>
+        <p>See all the extensions available for AMP</p>
+<div class="extension_btn">View All</div>        </div>
     </a></li>
 
 
@@ -377,20 +385,38 @@ Redux::setArgs( "redux_builder_amp", $args );
         'id'    => 'basic',
         'desc'  => __( '<div class="amp-faq">Thank you for using Accelerated Mobile Pages plugin. '. ' ' .
 
-                      sprintf( __( '  <h2 style="    width: 150px;
-    float: right;
-    padding: 15px 20px;
-    border: 1px solid #ddd;
-    font-size: 13px;
-    line-height: 20px;"><a href="https://wordpress.org/support/view/plugin-reviews/accelerated-mobile-pages?rate=5#postform">Like this plugin? Support us by leaving a 5 Star Rating</a></h2>We are actively working on updating the plugin. We have built user friendly options which allows you to make changes on your AMP version.', 'accelerated-mobile-pages' ), 'accelerated-mobile-pages' ) . ampforwp_plugin_activation_notice()
-			               . '<h2>' . __( 'Here are some quick links to help you get started:', 'accelerated-mobile-pages' ) . '</h2>'
-			               . '<p><strong>' . __( '1. <a href="http://ampforwp.com/help/" target="_blank">User Documentation</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'The AMP for WP plugin is easy to setup but we have some tutorials and guides prepared for you which will help you dive deep with the plugin.' ) . '</p>'
-			               . '<p><strong>' . __( '2. <a href="https://ampforwp.com/tutorials/" target="_blank">Tutorials</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We’re bunch of passionate people that are dedicated towards helping our users. We have prepared bunch of tutorials for you' ) . '</p>'
-			               . '<p><strong>' . __( '3. <a href="https://ampforwp.com/help/#extend" target="_blank">Developer Docs</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We have created special documentations for developers and semi technical users who are willing to modify the plugin according to their own needs.' ) . '</p>'
-			               . '<p><strong>' . __( '4. <a href="https://ampforwp.com/priority-support/" target="_blank">Fixing AMP Validation Errors</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We will personally take care that your website’s AMP version is perfectly validated. We will make sure that your AMP version gets approved and indexed by Google Webmaster Tools properly and we will even keep an eye on AMP updates from Google and implement them into your website.' ) . '</p>'
-			               . '<p><strong>' . __( '5. <a href="https://ampforwp.com/help/#support-forum" target="_blank">Community Support Forum</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We have a special community support forum where you can ask us questions and get help about your AMP related questions. Delivering a good user experience means alot to us and so we try our best to reply each and every question that gets asked.' ) . '</p>'
-			               . '<p><strong>' . __( '6. <a href="https://ampforwp.com/help/#contact" target="_blank">Hire Us / Other queries</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We try to answer each and every email, so remember to give us some time. For any other queries, please use the contact form. Please be descriptive as possible.' ) . '</p>'
-			               . '<p><strong>' . __( '7. <a href="http://ampforwp.com/new/" target="_blank"> What\'s New in this Version?</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'If you want to know whats new in the latest version of the plugin, then please use this link. ') . '</p>'
+                      sprintf( __( '  <h2 style="width: 150px;float: right;
+    padding: 8px 11px;background: #4CAF50;
+    font-size: 13px;margin: -24px 0 0 10px;
+    border-radius: 5px;line-height: 22px;"><a style="color: #fff;text-decoration: none;" href="https://wordpress.org/support/view/plugin-reviews/accelerated-mobile-pages?rate=5#postform">Like this plugin? <br /> Leave a 5 Star Rating</a></h2>We are actively working on updating the plugin. We have built user friendly options which allows you to make changes on your AMP version.', 'accelerated-mobile-pages' ), 'accelerated-mobile-pages' ) 
+                    //  . ampforwp_plugin_activation_notice()
+//       . '<h2>' . __( 'Here are some quick links to help you get started:', 'accelerated-mobile-pages' ) . '</h2>'
+                      
+			               . '<div style="width:100%;margin:20px 0px 10px 0px" class="getstarted_wrapper">
+            <div class="getstarted_options">
+            <p><b>Getting Started</b></p>
+				<ul class="getstarted_ul">
+					<li><a href="https://ampforwp.com/tutorials/article-categories/installation-updating/" target="_blank">Installation & Setup</a></li>
+					<li><a href="https://ampforwp.com/tutorials/article-categories/settings-options/" target="_blank">Settings & Options</a></li>
+					<li><a href="https://ampforwp.com/tutorials/article-categories/setup-amp/" target="_blank">Setup AMP</a></li>
+					<li><a href="https://ampforwp.com/tutorials/article-categories/page-builder/" target="_blank">Page Builder</a></li>
+				</ul>  
+            </div>
+            <div class="getstarted_options">
+            <p><b>Useful Links</b></p>
+				<ul class="getstarted_ul">
+					<li><a href="https://ampforwp.com/tutorials/article-categories/extension/" target="_blank">Extensions & Themes Docs</a></li>
+					<li><a href="https://ampforwp.com/tutorials/article-categories/extending/" target="_blank">Developers Docs</a></li>
+					<li><a href="https://ampforwp.com/amp-theme-framework/" target="_blank">Create a Custom Theme for AMP</a></li>
+					<li><a href="https://ampforwp.com/tutorials/article-categories/how-to/" target="_blank">General How To\'s</a></li>
+				</ul>  
+            </div>
+            <div class="clear"></div>
+            </div>'
+           . '<p><strong>' . __( '1. <a href="https://ampforwp.com/priority-support/" target="_blank">Fixing AMP Validation Errors</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We will personally take care that your website’s AMP version is perfectly validated. We will make sure that your AMP version gets approved and indexed by Google Webmaster Tools properly and we will even keep an eye on AMP updates from Google and implement them into your website.' ) . '</p>'
+			               . '<p><strong>' . __( '2. <a href="https://ampforwp.com/help/#support-forum" target="_blank">Community Support Forum</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We have a special community support forum where you can ask us questions and get help about your AMP related questions. Delivering a good user experience means alot to us and so we try our best to reply each and every question that gets asked.' ) . '</p>'
+			               . '<p><strong>' . __( '3. <a href="https://ampforwp.com/help/#contact" target="_blank">Hire Us / Other queries</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'We try to answer each and every email, so remember to give us some time. For any other queries, please use the contact form. Please be descriptive as possible.' ) . '</p>'
+			               . '<p><strong>' . __( '4. <a href="http://ampforwp.com/new/" target="_blank"> What\'s New in this Version?</a>: ', 'accelerated-mobile-pages' ) . '</strong>' . __( 'If you want to know whats new in the latest version of the plugin, then please use this link. ') . '</p>'
 
 						         . '</p></div>
                                  <br /><p><h3>Take AMP to the Next Level with Premium Extensions</h3></p>
@@ -445,6 +471,14 @@ Redux::setArgs( "redux_builder_amp", $args );
                        'indent' => true,
             ),
            array(
+               'id'        =>'amp-on-off-for-all-posts',
+               'type'      => 'switch',
+               'title'     => __('AMP on Posts', 'accelerated-mobile-pages'),
+               'subtitle'  => __('Enable or Disable AMP on all Posts', 'accelerated-mobile-pages'),
+               'default'   => 1,
+               'desc'      => __( 'Re-Save permalink if you make changes in this option, please have a look <a href="https://ampforwp.com/flush-rewrite-urls/">here</a> on how to do it', 'accelerated-mobile-pages' ),
+            ),
+			array(
                'id'        =>'amp-on-off-for-all-pages',
                'type'      => 'switch',
                'title'     => __('AMP on Pages', 'accelerated-mobile-pages'),
@@ -519,7 +553,7 @@ Redux::setArgs( "redux_builder_amp", $args );
    // AMP Content Page Builder SECTION
    Redux::setSection( $opt_name, array(
        'title'      => __( 'Page Builder', 'accelerated-mobile-pages' ),
-       'desc'       => __( 'With AMP Content Builder, you can easily build landing pages for AMP from the widgets area. <a href="http://ampforwp.com/tutorials/page-builder">(Need Help?)</a>' , 'accelerated-mobile-pages'),
+       'desc'       => __( 'With AMP Content Builder, you can easily build landing pages for AMP. <a href="https://ampforwp.com/tutorials/article/amp-page-builder-installation/">(See Video Tutorial)</a>' , 'accelerated-mobile-pages'),
        'id'         => 'amp-content-builder',
        'class' => 'amp_content_builder',
        'subsection' => true,
@@ -528,17 +562,26 @@ Redux::setArgs( "redux_builder_amp", $args );
             array(
                 'id'       => 'ampforwp-content-builder',
                 'type'     => 'switch',
-                'title'    => __('Enable Page Builder for AMP', 'accelerated-mobile-pages'),
+                'title'    => __('Legacy Page Builder (widgets)', 'accelerated-mobile-pages'),
                 'subtitle' => __('Build AMP Landing pages in minutes.', 'accelerated-mobile-pages'),
                 'true'      => 'true',
                 'desc' => '<div style="    background: #FFF9C4;
     display: inline-block;
-    padding: 12px;
-    margin-top: 12px;
+    padding: 10px 20px;
+    margin-top: 15px;
     left: 0;
-    line-height: 1.6;"><b>Hello!</b> First time here? <br /> <a href="https://ampforwp.com/tutorials/page-builder/" target="_blank">Learn how to use this Feature</a></div>',
+    line-height: 1.6;
+    position: absolute;
+    left: 20px;
+    font-size: 15px;"><b>Introducing  AMP Page Builder 2.0</b>, Re-Engineered! <br /> <a href="https://ampforwp.com/tutorials/article/amp-page-builder-installation/" target="_blank">Learn how to use this Feature</a></div>
+    
+    <iframe style="    position: absolute;
+    left: 20px;
+    margin-top: 100px;" width="600" height="400" src="https://www.youtube.com/embed/vAGPFKKm5G4" frameborder="0" allowfullscreen></iframe>
+    
+    ',
                 'false'     => 'false',
-                'default'   => 1
+                'default'   => 0
             ),
         )
        )
@@ -1140,13 +1183,65 @@ Redux::setArgs( "redux_builder_amp", $args );
                         )
             )
    );
-
+    //Get options for Structured Data Type
+    if( !function_exists('ampforwp_get_sd_types') ){
+        function ampforwp_get_sd_types(){
+            $options = array();
+            $options = array(
+                'BlogPosting'   => 'BlogPosting',
+                'NewsArticle'   => 'NewsArticle',
+                'Recipe'        => 'Recipe',
+                'Product'       => 'Product',
+            );
+            return $options;
+        }
+    }
+ 
+    add_filter('ampforwp_sd_custom_fields', 'ampforwp_add_extra_fields');
+    function ampforwp_add_extra_fields($fields){
+        $post_types = '';
+        $custom_fields = array();
+        $extra_fields = array();
+        $post_types = get_option('ampforwp_custom_post_types');
+        if($post_types){
+            foreach ($post_types as $post_type) {
+                $custom_fields[] = array(
+                  'id'       => 'ampforwp-sd-type-'. $post_type,
+                  'type'     => 'select',
+                  'title'    => __($post_type, 'accelerated-mobile-pages'),
+                  'subtitle' => __('Select the Structured Data Type for '.$post_type, 'accelerated-mobile-pages'),
+                  'options'  =>  ampforwp_get_sd_types(),
+                  'default'  => 'BlogPosting',
+                );
+                $extra_fields = array_merge($extra_fields, $custom_fields);
+            }
+        }
+        array_splice($fields, 2, 0,  $extra_fields);
+        return $fields;
+       
+    }
     // Structured Data
     Redux::setSection( $opt_name, array(
         'title'      => __( 'Structured Data', 'accelerated-mobile-pages' ),
         'id'         => 'opt-structured-data',
         'subsection' => true,
-        'fields'     => array(
+        'fields'     => apply_filters('ampforwp_sd_custom_fields', $fields = array(
+            array(
+              'id'       => 'ampforwp-sd-type-posts',
+              'type'     => 'select',
+              'title'    => __('Posts', 'accelerated-mobile-pages'),
+              'subtitle' => __('Select the Structured Data Type for Posts', 'accelerated-mobile-pages'),
+              'options'  => ampforwp_get_sd_types(),
+              'default'  => 'BlogPosting',
+            ),
+            array(
+              'id'       => 'ampforwp-sd-type-pages',
+              'type'     => 'select',
+              'title'    => __('Pages', 'accelerated-mobile-pages'),
+              'subtitle' => __('Select the Structured Data Type for Pages', 'accelerated-mobile-pages'),
+              'options'  =>  ampforwp_get_sd_types(),
+              'default'  => 'BlogPosting',
+            ),
             array(
               'id'       => 'amp-structured-data-logo',
               'type'     => 'media',
@@ -1202,6 +1297,7 @@ Redux::setArgs( "redux_builder_amp", $args );
               'default'  => '550'
              ),
         )
+)
     ) );
 
     // Notifications SECTION
@@ -1287,22 +1383,27 @@ $forms_support[]=  array(
 
    ) );
 
-// Comments
+// comments 
  Redux::setSection( $opt_name, array(
     'title'      => __( 'Comments', 'accelerated-mobile-pages' ),
     'desc' => $comment_desc,
     'id'         => 'disqus-comments',
     'subsection' => true,
     'fields'     => array(
+        array(
+                            'title'     =>__('WordPress Comments','accelerated-mobile-pages'),
+                            'id'        => 'wordpress-comments-support',
+                            'subtitle'  => __('Enable/Disable WordPress comments using this switch.', 'accelerated-mobile-pages'),
+                            'type'      => 'switch',
+
+                        ),
                     array(
                          'id'       => 'ampforwp-number-of-comments',
                          'type'     => 'text',
                          'desc'     => __('This refers to the normal comments','accelerated-mobile-pages'),
                          'title'    => __('No of Comments', 'accelerated-mobile-pages'),
                          'default'  => 10,
-                         'required' => array(
-                                            array('ampforwp-disqus-comments-support' , '=' , 0),
-                                            array('ampforwp-facebook-comments-support' , '=' , 0)
+                         'required' => array('wordpress-comments-support' , '=' , 1
                                         ),
                      ),
                      array(
@@ -1310,7 +1411,6 @@ $forms_support[]=  array(
                          'type'     => 'switch',
                          'title'    => __('Disqus comments Support', 'accelerated-mobile-pages'),
                          'subtitle' => __('Enable/Disable Disqus comments using this switch.', 'accelerated-mobile-pages'),
-                         'required' => array('ampforwp-facebook-comments-support', '=' , '0'),
                          'default'  => 0
                      ),
                      array(
@@ -1491,9 +1591,17 @@ Redux::setSection( $opt_name, array(
                     array(
                         'id'       => 'amp-header-text-area-for-html',
                         'type'     => 'textarea',
-                        'title'    => __('Enter HTML in Header', 'accelerated-mobile-pages'),
+                        'title'    => __('Enter HTML in Head', 'accelerated-mobile-pages'),
                         'subtitle' => __('please enter markup that is AMP validated', 'accelerated-mobile-pages'),
                         'desc' => __('check your markup here (enter markup between HEAD tag) : https://validator.ampproject.org/', 'accelerated-mobile-pages'),
+                        'default'   => ''
+                    ),
+                    array(
+                        'id'       => 'amp-body-text-area',
+                        'type'     => 'textarea',
+                        'title'    => __('Enter HTML in Body (beginning of body tag) ', 'accelerated-mobile-pages'),
+                        'subtitle' => __('please enter markup that is AMP validated', 'accelerated-mobile-pages'),
+                        'desc' => __('check your markup here (enter markup in the beginning of body tag) : https://validator.ampproject.org/', 'accelerated-mobile-pages'),
                         'default'   => ''
                     ),
                     array(
@@ -1514,6 +1622,63 @@ Redux::setSection( $opt_name, array(
                         'false'     => 'false',
                         'default'   => 0,
                         //'required'  => array('ampforwp-amp-menu', '=' , '1')
+                    ),
+					//Category Base Removal in AMP
+					array(
+                        'id'       => 'ampforwp-category-base-removel-link',
+                        'type'     => 'switch',
+                        'title'    => __('Category base remove in AMP', 'accelerated-mobile-pages'),
+                        'subtitle' => __('Category base removal in <code>AMP</code> from url', 'accelerated-mobile-pages'),
+                        'true'      => 'true',
+                        'false'     => 'false',
+                        'default'   => 0,
+                        
+                    ),
+					//Tag base Removal in AMP
+					array(
+                        'id'       => 'ampforwp-tag-base-removal-link',
+                        'type'     => 'switch',
+                        'title'    => __('Tag base remove in AMP', 'accelerated-mobile-pages'),
+                        'subtitle' => __('Tag base remove in <code>AMP</code> from url', 'accelerated-mobile-pages'),
+                        'true'      => 'true',
+                        'false'     => 'false',
+                        'default'   => 0,
+                        
+                    ),
+                    // Featured Image from Custom Fields
+                    array(
+                        'id'       => 'ampforwp-custom-fields-featured-image-switch',
+                        'type'     => 'switch',
+                        'title'    => __('Featured Image from Custom Fields', 'accelerated-mobile-pages'),
+                        'subtitle' => __('This will allow you to add Featured Image from Custom Fields', 'accelerated-mobile-pages'),
+                        'true'      => 'true',
+                        'false'     => 'false',
+                        'default'   => 0,                        
+                    ),
+                     array(
+                       'id'       => 'ampforwp-custom-fields-featured-image',
+                       'type'     => 'text',
+                       'title'    => __('Custom Field For Featured Image', 'accelerated-mobile-pages'),
+                       'default'  => __ ('','accelerated-mobile-pages'),
+                       'placeholder'=>__('Write the Custom Field of Featured Image','accelerated-mobile-pages'),
+                       'required' => array( 'ampforwp-custom-fields-featured-image-switch', '=' , 1 )
+                   ),
+                     array(
+                        'id'       => 'ampforwp-development-mode',
+                        'type'     => 'switch',
+                        'title'    => __('Dev Mode in AMP'),
+                        'subtitle' => __('This will enable the Development mode in AMP', 'accelerated-mobile-pages'),
+                        'true'      => 'true',
+                        'false'     => 'false',
+                        'default'   => 0,                        
+                    ),
+                      array(
+                        'id'       => 'ampforwp-development-mode-notice',
+                        'type'     => 'info',
+                        'style'    => 'info',
+                        'desc'     => __('Add /amp at the end of url to view the AMP version of the site. Search Engines will not be able to Crawl the AMP site when in Dev Mode.', 'accelerated-mobile-pages'),
+                        'title'    => __('Dev Mode', 'accelerated-mobile-pages'),
+                        'required' => array('ampforwp-development-mode', '=', 1)
                     ),
 
    ),
@@ -1800,7 +1965,7 @@ Redux::setSection( $opt_name, array(
 
 // Appearance Section
 Redux::setSection( $opt_name, array(
-              'title'      => __( 'Appearance', 'accelerated-mobile-pages' ),
+              'title'      => __( 'Design', 'accelerated-mobile-pages' ),
               'icon' => 'el el-adjust-alt',
               'desc'  => ''
 
@@ -1813,15 +1978,43 @@ Redux::setSection( $opt_name, array(
     }
     add_filter("extra_plugin_headers","amp_extra_plugin_theme_header");
     $themeDesign = array(
-            '1' => __('Design One', 'accelerated-mobile-pages' ),
-            '2' => __('Design Two', 'accelerated-mobile-pages' ),
-            '3' => __('Design Three', 'accelerated-mobile-pages' )
+			array(
+				'upgreade'=>true,
+				'title'=>__('Design One', 'accelerated-mobile-pages' ),
+				'value'=>1,
+				'alt'=>__('Design One', 'accelerated-mobile-pages' ),
+				'img'=>AMPFORWP_PLUGIN_DIR_URI.'/images/design-1.png',
+			),
+			array(
+				'upgreade'=>true,
+				'title'=>__('Design Two', 'accelerated-mobile-pages' ),
+				'value'=>2,
+				'alt'=>__('Design Two', 'accelerated-mobile-pages' ),
+				'img'=>AMPFORWP_PLUGIN_DIR_URI.'/images/design-2.png',
+			),
+			array(
+				'upgreade'=>true,
+				'title'=>__('Design Three', 'accelerated-mobile-pages' ),
+				'value'=>3,
+				'alt'=>__('Design Three', 'accelerated-mobile-pages' ),
+				'img'=>AMPFORWP_PLUGIN_DIR_URI.'/images/design-3.png',
+			)
         );
     if(count(get_plugins())>0){
         foreach (get_plugins() as $key => $value) {
             $plugin = get_plugin_data(WP_PLUGIN_DIR.'/'.$key);
-            if(!empty($plugin['AMP'])){
-                $themeDesign[$value['TextDomain']] = $plugin['AMP'];
+            if(!empty($plugin['AMP'])){//$plugin['AMP']
+				$imageUrl = '';
+				if(file_exists(AMPFORWP_MAIN_PLUGIN_DIR.$value['TextDomain'].'/screenshot.png')){
+					$imageUrl = plugins_url($value['TextDomain'].'/screenshot.png');
+				}
+                $themeDesign[] = array(
+									'upgreade'=>true,
+									'title'=>$plugin['AMP'],
+									'value'=>$value['TextDomain'],
+									'alt'=>$plugin['AMP'],
+									'img'=>$imageUrl,
+								);
             }
         }
     }
@@ -1834,10 +2027,12 @@ Redux::setSection( $opt_name, array(
 
              $fields =  array(
                 'id'       => 'amp-design-selector',
-                'type'     => 'select',
+                'type'     => 'select_image',
                 'title'    => __( 'Themes Selector', 'accelerated-mobile-pages' ),
-                'subtitle' => __( 'Select your design.', 'accelerated-mobile-pages' ),
-                'desc' => '<a href="https://ampforwp.com/themes/" target="_blank">View More AMP Themes →</a>',
+                'subtitle' => __( 'Select your design from dropdown or <br /><a href="https://ampforwp.com/themes/" style="position: relative;
+    top: 20px;text-decoration: none;
+    background: #eee;padding: 5px 8px 5px 9px;
+    border-radius: 30px;" target="_blank">View More AMP Themes →</a>', 'accelerated-mobile-pages' ),
                 'options'  => $themeDesign,
                 'default'  => '2'
                 ),
@@ -2160,6 +2355,23 @@ Redux::setSection( $opt_name, array(
         'id'         => 'amp-single',
         'subsection' => true,
         'fields'     => array(
+         //Breadcrumb ON/OFF
+          array(
+              'id'       => 'ampforwp-bread-crumb',
+              'type'     => 'switch',
+              'default'  =>  '1',
+              'title'    => __('Breadcrumb', 'accelerated-mobile-pages'),
+              'subtitle' => __('Enable or Disable Breadcrumb'),                  
+           ),
+          //Categories and Tags Links
+          array(
+              'id'       => 'ampforwp-cats-tags-links-single',
+              'type'     => 'switch',
+              'default'  =>  '1',
+              'title'    => __('Categories and Tags Links', 'accelerated-mobile-pages'),
+              'subtitle' => __('Enable or Disable Categories/Tags links in Single', 'accelerated-mobile-pages'),                  
+              'required'  => array('ampforwp-archive-support', '=' , '1'),
+           ),
           // Social Icons ON/OFF
           array(
               'id'        => 'enable-single-social-icons',
@@ -2227,7 +2439,7 @@ Redux::setSection( $opt_name, array(
                 'subtitle' => __('select the type of related posts', 'accelerated-mobile-pages'),
                     'options'  => array(
                         '1' => 'Tags',
-                        '2' => 'Categories'
+                        '2' => 'Categories',
                     ),
                'default'  => '2',
             ),
@@ -2352,6 +2564,14 @@ Redux::setSection( $opt_name, array(
               'required'  => array('enable-single-twitter-share', '=' , '1'),
               'placeholder'  => __('Eg: @xyx','accelerated-mobile-pages'),
               'default'   =>  '',
+          ),
+           array(
+              'id'        =>  'enable-single-twitter-share-link',
+              'type'      =>  'switch',
+              'title'     =>  __('Pretty Permalinks for Twitter Share?', 'accelerated-mobile-pages'),
+              'subtitle'  => __('Enable this to have pretty links for twitter sharing'),
+              'default'   =>  0,
+              'required'  => array('enable-single-twitter-share', '=' , '1'),
           ),
           // GooglePlus ON/OFF
           array(
@@ -2489,7 +2709,7 @@ Redux::setSection( $opt_name, array(
           array(
               'id'        =>  'enable-single-linkdin-profile',
               'type'      =>  'switch',
-              'title'     =>  __('Linkdin ', 'accelerated-mobile-pages'),
+              'title'     =>  __('LinkedIn', 'accelerated-mobile-pages'),
               'default'   =>  0,
               'required' => array(
                 array('amp-design-selector', '=' , '3')
@@ -2498,7 +2718,7 @@ Redux::setSection( $opt_name, array(
           array(
               'id'        =>  'enable-single-linkdin-profile-url',
               'type'      =>  'text',
-              'title'     =>  __('Linkdin URL', 'accelerated-mobile-pages'),
+              'title'     =>  __('LinkedIn URL', 'accelerated-mobile-pages'),
               'default'   =>  '',
               'required' => array(
                 array('amp-design-selector', '=' , '3'),
