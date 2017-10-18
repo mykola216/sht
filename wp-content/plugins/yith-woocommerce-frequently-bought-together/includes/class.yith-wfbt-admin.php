@@ -239,7 +239,7 @@ if ( ! class_exists( 'YITH_WFBT_Admin' ) ) {
 			$tabs['yith-wfbt'] = array(
 				'label'  => _x( 'Frequently Bought Together', 'tab in product data box', 'yith-woocommerce-frequently-bought-together' ),
 				'target' => 'yith_wfbt_data_option',
-				'class'  => array( 'hide_if_grouped', 'hide_if_external' ),
+				'class'  => array( 'hide_if_grouped', 'hide_if_external', 'hide_if_bundle' ),
 			);
 
 			return $tabs;

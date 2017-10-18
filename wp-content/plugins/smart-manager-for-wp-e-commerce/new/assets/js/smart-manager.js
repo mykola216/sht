@@ -1,11 +1,11 @@
 
 // jQuery(function(jQuery) {
-var sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_nonce: ''},
+var sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_nonce: '',search_query: [], search_count:0, state_apply: false, dashboard_states: {}},
     page = 1,
     hideDialog = '',
     inline_edit_dlg = '',
     multiselect_chkbox_list = '',
-    limit = 50,
+    limit = sm_beta_params.record_per_page,
     sm_dashboards_combo = '', // variable to store the dashboard names
     column_names = new Array(), // array for the column headers in jqgrid
     column_names_batch_update = new Array(), // array for storing the batch update fields
@@ -14,6 +14,7 @@ var sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_
     lastrow = '1',
     lastcell = '1',
     grid_width = '750',
+    grid_height = '600',
     sm_ajax_url = (ajaxurl.indexOf('?') !== -1) ? ajaxurl + '&action=sm_beta_include_file' : ajaxurl + '?action=sm_beta_include_file',
     //defining default actions for batch update
     batch_update_action_string = {set_to:'set to', prepend:'prepend', append:'append'};
@@ -21,7 +22,11 @@ var sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_
     sm_qtags_btn_init = 1,
     sm_grid_nm = 'sm_editor_grid', //name of div containing jqgrid
     sm_wp_editor_html = '', //variable for storing the html of the wp editor
-    sm_last_edited_row_id = sm_last_edited_col = '';
+    sm_last_edited_row_id = sm_last_edited_col = '',
+    sm_dashboards = sm_beta_params.sm_dashboards,
+    SM_IS_WOO30 = sm_beta_params.SM_IS_WOO30,
+    SM_BETA_PRO = sm_beta_params.SM_BETA_PRO,
+    col_model_search = '';
 
     //function for inline edit dialog
     inline_edit_dlg = function (dialog_content, title, dlg_width, dlg_height, edited_col) {            
@@ -97,9 +102,40 @@ var sm = {dashboard_model:'', dashboard_key: '',dashboard_select_options: '',sm_
 
     }
 
+
+    //Function to handle the state apply at regular intervals
+    var sm_beta_state_update =  function() {
+            
+        if (sm.state_apply === true) {
+
+            sm_refresh_dashboard_states();
+
+            var params = {
+                            cmd: 'save_state',
+                            security: sm.sm_nonce,
+                            active_module: sm.dashboard_key
+                        };
+
+            params['dashboard_states'] = sm.dashboard_states;
+
+            jQuery.ajax({
+
+                type : 'POST',
+                url : sm_ajax_url,
+                dataType:"text",
+                async: false,
+                data: params,
+                success: function() {
+                    sm.state_apply = false;
+                }
+            });
+        }
+        
+    }
+
 jQuery(document).ready(function() {
 
-    sm_dashboards_combo = sm_dashboards = jQuery.parseJSON(sm_dashboards[0]);
+    sm_dashboards_combo = sm_dashboards = jQuery.parseJSON(sm_dashboards);
 
     sm.dashboard_key = sm_dashboards['default'];
 
@@ -107,22 +143,36 @@ jQuery(document).ready(function() {
 
     delete sm_dashboards['sm_nonce'];
 
-    if ( !jQuery(document.body).hasClass('folded') ) {
-        grid_width  = document.documentElement.offsetWidth - 220;
-    }
-    else {
-        grid_width  = document.documentElement.offsetWidth - 100;
+    var current_url = document.URL;
+
+    if ( !jQuery(document.body).hasClass('folded') && current_url.indexOf("page=smart-manager") != -1 ) {
+        jQuery(document.body).addClass('folded');
     }
 
+    //Function to set all the states on unload
+    window.onbeforeunload = function (evt) { 
+        sm_beta_state_update();
+    }
+        
+    grid_width  = document.documentElement.offsetWidth - 80;
+    grid_height  = document.documentElement.offsetHeight - 190;
 
     jQuery('#collapse-menu').live('click', function() {
 
+        var current_url = document.URL;
+
+        if ( current_url.indexOf("page=smart-manager") == -1 ) {
+            return;
+        }
+
         if ( !jQuery(document.body).hasClass('folded') ) {
-            grid_width  = document.documentElement.offsetWidth - 220;
+            grid_width  = document.documentElement.offsetWidth - 205;
         }
         else {
-            grid_width  = document.documentElement.offsetWidth - 100;
+            grid_width  = document.documentElement.offsetWidth - 80;
         }
+        
+        // grid_width  = document.documentElement.offsetWidth - 100;
 
         jQuery('#sm_editor_grid').jqGrid("setGridWidth", grid_width);
         jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
@@ -343,7 +393,14 @@ var load_dashboard = function () {
 
     var sm_top_bar = "<div id='sm_top_bar' style='font-weight:400 !important;'>"+
                         "<div id='sm_top_bar_left'>"+
-                            "<label id=sm_dashboard_select_lbl> <select id='sm_dashboard_select' style='height:20px!important;'> </select> </label>"+
+                            "<label id=sm_dashboard_select_lbl style='float:left'> <select id='sm_dashboard_select' style='height:20px!important;'> </select> </label>"+
+                            "<div id='sm_advanced_search_content' style='float:left; width:70%; margin-top:0.2em;'>"+
+                            "<div style='width: 100%;'> <div id='sm_advanced_search_box' style='float:left;width:80%' > <div id='sm_advanced_search_box_0' style='width:100%;margin-left:0.8em;margin-bottom:0.5em;'> </div>"+
+                            "<input type='text' id='sm_advanced_search_box_value_0' name='sm_advanced_search_box_value_0' hidden> </div>"+ 
+                            "<input type='text' id='sm_advanced_search_query' hidden>"+
+                            "<div id='sm_advanced_search_or' style='float: left;margin-top: 0.15em;margin-left: 1em;opacity: 0.75;cursor: pointer;color: #3892D3;' class='dashicons dashicons-plus' title='Add Another Condition'> </div>"+
+                            "<div style='float: left;margin-left: 2em;cursor: pointer;line-height:0em;'><button id='sm_advanced_search_submit' style='height:2em;'> Search </button> </div>"+
+                            "</div> </div>"+
                         "</div>"+
                         "<div id='sm_top_bar_right'>"+
                             "<span id='add_sm_editor_grid' title='Add Row' class='dashicons dashicons-plus' style='margin-top: 2px;margin-right: 2px;font-size: 23px;'></span>"+
@@ -359,6 +416,44 @@ var load_dashboard = function () {
     jQuery('#sm_dashboard_select').append(sm.dashboard_select_options);
 
     jQuery('#sm_dashboard_select').width(jQuery('#sm_dashboard_select').width()+16); //Code for dynamically increasing the width of the select-box
+
+    col_model_search = Object.keys(col_model).map(function(k) { if(col_model[k].hasOwnProperty('searchable') && col_model[k]['searchable'] == 1 ) { return col_model[k]; } });
+
+    var visualsearch_params = {},
+        search_count = 1;
+
+    var visualsearch_params  = {
+                                el      : jQuery("#sm_advanced_search_box_0"),
+                                placeholder: "Enter your search conditions here!",
+                                strict: false,
+                                search: function(json){
+                                    // sm.search_query = JSON.parse(json);
+                                    sm.search_query[0] = json;
+                                    jQuery("#sm_advanced_search_box_value_0").val(json);
+                                },
+                                parameters: col_model_search
+                            };
+
+    if( sm.search_query[0] != '' && typeof(sm.search_query[0]) != 'undefined'  ) {
+        visualsearch_params.defaultquery = JSON.parse(sm.search_query[0]);
+    }                            
+
+    window.visualSearch = new VisualSearch(visualsearch_params);
+
+    if( SM_BETA_PRO == 1 ) { //handling multiple search conditions for pro
+        if( sm.search_query[0] != '' && typeof(sm.search_query[0]) != 'undefined' && sm.search_query.length > 1 ) { //for search
+
+            for(var i=0; i<sm.search_query.length-1; i++) {
+                sm.search_count = i;
+                if ( typeof smAddAdvancedSearchCondition !== "undefined" && typeof smAddAdvancedSearchCondition === "function" ) {
+                    smAddAdvancedSearchCondition();
+                }
+            }    
+        }    
+    }
+    
+
+    
 
     // Code for handling all the click events
 
@@ -505,6 +600,9 @@ var load_dashboard = function () {
                                                         modal: true,
                                                         done : function (perm) {
                                                             if (perm) {
+
+                                                                sm_refresh_dashboard_states();
+                                                                sm.state_apply = true;
                                                                 jQuery("#sm_editor_grid").jqGrid("remapColumns", perm, true);
                                                                 
                                                                 setTimeout(function() {
@@ -531,7 +629,8 @@ var load_dashboard = function () {
                 jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').css({"height":"20px","opacity":"1","margin":"6px","width":"150px","font-weight":"400"});
                 jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('li').css({"color":"#444","font-weight":"400"});
                 jQuery('#colchooser_sm_editor_grid').find('.ui-multiselect').find('input.search').on('focus',function(){
-                    jQuery(this).css({"border":"1px solid #0073ea","background":"transparent","color":"#444"});
+                    // jQuery(this).css({"border":"1px solid #0073ea","background":"transparent","color":"#444"});
+                    jQuery(this).css({"background":"transparent","color":"#444"});
                 });                
             },100);
         }
@@ -553,7 +652,7 @@ var load_dashboard = function () {
     //     return false;
     // });
 
-    jQuery(document).trigger("sm_jqgrid_titlebar_load"); //event for adding custom elements to jqgrid titlebar
+    setTimeout(function(){jQuery(document).trigger("sm_jqgrid_titlebar_load")}, 1); //event for adding custom elements to jqgrid titlebar
 
      jQuery("#sm_editor_grid").jqGrid('navGrid','#sm_pagging_bar',{
                           edit:false,
@@ -566,8 +665,12 @@ var load_dashboard = function () {
                           refresh:true});
 
     jQuery("#sm_dashboard_select").on('change',function(){
+        sm.state_apply = true;
+        sm_refresh_dashboard_states(); //function to save the state
+        
         sm.dashboard_key = jQuery( "#sm_dashboard_select" ).val();
         sm.dashboard_model = '';
+        sm.search_query = [];
         load_dashboard ();
         jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
     });
@@ -576,7 +679,7 @@ var load_dashboard = function () {
 
     jQuery('#add_sm_editor_grid div, #save_sm_editor_grid div, #batch_sm_editor_grid div').css('padding-right','5px');
 
-    jQuery('#gbox_sm_editor_grid').css({border:'1px solid #3892D3'}); // for main grid
+    // jQuery('#gbox_sm_editor_grid').css({border:'1px solid #3892D3'}); // for main grid
 
     //Code for handling the cell edit view part
     jQuery(document).on('focus','td[role="gridcell"]', function(){
@@ -625,6 +728,39 @@ var load_dashboard = function () {
             }
         }
     });
+
+    jQuery("#sm_advanced_search_or").on('click', function () {
+
+        if( SM_BETA_PRO == 1 ) {
+            jQuery("#sm_advanced_search_or").removeAttr('disabled');
+            if ( typeof smAddAdvancedSearchCondition !== "undefined" && typeof smAddAdvancedSearchCondition === "function" ) {
+                smAddAdvancedSearchCondition();    
+            }
+            
+        } else {
+            jQuery("#sm_advanced_search_or").attr('disabled','disabled');
+            inline_edit_dlg('This feature is available only in Pro version','Warning',250,50);
+        }
+    });
+
+    //request for handling advanced search
+    jQuery('#sm_advanced_search_submit').on('click',function(){ //listen for submit event
+        load_dashboard ();
+        jQuery('#sm_editor_grid').trigger( 'reloadGrid' );
+        
+    });
+
+    setTimeout(function(){jQuery(document).trigger("sm_load_dashboard_complete")}, 1); //event for adding custom code on load dashboard
+
+}
+
+//function to refresh the dashboard states whenever needed
+var sm_refresh_dashboard_states = function() {
+
+    var new_col_model = jQuery("#sm_editor_grid").jqGrid("getGridParam", "colModel");
+    sm.dashboard_model[sm.dashboard_key].columns = new_col_model;
+
+    sm.dashboard_states[sm.dashboard_key] = JSON.stringify(sm.dashboard_model[sm.dashboard_key]);
 }
 
 var smInitDateWithButton = function (elem) {
@@ -682,7 +818,13 @@ var format_dashboard_column_model = function (column_model) {
 
             column_values = (typeof(column_model[i].values) != 'undefined') ? column_model[i].values : '';
 
-            column_names[i] = column_model[i].name.trim(); //Array for column headers
+            var name = (column_model[i].hasOwnProperty('name')) ? column_model[i].name.trim() : ''
+
+            if(column_model[i].hasOwnProperty('name_display') === false) {// added for state management
+                column_model[i].name_display = name;
+            }
+
+            column_names[i] = column_model[i].name_display; //Array for column headers
             sm_column_names_src[column_model[i].index] = column_model[i].src;
 
             var batch_enabled_flag = 'true';
@@ -692,7 +834,7 @@ var format_dashboard_column_model = function (column_model) {
             }
 
             if (batch_enabled_flag == 'true') {
-                column_names_batch_update[column_model[i].index] = {name: column_model[i].name.trim(), type:column_model[i].type, values:column_values, src:column_model[i].src};
+                column_names_batch_update[column_model[i].index] = {name: name, type:column_model[i].type, values:column_values, src:column_model[i].src};
             }
 
             if ( typeof(column_model[i].allow_showhide) != 'undefined' && column_model[i].allow_showhide === false ) {
@@ -794,7 +936,6 @@ var get_dashboard_model = function () {
                 },
             success: function(response) {
                 if (response != '') {
-
                     sm_store_table_model = response[sm.dashboard_key].tables;
                     col_model = format_dashboard_column_model(response[sm.dashboard_key].columns);
                     response[sm.dashboard_key].columns = col_model;
@@ -806,6 +947,20 @@ var get_dashboard_model = function () {
 
 var load_grid = function () {
 
+    var post_data_params = {
+                                      cmd: 'get_data_model',
+                                      active_module: sm.dashboard_key,
+                                      security: sm.sm_nonce,
+                                      start: 0,
+                                      page: page,
+                                      limit: limit,
+                                      SM_IS_WOO30: SM_IS_WOO30,
+                                      sort_params: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('sort_params') ) ? sm.dashboard_model[sm.dashboard_key].sort_params : '',
+                                      table_model: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('tables') ) ? sm.dashboard_model[sm.dashboard_key].tables : ''
+                                  };
+
+    post_data_params['search_query[]'] = sm.search_query;
+
     var jqgrid_params = { 
                             url:sm_ajax_url,
                             // editurl:sm_ajax_url,
@@ -815,17 +970,8 @@ var load_grid = function () {
                             // ajaxGridOptions: {
                             //   type    : 'post',
                             //   async   : false,
-                            postData: {
-                                      cmd: 'get_data_model',
-                                      active_module: sm.dashboard_key,
-                                      security: sm.sm_nonce,
-                                      start: 0,
-                                      page: page,
-                                      limit: limit,
-                                      sort_params: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('sort_params') ) ? sm.dashboard_model[sm.dashboard_key].sort_params : '',
-                                      table_model: (sm.dashboard_model.hasOwnProperty(sm.dashboard_key) && sm.dashboard_model[sm.dashboard_key].hasOwnProperty('tables') ) ? sm.dashboard_model[sm.dashboard_key].tables : ''
-                                  },
-                              jsonReader: {
+                            postData: post_data_params,
+                            jsonReader: {
                                       root: "items",
                                       page: "page",
                                       start: "start",
@@ -843,7 +989,7 @@ var load_grid = function () {
                             // rowList:[10,20,30],
                             pager: '#sm_pagging_bar', // for rendering the paging bottom bar
                             multiselect: true, // for left checkbox column and multi-selection
-                            height: 500,
+                            height: grid_height,
                             width: grid_width,
                             hidegrid: false, //option for removing the grid show/hide option
                             // autowidth: true,
@@ -872,6 +1018,8 @@ var load_grid = function () {
                             },
                             gridComplete: function() {
 
+                                pimpHeader(jQuery("#sm_editor_grid"));
+
                                 //Code for changing the tree grid icons
                                 jQuery('.ui-icon.ui-icon-radio-off.tree-leaf.treeclick').replaceWith('<div style="margin-left: 20px;height: 18px;width: 18px;color: #469BDD;font-size: 1em;" class="">•••</div>');
 
@@ -884,10 +1032,11 @@ var load_grid = function () {
                                 jQuery('#sm_pagging_bar').hide();
                                 var records_view = jQuery('#sm_pagging_bar_right').find('.ui-paging-info').html();
 
-                                var records_view_html = '<div id="sm_records_view" style="float:right;color:#3892D3;margin-right:3.3em;font-weight:bold;font-style:italic;">'+records_view+'</div>';
+                                var records_view_html = '<div id="sm_records_view" style="float:right;color:#3892D3;margin-right:1em;font-weight:bold;margin-top: 0.2em;">'+records_view+'</div>';
 
                                 jQuery('#sm_records_view').remove(); //Code for refreshing the sm_records_view
-                                jQuery("#gbox_sm_editor_grid").after(records_view_html);
+                                // jQuery("#gbox_sm_editor_grid").after(records_view_html);
+                                jQuery("#sm_top_bar_left").append(records_view_html);
 
 
                                 jQuery("#gbox_sm_editor_grid").find('input[type=checkbox]').each(function() {
@@ -965,7 +1114,12 @@ jQuery(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, i
     multiselect_chkbox_list = '';
 
     if (value != '') {
-        current_value = value.split('<br>');
+        current_value = value.split(', <br>');
+        var rex = /(<([^>]+)>)/ig;
+
+        for(var i in current_value) {
+            current_value[i] = current_value[i].replace(rex , "");
+        }
     }
 
     for (var i in columns) {
@@ -999,7 +1153,8 @@ jQuery(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, i
 
                 var wp_editor_html = jQuery('#sm_wp_editor').html();
 
-                if ( sm_last_edited_row_id == '' && sm_last_edited_col == '' ) {
+                // if ( sm_last_edited_row_id == '' && sm_last_edited_col == '' ) {
+                if ( !document.getElementById('inline_edit_longstring_ok') ) { //code to show the OK button
                    wp_editor_html += '<span id="edit_attributes_toolbar">'+
                                         '<button type="button" id="inline_edit_longstring_ok" class="button button-primary" style="float:right;">OK</button>'+
                                     '</span>';
@@ -1011,24 +1166,31 @@ jQuery(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, i
                 sm_last_edited_row_id = rowid;
                 sm_last_edited_col = iCol;
 
-
-                if ( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').length != 0 ) {
-                    jQuery('#sm_inline_wp_editor-tmce').on('click',function() {
-                        jQuery('#sm_editor_grid_inlinecnt').find('#mceu_36').show();
-                    });
-
-                    jQuery('#sm_inline_wp_editor-html').on('click',function() {
-                        jQuery('#sm_editor_grid_inlinecnt').find('#mceu_36').hide();
-                    });
-
-                    jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('head').html( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('head').html() );
-                    jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('body').html( jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('body').html() );
-                }
-
                 tinyMCE.init({ id : tinyMCEPreInit.mceInit[ 'sm_inline_wp_editor' ]});
                 quicktags({id : 'sm_inline_wp_editor'});
                 QTags._buttonsInit();
                 sm_qtags_btn_init = 1;
+
+
+                jQuery(document).on('click','#sm_inline_wp_editor-tmce', function() {
+                    jQuery('#qt_sm_inline_wp_editor_toolbar').hide();
+                    jQuery('#wp-sm_inline_wp_editor-editor-container').find('.mce-panel').show();
+                    
+                    setTimeout(function(){
+                        jQuery('#sm_wp_editor').html(jQuery('#sm_editor_grid_inlinecnt').html());
+                        jQuery('#sm_wp_editor').find('#sm_inline_wp_editor_ifr').contents().find('html').html(jQuery('#sm_editor_grid_inlinecnt').find('#sm_inline_wp_editor_ifr').contents().find('html').html());
+
+                    }, 1000);
+
+                });
+
+                jQuery(document).on('click','#sm_inline_wp_editor-html', function() {
+                    jQuery('#qt_sm_inline_wp_editor_toolbar').show();
+                    jQuery('#wp-sm_inline_wp_editor-editor-container').find('.mce-panel').hide();
+                });
+
+                jQuery('#qt_sm_inline_wp_editor_toolbar').show();
+                jQuery('#sm_inline_wp_editor-html').click();
                 
                 jQuery(document).on("sm_inline_edit_dlg_hide", function(e,edited_col) {
                     
@@ -1185,7 +1347,7 @@ jQuery(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, i
             for (var index in mutiselect_col_val) {
                 if (selected_val.indexOf(index) != -1) {
                     if (mutiselect_edited_text != '') {
-                        mutiselect_edited_text += '<br>';
+                        mutiselect_edited_text += ', <br>';
                     }
                     mutiselect_edited_text += mutiselect_col_val[index]['term'];
                 }
@@ -1204,6 +1366,15 @@ jQuery(document).on('sm_on_cell_click',function(e,rowid, celname, value, iRow, i
 
 
 });
+
+function pimpHeader(gridObj) {
+    var cm = gridObj.jqGrid("getGridParam", "colModel");
+    for (var i=1;i<cm.length;i++) {
+        gridObj.jqGrid('setLabel', cm[i].name, '', 
+            {'text-align': (cm[i].align || 'left')}, 
+            (cm[i].titletext ? {'title': cm[i].titletext} : {}));
+    }
+}
 
 //Code for adding custom functions for the jqgrid
 var jqgrid_custom_func = function() {

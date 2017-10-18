@@ -28,10 +28,10 @@
 
 /*Added for WP4.4*/
 .sm-h2 {
-    font-size: 23px;
+    font-size: 1.5em;
     font-weight: 400;
     padding: 9px 15px 4px 0;
-    line-height: 29px;
+    color: #515151;
 }
 
 td {
@@ -62,7 +62,7 @@ ul.children{list-style:none outside;margin:0px 0 0 24px}
 
 #sm_top_bar_left{
 	float:left;
-	width:85%;
+	width:90%;
 }
 
 #sm_top_bar_right{
@@ -127,8 +127,10 @@ input[type=checkbox] {
     font-family: dashicons;
     color:#3892D3;
     right:0px;
-    line-height: 23px;
+    /*line-height: 23px;*/
     position:absolute;
+    top:0;
+    float: right;
     pointer-events:none;
 }
 #sm_dashboard_select_lbl:before {
@@ -139,6 +141,10 @@ input[type=checkbox] {
     position:absolute;
     pointer-events:none;
     display:block;
+}
+
+#sm_dashboard_select {
+    font-size: 1.2em !important;
 }
 
 /*For hiding the update notices on subscriptions page*/
@@ -171,3 +177,33 @@ OVERRIDING JQGRID CSS
     height: 1px;
 }*/
 
+
+
+.ui-jqgrid .ui-jqgrid-view {
+    font-size: 0.9em;
+    line-height: 2em;
+}
+
+.ui-jqgrid-htable, .ui-jqgrid-bdiv, .ui-jqgrid-btable {
+    width: 100% !important;
+}
+
+
+.ui-jqgrid-htable {
+    line-height: 1.5em;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+    border: 1px solid #ddd;
+    background: #f6f6f6 url("../images/jqgrid/ui-bg_highlight-soft_100_f6f6f6_1x100.png") 50% 50% repeat-x;
+    font-weight: 100;
+    color: #444;
+}
+
+/*==============================================
+OVERRIDING WP CSS
+==============================================*/
+
+#wpbody-content {
+    padding-bottom: 2.5rem !important;
+}

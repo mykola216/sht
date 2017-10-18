@@ -50,6 +50,25 @@ class MailChimp_WooCommerce_Transform_Orders
     }
 
     /**
+     * @param WC_Order $woo
+     * @return array
+     */
+    protected function dates(WC_Order $woo)
+    {
+        if (method_exists($woo, 'get_date_modified')) {
+            $created_at = $woo->get_date_modified();
+            $updated_at = $woo->get_date_modified();
+        } elseif (property_exists($woo, 'order_date') && property_exists($woo, 'modified_date')) {
+            $created_at = $woo->order_date ? new \DateTime($woo->order_date) : null;
+            $updated_at = $woo->modified_date ? new \DateTime($woo->modified_date) : null;
+        } else {
+            $created_at = $updated_at = new \DateTime();
+        }
+
+        return array($created_at, $updated_at);
+    }
+
+    /**
      * @param WP_Post $post
      * @return MailChimp_WooCommerce_Order
      */
@@ -177,6 +196,14 @@ class MailChimp_WooCommerce_Transform_Orders
         $subscribed_on_order = $subscriber_meta === '' ? false : (bool) $subscriber_meta;
 
         $customer->setOptInStatus($subscribed_on_order);
+        // if they didn't subscribe on the order, we need to check to make sure they're not already a subscriber
+        // if they are, we just need to make sure that we don't unsubscribe them just because they unchecked this box.
+        if (!$subscribed_on_order) {
+            try {
+                $subscriber = mailchimp_get_api()->member(mailchimp_get_list_id(), $customer->getEmailAddress());
+                $customer->setOptInStatus(($subscriber['status'] !== 'unsubscribed'));
+            } catch (\Exception $e) {}
+        }
 
         // use the info from the order to compile an address.
         $address = new MailChimp_WooCommerce_Address();

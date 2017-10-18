@@ -6,10 +6,10 @@
 
 /*Added for WP4.4*/
 .sm-h2 {
-	font-size: 23px;
+	font-size: 1.5em;
 	font-weight: 400;
 	padding: 9px 15px 4px 0;
-	line-height: 29px;
+	color: #515151;
 }
 
 .icon32 {
@@ -400,4 +400,32 @@ EXTJS Theme related CSS
 /*For hiding the update notices on subscriptions page*/
 .update-nag, .updated, .error { 
   display: none; 
+}
+
+
+/*==============================================
+OVERRIDING EXTJS CSS
+==============================================*/
+.x-panel-tbar-noheader .x-toolbar, .x-panel-mc .x-panel-tbar .x-toolbar {
+	border: 1px solid #d0d0d0 !important;
+	border-bottom: 0px !important;
+}
+
+.x-grid-panel .x-panel-mc .x-panel-body {
+	border: 1px solid #d0d0d0 !important;
+	border-top: 0px !important;
+	border-bottom: 0px !important;
+}
+
+.x-panel-bbar{
+	border: 1px solid #d0d0d0 !important;
+	border-top: 0px !important;
+}
+
+/*==============================================
+OVERRIDING WP CSS
+==============================================*/
+
+#wpbody-content {
+    padding-bottom: 2.5rem !important;
 }

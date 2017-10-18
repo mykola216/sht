@@ -251,16 +251,30 @@ class WF_PrRevImpExpCsv_Exporter {
 				if ($column === 'comment_alter_id') {
 					$row[] = self::format_data($comment_ID);
 				}
-
+				
 				if ( isset( $comment->meta->$column ) ) {
 					$row[] = self::format_data( $comment->meta->$column );
-				} elseif ( isset( $comment->$column ) && ! is_array( $comments[0]->$column ) ) {
+				} 
+				elseif ( isset( $comment->$column ) && ! is_array( $comments[0]->$column ) )
+				{
+					if($column === 'comment_post_ID')
+						$temp_product_id = sanitize_text_field( $comment->$column );
+					
 					if ( $column === 'post_title' ) {
 						$row[] = sanitize_text_field( $comment->$column );
-					} else {
+					} 
+					else 
+					{
 						$row[] = self::format_data( $comment->$column );
 					}
-				} else {
+				} 
+				else 
+				{
+					if($column === 'product_SKU' && !empty($temp_product_id))
+					{
+						$row[] = (string)get_post_meta($temp_product_id, '_sku', true);
+					}
+				else
 					$row[] = '';
 				}
 			}
