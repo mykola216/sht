@@ -190,8 +190,8 @@ msgstr "Smart Manager Pro for at få mulighed for automatiske opdateringer og su
 
 #: pro/upgrade.php:168
 #, php-format
-msgid "%1sNeed a license key? <a href=\"http://www.storeapps.org/pricing-purchase/\" target=\"_blank\">Purchase one now</a>."
-msgstr "%1sBrug for en licensnøgle? <a href=\"http://www.storeapps.org/pricing-purchase/\" target=\"_blank\">Køb en nu</a>."
+msgid "%1sNeed a license key? <a href=\"https://www.storeapps.org/pricing-purchase/\" target=\"_blank\">Purchase one now</a>."
+msgstr "%1sBrug for en licensnøgle? <a href=\"https://www.storeapps.org/pricing-purchase/\" target=\"_blank\">Køb en nu</a>."
 
 #: pro/sm-privilege.php:20
 msgid "Access Privilege <b>Updated</b>"

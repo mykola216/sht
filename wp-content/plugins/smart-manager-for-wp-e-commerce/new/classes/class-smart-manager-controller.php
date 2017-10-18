@@ -29,7 +29,7 @@ if ( ! class_exists( 'Smart_Manager_Controller' ) ) {
 		public function sm_footer() {
 			if(isset($_GET['sm_beta']) && $_GET['sm_beta'] == '1'){
 				echo '<div id="sm_wp_editor" style="display:none;">';
-				wp_editor( '', 'sm_inline_wp_editor' );
+				wp_editor( '', 'sm_inline_wp_editor', array('default_editor' => 'html') );
 				echo '</div>';
 			}
 		}

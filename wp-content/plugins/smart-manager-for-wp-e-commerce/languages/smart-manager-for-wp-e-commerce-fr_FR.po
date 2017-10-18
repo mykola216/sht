@@ -1010,8 +1010,8 @@ msgstr "votre copie de Smart Manager pour avoir accès aux mises à jour automat
 
 #: pro/upgrade.php:183
 #, php-format
-msgid "%1sNeed a license key? <a href=\"http://www.storeapps.org/pricing-purchase/\" target=\"_blank\">Purchase one now</a>."
-msgstr "%1sBesoin d&rsquo;une clé de licence ? <a href=\"http://www.storeapps.org/pricing-purchase/\" target=\"_blank\">En acheter une maintenant</a>."
+msgid "%1sNeed a license key? <a href=\"https://www.storeapps.org/pricing-purchase/\" target=\"_blank\">Purchase one now</a>."
+msgstr "%1sBesoin d&rsquo;une clé de licence ? <a href=\"https://www.storeapps.org/pricing-purchase/\" target=\"_blank\">En acheter une maintenant</a>."
 
 #~ msgid "Pro"
 #~ msgstr "Pro"

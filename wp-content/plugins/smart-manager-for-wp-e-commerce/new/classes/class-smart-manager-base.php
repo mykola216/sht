@@ -21,6 +21,7 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			$this->req_params  	= (!empty($_REQUEST)) ? $_REQUEST : array();
 
 			add_filter('posts_join_paged',array(&$this,'sm_query_join'),10,2);
+			add_filter('posts_where',array(&$this,'sm_query_post_where_cond'),10,2);
 			add_filter('posts_orderby',array(&$this,'sm_query_order_by'),10,2);
 		}
 
@@ -48,7 +49,27 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					}
 				}
 			}
+
+			//Code for handling search
+			if( !empty($_POST) && !empty($_POST['search_query']) && !empty($_POST['search_query'][0]) ) {
+				$join .= " JOIN {$wpdb->base_prefix}sm_advanced_search_temp
+                            	ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.id)";
+			}
+
+
 			return $join;
+		}
+
+		public function sm_query_post_where_cond ($where, $wp_query_obj) {
+
+			global $wpdb;
+
+			//Code for handling search
+			if( !empty($_POST) && !empty($_POST['search_query']) && !empty($_POST['search_query'][0]) ) {
+				$where .= " AND {$wpdb->base_prefix}sm_advanced_search_temp.flag > 0";
+			}
+
+			return $where;
 		}
 
 		public function sm_query_order_by ($order_by, $wp_query_obj) {
@@ -86,8 +107,14 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					$temp ['index'] = sanitize_title(str_replace('/', '_', $temp ['src'])); // generate slug using the wordpress function if not given 
 					$temp ['name'] = __(ucwords(str_replace('_', ' ', $field_nm)), Smart_Manager::$text_domain);
 
+					$temp ['table_name'] = $wpdb->prefix.'posts';
+					$temp ['col_name'] = $field_nm;
+
+					$temp ['key'] = $temp ['name']; //for advanced search
+
 					$type = 'string';
 					$temp ['width'] = 100;
+					$temp ['align'] = 'left';
 
 					if (!empty($posts_col['Type'])) {
 						$type_strpos = strrpos($posts_col['Type'],'(');
@@ -99,7 +126,9 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 
 						if (substr($type,-3) == 'int') {
 							$type = 'number';
+							$temp ['min'] = 0;
 							$temp ['width'] = 50;
+							$temp ['align'] = 'right';
 						} else if ($type == 'text') {
 							$temp ['width'] = 130;
 						} else if (substr($type,-4) == 'char' || substr($type,-4) == 'text') {
@@ -118,7 +147,9 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 							$type = 'date';
 						} else if ($type == 'decimal' || $type == 'float' || $type == 'double' || $type == 'real') {
 							$type = 'integer';
+							$temp ['min'] = 0;
 							$temp ['width'] = 50;
+							$temp ['align'] = 'right';
 						} else if ($type == 'boolean') {
 							$type = 'toggle';
 							$temp ['width'] = 30;
@@ -139,30 +170,32 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					$temp ['exportable']		= true; //default true. flag for enabling the column in export
 					$temp ['searchable']		= true;
 
-					//Code fr handling the positioning of the columns
+					//Code for handling the positioning of the columns
 					if ($field_nm == 'ID') {
-						$temp ['position'] = 0;
+						$temp ['position'] = 1;
 						$temp ['key'] = true;
 						$temp ['editable'] = false;
 						$temp ['batch_editable'] = false;
+						$temp ['align'] = 'left';
 						// $temp ['frozen'] = true;
 					} else if ($field_nm == 'post_title') {
 						$temp ['width'] = 200;
-						$temp ['position'] = 1; // based on order of definition if not given or more than one column having same position
+						$temp ['position'] = 2; // based on order of definition if not given or more than one column having same position
 						// $temp ['frozen'] = true;
 					} else if ($field_nm == 'post_content') {
-						$temp ['position'] = 2;
-					} else if ($field_nm == 'post_status') {
 						$temp ['position'] = 3;
-					} else if ($field_nm == 'post_date') {
+					} else if ($field_nm == 'post_status') {
 						$temp ['position'] = 4;
-					} else if ($field_nm == 'post_name') {
+					} else if ($field_nm == 'post_date') {
 						$temp ['position'] = 5;
+					} else if ($field_nm == 'post_name') {
+						$temp ['position'] = 6;
 					}
 
 					$temp ['type'] = $type;
 
 					$temp ['values'] = array();
+					$temp['search_values'] = array();
 					if ($field_nm == 'post_status') {
 						$temp ['type'] = 'list';
 						$temp ['values'] = array('publish' => __('Publish', Smart_Manager::$text_domain),
@@ -170,6 +203,12 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 												 'draft' => __('Draft', Smart_Manager::$text_domain),
 												 'private' => __('Private', Smart_Manager::$text_domain),
 												 'future' => __('Scheduled', Smart_Manager::$text_domain));
+
+						$temp['search_values'][0] = array('key' => 'publish', 'value' =>  __('Publish',Smart_Manager::$text_domain));
+						$temp['search_values'][1] = array('key' => 'pending', 'value' =>  __('Pending Review',Smart_Manager::$text_domain));
+						$temp['search_values'][2] = array('key' => 'draft', 'value' =>  __('Draft',Smart_Manager::$text_domain));
+						$temp['search_values'][3] = array('key' => 'private', 'value' =>  __('Private',Smart_Manager::$text_domain));	
+						$temp['search_values'][3] = array('key' => 'future', 'value' =>  __('Scheduled',Smart_Manager::$text_domain));	
 					}
 
 					if ( $field_nm == 'ID' || $field_nm == 'post_title' || $field_nm == 'post_date' || $field_nm == 'post_name'
@@ -178,6 +217,9 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					} else {
 						$temp ['hidden'] = true;
 					}
+
+					$temp ['category'] = ''; //for advanced search
+					$temp ['placeholder'] = ''; //for advanced search
 
 					$col_model [] = $temp;
 
@@ -241,10 +283,17 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 				$col_model [$index]['src'] = 'postmeta/post_id';
 				$col_model [$index]['index'] = sanitize_title(str_replace('/', '_', $col_model [$index]['src'])); // generate slug using the wordpress function if not given 
 				$col_model [$index]['name'] = __(ucwords(str_replace('_', ' ', 'post_id')), Smart_Manager::$text_domain);
+				$col_model [$index]['key'] = $col_model [$index]['name']; //for advanced search
 				$col_model [$index]['type'] = 'number';
 				$col_model [$index]['hidden']	= true;
 				$col_model [$index]['allow_showhide'] = false;
 				$col_model [$index]['editable']	= false;
+
+				$col_model [$index]['table_name'] = $wpdb->prefix.'postmeta';
+				$col_model [$index]['col_name'] = 'post_id';
+
+				$col_model [$index] ['category'] = ''; //for advanced search
+				$col_model [$index] ['placeholder'] = ''; //for advanced search
 
 				foreach ($results_postmeta_col as $postmeta_col) {
 
@@ -256,12 +305,19 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					$temp ['src'] = 'postmeta/meta_key='.$meta_key.'/meta_value='.$meta_key;
 					$temp ['index'] = sanitize_title(str_replace(array('/','='), '_', $temp ['src'])); // generate slug using the wordpress function if not given 
 					$temp ['name'] = __(ucwords(str_replace('_', ' ', $meta_key)), Smart_Manager::$text_domain);
+					$temp ['key'] = $temp ['name']; //for advanced search
+
+					$temp ['table_name'] = $wpdb->prefix.'postmeta';
+					$temp ['col_name'] = $meta_key;
 
 					$temp ['width'] = 100;
+					$temp ['align'] = 'left';
 
 					if (is_numeric($meta_value)) {
 						$type = 'number';
+						$temp ['min'] = 0;
 						$temp ['width'] = 50;
+						$temp ['align'] = 'right';
 					} else if ($meta_value == 'yes' || $meta_value == 'no') {
 						$type = 'toggle';
 						$temp ['width'] = 30;
@@ -272,6 +328,7 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 
 					$temp ['type'] = $type;
 					$temp ['values'] = array();
+					$temp ['search_values'] = array();
 
 					$temp ['hidden'] = false;
 					$hidden_col_array = array('_edit_lock','_edit_last');
@@ -290,6 +347,9 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					$temp ['exportable']		= true; //default true. flag for enabling the column in export
 					$temp ['searchable']		= true;
 
+					$temp ['category'] = ''; //for advanced search
+					$temp ['placeholder'] = ''; //for advanced search
+
 					$col_model [] = $temp;
 				}
 			}
@@ -302,6 +362,7 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			if (!empty($taxonomy_nm)) {
 
 				$terms_val = array();
+				$terms_val_search = array();
 				$terms_val_parent = array();
 
 				$index = sizeof($col_model);
@@ -312,10 +373,17 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 				$col_model [$index]['src'] = 'terms/object_id';
 				$col_model [$index]['index'] = sanitize_title(str_replace('/', '_', $col_model [$index]['src'])); // generate slug using the wordpress function if not given 
 				$col_model [$index]['name'] = __(ucwords(str_replace('_', ' ', 'object_id')), Smart_Manager::$text_domain);
+				$col_model [$index]['key'] = $col_model [$index]['name']; //for advanced search
 				$col_model [$index]['type'] = 'number';
 				$col_model [$index]['allow_showhide'] = false;
 				$col_model [$index]['hidden']	= true;
 				$col_model [$index]['editable']	= false;
+
+				$col_model [$index]['table_name'] = $wpdb->prefix.'terms';
+				$col_model [$index]['col_name'] = 'object_id';
+
+				$col_model [$index]['category'] = ''; //for advanced search
+				$col_model [$index]['placeholder'] = ''; //for advanced search
 
 				$taxonomy_terms = get_terms($taxonomy_nm, array('hide_empty'=> 0,'orderby'=> 'id'));
 
@@ -327,6 +395,7 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 						}
 
 						$terms_val[$term_obj->taxonomy][$term_obj->term_id] = $term_obj->name;
+						$terms_val_search[$term_obj->taxonomy][$term_obj->slug] = $term_obj->name; //for advanced search
 						$this->terms_val_parent[$term_obj->taxonomy][$term_obj->term_id] = array();
 						$this->terms_val_parent[$term_obj->taxonomy][$term_obj->term_id]['term'] = $term_obj->name;
 						$this->terms_val_parent[$term_obj->taxonomy][$term_obj->term_id]['parent'] = $term_obj->parent;
@@ -341,16 +410,27 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					$terms_col ['src'] 				= 'terms/'.$taxonomy;
 					$terms_col ['index'] 			= sanitize_title(str_replace(array('/','='), '_', $terms_col ['src'])); // generate slug using the wordpress function if not given 
 					$terms_col ['name'] 			= __(ucwords(str_replace('_', ' ', $taxonomy)), Smart_Manager::$text_domain);
+					$terms_col ['key'] 				= $terms_col ['name']; //for advanced search
+
+					$terms_col ['table_name'] = $wpdb->prefix.'terms';
+					$terms_col ['col_name'] = $taxonomy;
 
 					$terms_col ['width'] = 200;
+					$terms_col ['align'] = 'left';
 
 					if (!empty($terms_val[$taxonomy])) {
 						$terms_col ['type'] 		= 'list';
-						$terms_col ['values'] 		= $terms_val[$taxonomy];	
+						$terms_col ['values'] 		= $terms_val[$taxonomy];
+
+						//code for handling values for advanced search
+						$terms_col['search_values'] = array();
+						foreach ($terms_val_search[$taxonomy] as $key => $value) {
+							$terms_col['search_values'][] = array('key' => $key, 'value' =>  $value);
+						}
+
 					} else {
 						$terms_col ['type'] 		= 'string';
 					}
-					
 
 					$terms_col ['hidden'] 			= false;
 					$terms_col ['editable']			= true;
@@ -361,6 +441,9 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 					$terms_col ['allow_showhide']	= true;
 					$terms_col ['exportable']		= true; //default true. flag for enabling the column in export
 					$terms_col ['searchable']		= true;
+
+					$terms_col ['category'] = ''; //for advanced search
+					$terms_col ['placeholder'] = ''; //for advanced search
 
 					$col_model [] = $terms_col;
 				}
@@ -444,19 +527,26 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 		//Function to get the dashboard model
 		public function get_dashboard_model() {
 
-			global $wpdb;
+			global $wpdb, $current_user;
 
 			$col_model = array();
 
 			// Load from cache
-			$store_model = get_transient( 'sm_dashboard_model_'.$this->dashboard_key );			
+			$store_model_transient = get_transient( 'sm_beta_'.$current_user->user_email.'_'.$this->dashboard_key );
 
-			$store_model = false;
 			// Valid cache not found
-			if ( false === $store_model ) {
+			if ( false === $store_model_transient ) {
 				$this->get_default_store_model();
 				$store_model = $this->default_store_model;
+
+				foreach ($store_model[$this->dashboard_key]['columns'] as $key => $value) {
+					$store_model[$this->dashboard_key]['columns'][$key]['save_state'] = true;
+				}
+
+			} else {
+				$store_model[$this->dashboard_key] = $store_model_transient;
 			}
+
 			//Filter to modify the dashboard model
 			$store_model = apply_filters('sm_dashboard_model', $store_model);
 
@@ -494,8 +584,10 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 
 					usort( $priority_columns, "sm_position_compare" ); //code for sorting as per the position
 
-					foreach ($final_column_model as $column_model) {
-						$priority_columns [] = $column_model;
+					$final_column_model = array_values($final_column_model);
+
+					foreach ($final_column_model as $col_model) {
+						$priority_columns[] = $col_model;
 					}
 
 					ksort($priority_columns);
@@ -504,8 +596,8 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			}
 
 			// Valid cache not found
-			if ( false === get_transient( 'sm_dashboard_model_'.$this->dashboard_key ) ) {
-				set_transient( 'sm_dashboard_model_'.$this->dashboard_key, $store_model, WEEK_IN_SECONDS );	
+			if ( false === get_transient( 'sm_beta_'.$current_user->user_email.'_'.$this->dashboard_key ) ) {
+				set_transient( 'sm_beta_'.$current_user->user_email.'_'.$this->dashboard_key, $store_model[$this->dashboard_key], WEEK_IN_SECONDS );	
 			}
 
 			do_action('sm_dashboard_model_saved');
@@ -514,10 +606,459 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			exit;
 		}
 
+		public function process_search_cond($params = array()) {
+
+			global $wpdb;
+
+
+			if( empty($params) || empty($params['search_query']) ) {
+				return;
+			}
+
+
+			$wpdb->query("DELETE FROM {$wpdb->base_prefix}sm_advanced_search_temp"); // query to reset advanced search temp table
+
+            $advanced_search_query = array();
+            $i = 0;
+
+            update_option('sm_advanced_search_query',$params['search_query']);
+
+            foreach ($params['search_query'] as $search_string_array) {
+
+                $search_string_array = json_decode(stripslashes($search_string_array),true);
+
+                if (is_array($search_string_array)) {
+
+                		// START FROM HERE
+
+                        $advanced_search_query[$i] = array();
+                        $advanced_search_query[$i]['cond_posts'] = '';
+                        $advanced_search_query[$i]['cond_postmeta'] = '';
+                        $advanced_search_query[$i]['cond_terms'] = '';
+
+                        $advanced_search_query[$i]['cond_postmeta_col_name'] = '';
+                        $advanced_search_query[$i]['cond_postmeta_col_value'] = '';
+                        $advanced_search_query[$i]['cond_postmeta_operator'] = '';
+
+                        $advanced_search_query[$i]['cond_terms_col_name'] = '';
+                        $advanced_search_query[$i]['cond_terms_col_value'] = '';
+                        $advanced_search_query[$i]['cond_terms_operator'] = '';
+
+                        $search_value_is_array = 0; //flag for array of search_values
+
+                        $search_string_array = apply_filters('sm_before_search_string_process', $search_string_array);
+
+                        foreach ($search_string_array as $search_string) {
+
+                            $search_col = (!empty($search_string['col_name'])) ? $search_string['col_name'] : '';
+                            $search_operator = (!empty($search_string['operator'])) ? $search_string['operator'] : '';
+                            $search_data_type = (!empty($search_string['type'])) ? $search_string['type'] : 'string';
+                            $search_value = (!empty($search_string['value']) && $search_string['value'] != "''") ? $search_string['value'] : (($search_data_type == "number") ? '0' : '');
+
+                            $search_params = array('search_string' => $search_string,
+													'search_col' => $search_col,
+													'search_operator' => $search_operator, 
+													'search_data_type' => $search_data_type, 
+													'search_value' => $search_value,
+													'SM_IS_WOO30' => (!empty($params['SM_IS_WOO30'])) ? $params['SM_IS_WOO30'] : '');
+
+                            if (!empty($search_string['table_name']) && $search_string['table_name'] == $wpdb->prefix.'posts') {
+
+                            	$search_col = apply_filters('sm_search_format_query_posts_col_name', $search_col, $search_params);
+                                $search_value = apply_filters('sm_search_format_query_posts_col_value', $search_value, $search_params);
+
+                                if ($search_data_type == "number") {
+                                    $posts_cond = $search_string['table_name'].".".$search_col . " ". $search_operator ." " . $search_value;
+                                } else {
+                                    if ($search_operator == 'is') {
+                                        $posts_cond = $search_string['table_name'].".".$search_col . " LIKE '" . $search_value . "'";
+                                    } else if ($search_operator == 'is not') {
+                                        $posts_cond = $search_string['table_name'].".".$search_col . " NOT LIKE '" . $search_value . "'";
+                                    } else {
+                                        $posts_cond = $search_string['table_name'].".".$search_col . " ". $search_operator ."'%" . $search_value . "%'";
+                                    }
+                                }
+
+                                $posts_cond = apply_filters('sm_search_posts_cond', $posts_cond, $search_params);
+
+                                $advanced_search_query[$i]['cond_posts'] .= $posts_cond ." AND ";
+
+                            } else if (!empty($search_string['table_name']) && $search_string['table_name'] == $wpdb->prefix.'postmeta') {
+
+                                $advanced_search_query[$i]['cond_postmeta_col_name'] .= $search_col;
+                                $advanced_search_query[$i]['cond_postmeta_col_value'] .= $search_value;
+
+                                $search_col = apply_filters('sm_search_format_query_postmeta_col_name', $search_col, $search_params);
+                                $search_value = apply_filters('sm_search_format_query_postmeta_col_value', $search_value, $search_params);
+
+                                if ($search_data_type == "number") {
+                                    $postmeta_cond = " ( ". $search_string['table_name'].".meta_key LIKE '". $search_col . "' AND ". $search_string['table_name'] .".meta_value ". $search_operator ." " . $search_value . " )";
+                                    $advanced_search_query[$i]['cond_postmeta_operator'] .= $search_operator;
+                                } else {
+                                    if ($search_operator == 'is') {
+
+                                        $advanced_search_query[$i]['cond_postmeta_operator'] .= 'LIKE';
+                                        $postmeta_cond = " ( ". $search_string['table_name'].".meta_key LIKE '". $search_col . "' AND ". $search_string['table_name'] .".meta_value LIKE '" . $search_value . "'" . " )";
+
+                                        
+                                    } else if ($search_operator == 'is not') {
+
+                                        $advanced_search_query[$i]['cond_postmeta_operator'] .= 'NOT LIKE';
+                                        $postmeta_cond = " ( ". $search_string['table_name'].".meta_key LIKE '". $search_col . "' AND ". $search_string['table_name'] .".meta_value NOT LIKE '" . $search_value . "'" . " )";
+
+                                    } else {
+
+                                        $advanced_search_query[$i]['cond_postmeta_operator'] .= $search_operator;
+                                        $postmeta_cond = " ( ". $search_string['table_name'].".meta_key LIKE '". $search_col . "' AND ". $search_string['table_name'] .".meta_value ". $search_operator ."'%" . $search_value . "%'" . " )";
+                                    }
+                                    
+                                }
+
+                                $postmeta_cond = apply_filters('sm_search_postmeta_cond', $postmeta_cond, $search_params);
+
+                                $advanced_search_query[$i]['cond_postmeta'] .= $postmeta_cond ." AND ";
+                                $advanced_search_query[$i]['cond_postmeta_col_name'] .= " AND ";
+                                $advanced_search_query[$i]['cond_postmeta_col_value'] .= " AND ";
+                                $advanced_search_query[$i]['cond_postmeta_operator'] .= " AND ";
+
+                            } else if (!empty($search_string['table_name']) && $search_string['table_name'] == $wpdb->prefix.'terms') {
+
+                                $advanced_search_query[$i]['cond_terms_col_name'] .= $search_col;
+                                $advanced_search_query[$i]['cond_terms_col_value'] .= $search_value;
+
+                                $search_col = apply_filters('sm_search_format_query_terms_col_name', $search_col, $search_params);
+                                $search_value = apply_filters('sm_search_format_query_terms_col_value', $search_value, $search_params);
+
+                                if ($search_operator == 'is') {
+                                    if( $search_string['value'] == "''" ) { //for handling empty search strings
+                                        $terms_cond = " ( ". $wpdb->prefix ."term_taxonomy.taxonomy NOT LIKE '". $search_col . "' AND ". $wpdb->prefix ."term_taxonomy.taxonomy NOT LIKE 'product_type' )";
+                                        $advanced_search_query[$i]['cond_terms_operator'] .= 'NOT LIKE';
+                                    } else {                                        
+                                        $terms_cond = " ( ". $wpdb->prefix ."term_taxonomy.taxonomy LIKE '". $search_col . "' AND ". $wpdb->prefix ."terms.slug LIKE '" . $search_value . "'" . " )";
+                                        $advanced_search_query[$i]['cond_terms_operator'] .= 'LIKE';
+                                            
+                                    }
+                                } else if ($search_operator == 'is not') {
+                                    if( $search_string['value'] == "''" ) { //for handling empty search strings
+                                        $terms_cond = " ( ". $wpdb->prefix ."term_taxonomy.taxonomy LIKE '". $search_col . "' )";
+                                        $advanced_search_query[$i]['cond_terms_operator'] .= 'LIKE';
+                                    } else {
+                                    	$terms_cond = " ( ". $wpdb->prefix ."term_taxonomy.taxonomy NOT LIKE '". $search_col . "' AND ". $wpdb->prefix ."terms.slug NOT LIKE '" . $search_value . "'" . " )";
+                                        $advanced_search_query[$i]['cond_terms_operator'] .= 'NOT LIKE';
+                                    }
+                                } else {
+                                    $terms_cond = " ( ". $wpdb->prefix ."term_taxonomy.taxonomy LIKE '". $search_col . "' AND ". $wpdb->prefix ."terms.slug ". $search_operator ."'%" . $search_value . "%'" . " )";
+                                    $advanced_search_query[$i]['cond_terms_operator'] .= $search_operator;
+                                }
+
+                                $terms_cond = apply_filters('sm_search_terms_cond', $terms_cond, $search_params);
+
+                                $advanced_search_query[$i]['cond_terms'] .= $terms_cond ." AND ";
+                                $advanced_search_query[$i]['cond_terms_col_name'] .= " AND ";
+                                $advanced_search_query[$i]['cond_terms_col_value'] .= " AND ";
+                                $advanced_search_query[$i]['cond_terms_operator'] .= " AND ";
+
+                            }
+
+                            $advanced_search_query[$i] = apply_filters('sm_search_query_formatted', $advanced_search_query[$i], $search_params);
+                        }
+
+                        $advanced_search_query[$i]['cond_posts'] = (!empty($advanced_search_query[$i]['cond_posts'])) ? substr( $advanced_search_query[$i]['cond_posts'], 0, -4 ) : '';
+                        $advanced_search_query[$i]['cond_postmeta'] = (!empty($advanced_search_query[$i]['cond_postmeta'])) ? substr( $advanced_search_query[$i]['cond_postmeta'], 0, -4 ) : '';
+                        $advanced_search_query[$i]['cond_terms'] = (!empty($advanced_search_query[$i]['cond_terms'])) ? substr( $advanced_search_query[$i]['cond_terms'], 0, -4 ) : '';
+
+                        $advanced_search_query[$i]['cond_postmeta_col_name'] = (!empty($advanced_search_query[$i]['cond_postmeta_col_name'])) ? substr( $advanced_search_query[$i]['cond_postmeta_col_name'], 0, -4 ) : '';
+                        $advanced_search_query[$i]['cond_postmeta_col_value'] = (!empty($advanced_search_query[$i]['cond_postmeta_col_value'])) ? substr( $advanced_search_query[$i]['cond_postmeta_col_value'], 0, -4 ) : '';
+                        $advanced_search_query[$i]['cond_postmeta_operator'] = (!empty($advanced_search_query[$i]['cond_postmeta_operator'])) ? substr( $advanced_search_query[$i]['cond_postmeta_operator'], 0, -4 ) : '';
+
+                        $advanced_search_query[$i]['cond_terms_col_name'] = (!empty($advanced_search_query[$i]['cond_terms_col_name'])) ? substr( $advanced_search_query[$i]['cond_terms_col_name'], 0, -4 ) : '';
+                        $advanced_search_query[$i]['cond_terms_col_value'] = (!empty($advanced_search_query[$i]['cond_terms_col_value'])) ? substr( $advanced_search_query[$i]['cond_terms_col_value'], 0, -4 ) : '';
+                        $advanced_search_query[$i]['cond_terms_operator'] = (!empty($advanced_search_query[$i]['cond_terms_operator'])) ? substr( $advanced_search_query[$i]['cond_terms_operator'], 0, -4 ) : '';
+
+                    }
+
+                    $i++;
+                }
+
+                //Code for handling advanced search conditions
+		        if (!empty($advanced_search_query)) {
+
+		            $index_search_string = 1; // index to keep a track of flags in the advanced search temp 
+		            $search_params = array();
+
+		            foreach ($advanced_search_query as &$advanced_search_query_string) {
+
+		                //Condn for terms
+
+		                if (!empty($advanced_search_query_string['cond_terms'])) {
+
+		                    $cond_terms_array = explode(" AND  ",$advanced_search_query_string['cond_terms']);
+
+		                    $cond_terms_col_name = (!empty($advanced_search_query_string['cond_terms_col_name'])) ? explode(" AND ",$advanced_search_query_string['cond_terms_col_name']) : '';
+		                    $cond_terms_col_value = (!empty($advanced_search_query_string['cond_terms_col_value'])) ?  explode(" AND ",$advanced_search_query_string['cond_terms_col_value']) : '';
+		                    $cond_terms_operator = (!empty($advanced_search_query_string['cond_terms_operator'])) ?  explode(" AND ",$advanced_search_query_string['cond_terms_operator']) : '';
+
+		                    $cond_terms_post_ids = '';
+		                    $cond_cat_post_ids = array(); // array for storing the cat post ids
+
+		                    $index=0;
+		                    $terms_cat_search_taxonomy_ids = array();
+		                    $terms_att_search_flag = 0;
+
+		                    $query_terms_search_count_array = array();
+
+		                    $terms_advanced_search_from = '';
+		                    $terms_advanced_search_where = '';
+		                    $result_terms_search = '';
+
+		                    $product_visibility_visible_flag = 0;                    
+
+		                    foreach ($cond_terms_array as $cond_terms) {
+
+		                    	$search_params = array('cond_terms_col_name' => $cond_terms_col_name[$index],
+		                    							'cond_terms_col_value' => $cond_terms_col_value[$index],
+		                    							'cond_terms_operator' => $cond_terms_operator[$index],
+		                    							'SM_IS_WOO30' => (!empty($params['SM_IS_WOO30'])) ? $params['SM_IS_WOO30'] : '');
+
+		                    	$cond_terms = apply_filters('sm_search_terms_condition_start', $cond_terms, $search_params);
+
+		                        $query_advanced_search_taxonomy_id = "SELECT {$wpdb->prefix}term_taxonomy.term_taxonomy_id
+		                                                              FROM {$wpdb->prefix}term_taxonomy
+		                                                                JOIN {$wpdb->prefix}terms
+		                                                                    ON ( {$wpdb->prefix}terms.term_id = {$wpdb->prefix}term_taxonomy.term_id)
+		                                                              WHERE ".$cond_terms;
+		                        $result_advanced_search_taxonomy_id = $wpdb->get_col ( $query_advanced_search_taxonomy_id );
+
+		                        //Query to get the child taxonomy ids 
+		                        $query_advanced_search_parent_id = "SELECT {$wpdb->prefix}term_taxonomy.term_taxonomy_id
+		                                                            FROM {$wpdb->prefix}term_taxonomy
+		                                                                JOIN {$wpdb->prefix}terms 
+		                                                                ON ( {$wpdb->prefix}term_taxonomy.parent = {$wpdb->prefix}terms.term_id )    
+		                                                            WHERE {$wpdb->prefix}terms.slug  = '". trim($cond_terms_col_value[$index]) ."'"; 
+
+		                        $result_advanced_search_parent_id = $wpdb->get_col( $query_advanced_search_parent_id);
+
+		                        if (!empty($result_advanced_search_taxonomy_id))  {
+
+		                            $terms_search_result_flag = ( $index == (sizeof($cond_terms_array) - 1) ) ? ', '.$index_search_string : ', 0';
+		                            $terms_advanced_search_select = "SELECT DISTINCT ".$wpdb->prefix."posts.id ". $terms_search_result_flag;
+
+		                            $search_params['terms_search_result_flag'] = $terms_search_result_flag;
+
+
+		                            $result_taxonomy_ids = implode(",",$result_advanced_search_taxonomy_id);
+		                            $result_taxonomy_ids .= (!empty($result_advanced_search_parent_id)) ? ','.implode(',',$result_advanced_search_parent_id) : ''; //condition added for displaying child taxonomies when searching for parent taxonomies
+
+		                            $search_params['result_taxonomy_ids'] = $result_taxonomy_ids;
+
+									$terms_advanced_search_select = apply_filters('sm_search_query_terms_select', $terms_advanced_search_select, $search_params);
+									$terms_advanced_search_from	= apply_filters('sm_search_query_terms_from', $terms_advanced_search_from, $search_params);
+									$terms_advanced_search_where	= apply_filters('sm_search_query_terms_where', $terms_advanced_search_where, $search_params);
+
+		                            //Query to find if there are any previous conditions
+		                            $count_temp_previous_cond = $wpdb->query("UPDATE {$wpdb->base_prefix}sm_advanced_search_temp 
+		                                                                        SET flag = 0
+		                                                                        WHERE flag = ". $index_search_string);
+
+		                            //Code to handle condition if the ids of previous cond are present in temp table
+		                            if (($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_terms_search))) {
+		                                $terms_advanced_search_from .= " JOIN ".$wpdb->base_prefix."sm_advanced_search_temp
+		                                                                    ON (".$wpdb->base_prefix."sm_advanced_search_temp.product_id = ".$wpdb->prefix."posts.id)";
+
+		                                $terms_advanced_search_where .= "AND ".$wpdb->base_prefix."sm_advanced_search_temp.flag = 0";
+		                            }
+
+		                            $result_terms_search = array();
+
+		                            if (!empty($terms_advanced_search_select ) && !empty($terms_advanced_search_from ) && !empty($terms_advanced_search_where )) {
+		                                $query_terms_search = "REPLACE INTO {$wpdb->base_prefix}sm_advanced_search_temp
+		                                                            (".$terms_advanced_search_select . " " .
+		                                                                $terms_advanced_search_from . " " .
+		                                                                $terms_advanced_search_where . " " .")";
+		                                $result_terms_search = $wpdb->query ( $query_terms_search );
+		                            }
+
+		                            do_action('sm_search_terms_condition_complete',$result_terms_search,$search_params);
+		                        }
+
+		                        $index++;
+		                    }
+
+		                    do_action('sm_search_terms_conditions_array_complete',$search_params);
+
+		                    //Query to reset the cat_flag
+		                    $wpdb->query("UPDATE {$wpdb->base_prefix}sm_advanced_search_temp SET cat_flag = 0");
+
+		                    //Code to delete the unwanted post_ids
+		                    $wpdb->query("DELETE FROM {$wpdb->base_prefix}sm_advanced_search_temp WHERE flag = 0");
+		                }
+
+		                //Cond for postmeta
+		                if (!empty($advanced_search_query_string['cond_postmeta'])) {
+
+		                    $cond_postmeta_array = explode(" AND  ",$advanced_search_query_string['cond_postmeta']);
+
+		                    $cond_postmeta_col_name = (!empty($advanced_search_query_string['cond_postmeta_col_name'])) ? explode(" AND ",$advanced_search_query_string['cond_postmeta_col_name']) : '';
+		                    $cond_postmeta_col_value = (!empty($advanced_search_query_string['cond_postmeta_col_value'])) ? explode(" AND ",$advanced_search_query_string['cond_postmeta_col_value']) : '';
+		                    $cond_postmeta_operator = (!empty($advanced_search_query_string['cond_postmeta_operator'])) ? explode(" AND ",$advanced_search_query_string['cond_postmeta_operator']) : '';
+
+		                    $index = 0;
+		                    $cond_postmeta_post_ids = '';
+		                    $result_postmeta_search = '';
+
+		                    foreach ($cond_postmeta_array as $cond_postmeta) {
+
+		                        $postmeta_search_result_flag = ( $index == (sizeof($cond_postmeta_array) - 1) ) ? ', '.$index_search_string : ', 0';
+
+		                        $cond_postmeta_col_name1 = (!empty($cond_postmeta_col_name[$index])) ? trim($cond_postmeta_col_name[$index]) : '';
+		                        $cond_postmeta_col_value1 = (!empty($cond_postmeta_col_value[$index])) ? trim($cond_postmeta_col_value[$index]) : '';
+		                        $cond_postmeta_operator1 = (!empty($cond_postmeta_operator[$index])) ? trim($cond_postmeta_operator[$index]) : '';
+
+		                        $search_params = array('cond_postmeta_col_name' => $cond_postmeta_col_name1,
+		                    							'cond_postmeta_col_value' => $cond_postmeta_col_value1,
+		                    							'cond_postmeta_operator' => $cond_postmeta_operator1,
+		                    							'SM_IS_WOO30' => (!empty($params['SM_IS_WOO30'])) ? $params['SM_IS_WOO30'] : '');
+
+		                        $cond_postmeta = apply_filters('sm_search_postmeta_condition_start', $cond_postmeta, $search_params);
+
+		                        $search_params['cond_postmeta'] = $cond_postmeta;
+
+		                        $postmeta_advanced_search_select = 'SELECT DISTINCT '.$wpdb->prefix.'postmeta.post_id '. $postmeta_search_result_flag .' ,0 ';
+		                        $postmeta_advanced_search_from = 'FROM '.$wpdb->prefix.'postmeta ';
+		                        $postmeta_advanced_search_where = 'WHERE '.$cond_postmeta;
+
+		                        $postmeta_advanced_search_select = apply_filters('sm_search_query_postmeta_select', $postmeta_advanced_search_select, $search_params);
+								$postmeta_advanced_search_from	= apply_filters('sm_search_query_postmeta_from', $postmeta_advanced_search_from, $search_params);
+								$postmeta_advanced_search_where	= apply_filters('sm_search_query_postmeta_where', $postmeta_advanced_search_where, $search_params);
+
+		                        //Query to find if there are any previous conditions
+		                        $count_temp_previous_cond = $wpdb->query("UPDATE {$wpdb->base_prefix}sm_advanced_search_temp 
+		                                                                    SET flag = 0
+		                                                                    WHERE flag = ". $index_search_string);
+
+		                        //Code to handle condition if the ids of previous cond are present in temp table
+		                        if (($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_postmeta_search))) {
+		                            $postmeta_advanced_search_from .= " JOIN ".$wpdb->base_prefix."sm_advanced_search_temp
+		                                                                ON (".$wpdb->base_prefix."sm_advanced_search_temp.product_id = {$wpdb->prefix}postmeta.post_id)";
+
+		                            $postmeta_advanced_search_where .= " AND ".$wpdb->base_prefix."sm_advanced_search_temp.flag = 0";
+		                        }
+
+		                        $result_postmeta_search = array();
+
+		                        if (!empty($postmeta_advanced_search_select ) && !empty($postmeta_advanced_search_from ) && !empty($postmeta_advanced_search_where )) {
+			                        $query_postmeta_search = "REPLACE INTO {$wpdb->base_prefix}sm_advanced_search_temp
+			                                                        (". $postmeta_advanced_search_select ."
+			                                                        ". $postmeta_advanced_search_from ."
+			                                                        ".$postmeta_advanced_search_where.")";
+			                        $result_postmeta_search = $wpdb->query ( $query_postmeta_search );
+			                    }
+
+			                    do_action('sm_search_postmeta_condition_complete',$result_postmeta_search,$search_params);
+
+		                        $index++;
+		                    }
+
+		                    do_action('sm_search_postmeta_conditions_array_complete',$search_params);
+
+		                    //Query to delete the unwanted post_ids
+		                    $wpdb->query("DELETE FROM {$wpdb->base_prefix}sm_advanced_search_temp WHERE flag = 0");
+		                }
+
+		                //Cond for posts
+		                if (!empty($advanced_search_query_string['cond_posts'])) {
+
+		                    $cond_posts_array = explode(" AND ",$advanced_search_query_string['cond_posts']);
+
+		                    $index = 0;
+		                    $cond_posts_post_ids = '';
+		                    $result_posts_search = '';
+
+		                    foreach ( $cond_posts_array as $cond_posts ) {
+
+		                        $posts_search_result_flag = ( $index == (sizeof($cond_posts_array) - 1) ) ? ', '.$index_search_string : ', 0';
+		                        $posts_search_result_cat_flag = ( $index == (sizeof($cond_posts_array) - 1) ) ? ", 999" : ', 0';
+
+		                        if( strpos($cond_posts,'post_status') !== FALSE ) {
+		                            $cond_posts .= " AND ".$wpdb->prefix."posts.post_parent = 0 ";
+		                        }
+
+		                        $cond_posts = apply_filters('sm_search_posts_condition_start', $cond_posts);
+
+		                        $search_params = array('cond_posts' => $cond_posts,
+		                    							'SM_IS_WOO30' => (!empty($params['SM_IS_WOO30'])) ? $params['SM_IS_WOO30'] : '');
+
+		                        $posts_advanced_search_select = "SELECT DISTINCT ".$wpdb->prefix."posts.id ". $posts_search_result_flag ." ". $posts_search_result_cat_flag ." ";
+		                        $posts_advanced_search_from = " FROM ".$wpdb->prefix."posts ";
+		                        $posts_advanced_search_where = " WHERE ". $cond_posts ." ";
+
+		                        $posts_advanced_search_select = apply_filters('sm_search_query_posts_select', $posts_advanced_search_select, $search_params);
+								$posts_advanced_search_from	= apply_filters('sm_search_query_posts_from', $posts_advanced_search_from, $search_params);
+								$posts_advanced_search_where	= apply_filters('sm_search_query_posts_where', $posts_advanced_search_where, $search_params);
+
+		                        //Query to find if there are any previous conditions
+		                        $count_temp_previous_cond = $wpdb->query("UPDATE {$wpdb->base_prefix}sm_advanced_search_temp 
+		                                                                    SET flag = 0
+		                                                                    WHERE flag = ". $index_search_string);
+
+
+		                        //Code to handle condition if the ids of previous cond are present in temp table
+		                        if ( ($index == 0 && $count_temp_previous_cond > 0) || (!empty($result_posts_search)) ) {
+		                            $posts_advanced_search_from .= " JOIN ".$wpdb->base_prefix."sm_advanced_search_temp
+		                                                                ON (".$wpdb->base_prefix."sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.id) ";
+
+		                            $posts_advanced_search_where .= " AND ".$wpdb->base_prefix."sm_advanced_search_temp.flag = 0 ";
+		                        }
+
+		                        $result_posts_search = array();
+
+		                        if (!empty($posts_advanced_search_select ) && !empty($posts_advanced_search_from ) && !empty($posts_advanced_search_where )) {
+			                        $query_posts_search = "REPLACE INTO {$wpdb->base_prefix}sm_advanced_search_temp
+			                                                        ( ". $posts_advanced_search_select ."
+			                                                        ". $posts_advanced_search_from ."
+			                                                        ". $posts_advanced_search_where .")";
+			                        $result_posts_search = $wpdb->query ( $query_posts_search );
+			                    }
+		                        
+			                    do_action('sm_search_posts_condition_complete',$result_posts_search,$search_params);
+
+		                        $index++;
+		                    }
+
+		                    //condition for handling ANDing with att and other fields
+
+		                    $child_where_cond = '';
+
+		                    if ( !empty( $advanced_search_query_string['cond_terms'] ) || !empty( $advanced_search_query_string['cond_postmeta'] ) ) {
+		                        $child_where_cond = " WHERE ".$wpdb->prefix."posts.id IN (SELECT product_id FROM {$wpdb->base_prefix}sm_advanced_search_temp ) ";
+		                    }
+
+		                    //Query to get the variations of the parent product in result set
+		                    $query_posts_search = "REPLACE INTO {$wpdb->base_prefix}sm_advanced_search_temp
+		                                                    (SELECT DISTINCT {$wpdb->prefix}posts.id ,". $index_search_string .", 0
+		                                                    FROM {$wpdb->prefix}posts 
+		                                                        JOIN {$wpdb->base_prefix}sm_advanced_search_temp 
+		                                                            ON ({$wpdb->base_prefix}sm_advanced_search_temp.product_id = {$wpdb->prefix}posts.post_parent
+		                                                                AND {$wpdb->base_prefix}sm_advanced_search_temp.cat_flag = 999
+		                                                                AND {$wpdb->base_prefix}sm_advanced_search_temp.flag = ".$index_search_string.")
+		                                                    ". $child_where_cond .")";
+		                    $result_posts_search = $wpdb->query ( $query_posts_search );
+
+		                    do_action('sm_search_posts_conditions_array_complete',$search_params);
+
+		                    //Query to delete the unwanted post_ids
+		                    $wpdb->query("DELETE FROM {$wpdb->base_prefix}sm_advanced_search_temp WHERE flag = 0");
+
+		                }
+		                $index_search_string++;
+		            }
+		        }
+		}
+
 		//Function to get the data model for the dashboard
 		public function get_data_model() {
 
-			global $wpdb;
+			global $wpdb, $current_user;
 
 			$data_model = array(); 
 
@@ -534,7 +1075,39 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 			$order_by = (!empty($sort_params['orderby'])) ? $sort_params['orderby'] : '';
 			$order = (!empty($sort_params['order'])) ? $sort_params['order'] : '';
 
-			$current_store_model = get_transient( 'sm_dashboard_model_'.$this->dashboard_key );
+			$current_store_model[$this->dashboard_key] = get_transient( 'sm_beta_'.$current_user->user_email.'_'.$this->dashboard_key );
+
+
+			//Code for advanced search
+			$search = "";
+	        $search_condn = "";
+
+	        
+	        //Code to clear the advanced search temp table
+	        if (empty($_POST['search_query']) || empty($_POST['search_query'][0]) || $_POST['search_query'][0] == '[]' || !empty($_POST['searchText']) ) {
+	            $wpdb->query("DELETE FROM {$wpdb->base_prefix}sm_advanced_search_temp");
+	            delete_option('sm_advanced_search_query');
+	        }        
+
+	        $sm_advanced_search_results_persistent = 0; //flag to handle persistent search results
+
+	        //Code fo handling advanced search functionality
+	        if ((!empty($_POST['search_query']) && !empty($_POST['search_query'][0]) && $_POST['search_query'][0] != '[]') || (!empty($_POST['searchText'])) ) {
+
+	            if (empty($_POST['searchText'])) {
+	                $search_query_diff = (get_option('sm_advanced_search_query') != '') ? array_diff($_POST['search_query'],get_option('sm_advanced_search_query')) : $_POST['search_query'];
+	            } else {
+	                $search_query_diff = '';
+	            }
+
+	            if (!empty($search_query_diff)) {
+
+					$this->process_search_cond(array( 'search_query' => (!empty($_POST['search_query'])) ? $_POST['search_query'] : '',
+	            									'SM_IS_WOO30' => (!empty($_POST['SM_IS_WOO30'])) ? $_POST['SM_IS_WOO30'] : '' ));
+
+	            }
+
+	        }
 
 			// Code for handling sorting of the postmeta
 
@@ -695,7 +1268,7 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 	        				if (empty($terms_data[$term_obj->object_id][$taxonomy_nm])) {
 	        					$terms_data[$term_obj->object_id][$taxonomy_nm] = $term_obj->name;
 	        				} else {
-	        					$terms_data[$term_obj->object_id][$taxonomy_nm] .= "<br>" . $term_obj->name;
+	        					$terms_data[$term_obj->object_id][$taxonomy_nm] .= ", <br>" . $term_obj->name;
 	        				}
 	        			} else {
 	        				$terms_data[$term_obj->object_id][$taxonomy_nm] = $term_obj->name;
@@ -778,13 +1351,42 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 		}
 
 
+		public function save_state() {
+
+			global $current_user , $wpdb;
+
+
+			if( !empty($this->req_params['active_module']) && !empty($this->req_params['dashboard_states']) ) {
+
+				set_transient( 'sm_beta_'.$current_user->user_email.'_default_dashboard', $this->req_params['active_module'], WEEK_IN_SECONDS );	
+
+				foreach ($this->req_params['dashboard_states'] as $dashboard => $value) {
+
+					$value = json_decode(stripslashes($value), true);
+
+					if(!empty($value)) {
+						foreach ($value['columns'] as $key => $columns) {
+							if( empty($columns['save_state']) ) {
+								unset($value['columns'][$key]);
+							}
+						}
+					}
+
+					set_transient( 'sm_beta_'.$current_user->user_email.'_'.$dashboard, $value, WEEK_IN_SECONDS );	
+				}
+				
+			}
+
+			exit;
+		}
+
 		public function inline_update() {
-			global $wpdb;
+			global $wpdb, $current_user;
 
 			$edited_data = (!empty($this->req_params['edited_data'])) ? json_decode(stripslashes($this->req_params['edited_data']), true) : array();
-			$current_store_model = get_transient( 'sm_dashboard_model_'.$this->dashboard_key );
+			$current_store_model[$this->dashboard_key] = get_transient( 'sm_beta_'.$current_user->user_email.'_'.$this->dashboard_key );		
 
-			if( empty($current_store_model) ){
+			if( empty($current_store_model[$this->dashboard_key]) ){
 				$current_store_model = $this->get_dashboard_model();
 			}
 
@@ -960,14 +1562,14 @@ if ( ! class_exists( 'Smart_Manager_Base' ) ) {
 
     						$actual_val = (!empty($data_cols_multiselect_val[$update_column])) ? $data_cols_multiselect_val[$update_column] : array();
     						if(empty($value) || empty($actual_val)) continue;
-							$edited_values = explode("<br>",$value);
+							$edited_values = explode(", ",$value);
 							if (empty($edited_values)) continue;
 
     					} else if (array_search($update_column, $data_cols_list) !== false) {
 
     						$actual_val = (!empty($data_cols_list_val[$update_column])) ? $data_cols_list_val[$update_column] : array();
     						if(empty($value) || empty($actual_val)) continue;
-							$edited_values = explode("<br>",$value);
+							$edited_values = explode(", ",$value);
 							if (empty($edited_values)) continue;
     					}
 
