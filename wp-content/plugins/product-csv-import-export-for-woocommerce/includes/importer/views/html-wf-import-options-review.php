@@ -69,6 +69,7 @@
     </table>
     <p class="submit">
         <input type="submit" class="button button-primary" value="<?php esc_attr_e('Submit', 'wf_csv_import_export'); ?>" />
-        <input type="hidden" name="delimiter" value="<?php echo $this->delimiter ?>" />        
+        <input type="hidden" name="delimiter" value="<?php echo $this->delimiter ?>" />
+	<input type="hidden" name="use_sku" value="<?php echo $this->use_sku ?>" />
     </p>
 </form>

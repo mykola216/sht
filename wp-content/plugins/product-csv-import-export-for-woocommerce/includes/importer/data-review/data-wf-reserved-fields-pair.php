@@ -4,6 +4,7 @@
 return array(
                 
                 'comment_ID'                    => 'Comments ID | ID of the comments',
+		'product_SKU'			=> 'Product SKU | Product SKU',
                 'comment_post_ID'               => 'Comment Post ID | ID of the product, on which the comment is done',
                 'comment_author'                => 'Comments Author Name | The author name, who made comments',
                 'comment_author_email'          => 'Comments Author Email | The author email, who made comments',

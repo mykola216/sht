@@ -427,7 +427,7 @@ class WF_ProdImpExpCsv_Exporter {
 
 						if (is_array($file_paths) || is_object($file_paths)) {
 							foreach ( $file_paths as $file_path ) {
-								$file_paths_to_export[] = ( ! empty( $file_path['name'] ) ? $file_path['name'] : wc_get_filename_from_url( $file_path['file'] ) ) . '::' . $file_path['file'];
+								$file_paths_to_export[] = ( ! empty( $file_path['name'] ) ? $file_path['name'] : xa_wc_get_filename_from_url( $file_path['file'] ) ) . '::' . $file_path['file'];
 							}
 						}
 						$file_paths_to_export = implode( ' | ', $file_paths_to_export );
