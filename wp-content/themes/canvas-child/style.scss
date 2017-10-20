@@ -1308,7 +1308,6 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 .woocommerce.one-col .yith-wfbt-section .yith-wfbt-submit-block {
 	clear: both;
 }
-
 .description-wrapper .more{
 	position: relative;
 	cursor: pointer;
@@ -1701,4 +1700,8 @@ body #wrapper #content .button.gform_button_select_files:focus{
 		content: url("images/mobile-menu-sht.png");
 		padding: 6px 7px 2px 2px;
 	}
+}
+
+#main .breadcrumb-trail a, .page-template-default .entry a, .our-team p a, .clients p a, #contact-page .entry p a, .description-wrapper p a {
+	text-decoration: underline;
 }
