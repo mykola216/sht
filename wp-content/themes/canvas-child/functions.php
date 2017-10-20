@@ -1311,3 +1311,53 @@ if( function_exists('acf_add_options_page') ) {
 
     acf_add_options_page('Dynamic change blocks');
 }
+
+
+
+//add filter Output success messages
+
+add_filter( 'wc_add_to_cart_message', 'foo' );
+function foo() {
+    $additional_link = '<span class="additional-link"> of <a href="'. home_url() . '">Verder winkelen</a></span>';
+    $product_id = $_REQUEST[ 'product_id' ];
+
+    if ( is_array( $product_id ) ) {
+
+        $titles = array();
+
+        foreach ( $product_id as $id ) {
+            $titles[] = get_the_title( $id );
+        }
+
+        $added_text = sprintf( __( 'Added &quot;%s&quot; to your cart.', 'woocommerce' ), join( __( '&quot; and &quot;', 'woocommerce' ), array_filter( array_merge( array( join( '&quot;, &quot;', array_slice( $titles, 0, -1 ) ) ), array_slice( $titles, -1 ) ) ) ) );
+
+    } else {
+        $added_text = sprintf( __( '&quot;%s&quot; is toegevoegd aan je winkelmand.', 'woocommerce' ), get_the_title( $product_id ) );
+    }
+
+
+// Output success messages
+    if ( get_option( 'woocommerce_cart_redirect_after_add' ) == 'yes' ) :
+
+        $return_to  = apply_filters( 'woocommerce_continue_shopping_redirect', wc_get_checkout_url() );
+
+        $message    = sprintf(
+            '<a href="%s" class="button wc-forward">%s &rarr;</a> %s',
+            $return_to, __( 'Doorgaan naar afrekenen', 'woocommerce' ),
+            $added_text
+            . $additional_link
+        );
+
+    else :
+
+        $message    = sprintf(
+            '<a href="%s" class="button wc-forward">%s &rarr;</a> %s',
+            get_permalink( wc_get_page_id( 'cart' ) ),
+            __( 'View Cart', 'woocommerce' ),
+            $added_text);
+
+    endif;
+
+
+    return $message;
+}
