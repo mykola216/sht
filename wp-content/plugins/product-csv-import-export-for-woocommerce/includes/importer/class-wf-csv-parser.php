@@ -128,7 +128,7 @@ class WF_CSV_Parser {
 		$raw_headers = array();
 
 		// Put all CSV data into an associative array
-		if ( ( $handle = fopen( $file, "r" ) ) !== FALSE ) {
+		if ( ( $handle = @fopen( $file, "r" ) ) !== FALSE ) {
 
 			$header   = ($this->decentFgetcsv)? fgetcsv( $handle, 0, $delimiter , '"', '"' ) : fgetcsv( $handle, 0, $delimiter , '"' );
 			if ( $start_pos != 0 )
@@ -154,9 +154,12 @@ class WF_CSV_Parser {
 							$s_heading = esc_attr( $mapping[$s_heading] );
 						}
 					}
-					foreach ($mapping as $mkey => $mvalue) {
-						if(trim($mvalue) === trim($heading)){
-							$s_heading =  $mkey;
+					if( !empty($mapping) )
+					{
+						foreach ($mapping as $mkey => $mvalue) {
+							if(trim($mvalue) === trim($heading)){
+								$s_heading =  $mkey;
+							}
 						}
 					}
 
@@ -244,7 +247,7 @@ class WF_CSV_Parser {
 
 		$this->post_defaults['post_type'] = 'product';
 		if(!empty($item['parent_sku'])){
-			$prod_id = wc_get_product_id_by_sku( $item['parent_sku'] );
+			$prod_id = xa_wc_get_product_id_by_sku( $item['parent_sku'] );
 			$prod    = wc_get_product( $prod_id );
 			if(WC()->version < '2.7.0')
 			{
@@ -503,7 +506,7 @@ class WF_CSV_Parser {
 							$file_name = $file_path[0];
 							$file_path = $file_path[1];
 						} else {
-							$file_name = wc_get_filename_from_url( $file_path[0] );
+							$file_name = xa_wc_get_filename_from_url( $file_path[0] );
 							$file_path = $file_path[0];
 						}
 						$_file_paths[ md5( $file_path ) ] = array(

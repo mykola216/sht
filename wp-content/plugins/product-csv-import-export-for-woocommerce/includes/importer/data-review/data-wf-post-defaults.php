@@ -4,17 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // New post defaults
-return array(
+return apply_filters('alter_review_export_fields', array(
 	'comment_ID'			=> '',
 	'comment_post_ID'		=> '',
-    'comment_author'		=> '',
-	'comment_author_email' 	=> '',
+	'comment_author'		=> '',
+	'comment_author_email'		=> '',
 	'comment_date'			=> '',
 	'comment_date_gmt'		=> '',
 	'comment_content'		=> '',
-	//'comment_karma'			=> 'comment_karma',
 	'comment_approved'		=> '',
 	'comment_parent'		=> '',
-	'user_id'				=> '',
+	'user_id'			=> '',
 	'comment_alter_id'		=> '',
-);
+	'rating'			=> '',
+));

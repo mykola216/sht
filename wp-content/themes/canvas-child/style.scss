@@ -1019,6 +1019,77 @@ ul.products li.product:nth-child(2n) > a >img {
 /* Minicart - end */
 
 /* Cart */
+body.woocommerce-cart {
+	#navigation {
+		display: none!important;
+	}
+
+}
+.woocommerce_message, .woocommerce-message {
+	border-radius: 0;
+	color: #333333;
+	font-family: "Open Sans";
+	font-size: 14px;
+	font-weight: 600;
+	margin-top: 15px;
+	margin-bottom: 15px !important;
+	padding-left: 50px !important;
+	position: relative;
+	border: none;
+	&:before {
+		content: url("images/cart-checkbox.png");
+		position: absolute;
+		top: 13px;
+	}
+}
+div.woocommerce-message {
+	color: #333;
+	font-size: 14px;
+	font-weight: 400;
+	background: transparent;
+	border: none;
+	margin-bottom: 0!important;
+	&:before {
+		content: url("images/cart-checkbox.png");
+		top: 13px;
+		left: 8px;
+	}
+}
+div.woocommerce-message  {
+	position: relative;
+	.wc-forward {
+		max-width: 330px;
+		width: 100%;
+		height: 50px;
+		position: relative;
+		font-size: 22px!important;
+		border-radius: 0;
+		background: #f0a818;
+		margin-top: -12px;
+		margin-bottom: 28px;
+		@include mobile {
+			height: 44px;
+			font-size: 18px !important;
+		}
+		&:before {
+		}
+		&:hover {
+			background: #f0a818;
+		}
+	}
+	.additional-link {
+		position: absolute;
+		right: 14px;
+		bottom: 10px;
+		@include mobile {
+			bottom: 59px;
+		}
+	}
+}
+
+
+
+
 body.woocommerce-cart .cross-sells .yith-wcwl-add-to-wishlist-loop {
 	display: none;
 }
@@ -1308,7 +1379,6 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 .woocommerce.one-col .yith-wfbt-section .yith-wfbt-submit-block {
 	clear: both;
 }
-
 .description-wrapper .more{
 	position: relative;
 	cursor: pointer;
@@ -1701,4 +1771,8 @@ body #wrapper #content .button.gform_button_select_files:focus{
 		content: url("images/mobile-menu-sht.png");
 		padding: 6px 7px 2px 2px;
 	}
+}
+
+#main .breadcrumb-trail a, .page-template-default .entry a, .our-team p a, .clients p a, #contact-page .entry p a, .description-wrapper p a {
+	text-decoration: underline;
 }

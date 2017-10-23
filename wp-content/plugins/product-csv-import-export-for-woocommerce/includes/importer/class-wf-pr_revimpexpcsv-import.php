@@ -13,6 +13,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 	var $id;
 	var $file_url;
 	var $delimiter;
+	var $use_sku;
         var $profile;
 	var $merge_empty_cells;
 
@@ -52,7 +53,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
             session_start();
         }
     }
-    public function hf_log_data_change ($content = 'csv-import',$data='')
+    public function hf_log_data_change ($content = 'review-csv-import',$data='')
 	{
 		if (WC()->version < '2.7.0')
 		{
@@ -76,7 +77,6 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		global $woocommerce, $wpdb;
  		
  		add_action('init', array($this, 'hf_rev_im_ex_StartSession'), 1);
-
 		if ( ! empty( $_POST['delimiter'] ) ) {
 			$this->delimiter = stripslashes( trim( $_POST['delimiter'] ) );
 		}else if ( ! empty( $_GET['delimiter'] ) ) {
@@ -85,7 +85,8 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		if ( ! $this->delimiter )
 			$this->delimiter = ',';
-                
+                if( !empty ($_POST['use_sku']))
+			$this->use_sku = 1;
                 if ( ! empty( $_POST['profile'] ) ) {
 			$this->profile = stripslashes( trim( $_POST['profile'] ) );
 		}else if ( ! empty( $_GET['profile'] ) ) {
@@ -177,6 +178,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
                                                                         profile:    '<?php echo $this->profile; ?>',
 									eval_field: '<?php echo stripslashes(json_encode(($_POST['eval_field']),JSON_HEX_APOS)) ?>',
 									delimiter:  '<?php echo $this->delimiter; ?>',
+									use_sku:  '<?php echo $this->use_sku; ?>',
 									start_pos:  start_pos,
 									end_pos:    end_pos,
 								};
@@ -269,7 +271,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 							$import_count      = 0;
 
 							// Get CSV positions
-							if ( ( $handle = fopen( $file, "r" ) ) !== FALSE ) {
+							if ( ( $handle = @fopen( $file, "r" ) ) !== FALSE ) {
 
 								while ( ( $postmeta = fgetcsv( $handle, 0, $this->delimiter , '"', '"' ) ) !== FALSE ) {
 									$count++;
@@ -510,7 +512,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		@ini_set( 'auto_detect_line_endings', true );
 
 		// Get headers
-		if ( ( $handle = fopen( $file, "r" ) ) !== FALSE ) {
+		if ( ( $handle = @fopen( $file, "r" ) ) !== FALSE ) {
 
 			$row = $raw_headers = array();
 			
@@ -562,20 +564,18 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		global $woocommerce, $wpdb;
 
 		wp_suspend_cache_invalidation( true );
-
-		$this->hf_log_data_change( 'csv-import', '---' );
-		$this->hf_log_data_change( 'csv-import', __( 'Processing product reviews.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'review-csv-import', '---' );
+		$this->hf_log_data_change( 'review-csv-import', __( 'Processing product reviews.', 'wf_csv_import_export' ) );
 		foreach ( $this->parsed_data as $key => &$item ) {
-
-			$product = $this->parser->parse_product_review( $item, 0 );
-			if ( ! is_wp_error( $product ) )
-				$this->process_product_reviews( $product );
+			$product_review = $this->parser->parse_product_review( $item, $this->use_sku );
+			if ( ! is_wp_error( $product_review ) )
+				$this->process_product_reviews( $product_review );
 			else
-				$this->add_import_result( 'failed', $product->get_error_message(), 'Not parsed', json_encode( $item ), '-' );
+				$this->add_import_result( 'failed', $product_review->get_error_message(), 'Not parsed', json_encode( $item ), '-' );
 
-			unset( $item, $product );
+			unset( $item, $product_review );
 		}
-		$this->hf_log_data_change( 'csv-import', __( 'Finished processing product reviews.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'review-csv-import', __( 'Finished processing product reviews.', 'wf_csv_import_export' ) );
 		wp_suspend_cache_invalidation( false );
 	}
 
@@ -594,13 +594,13 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			$wp_memory = size_format( wc_let_to_num( WP_MEMORY_LIMIT ) );
 		}
 		
-		$this->hf_log_data_change( 'csv-import', '---[ New Import ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory );
-		$this->hf_log_data_change( 'csv-import', __( 'Parsing product reviews CSV.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'review-csv-import', '---[ New Import ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory );
+		$this->hf_log_data_change( 'review-csv-import', __( 'Parsing product reviews CSV.', 'wf_csv_import_export' ) );
 
 		$this->parser = new WF_CSV_Parser_Review( 'product' );
 
 		list( $this->parsed_data, $this->raw_headers, $position ) = $this->parser->parse_data( $file, $this->delimiter, $mapping, $start_pos, $end_pos, $eval_field );
-		$this->hf_log_data_change( 'csv-import', __( 'Finished parsing product reviews CSV.', 'wf_csv_import_export' ) );
+		$this->hf_log_data_change( 'review-csv-import', __( 'Finished parsing product reviews CSV.', 'wf_csv_import_export' ) );
 
 		unset( $import_data );
 
@@ -698,25 +698,26 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		if ( ! empty( $processing_product_id ) && isset( $this->processed_posts[ $processing_product_id ] ) ) {
 			$this->add_import_result( 'skipped', __( 'Product review already processed', 'wf_csv_import_export' ), $processing_product_id  );
-			$this->hf_log_data_change( 'csv-import', __('> Post ID already processed. Skipping.', 'wf_csv_import_export'), true );
+			$this->hf_log_data_change( 'review-csv-import', __('> Post ID already processed. Skipping.', 'wf_csv_import_export'), true );
 			unset( $post );
 			return;
 		}
 
 		if ( ! empty ( $post['post_status'] ) && $post['post_status'] == 'auto-draft' ) {
 			$this->add_import_result( 'skipped', __( 'Skipping auto-draft', 'wf_csv_import_export' ), $processing_product_id );
-			$this->hf_log_data_change( 'csv-import', __('> Skipping auto-draft.', 'wf_csv_import_export'), true );
+			$this->hf_log_data_change( 'review-csv-import', __('> Skipping auto-draft.', 'wf_csv_import_export'), true );
 			unset( $post );
 			return;
 		}
 		// Check if post exists when importing
 		$is_post_exist_in_db = $this->product_review_exists( $processing_product_id );
-		if ( ! $merging ) {
-			if ( $is_post_exist_in_db ) {
-                                
-                $usr_msg = 'Product review skipped.'; 
-                $this->add_import_result( 'skipped', __( $usr_msg, 'wf_csv_import_export' ), $processing_product_id );
-				$this->hf_log_data_change( 'csv-import', sprintf( __('> &#8220;%s&#8221;'.$usr_msg, 'wf_csv_import_export'), esc_html($processing_product_title) ), true );
+		if ( ! $merging )
+		{
+			if ( $is_post_exist_in_db )
+			{        
+				$usr_msg = 'Product review skipped.'; 
+				$this->add_import_result( 'skipped', __( $usr_msg, 'wf_csv_import_export' ), $processing_product_id );
+				$this->hf_log_data_change( 'review-csv-import', sprintf( __('> &#8220;%s&#8221;'.$usr_msg, 'wf_csv_import_export'), esc_html($processing_product_title) ), true );
 				unset( $post );
 				return;
 			}
@@ -728,7 +729,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			// Only merge fields which are set
 			$post_id = $processing_product_id;
 
-			$this->hf_log_data_change( 'csv-import', sprintf( __('> Merging post ID %s.', 'wf_csv_import_export'), $post_id ), true );
+			$this->hf_log_data_change( 'review-csv-import', sprintf( __('> Merging post ID %s.', 'wf_csv_import_export'), $post_id ), true );
 
 			if ( ! empty( $post['comment_post_ID'] ) ) {
 				$postdata['comment_post_ID'] = $post['comment_post_ID'];
@@ -752,7 +753,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			if ( ! empty( $post['comment_approved'] ) ) {
 				$postdata['comment_approved'] = $post['comment_approved'];
 			}
-                $postdata['comment_type']  = 'review';
+			$postdata['comment_type']  = 'review';
                 
 			if ( ! empty( $post['comment_parent'] ) ) {
 				$postdata['comment_parent'] = $post['comment_parent'];
@@ -760,10 +761,12 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			if ( ! empty( $post['user_id'] ) ) {
 				$postdata['user_id'] = $post['user_id'];
 			}
+			// Update product review
 			if ( sizeof( $postdata ) > 1 ) {
 				global $wpdb;
 				$result = $wpdb->update('wp_comments',$postdata,array('comment_ID'=>$post_id));
-				
+				if ( ! empty( $post['rating'] ) )
+					update_comment_meta( $post_id, 'rating',  $post['rating']  );
 			}
 
 		} else {
@@ -776,10 +779,10 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
             	$this->csv_last_start = $last_cmt_id;
             }
 
-			// Insert product
-			$this->hf_log_data_change( 'csv-import', sprintf( __('> Inserting %s', 'wf_csv_import_export'), esc_html( $processing_product_id ) ), true );
+	    // Insert product review
+	    $this->hf_log_data_change( 'review-csv-import', sprintf( __('> Inserting %s', 'wf_csv_import_export'), esc_html( $processing_product_id ) ), true );
 
-			 if ($post['comment_parent'] === '0') {
+	    if ($post['comment_parent'] === '0') {
                 $this->parent_data = $post['comment_parent'];
                 $_SESSION['new_id'][$post['comment_alter_id']] = $this->get_last_comment_id();
             } else {
@@ -802,17 +805,17 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 				$this->cmd_type = '';
 			}
 			$postdata = array(
-				'comment_ID'      		=> $processing_product_id,
-				'comment_post_ID' 		=> $post['comment_post_ID'] ,
+				'comment_ID'      	=> $processing_product_id,
+				'comment_post_ID' 	=> $post['comment_post_ID'] ,
 				'comment_date'      	=> ( $post['comment_date'] ) ? date( 'Y-m-d H:i:s', strtotime( $post['comment_date'] )) : '',
 				'comment_date_gmt'  	=> ( $post['comment_date_gmt'] ) ? date( 'Y-m-d H:i:s', strtotime( $post['comment_date_gmt'] )) : '',
-				'comment_author'   		=> $post['comment_author'],
+				'comment_author'   	=> $post['comment_author'],
 				'comment_author_email'  => $post['comment_author_email'],
 				'comment_content'      	=> ( $post['comment_content'] ) ? $post['comment_content'] : sanitize_title( $comment_content ),
 				'comment_approved'    	=> ( $post['comment_approved'] ) ? $post['comment_approved'] : 0,
-                'comment_type'  => $this->cmd_type,
+				'comment_type'		=> $this->cmd_type,
 				'comment_parent'     	=> $this->parent_data,
-				'user_id'      			=> $post['user_id'],
+				'user_id'      		=> $post['user_id'],
 			);
                         
 			$post_id = wp_insert_comment( $postdata, true );
@@ -820,13 +823,13 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			if ( is_wp_error( $post_id ) ) {
 
 				$this->add_import_result( 'failed', __( 'Failed to import product review', 'wf_csv_import_export' ), $processing_product_id);
-				$this->hf_log_data_change( 'csv-import', sprintf( __( 'Failed to import product review &#8220;%s&#8221;', 'wf_csv_import_export' ), esc_html($processing_product_title) ) );
+				$this->hf_log_data_change( 'review-csv-import', sprintf( __( 'Failed to import product review &#8220;%s&#8221;', 'wf_csv_import_export' ), esc_html($processing_product_title) ) );
 				unset( $post );
 				return;
 
 			} else {
 
-				$this->hf_log_data_change( 'csv-import', sprintf( __('> Inserted - post ID is %s.', 'wf_csv_import_export'), $post_id ) );
+				$this->hf_log_data_change( 'review-csv-import', sprintf( __('> Inserted - post ID is %s.', 'wf_csv_import_export'), $post_id ) );
 
 			}
 		}
@@ -840,10 +843,10 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		if ( ! empty( $post['postmeta'] ) && is_array( $post['postmeta'] ) ) {
 		if($this->cmd_type === '')
 		{
-		update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
+			update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
 		}
 		else{
-		update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
+			update_comment_meta( $post_id, 'verified',  $post['postmeta'][1]['value']  );
 			update_comment_meta( $post_id, 'rating',  $post['postmeta'][0]['value']  );
                         update_comment_meta( $post_id, 'title',  $post['postmeta'][2]['value']  );
 		}
@@ -854,10 +857,10 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 
 		if ( $merging ) {
 			$this->add_import_result( 'merged', 'Merge successful', $post_id );
-			$this->hf_log_data_change( 'csv-import', sprintf( __('> Finished merging post ID %s.', 'wf_csv_import_export'), $post_id ) );
+			$this->hf_log_data_change( 'review-csv-import', sprintf( __('> Finished merging post ID %s.', 'wf_csv_import_export'), $post_id ) );
 		} else {
 			$this->add_import_result( 'imported', 'Import successful', $post_id );
-			$this->hf_log_data_change( 'csv-import', sprintf( __('> Finished importing post ID %s.', 'wf_csv_import_export'), $post_id ) );
+			$this->hf_log_data_change( 'review-csv-import', sprintf( __('> Finished importing post ID %s.', 'wf_csv_import_export'), $post_id ) );
 		}
 		unset( $post );
 	}
@@ -872,12 +875,12 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 			'reason'     => $reason,
 		);
 	}
- public function get_last_comment_id() {
-        global $wpdb;
-        $query = "SELECT MAX(comment_ID) FROM $wpdb->comments";
-        $results = $wpdb->get_var($query);
-        return $results + 1;
-    }
+	public function get_last_comment_id() {
+	       global $wpdb;
+	       $query = "SELECT MAX(comment_ID) FROM $wpdb->comments";
+	       $results = $wpdb->get_var($query);
+	       return $results + 1;
+	}
 	
 
 	/**
@@ -977,9 +980,9 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		
 		$settings = array();
 		$settings[ 'rev_ftp_server' ]		= $ftp_server;
-		$settings[ 'rev_ftp_user' ]			= $ftp_user;
+		$settings[ 'rev_ftp_user' ]		= $ftp_user;
 		$settings[ 'rev_ftp_password' ]		= $ftp_password;
-		$settings[ 'rev_use_ftps' ]			= $use_ftps;
+		$settings[ 'rev_use_ftps' ]		= $use_ftps;
 		$settings[ 'rev_enable_ftp_ie' ]	= $enable_ftp_ie;
 		$settings[ 'rev_ftp_server_path' ]	= $ftp_server_path;
 		
@@ -1008,7 +1011,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 				$error_message =  "";
 				$success = true;
 			} else {
-				$error_message = "There was a problem\n";
+				$error_message = "There was a problem while downloading the specified File <b>".$server_file."</b> .\n";
 			}
 		}
 		

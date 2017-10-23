@@ -35,6 +35,8 @@ jQuery(function($) {
 					sm.dashboard_model[sm.dashboard_key].tables.posts.where.post_type = 'product';
 					sm.dashboard_model[sm.dashboard_key].treegrid = false;
 				}
+
+				sm.state_apply = true;
 				load_dashboard();
 			});
 
@@ -115,7 +117,7 @@ jQuery(function($) {
 
 			//Code for setting is_variation flag
 			if (rowData.hasOwnProperty('terms_product_type')) {
-				if (rowData.terms_product_type == 'variable') {
+				if (rowData.terms_product_type == 'variable' || rowData.terms_product_type == 'Variable Subscription') {
 					is_variation = 1;
 				}
 			}
@@ -342,6 +344,10 @@ jQuery(function($) {
 
 					var edited_value = '';
 
+					if( attributes_edited_text.length > 0 ) {
+						attributes_edited_text += ', <br>';
+					}
+
 					if ($( "input[name='attribute_values["+index+"]']" ).attr('type') !== undefined && $( "input[name='attribute_values["+index+"]']" ).attr('type') == "text") {
 						edited_value = $( "input[name='attribute_values["+index+"]']" ).val();
 
@@ -358,10 +364,10 @@ jQuery(function($) {
 						edited_value = edited_text.join(" | ");
 
 						if (is_taxonomy == 1) {
-							attributes_edited_text += attribute_display_text [attr_nm] + ': [' + edited_value + ']' + '<br>';
+							attributes_edited_text += attribute_display_text [attr_nm] + ': [' + edited_value + ']';
 							edited_value = edited_text;
 						} else if (is_taxonomy == 0) {
-							attributes_edited_text += attr_nm + ': [' + edited_value + ']' + '<br>';
+							attributes_edited_text += attr_nm + ': [' + edited_value + ']';
 							attr_nm = attr_nm.replace(/( )/g,"-").replace(/([^a-z A-Z 0-9][^\w\s])/gi,'').toLowerCase();
 						}
 
@@ -385,28 +391,27 @@ jQuery(function($) {
 							edited_value[selected_val[i]] = attr_col_val_og[selected_val[i]];
 						}
 
-						attributes_edited_text += attribute_display_text [attr_nm] + ': [' + selected_text + ']' + '<br>';
+						attributes_edited_text += attribute_display_text [attr_nm] + ': [' + selected_text + ']';
 					}
 
 					product_attributes_postmeta [attr_nm] = {};
-					product_attributes_postmeta [attr_nm]['is_taxonomy'] = is_taxonomy;
+					product_attributes_postmeta [attr_nm]['name'] = $( "input[name='attribute_names["+index+"]']" ).val();
+					product_attributes_postmeta [attr_nm]['value'] = edited_value;
+					product_attributes_postmeta [attr_nm]['position'] = $( "input[name='attribute_position["+index+"]']" ).val();
+
+					if ($( "input[name='attribute_visibility["+index+"]']" ).is(":checked")) {
+						product_attributes_postmeta [attr_nm]['is_visible'] = 1;
+					} else {
+						product_attributes_postmeta [attr_nm]['is_visible'] = 0;
+					}
 
 					if ($( "input[name='attribute_variation["+index+"]']" ).is(":checked")) {
 						product_attributes_postmeta [attr_nm]['is_variation'] = 1;
 					} else {
 						product_attributes_postmeta [attr_nm]['is_variation'] = 0;
 					}
-					
-					if ($( "input[name='attribute_visibility["+index+"]']" ).is(":checked")) {
-						product_attributes_postmeta [attr_nm]['is_visible'] = 1;
-					} else {
-						product_attributes_postmeta [attr_nm]['is_visible'] = 0;
-					}
-					
+					product_attributes_postmeta [attr_nm]['is_taxonomy'] = is_taxonomy;
 
-					product_attributes_postmeta [attr_nm]['name'] = $( "input[name='attribute_names["+index+"]']" ).val();
-					product_attributes_postmeta [attr_nm]['position'] = $( "input[name='attribute_position["+index+"]']" ).val();
-					product_attributes_postmeta [attr_nm]['value'] = edited_value;
 				}
 
 				var rowData = $('#sm_editor_grid').jqGrid('getRowData', grid_rowid);
@@ -415,6 +420,7 @@ jQuery(function($) {
 				rowData.postmeta_meta_key__product_attributes_meta_value__product_attributes = JSON.stringify(product_attributes_postmeta);
 
 				$('#sm_editor_grid').jqGrid('smsetCell',grid_rowid, 'custom_product_attributes', '', 'sm-jqgrid-dirty-cell', false, true, true);
+				$('#sm_editor_grid').jqGrid('smsetCell',grid_rowid, 'postmeta_meta_key__product_attributes_meta_value__product_attributes', '', 'sm-jqgrid-dirty-cell', false, true, true);
 				$('#sm_editor_grid').jqGrid('setRowData', grid_rowid, rowData);
 
 				hideDialog();

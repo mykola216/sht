@@ -68,7 +68,8 @@ foreach( $products as $current_product ) {
 				foreach( $attributes as $key => $attribute ) {
 					$key = str_replace( 'attribute_', '', $key );
 
-					$terms = get_terms( sanitize_title( $key ), array(
+					$terms = get_terms( array(
+						'taxonomy' =>  sanitize_title( $key ),
 						'menu_order' => 'ASC',
 						'hide_empty' => false
 					) );

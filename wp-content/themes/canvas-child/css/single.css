@@ -69,8 +69,8 @@ img.attachment-shop_thumbnail {
 #product-summary-tabs > ul > li.tab {
     float: left;
     list-style-type: none;
+	width: 50%;
 }
-#product-summary-tabs > ul > li.tab,
 .woocommerce-tabs ul.tabs li {
 	margin-right: 2px;
 }
@@ -90,8 +90,12 @@ img.attachment-shop_thumbnail {
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 42px;
+	text-align: center;
 }
-#product-summary-tabs > ul > li.tab a:hover,
 .woocommerce-tabs ul.tabs li a:hover {
     background-color: #f1f1f1;
 }
@@ -302,4 +306,16 @@ li.kussens label:last-child{
     div.summary.entry-summary {
         width: 38% !important;
     }
+}
+@media (max-width: 768px) {
+	.gform_wrapper.gf_browser_safari .gfield_checkbox li input, .gform_wrapper.gf_browser_safari .gfield_checkbox li input[type=checkbox], .gform_wrapper.gf_browser_safari .gfield_radio li input[type=radio] {
+		width: 30px !important;
+		height: 30px !important;
+	}
+	.gform_wrapper ul.gfield_checkbox li label, .gform_wrapper ul.gfield_radio li label {
+		width: 70% !important;
+	}
+	#product-summary-tabs > div.panel button.single_add_to_cart_button  {
+		float: right;
+	}
 }

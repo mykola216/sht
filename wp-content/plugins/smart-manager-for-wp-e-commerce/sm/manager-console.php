@@ -676,7 +676,6 @@ if (WPSC_RUNNING === true) {
  //    		productsSearchFields.push(value.name);
  //    	} 
 
-
 	//Array for advanced search
 	$products_cols_advanced_search = $products_cols;
 
@@ -843,23 +842,23 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 
 			if ($products_col['name'] == 'Disregard Shipping' || $products_col['name'] == 'Stock: Quantity Limited'
 				|| $products_col['name'] == 'Stock: Inform When Out Of Stock') {
-				$wpec_products_search_cols [$index]['values'] = array();
-				$wpec_products_search_cols [$index]['values'][0] = array('key' => 'yes', 'value' =>  __('Yes',$sm_text_domain));
-				$wpec_products_search_cols [$index]['values'][1] = array('key' => 'no', 'value' =>  __('No',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'] = array();
+				$wpec_products_search_cols [$index]['search_values'][0] = array('key' => 'yes', 'value' =>  __('Yes',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'][1] = array('key' => 'no', 'value' =>  __('No',$sm_text_domain));
 
 			} else if ( $products_col['colName'] == "height_unit" ||
 					$products_col['colName'] == "width_unit" || $products_col['colName'] == "length_unit" || (( defined('IS_WPSC3814') && IS_WPSC3814 ) && $products_col['colName'] == "dimension_unit")) {
-				$wpec_products_search_cols [$index]['values'] = array();
-				$wpec_products_search_cols [$index]['values'][0] = array('key' => 'in', 'value' =>  __('inches',$sm_text_domain));
-				$wpec_products_search_cols [$index]['values'][1] = array('key' => 'cm', 'value' =>  __('cm',$sm_text_domain));
-				$wpec_products_search_cols [$index]['values'][2] = array('key' => 'meter', 'value' =>  __('meter',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'] = array();
+				$wpec_products_search_cols [$index]['search_values'][0] = array('key' => 'in', 'value' =>  __('inches',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'][1] = array('key' => 'cm', 'value' =>  __('cm',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'][2] = array('key' => 'meter', 'value' =>  __('meter',$sm_text_domain));
 
 			} else if ($products_col['colName'] == "weight_unit") {
-				$wpec_products_search_cols [$index]['values'] = array();
-				$wpec_products_search_cols [$index]['values'][0] = array('key' => 'pound', 'value' =>  __('pounds',$sm_text_domain));
-				$wpec_products_search_cols [$index]['values'][1] = array('key' => 'ounce', 'value' =>  __('ounces',$sm_text_domain));
-				$wpec_products_search_cols [$index]['values'][2] = array('key' => 'gram', 'value' =>  __('grams',$sm_text_domain));
-				$wpec_products_search_cols [$index]['values'][3] = array('key' => 'kilogram', 'value' =>  __('kilograms',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'] = array();
+				$wpec_products_search_cols [$index]['search_values'][0] = array('key' => 'pound', 'value' =>  __('pounds',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'][1] = array('key' => 'ounce', 'value' =>  __('ounces',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'][2] = array('key' => 'gram', 'value' =>  __('grams',$sm_text_domain));
+				$wpec_products_search_cols [$index]['search_values'][3] = array('key' => 'kilogram', 'value' =>  __('kilograms',$sm_text_domain));
 				
 			}
 
@@ -902,13 +901,13 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 						$wpec_products_search_cols [$index]['placeholder'] = "";
 						$wpec_products_search_cols [$index]['table_name'] = "{$wpdb->prefix}term_relationships";
 						$wpec_products_search_cols [$index]['col_name'] = $results_wpec_category_advanced_search['taxonomy'];
-						$wpec_products_search_cols [$index]['values'] = array();
+						$wpec_products_search_cols [$index]['search_values'] = array();
 
 						$attribute_id = $results_wpec_category_advanced_search['term_id'];
 					} 
 					else {
 						// $wpec_products_search_cols [$index]['values'][$attributes_index] = array('key' => $results_wpec_category_advanced_search['term_taxonomy_id'], 'value' => __($results_wpec_category_advanced_search['name'],$sm_text_domain));
-						$wpec_products_search_cols [$index]['values'][$attributes_index] = array('key' => $results_wpec_category_advanced_search['slug'], 'value' => __($results_wpec_category_advanced_search['name'],$sm_text_domain));
+						$wpec_products_search_cols [$index]['search_values'][$attributes_index] = array('key' => $results_wpec_category_advanced_search['slug'], 'value' => __($results_wpec_category_advanced_search['name'],$sm_text_domain));
 						$attributes_index++;
 					}
 
@@ -927,7 +926,7 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 			$wpec_products_search_cols [$index]['placeholder'] = "";
 			$wpec_products_search_cols [$index]['table_name'] = "{$wpdb->prefix}term_relationships";
 			$wpec_products_search_cols [$index]['col_name'] = 'wpsc_product_category';
-			$wpec_products_search_cols [$index]['values'] = $categories_list;
+			$wpec_products_search_cols [$index]['search_values'] = $categories_list;
 		}
 
 		$wpec_products_search_cols= json_encode ($wpec_products_search_cols);
@@ -991,18 +990,18 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 
 
 			if ($products_col['name'] == 'Tax Status') {
-				$products_search_cols [$index]['values'] = array();
-				$products_search_cols [$index]['values'][0] = array('key' => 'taxable', 'value' =>  __('Taxable',$sm_text_domain));
-				$products_search_cols [$index]['values'][1] = array('key' => 'shipping', 'value' =>  __('Shipping only',$sm_text_domain));
-				$products_search_cols [$index]['values'][2] = array('key' => 'none', 'value' =>  __('None',$sm_text_domain));
+				$products_search_cols [$index]['search_values'] = array();
+				$products_search_cols [$index]['search_values'][0] = array('key' => 'taxable', 'value' =>  __('Taxable',$sm_text_domain));
+				$products_search_cols [$index]['search_values'][1] = array('key' => 'shipping', 'value' =>  __('Shipping only',$sm_text_domain));
+				$products_search_cols [$index]['search_values'][2] = array('key' => 'none', 'value' =>  __('None',$sm_text_domain));
 
 			}  else if ($products_col['name'] == 'Publish') {
 				$products_search_cols [$index]['key'] = 'Post Status';
-				$products_search_cols [$index]['values'] = array();
-				$products_search_cols [$index]['values'][0] = array('key' => 'publish', 'value' => __('Publish',$sm_text_domain));
-				$products_search_cols [$index]['values'][1] = array('key' => 'pending', 'value' => __('Pending Review',$sm_text_domain));
-				$products_search_cols [$index]['values'][2] = array('key' => 'draft', 'value' => __('Draft',$sm_text_domain));
-				$products_search_cols [$index]['values'][3] = array('key' => 'private', 'value' => __('Private',$sm_text_domain));
+				$products_search_cols [$index]['search_values'] = array();
+				$products_search_cols [$index]['search_values'][0] = array('key' => 'publish', 'value' => __('Publish',$sm_text_domain));
+				$products_search_cols [$index]['search_values'][1] = array('key' => 'pending', 'value' => __('Pending Review',$sm_text_domain));
+				$products_search_cols [$index]['search_values'][2] = array('key' => 'draft', 'value' => __('Draft',$sm_text_domain));
+				$products_search_cols [$index]['search_values'][3] = array('key' => 'private', 'value' => __('Private',$sm_text_domain));
 			}
 
 			$products_search_cols [$index]['category'] = "";
@@ -1013,13 +1012,13 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 
 			if( SM_IS_WOO30 == "true" && $products_col['name'] == 'Featured' ) {
 				$products_search_cols [$index]['col_name'] = 'product_visibility_featured';
-				$products_search_cols [$index]['values'] = array();
-				$products_search_cols [$index]['values'][0] = array('key' => 'yes', 'value' =>  __('Yes',$sm_text_domain));
-				$products_search_cols [$index]['values'][1] = array('key' => 'no', 'value' =>  __('No',$sm_text_domain));
+				$products_search_cols [$index]['search_values'] = array();
+				$products_search_cols [$index]['search_values'][0] = array('key' => 'yes', 'value' =>  __('Yes',$sm_text_domain));
+				$products_search_cols [$index]['search_values'][1] = array('key' => 'no', 'value' =>  __('No',$sm_text_domain));
 			}
 
 			if ($products_col['name'] == 'Visibility') {
-				$products_search_cols [$index]['values'] = array();
+				$products_search_cols [$index]['search_values'] = array();
 
 				if( SM_IS_WOO30 == "true" ) {
 
@@ -1030,16 +1029,16 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 
 						if( !empty($visibility_options) ) {
 							foreach ($visibility_options as $key => $value) {
-								$products_search_cols [$index]['values'][] = array('key' => $key, 'value' =>  __($value,$sm_text_domain));
+								$products_search_cols [$index]['search_values'][] = array('key' => $key, 'value' =>  __($value,$sm_text_domain));
 							}
 						}
 					}
 
 				} else {
-					$products_search_cols [$index]['values'][0] = array('key' => 'visible', 'value' =>  __('Catalog & Search',$sm_text_domain));
-					$products_search_cols [$index]['values'][1] = array('key' => 'catalog', 'value' =>  __('Catalog',$sm_text_domain));
-					$products_search_cols [$index]['values'][2] = array('key' => 'search', 'value' =>  __('Search',$sm_text_domain));
-					$products_search_cols [$index]['values'][3] = array('key' => 'hidden', 'value' =>  __('Hidden',$sm_text_domain));	
+					$products_search_cols [$index]['search_values'][0] = array('key' => 'visible', 'value' =>  __('Catalog & Search',$sm_text_domain));
+					$products_search_cols [$index]['search_values'][1] = array('key' => 'catalog', 'value' =>  __('Catalog',$sm_text_domain));
+					$products_search_cols [$index]['search_values'][2] = array('key' => 'search', 'value' =>  __('Search',$sm_text_domain));
+					$products_search_cols [$index]['search_values'][3] = array('key' => 'hidden', 'value' =>  __('Hidden',$sm_text_domain));	
 				}
 
 			}
@@ -1121,11 +1120,11 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 						$products_search_cols [$index]['placeholder'] = "";
 						$products_search_cols [$index]['table_name'] = "{$wpdb->prefix}term_relationships";
 						$products_search_cols [$index]['col_name'] = $results_attribute_advanced_search['taxonomy'];
-						$products_search_cols [$index]['values'] = array();
+						$products_search_cols [$index]['search_values'] = array();
 					} 
 					// else {
 					// $products_search_cols [$index]['values'][$attributes_index] = array('key' => $results_attribute_advanced_search['term_taxonomy_id'], 'value' => __($results_attribute_advanced_search['name'],$sm_text_domain));
-					$products_search_cols [$index]['values'][$attributes_index] = array('key' => $results_attribute_advanced_search['slug'], 'value' => __($results_attribute_advanced_search['name'],$sm_text_domain));
+					$products_search_cols [$index]['search_values'][$attributes_index] = array('key' => $results_attribute_advanced_search['slug'], 'value' => __($results_attribute_advanced_search['name'],$sm_text_domain));
 					// }
 					$attributes_index++;
 
@@ -1147,7 +1146,7 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 			$products_search_cols [$index]['placeholder'] = "";
 			$products_search_cols [$index]['table_name'] = "{$wpdb->prefix}term_relationships";
 			$products_search_cols [$index]['col_name'] = 'product_cat';
-			$products_search_cols [$index]['values'] = $categories_list;
+			$products_search_cols [$index]['search_values'] = $categories_list;
 		}
 
 		//For handling Product Type
@@ -1161,10 +1160,10 @@ if (WPSC_RUNNING === true && IS_WPSC38) {
 			$products_search_cols [$index]['placeholder'] = "";
 			$products_search_cols [$index]['table_name'] = "{$wpdb->prefix}term_relationships";
 			$products_search_cols [$index]['col_name'] = 'product_type';
-			$products_search_cols [$index]['values'] = array();
+			$products_search_cols [$index]['search_values'] = array();
 
 			foreach ($product_types as $type) {
-				$products_search_cols [$index]['values'][] = array( 'key' => $type->slug, 'value' => __($type->name,$sm_text_domain));
+				$products_search_cols [$index]['search_values'][] = array( 'key' => $type->slug, 'value' => __($type->name,$sm_text_domain));
 			}
 		}
 
@@ -1436,7 +1435,7 @@ if (WOO_RUNNING === true) {
 					$index++;
 				}
 
-				$products_search_cols [$index_search_cols]['values'] = $advanced_search_column_values;
+				$products_search_cols [$index_search_cols]['search_values'] = $advanced_search_column_values;
 			}
 
 			$index_search_cols++;
@@ -1628,6 +1627,9 @@ if (WPSC_RUNNING === true) {
 		lang.billing_region		= '" . __('Billing Region',$sm_text_domain) . "';
 		lang.country			= '" . __('Country',$sm_text_domain) . "';
 		lang.billing_country		= '" . __('Billing Country',$sm_text_domain) . "';
+		lang.billing_address_1	= '" . __('Billing Address 1',$sm_text_domain) . "';
+		lang.billing_address_2	= '" . __('Billing Address 2',$sm_text_domain) . "';
+		lang.customer_id		= '" . __('Customer ID',$sm_text_domain) . "';
 		lang.total_purchased		= '" . __('Total Purchased',$sm_text_domain) . "';
 		lang.last_order			= '" . __('Last Order',$sm_text_domain) . "';
 		lang.last_order_total	= '" . __('Last Order Total',$sm_text_domain) . "';
@@ -1900,7 +1902,7 @@ if (! function_exists('sm_add_social_links')) {
                         </style>';
         $social_link .= '<a href="https://twitter.com/storeapps" class="twitter-follow-button" data-show-count="true" data-dnt="true" data-show-screen-name="false">Follow</a>';
         $social_link .= "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>";
-        $social_link .= '<iframe id="fb_like_sm" src="'. $ssl .'://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FStore-Apps%2F614674921896173&width=100&layout=button_count&action=like&show_faces=false&share=false&height=21"></iframe>';
+        $social_link .= '<iframe id="fb_like_sm" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FStore-Apps%2F614674921896173&width=100&layout=button_count&action=like&show_faces=false&share=false&height=21"></iframe>';
         // $social_link .= '<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script><script type="IN/FollowCompany" data-id="3758881" data-counter="right"></script>';
 
         return $social_link;
@@ -1916,16 +1918,3 @@ if (! function_exists('sm_add_social_links')) {
 ?>
 <!-- Smart Manager FB Like Button -->
 
-
-<div id="sm_footer" style="float:left;">
-	<div id="add_social_links" class="wrap sm_social_links">
-	    <?php echo sm_add_social_links();?>
-	</div>
-
-
-	<div id="sm_wp_rating" class="wrap" style="color:#9e9b9b;font-size:0.95em;">
-	  <?php
-	    echo sprintf( __( 'If you like <strong>Smart Manager</strong> please leave us a %s&#9733;&#9733;&#9733;&#9733;&#9733;%s rating. A huge thank you from StoreApps in advance!', $sm_text_domain ), '<a href="https://wordpress.org/support/view/plugin-reviews/smart-manager-for-wp-e-commerce?filter=5#postform" target="_blank" data-rated="' . esc_attr__( 'Thanks :)', $sm_text_domain ) . '">', '</a>' );
-	  ?>
-	</div>
-</div>

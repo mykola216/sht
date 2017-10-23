@@ -2,8 +2,8 @@
 Contributors: yithemes
 Tags: frequently bought together, bought together, bundles, frequently bought products, product group
 Requires at least: 4.0
-Tested up to: 4.8
-Stable tag: 1.1.2
+Tested up to: 4.8.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,13 @@ Full documentation is available [here](http://yithemes.com/docs-plugins/yith-woo
 3. The plugin tab in edit product
 
 == Changelog ==
+
+== 1.1.3 == Released on Oct 17, 2017
+
+* New: Support to WordPress 4.8.2.
+* New: Support to WooCommerce 3.2.1.
+* New: Danish Translation.
+* Update: Plugin core.
 
 == 1.1.2 == Released on Jul 22, 2017
 
@@ -109,15 +116,17 @@ If you have suggestions about how to improve YITH WooCommerce Frequently Bought 
 * English
 * Italian
 * Spanish
+* Danish
 
-If you have created your own language pack, or have an update for an existing one, you can send [gettext PO and MO file](http://codex.wordpress.org/Translating_WordPress "Translating WordPress")
-[use](http://yithemes.com/contact/ "Your Inspiration Themes") so we can bundle it into YITH Frequently Bought Together languages.
+If you can't find this plugin in your language and want to translate it, use the dedicated tool at [Translating WordPress](https://translate.wordpress.org/locale/it/default/wp-plugins/yith-woocommerce-frequently-bought-together "Translating WordPress").
+Or, if you have created your own language pack, or have an update for an existing one, you can send it as an email attachment from our [Contacts page](http://yithemes.com/contact/ "Your Inspiration Themes") and we will bundle into YITH WooCommerce Frequently Bought Together.
 
 == Upgrade notice ==
 
-== 1.1.2 == Released on Jul 22, 2017
+== 1.1.3 == Released on Oct 17, 2017
 
-* New: Support to WordPress 4.8.
-* New: Support to WooCommerce 3.1.1.
+* New: Support to WordPress 4.8.2.
+* New: Support to WooCommerce 3.2.1.
+* New: Danish Translation.
 * Update: Plugin core.
-* Fix: Exclude deleted products automatically from frequently bought products.
+

@@ -5,7 +5,7 @@ Plugin URI: https://www.xadapter.com/product/product-import-export-plugin-for-wo
 Description: Import and Export Products and Product Reviews From and To your WooCommerce Store.
 Author: Xadapter
 Author URI: https://www.xadapter.com/shop/
-Version: 3.3.5
+Version: 3.4.0
 Text Domain: wf_csv_import_export
 */
 
@@ -341,7 +341,7 @@ if ( ! class_exists( 'WF_Product_Review_Import_Export_CSV' ) ) :
     function hf_welcome_screen_and_activation_check() {
 		if ( is_plugin_active('product-import-export-for-woo/product-csv-import-export.php') ){
             deactivate_plugins( basename( __FILE__ ) );
-            wp_die( __("Oops! You tried installing the premium version without deactivating and deleting the basic version. Kindly deactivate and delete UPS(Basic) Woocommerce Extension and then try again", "ups-woocommerce-shipping" ), "", array('back_link' => 1 ));
+            wp_die( __("Oops! You tried installing the premium version without deactivating and deleting the basic version. Kindly deactivate and delete Product Import Export for WooCommerce (Basic version) plugin and then try again", "wf_csv_import_export" ), "", array('back_link' => 1 ));
         }
         set_transient('_welcome_screen_activation_redirect', true, 30);
     }
@@ -373,3 +373,28 @@ if ( ! class_exists( 'WF_Product_Review_Import_Export_CSV' ) ) :
 	        remove_submenu_page('index.php', 'impexp-welcome');
 	    }
 	}
+	if( !function_exists('xa_wc_get_product_id_by_sku') ){
+            function xa_wc_get_product_id_by_sku( $sku ) {
+                    if(WC()->version < 2.3)
+                    {
+                        global $wpdb;
+                        $product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $sku ) );                 
+                    }else
+                    {
+                        $data_store = WC_Data_Store::load( 'product' );
+                        $product_id = $data_store->get_product_id_by_sku( $sku );                        
+                    }
+                    return ( $product_id ) ? intval( $product_id ) : 0;
+                }
+            }
+
+	if( !function_exists('xa_wc_get_filename_from_url') ){
+                function xa_wc_get_filename_from_url( $file_url ) {
+                    $parts = parse_url( $file_url );
+                    if ( isset( $parts['path'] ) ) {
+                        return basename( $parts['path'] );
+                    }
+                }
+            }
+
+            

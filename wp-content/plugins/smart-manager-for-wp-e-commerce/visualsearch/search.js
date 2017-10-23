@@ -80,7 +80,6 @@
 				defaultquery: []
 			}, this.options);
 
-
 			//Create the Search Query -- A collection of current parameters
 			this.searchQuery	= new VS.SearchQuery(this.options.defaultquery, {
 				parameters: this.options.parameters,
@@ -491,7 +490,7 @@
 							if (parameters.type[i] == "number") {
 								source_operator = ["==", "!=", "<", ">", "<=", ">="];	
 							} else {
-								if (typeof parameters.values[i] != 'undefined') {
+								if (typeof parameters.search_values[i] != 'undefined') {
 									source_operator = ["is","is not"];
 								} else {
 									source_operator = ["is","contains","is not","not contains"];
@@ -500,8 +499,8 @@
 							}
 						}
 
-						if (typeof parameters.values != 'undefined' ) {
-							source_value = parameters.values[i];	
+						if (typeof parameters.search_values != 'undefined' ) {
+							source_value = parameters.search_values[i];	
 						}
 
 						// this.value = ui.item.value;
