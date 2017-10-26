@@ -22,23 +22,6 @@
             border: 1px solid #ddd;
         }
 
-        .fue_table_footer {
-            position: relative;
-            overflow: hidden;
-            padding: 8px;
-            background: #EAF2FA;
-            border: #c7d7e2 solid 1px;
-            border-top:0 none;
-        }
-
-        .fue_table_footer .order_message {
-            background: url(<?php echo FUE_TEMPLATES_URL; ?>/images/drag_and_drop_to_reorder.png);
-            width: 161px;
-            height: 23px;
-            float: left;
-            margin-left: 20px;
-        }
-
         .ui-sortable tr {
             cursor: move;
         }

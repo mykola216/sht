@@ -103,7 +103,7 @@ class FUE_Addon_WC_Memberships {
         // figure out the amount
         $amount = $rule->get_discount_type() == 'percentage'
             ? $rule->get_discount_amount() .'%'
-            : woocommerce_price( $rule->get_discount_amount() );
+            : wc_price( $rule->get_discount_amount() );
 
         if ( $content_type == 'post_type' ) {
             $object_ids = $rule->get_object_ids();

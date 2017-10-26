@@ -240,7 +240,7 @@ class FUE_Coupons{
         }
 
         if ( !empty( $queue_item->meta['discount_amount'] ) ) {
-            $variables['coupon_amount'] = woocommerce_price( $queue_item->meta['discount_amount'] );
+            $variables['coupon_amount'] = wc_price( $queue_item->meta['discount_amount'] );
         }
         return $variables;
 
@@ -258,7 +258,7 @@ class FUE_Coupons{
     protected function add_test_variable_replacements( $variables, $email_data, $email ) {
         $variables['coupon_code']       = 'COUPON_TEST';
         $variables['coupon_code_used']  = 'COUPON_USED_TEST';
-        $variables['coupon_amount']     = woocommerce_price( 19.99 );
+        $variables['coupon_amount']     = wc_price( 19.99 );
 
         return $variables;
     }

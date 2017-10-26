@@ -71,7 +71,7 @@
     <?php
         } catch ( Exception $e ) {
             $exception = json_decode( $e->getMessage() );
-            $error = array_pop( $exception->errors );
+            $error = isset( $exception->errors ) ? array_pop( $exception->errors ) : (object) array( 'message' => 'Unknown error' );
             echo '<div class="error"><p>Twitter Error: '. $error->message .'</p></div>';
         }
     else:

@@ -1,6 +1,20 @@
 <?php
 
 /**
+ * Returns the path to the log file
+ */
+function fue_get_log_path() {
+    $uploads = wp_upload_dir();
+    $path    = trailingslashit( $uploads['basedir'] ) . 'fue.log';
+
+    if ( ! file_exists( $path ) ) {
+        touch( $path );
+    }
+
+    return $path;
+}
+
+/**
  * Get the login URL which depends on the installed plugins. If WC is installed,
  * the my-account URL is return. Otherwise, WP's default login URL is returned.
  *
@@ -966,7 +980,7 @@ function fue_get_customer_from_order( $order ) {
         $order = WC_FUE_Compatibility::wc_get_order( $order );
     }
 
-    return fue_get_customer( WC_FUE_Compatibility::get_order_user_id( $order ), $order->billing_email );
+    return fue_get_customer( WC_FUE_Compatibility::get_order_user_id( $order ), WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
 
 }
 
@@ -1162,7 +1176,7 @@ function fue_get_unsubscribe_url() {
  * Get the URL to the email-subscriptions endpoint
  */
 function fue_get_email_subscriptions_url() {
-    return apply_filters( 'fue_email_unsubscribe_url', site_url( '/my-account/email-subscriptions/' ) );
+    return apply_filters( 'fue_email_subscriptions_unsubscribe_url', site_url( '/my-account/email-subscriptions/' ) );
 }
 
 /**
@@ -1427,16 +1441,16 @@ function fue_let_to_num( $size ) {
     $ret = substr( $size, 0, -1 );
     switch ( strtoupper( $let ) ) {
         case 'P':
-            $ret *= 1024;
+            $ret *= pow( 1024, 5 );
             break;
         case 'T':
-            $ret *= 1024;
+            $ret *= pow( 1024, 4 );
             break;
         case 'G':
-            $ret *= 1024;
+            $ret *= pow( 1024, 3 );
             break;
         case 'M':
-            $ret *= 1024;
+            $ret *= pow( 1024, 2 );
             break;
         case 'K':
             $ret *= 1024;

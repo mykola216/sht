@@ -475,7 +475,7 @@ class FUE_Addon_Woocommerce_Conditions {
      */
     public function test_payment_method( $item, $condition ) {
         $order      = WC_FUE_Compatibility::wc_get_order( $item->order_id );
-        $method     = $order->payment_method;
+        $method     = WC_FUE_Compatibility::get_order_prop( $order, 'payment_method' );
         $value      = $condition['payment_method'];
 
         $result = ($value == $method);
@@ -511,9 +511,10 @@ class FUE_Addon_Woocommerce_Conditions {
         $method_names = array();
 
         foreach ( $methods as $method ) {
-            $method_names[] = $method['method_id'];
+            $method_id      = trim( current( explode( ':', (string) $method['method_id'] ) ) );
+            $method_names[] = $method_id;
 
-            if ( $method['method_id'] == $value ) {
+            if ( $method_id === $value ) {
                 $result = true;
                 break;
             }

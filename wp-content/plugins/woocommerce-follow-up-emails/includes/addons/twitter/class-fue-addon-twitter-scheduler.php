@@ -21,21 +21,28 @@ class FUE_Addon_Twitter_Scheduler extends FUE_Addon_Woocommerce_Scheduler {
     }
 
     /**
-     * Register hooks
+     * Register hooks.
+     *
+     * @since 1.0.0
+     * @version 4.5.2
      */
     public function register_hooks() {
         // @since 2.2.1 support custom order statuses
         add_action( 'plugins_loaded', array($this, 'hook_statuses'), 20 );
         add_action( 'woocommerce_checkout_order_processed', array($this, 'order_status_updated') );
 
-        // subscription triggers
+        // Subscription triggers.
         $this->register_subscription_hooks();
 
-        // wootickets triggers
+        // The wootickets triggers.
         $this->register_wootickets_hooks();
 
-        // use the twitter handle as the email address
+        // Use the twitter handle as the email address.
         add_filter( 'fue_insert_email_order', array( $this, 'use_twitter_handle_as_email'), 100 );
+
+        // If twitter handle is required, don't schedule the tweet if item
+        // to queue doesn't have it.
+        add_filter( 'pre_fue_insert_email_order', array( $this, 'maybe_check_twitter_handle' ), 10, 2 );
     }
 
     /**
@@ -84,35 +91,71 @@ class FUE_Addon_Twitter_Scheduler extends FUE_Addon_Woocommerce_Scheduler {
     }
 
     /**
-     * For twitter types, use the twitter handle in place of the email address
+     * For twitter types, use the twitter handle in place of the email address.
      *
      * @param array $data
      * @return array
      */
     public function use_twitter_handle_as_email( $data ) {
-
         $email = new FUE_Email( $data['email_id'] );
 
-        if ( $email->type == 'twitter' && !empty( $data['order_id'] ) ) {
-            $handle = get_post_meta( $data['order_id'], '_twitter_handle', true );
+        if ( 'twitter' !== $email->type ) {
+            return $data;
+        }
+        if ( empty( $data['order_id'] ) ) {
+            return $data;
+        }
 
-            if ( $handle ) {
-                $data['user_email'] = '@'.$handle;
-            } else {
-                $order = WC_FUE_Compatibility::wc_get_order( $data['order_id'] );
-                $user_id = $order->customer_user;
+        $handle = get_post_meta( $data['order_id'], '_twitter_handle', true );
+        if ( $handle ) {
+            $data['user_email'] = '@' . $handle;
+        } else {
+            $order = WC_FUE_Compatibility::wc_get_order( $data['order_id'] );
+            $user_id = WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' );
 
-                if ( $user_id ) {
-                    $handle = get_user_meta( $user_id, 'twitter_handle', true );
+            if ( $user_id ) {
+                $handle = get_user_meta( $user_id, 'twitter_handle', true );
 
-                    if ( $handle ) {
-                        $data['user_email'] = '@'.$handle;
-                    }
+                if ( $handle ) {
+                    $data['user_email'] = '@' . $handle;
                 }
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Check twitter handle.
+     *
+     * @since 4.5.2
+     * @version 4.5.2
+     *
+     * @param false|WP_Error|int $preempt Whether to preempt email insertion's
+     *                                    return value.
+     * @param array              $data    Email data.
+     */
+    public function maybe_check_twitter_handle( $pre, $data ) {
+        $email = new FUE_Email( $data['email_id'] );
+
+        if ( 'twitter' !== $email->type ) {
+            return $pre;
+        }
+
+        $meta = maybe_unserialize( $email->meta );
+        if ( empty( $meta['require_twitter_handle'] ) || 'yes' !== $meta['require_twitter_handle'] ) {
+            return $pre;
+        }
+
+        $handle = trim( $data['user_email'] );
+        if ( empty( $handle ) || '@' !== substr( $handle, 0, 1 ) ) {
+            return new WP_Error(
+                'fue_insert_email_order',
+                __( 'Cannot schedule a tweet that with a missing twitter handle.', 'follow_up_emails' )
+            );
+        }
+
+        return $pre;
     }
 
     /**
@@ -135,11 +178,6 @@ class FUE_Addon_Twitter_Scheduler extends FUE_Addon_Woocommerce_Scheduler {
     function order_status_updated( $order_id ) {
 
         $order = WC_FUE_Compatibility::wc_get_order($order_id);
-        $handle = $this->fue_twitter->get_twitter_handle_from_order( $order_id );
-
-        if ( empty( $handle ) ) {
-            return;
-        }
 
         $queued         = array();
         $triggers       = $this->get_order_triggers( $order, Follow_Up_Emails::get_email_type( 'twitter' ) );

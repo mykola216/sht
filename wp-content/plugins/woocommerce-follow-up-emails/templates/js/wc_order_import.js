@@ -142,6 +142,11 @@ jQuery(document).ready(function($) {
     }
 
     function log_import_data( data ) {
+        if ( ! data.length ) {
+           console.error( 'Invalid data supplied to log_import_data', data );
+           return;
+        }
+
         for ( var x = 0; x < data.length; x++ ) {
             var row;
             var id = data[x].id;
