@@ -20,7 +20,7 @@ if ( !empty( $_GET['qid'] ) ) {
         if ( function_exists( 'wc_get_endpoint_url' ) ) {
             $order_url = wc_get_endpoint_url( 'view-order', $order_id, wc_get_page_permalink( 'myaccount' ) );
         } else {
-            $order_url = add_query_arg('order', $order_id, get_permalink( woocommerce_get_page_id( 'view_order' ) ) );
+            $order_url = add_query_arg('order', $order_id, get_permalink( wc_get_page_id( 'view_order' ) ) );
         }
 
     }

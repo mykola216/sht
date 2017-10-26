@@ -23,7 +23,7 @@ if ( $emails ):
             if ( function_exists( 'wc_get_endpoint_url' ) ) {
                 $order_url = wc_get_endpoint_url( 'view-order', $email->order_id, wc_get_page_permalink( 'myaccount' ) );
             } else {
-                $order_url = add_query_arg('order', $email->order_id, get_permalink( woocommerce_get_page_id( 'view_order' ) ) );
+                $order_url = add_query_arg('order', $email->order_id, get_permalink( wc_get_page_id( 'view_order' ) ) );
             }
         ?>
         <tr>
@@ -40,7 +40,7 @@ if ( $emails ):
 </table>
 <?php else: ?>
 <div class="woocommerce-info">
-    <a href="<?php echo get_permalink( woocommerce_get_page_id('myaccount') ); ?>" class="button"><?php _e('Back to My Account', 'follow_up_emails'); ?></a>
+    <a href="<?php echo get_permalink( wc_get_page_id('myaccount') ); ?>" class="button"><?php _e('Back to My Account', 'follow_up_emails'); ?></a>
     <?php _e('You are not subscribed to any emails.', 'follow_up_emails'); ?>
 </div>
 <?php endif; ?>

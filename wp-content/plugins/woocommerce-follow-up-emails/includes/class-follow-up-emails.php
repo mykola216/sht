@@ -68,6 +68,11 @@ class Follow_Up_Emails {
     public static $email_type_short_descriptions    = array();
 
     /**
+     * @var FUE_Logger
+     */
+    public $logger;
+
+    /**
      * @var FUE_API
      */
     public $api         = null;
@@ -134,6 +139,9 @@ class Follow_Up_Emails {
             'years'     => array( __('year', 'follow_up_emails'), __('years', 'follow_up_emails') )
         ) );
 
+        $log_level  = get_option( 'fue_log_level', 0 );
+
+        $this->logger       = new FUE_Logger( $log_level, fue_get_log_path() );
         $this->query        = new FUE_Query();
         $this->scheduler    = new FUE_Sending_Scheduler( $this );
         $this->email_vars   = new FUE_Sending_Email_Variables();
@@ -220,11 +228,9 @@ class Follow_Up_Emails {
         if ( is_admin() ) {
             require_once FUE_INC_DIR .'/class-fue-admin-controller.php';
             require_once FUE_INC_DIR .'/class-fue-admin-profile.php';
-
-            if ( ! empty( $_GET['page'] ) ) {
-                require_once FUE_INC_DIR .'/class-fue-admin-welcome.php';
-            }
         }
+
+        require_once FUE_INC_DIR . '/lib/fue-logger.php';
     }
 
     /**
@@ -380,13 +386,15 @@ class Follow_Up_Emails {
      * @return string
      */
     public static function get_account_url() {
+        $url = get_bloginfo( 'url' );
+
         if ( self::is_sensei_installed() ) {
-            return get_permalink( get_option('woothemes-sensei_user_dashboard_page_id', -1) );
+            $url = get_permalink( get_option( 'woothemes-sensei_user_dashboard_page_id', -1 ) );
         } elseif ( self::is_woocommerce_installed() ) {
-            return get_permalink( WC_FUE_Compatibility::wc_get_page_id( 'myaccount' ) );
+            $url = get_permalink( WC_FUE_Compatibility::wc_get_page_id( 'myaccount' ) );
         }
 
-        return apply_filters( 'fue_get_account_url', get_bloginfo( 'url' ) );
+        return apply_filters( 'fue_get_account_url', $url );
     }
 
     /**

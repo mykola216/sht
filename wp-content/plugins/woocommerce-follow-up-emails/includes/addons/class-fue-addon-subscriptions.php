@@ -51,10 +51,11 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
                 add_filter( 'wcs_renewal_order_created', array($v2, 'subscription_renewal_order_created'), 10, 2 );
 
                 add_action( 'woocommerce_subscription_payment_failed', array($v2, 'subscription_payment_failed'), 10, 2 );
+                add_action( 'woocommerce_subscription_status_updated', array($v2, 'remove_subscription_payment_failed_email'), 10, 3 );
                 add_action( 'woocommerce_subscription_payment_complete', array($v2, 'set_renewal_reminder'), 10 );
                 add_action( 'woocommerce_subscription_payment_complete', array($v2, 'set_expiration_reminder'), 11 );
 
-                add_action( 'fue_before_variable_replacements', array($v2, 'register_variable_replacements'), 10, 4 );
+                add_action( 'fue_before_variable_replacements', array($v2, 'register_variable_replacements'), 11, 4 );
 
                 add_filter( 'fue_wc_get_orders_for_email', array($v2, 'get_orders_for_email'), 10, 2 );
                 add_filter( 'fue_wc_filter_orders_for_email', array($v2, 'filter_orders_for_email'), 10, 2 );
@@ -215,28 +216,31 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
 
     /**
      * Fields to show if subscription is selected
+     *
+     * @since 1.0.0
+     * @version 4.5.2
      */
     public function manual_type_actions() {
         $subscriptions = array();
 
         $posts = get_posts( array(
-            'post_type'     => 'product',
-            'post_status'   => 'publish',
-            'posts_per_page'      => -1
+            'post_type'      => 'product',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
         ) );
 
-        foreach ($posts as $post) {
+        foreach ( $posts as $post ) {
             $product = WC_FUE_Compatibility::wc_get_product( $post->ID );
-
-            if ( $product->is_type( array( WC_Subscriptions::$name, 'subscription_variation', 'variable-subscription' ) ) )
+            if ( $product->is_type( array( WC_Subscriptions::$name, 'subscription_variation', 'variable-subscription' ) ) ) {
                 $subscriptions[] = $product;
+            }
         }
 
         ?>
         <div class="send-type-subscription send-type-div">
             <select id="subscription_id" name="subscription_id" class="select2" style="width: 400px;">
-                <?php foreach ( $subscriptions as $subscription ): ?>
-                <option value="<?php echo $subscription->id; ?>"><?php echo esc_html( $subscription->get_title() ); ?></option>
+                <?php foreach ( $subscriptions as $subscription ) : ?>
+                <option value="<?php echo WC_FUE_Compatibility::get_order_prop( $subscription, 'id' ); ?>"><?php echo esc_html( $subscription->get_title() ); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -279,9 +283,9 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
 
                     if ( $subscription['product_id'] == $post['subscription_id'] || $subscription['variation_id'] == $post['subscription_id'] ) {
                         $order = WC_FUE_Compatibility::wc_get_order( $subscription['order_id'] );
-                        $user_email = $order->billing_email;
-                        $first_name = $order->billing_first_name;
-                        $last_name  = $order->billing_last_name;
+                        $user_email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
+                        $first_name = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' );
+                        $last_name  = WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
 
                         $recipients[$sub_key] = array($user_id, $user_email, $first_name .' '. $last_name);
                     }
@@ -511,11 +515,11 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
     public static function subscription_renewal_order_created( $renewal_order, $original_order, $product_id ) {
         global $wpdb;
 
-        $subs_key = self::get_subscription_key( $original_order->id, $product_id );
+        $subs_key = self::get_subscription_key( WC_FUE_Compatibility::get_order_prop( $original_order, 'id' ), $product_id );
 
         $triggers[]     = 'subs_renewal_order';
 
-        self::add_to_queue($original_order->id, $triggers, $subs_key, $original_order->user_id);
+        self::add_to_queue( WC_FUE_Compatibility::get_order_prop( $original_order, 'id' ), $triggers, $subs_key, WC_FUE_Compatibility::get_order_prop( $original_order, 'user_id' ));
     }
 
     /**
@@ -547,8 +551,8 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
 
             if ( $subs_key ) {
                 $item_id        = WC_Subscriptions_Order::get_item_id_by_subscription_key( $subs_key );
-                $product_id     = woocommerce_get_order_item_meta( $item_id, '_product_id', true );
-                $variation_id   = woocommerce_get_order_item_meta( $item_id, '_variation_id', true );
+                $product_id     = wc_get_order_item_meta( $item_id, '_product_id', true );
+                $variation_id   = wc_get_order_item_meta( $item_id, '_variation_id', true );
                 $meta           = maybe_unserialize($email->meta);
                 $include_variations = isset($meta['include_variations']) && $meta['include_variations'] == 'yes';
                 $match          = false;
@@ -1173,8 +1177,8 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
 
         if ( $email_order->order_id ) {
             $order          = WC_FUE_Compatibility::wc_get_order( $email_order->order_id );
-            $order_date     = date(get_option('date_format'), strtotime($order->order_date));
-            $order_datetime = date(get_option('date_format') .' '. get_option('time_format'), strtotime($order->order_date));
+            $order_date     = date(get_option('date_format'), strtotime(WC_FUE_Compatibility::get_order_prop( $order, 'order_date' )));
+            $order_datetime = date(get_option('date_format') .' '. get_option('time_format'), strtotime(WC_FUE_Compatibility::get_order_prop( $order, 'order_date' )));
 
             $order_id = $order->get_order_number();
 
@@ -1261,12 +1265,12 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
 
             if (! empty($subscription)) {
                 $order  = WC_FUE_Compatibility::wc_get_order($subscription['order_id']);
-                $user   = new WP_User($order->user_id);
+                $user   = new WP_User(WC_FUE_Compatibility::get_order_prop( $order, 'user_id' ));
 
-                $email_data['email_to']     = $order->billing_email;
+                $email_data['email_to']     = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
                 $email_data['username']     = $user->user_login;
-                $email_data['first_name']   = $order->billing_first_name;
-                $email_data['last_name']    = $order->billing_last_name;
+                $email_data['first_name']   = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' );
+                $email_data['last_name']    = WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
                 $email_data['cname']        = $email_data['first_name'] .' '. $email_data['last_name'];
             }
         }
@@ -1314,7 +1318,7 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
             $order_items        = WC_Subscriptions_Order::get_recurring_items( $order );
             $first_order_item   = reset( $order_items );
             $product_id         = WC_Subscriptions_Order::get_items_product_id( $first_order_item );
-            $subs_key           = self::get_subscription_key( $order->id, $product_id );
+            $subs_key           = self::get_subscription_key( WC_FUE_Compatibility::get_order_prop( $order, 'id' ), $product_id );
 
             $subject    = sprintf( __('Subscription payment failed for Order %s'), $order->get_order_number() );
             $message    = sprintf( __('A subscription payment for the order %s has failed. The subscription has now been automatically put on hold.'), $order->get_order_number() );
@@ -1343,7 +1347,7 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
                             'message'   => $message
                         ),
                         'email_trigger' => 'After a subscription payment fails',
-                        'order_id'      => $order->id,
+                        'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                         'product_id'    => $product_id,
                         'send_on'       => current_time('timestamp')
                     ),
@@ -1702,13 +1706,13 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
 
         $from_date_arg = $from_date;
 
-        $subscription              = WC_Subscriptions_Manager::get_subscription( self::get_subscription_key( $order->id, $product_id ) );
+        $subscription              = WC_Subscriptions_Manager::get_subscription( self::get_subscription_key( WC_FUE_Compatibility::get_order_prop( $order, 'id' ), $product_id ) );
         $subscription_period       = WC_Subscriptions_Order::get_subscription_period( $order, $product_id );
         $subscription_interval     = WC_Subscriptions_Order::get_subscription_interval( $order, $product_id );
         $subscription_trial_length = WC_Subscriptions_Order::get_subscription_trial_length( $order, $product_id );
         $subscription_trial_period = WC_Subscriptions_Order::get_subscription_trial_period( $order, $product_id );
 
-        $trial_end_time   = ( ! empty( $subscription['trial_expiry_date'] ) ) ? $subscription['trial_expiry_date'] : WC_Subscriptions_Product::get_trial_expiration_date( $product_id, get_gmt_from_date( $order->order_date ) );
+        $trial_end_time   = ( ! empty( $subscription['trial_expiry_date'] ) ) ? $subscription['trial_expiry_date'] : WC_Subscriptions_Product::get_trial_expiration_date( $product_id, get_gmt_from_date( WC_FUE_Compatibility::get_order_prop( $order, 'order_date' ) ) );
         $trial_end_time   = strtotime( $trial_end_time );
 
         // If the subscription has a free trial period, and we're still in the free trial period, the next payment is due at the end of the free trial
@@ -1859,8 +1863,8 @@ class FUE_Addon_Subscriptions extends FUE_Addon_Woocommerce_Scheduler {
             'next_payment_date' => WC_Subscriptions_Manager::get_next_payment_date( $subs_key ),
             'end_date'          => WC_Subscriptions_Manager::get_subscription_expiration_date( $subs_key ),
             'days_to_renew'     => '',
-            'first_payment_cost'=> woocommerce_price( WC_Subscriptions_Order::get_total_initial_payment($subscription['order_id'], $subscription['product_id'] ) ),
-            'cost'              => woocommerce_price( WC_Subscriptions_Order::get_recurring_total( $subscription['order_id'] ) ),
+            'first_payment_cost'=> wc_price( WC_Subscriptions_Order::get_total_initial_payment($subscription['order_id'], $subscription['product_id'] ) ),
+            'cost'              => wc_price( WC_Subscriptions_Order::get_recurring_total( $subscription['order_id'] ) ),
             'cost_term'         => '',
         );
 

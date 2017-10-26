@@ -102,25 +102,25 @@ class FUE_Addon_WooCommerce_Order_Importer {
      * @return array
      */
     public function import_orders( $email_id, $orders, $limit = 100 ) {
-        $import_data    = array();
-        $processed      = 0;
-        $successes      = 0;
-        $failures       = 0;
-
-        $email = new FUE_Email( $email_id );
+        $import_data = array();
+        $imported    = array();
+        $processed   = 0;
+        $successes   = 0;
+        $failures    = 0;
+        $email       = new FUE_Email( $email_id );
 
         foreach ( $orders as $idx => $order_id ) {
             // break out of the loop if the $limit has been hit
             if ( $processed >= $limit ) {
                 break;
             }
-
             $processed++;
 
             // remove from $orders so this doesn't get processed again in the next run
             unset( $orders[ $idx ] );
 
-            if ( !$order_id ) {
+            $order = WC_FUE_Compatibility::wc_get_order( $order_id );
+            if ( ! $order ) {
                 $failures++;
                 $import_data[] = array(
                     'id'        => $order_id,
@@ -130,61 +130,71 @@ class FUE_Addon_WooCommerce_Order_Importer {
                 continue;
             }
 
-            $order      = WC_FUE_Compatibility::wc_get_order( $order_id );
             $start_date = null;
 
             if ( $email->trigger == 'completed' ) {
-                $start_date = $order->completed_date;
+                $start_date = version_compare( WC_VERSION, '3.0', '>=' )
+                    ? ( $order->get_date_completed() ? gmdate( 'Y-m-d H:i:s', $order->get_date_completed()->getOffsetTimestamp()  ) : '' )
+                    : $order->completed_date;
+
             } elseif (
                 in_array( $email->trigger, Follow_Up_Emails::instance()->fue_wc->get_order_statuses() ) ||
                 $email->trigger == 'first_purchase' ||
                 $email->type == 'customer'
             ) {
-                $start_date = $order->post->post_date;
+                $start_date = WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_date;
             }
-            
+
             $insert = apply_filters( 'fue_wc_import_insert', array(
                 'send_on'       => $email->get_send_timestamp( $start_date ),
                 'email_id'      => $email->id,
                 'order_id'      => $order_id,
-                'user_id'       => $order->customer_user,
-                'user_email'    => $order->billing_email
+                'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ),
+                'user_email'    => WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' )
             ), $email );
 
-            if ( $insert ) {
-                $item_id = FUE_Sending_Scheduler::queue_email( $insert, $email );
+            if ( ! $insert ) {
+                $failures++;
+                $imported[] = array(
+                    'id'        => $order_id,
+                    'status'    => 'failures',
+                    'reason'    => sprintf( __( 'There was an error importing the orders(#%d)', 'follow_up_emails' ), $order_id )
+                );
+                continue;
+            }
 
-                if ( is_wp_error( $item_id ) ) {
-                    $failures++;
-                    $imported[] = array(
-                        'id'        => $order_id,
-                        'status'    => 'failed',
-                        'reason'    => sprintf( __('Importing failed. %s', 'follow_up_emails'), $item_id->get_error_message() )
-                    );
-                    continue;
-                }
+            $item_id = FUE_Sending_Scheduler::queue_email( $insert, $email );
 
-                $_order = WC_FUE_Compatibility::wc_get_order( $insert['order_id'] );
+            if ( is_wp_error( $item_id ) ) {
+                $failures++;
+                $imported[] = array(
+                    'id'        => $order_id,
+                    'status'    => 'failed',
+                    'reason'    => sprintf( __('Importing failed. %s', 'follow_up_emails'), $item_id->get_error_message() )
+                );
+                continue;
+            }
 
-                $email_trigger  = apply_filters( 'fue_interval_str', $email->get_trigger_string(), $email );
-                $send_date      = date( get_option('date_format') .' '. get_option('time_format'), $email->get_send_timestamp() );
+            $_order = WC_FUE_Compatibility::wc_get_order( $insert['order_id'] );
 
-                if ( $_order ) {
-                    $note = sprintf(
-                        __('Email queued: %s scheduled on %s<br/>Trigger: %s', 'follow_up_emails'),
-                        $email->name,
-                        $send_date,
-                        $email_trigger
-                    );
+            $email_trigger  = apply_filters( 'fue_interval_str', $email->get_trigger_string(), $email );
+            $send_date      = date( get_option('date_format') .' '. get_option('time_format'), $email->get_send_timestamp() );
 
-                    $_order->add_order_note( $note );
+            if ( $_order ) {
+                $note = sprintf(
+                    __('Email queued: %s scheduled on %s<br/>Trigger: %s', 'follow_up_emails'),
+                    $email->name,
+                    $send_date,
+                    $email_trigger
+                );
 
-                    $successes++;
-                    $imported[] = array(
-                        'id'        => $insert['order_id'],
-                        'status'    => 'success'
-                    );
-                }
+                $_order->add_order_note( $note );
+
+                $successes++;
+                $imported[] = array(
+                    'id'        => $insert['order_id'],
+                    'status'    => 'success'
+                );
             }
         }
 
@@ -234,15 +244,15 @@ class FUE_Addon_WooCommerce_Order_Importer {
             $start_date = null;
 
             if ( $email->trigger == 'first_purchase' ) {
-                $start_date = $order->post->post_date;
+                $start_date = WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_date;
             }
 
             $insert = apply_filters( 'fue_wc_import_insert', array(
                 'send_on'       => $email->get_send_timestamp( $start_date ),
                 'email_id'      => $email->id,
                 'order_id'      => $order_id,
-                'user_id'       => $order->customer_user,
-                'user_email'    => $order->billing_email
+                'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ),
+                'user_email'    => WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' )
             ), $email );
 
             if ( $insert ) {
@@ -335,43 +345,21 @@ class FUE_Addon_WooCommerce_Order_Importer {
         if ( in_array( $trigger, Follow_Up_Emails::instance()->fue_wc->get_order_statuses() ) ) {
             // count the number of orders matching the email's order status trigger
             // and exclude those Order IDs that are in the email queue, sent or unsent
-            if ( WC_FUE_Compatibility::is_wc_version_gte_2_2() ) {
-                $status = 'wc-'. $email->trigger;
-                $orders = $wpdb->get_col( $wpdb->prepare(
-                    "SELECT ID
-                        FROM {$wpdb->posts} p
-                        WHERE p.post_status = %s
-                        AND (
-                            SELECT COUNT(id)
-                            FROM {$wpdb->prefix}followup_email_orders
-                            WHERE order_id = p.ID
-                            AND email_id = %d
-                        ) = 0",
-                    $status,
-                    $email->id
-                ) );
-            } else {
-                $excluded_ids = $wpdb->get_col( $wpdb->prepare(
-                    "SELECT DISTINCT order_id
-                    FROM {$wpdb->prefix}followup_email_orders
-                    WHERE order_id > 0
-                    AND email_id = %d",
-                    $email->id
-                ) );
-                $orders = get_posts( array(
-                    'post_status'   => 'publish',
-                    'tax_query'     => array(
-                        array(
-                            'taxonomy' => 'shop_order_status',
-                            'field'    => 'slug',
-                            'terms'    => $email->trigger
-                        )
-                    ),
-                    'post__not_in'  => $excluded_ids,
-                    'fields'        => 'ids',
-                    'posts_per_page'=> -1
-                ) );
-            }
+            $status = 'wc-'. $email->trigger;
+            $orders = $wpdb->get_col( $wpdb->prepare(
+                "SELECT ID
+                    FROM {$wpdb->posts} p
+                    WHERE p.post_status = %s
+                    AND p.post_type = 'shop_order'
+                    AND (
+                        SELECT COUNT(id)
+                        FROM {$wpdb->prefix}followup_email_orders
+                        WHERE order_id = p.ID
+                        AND email_id = %d
+                    ) = 0",
+                $status,
+                $email->id
+            ) );
         } elseif ( $trigger == 'first_purchase' ) {
             // get the order IDs of customers with only 1 order
             $customer_orders = $wpdb->get_col(
@@ -480,7 +468,7 @@ class FUE_Addon_WooCommerce_Order_Importer {
                     continue;
                 }
 
-                $diff = $now - strtotime( $order->post->post_date_gmt );
+                $diff = $now - strtotime( WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_date_gmt );
 
                 if ( $diff < $min_diff ) {
                     // the customer's last order doesn't meet the minimum date difference,
@@ -672,7 +660,7 @@ class FUE_Addon_WooCommerce_Order_Importer {
                 if ( $user_id ) {
                     $customer = fue_get_customer( $user_id );
                 } else {
-                    $customer = fue_get_customer( 0, $order->billing_email );
+                    $customer = fue_get_customer( 0, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
                 }
 
                 if ( ! $customer ) {
@@ -708,7 +696,7 @@ class FUE_Addon_WooCommerce_Order_Importer {
                 if ( $user_id ) {
                     $customer = fue_get_customer( $user_id );
                 } else {
-                    $customer = fue_get_customer( 0, $order->billing_email );
+                    $customer = fue_get_customer( 0, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
                 }
 
                 if ( ! $customer ) {

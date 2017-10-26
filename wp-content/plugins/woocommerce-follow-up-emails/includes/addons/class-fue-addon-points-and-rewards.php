@@ -28,7 +28,7 @@ class FUE_Addon_Points_And_Rewards {
             add_action( 'wc_points_rewards_after_increase_points', array($this, 'after_points_increased'), 10, 5 );
             add_action( 'fue_email_variables_list', array($this, 'email_variables_list') );
 
-            add_action( 'fue_before_variable_replacements', array($this, 'register_variable_replacements'), 10, 4 );
+            add_action( 'fue_before_variable_replacements', array($this, 'register_variable_replacements'), 11, 4 );
 
         }
     }

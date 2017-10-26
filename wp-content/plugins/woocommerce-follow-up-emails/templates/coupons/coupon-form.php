@@ -76,7 +76,7 @@ else
                                                     <option value="{customer_first_name}"><?php _e('Customer\'s First Name', 'follow_up_emails'); ?></option>
                                                     <option value="{customer_last_name}"><?php _e('Customer\'s Last Name', 'follow_up_emails'); ?></option>
                                                 </select>
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('Add a prefix to the generated coupon code', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('Add a prefix to the generated coupon code', 'follow_up_emails'); ?></span>
                                             </p>
                                             <p class="form-field">
                                                 <label for="type"><?php _e('Discount type', 'follow_up_emails'); ?></label>
@@ -93,7 +93,7 @@ else
                                             <p class="form-field">
                                                 <label for="amount"><?php _e('Coupon Amount', 'follow_up_emails'); ?></label>
                                                 <input type="text" name="amount" id="amount" class="short" value="<?php echo esc_attr($data['amount']); ?>" placeholder="0.0" />
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('e.g. 5.99 (do not include the percent symbol)', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('e.g. 5.99 (do not include the percent symbol)', 'follow_up_emails'); ?></span>
                                             </p>
                                             <p class="form-field">
                                                 <label for="free_shipping"><?php _e('Allow free shipping', 'follow_up_emails'); ?></label>
@@ -116,7 +116,7 @@ else
                                                     <option value="weeks" <?php if ($data['expiry_type'] == 'weeks') echo 'selected'; ?>><?php _e('weeks', 'follow_up_emails'); ?></option>
                                                     <option value="months" <?php if ($data['expiry_type'] == 'months') echo 'selected'; ?>><?php _e('months', 'follow_up_emails'); ?></option>
                                                 </select>
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('after the discount has been sent to the user', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('after the discount has been sent to the user', 'follow_up_emails'); ?></span>
                                             </p>
                                         </div>
                                     </div>
@@ -125,12 +125,12 @@ else
                                             <p class="form-field">
                                                 <label for="minimum_amount"><?php _e('Minimum spend', 'woocommerce'); ?></label>
                                                 <input type="text" class="short" name="minimum_amount" id="minimum_amount" value="<?php echo esc_attr( $data['minimum_amount'] ); ?>" placeholder="<?php _e('No minimum', 'woocommerce'); ?>">
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('This field allows you to set the minimum subtotal needed to use the coupon.', 'woocommerce'); ?>">
+                                                <span class="description"><?php _e('This field allows you to set the minimum subtotal needed to use the coupon.', 'woocommerce'); ?></span>
                                             </p>
                                             <p class="form-field">
                                                 <label for="maximum_amount"><?php _e('Maximum spend', 'woocommerce'); ?></label>
                                                 <input type="text" class="short" name="maximum_amount" id="maximum_amount" value="<?php echo esc_attr( $data['maximum_amount'] ); ?>" placeholder="<?php _e('No maximum', 'woocommerce'); ?>">
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('This field allows you to set the maximum subtotal allowed when using the coupon.', 'woocommerce'); ?>">
+                                                <span class="description"><?php _e('This field allows you to set the maximum subtotal allowed when using the coupon.', 'woocommerce'); ?></span>
                                             </p>
                                         </div>
                                         <div class="options_group">
@@ -176,7 +176,7 @@ else
                                                     data-selected="<?php echo esc_attr( json_encode( $json_ids ) ); ?>"
                                                     >
 
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('Products which need to be in the cart to use this coupon or, for &quot;Product Discounts&quot;, which products are discounted.', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('Products which need to be in the cart to use this coupon or, for &quot;Product Discounts&quot;, which products are discounted.', 'follow_up_emails'); ?></span>
                                             </p>
                                             <p class="form-field">
                                                 <label for="exclude_product_ids"><?php _e('Exclude Products', 'woocommerce'); ?></label>
@@ -204,7 +204,7 @@ else
                                                     data-selected="<?php echo esc_attr( json_encode( $json_ids ) ); ?>"
                                                     >
 
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('Products which must not be in the cart to use this coupon or, for &quot;Product Discounts&quot;, which products are not discounted.', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('Products which must not be in the cart to use this coupon or, for &quot;Product Discounts&quot;, which products are not discounted.', 'follow_up_emails'); ?></span>
                                             </p>
                                         </div>
                                         <div class="options_group">
@@ -218,7 +218,7 @@ else
                                                         <option value="<?php _e($category->term_id); ?>" <?php echo $selected; ?>><?php echo esc_html($category->name); ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('A product must be in this category for the coupon to remain valid or, for &quot;Product Discounts&quot;, products in these categories will be discounted.', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('A product must be in this category for the coupon to remain valid or, for &quot;Product Discounts&quot;, products in these categories will be discounted.', 'follow_up_emails'); ?></span>
                                             </p>
                                             <p class="form-field">
                                                 <label for="exclude_product_categories"><?php _e('Exclude Categories', 'woocommerce'); ?></label>
@@ -230,7 +230,7 @@ else
                                                         <option value="<?php _e($category->term_id); ?>" <?php echo $selected; ?>><?php echo esc_html($category->name); ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                                <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('Product must not be in this category for the coupon to remain valid or, for &quot;Product Discounts&quot;, products in these categories will not be discounted.', 'follow_up_emails'); ?>">
+                                                <span class="description"><?php _e('Product must not be in this category for the coupon to remain valid or, for &quot;Product Discounts&quot;, products in these categories will not be discounted.', 'follow_up_emails'); ?></span>
                                             </p>
                                         </div>
                                     </div>
@@ -238,12 +238,12 @@ else
                                         <p class="form-field usage_limit_field">
                                             <label for="usage_limit"><?php _e('Usage limit per coupon', 'woocommerce'); ?></label>
                                             <input type="number" min="0" step="1" class="short" name="usage_limit" id="usage_limit" value="<?php echo esc_attr( $data['usage_limit'] ); ?>" placeholder="Unlimited usage">
-                                            <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('How many times this coupon can be used before it is void', 'follow_up_emails'); ?>">
+                                            <span class="description"><?php _e('How many times this coupon can be used before it is void', 'follow_up_emails'); ?></span>
                                         </p>
                                         <p class="form-field usage_limit_per_user_field">
                                             <label for="usage_limit_per_user"><?php _e('Usage limit per user', 'woocommerce'); ?></label>
                                             <input type="number" min="0" step="1" placeholder="Unlimited usage" value="<?php echo esc_attr( $data['usage_limit_per_user'] ); ?>" id="usage_limit_per_user" name="usage_limit_per_user" style="" class="short">
-                                            <img class="help_tip" src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" width="16" height="16" title="<?php _e('How many times this coupon can be used by an individual user. Uses billing email for guests, and user ID for logged in users.', 'follow_up_emails'); ?>">
+                                            <span class="description"><?php _e('How many times this coupon can be used by an individual user. Uses billing email for guests, and user ID for logged in users.', 'follow_up_emails'); ?></span>
                                         </p>
                                     </div>
                                 </div>

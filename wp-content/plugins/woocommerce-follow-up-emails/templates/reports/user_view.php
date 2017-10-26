@@ -208,16 +208,16 @@ if ( $user_id ):
             	$total_conversions = 0;
             	foreach ( $conversions as $conversion ):
                 	$order      = $conversion['order'];
-                	$user       = new WP_User( $order->customer_user );
+                	$user       = new WP_User( WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ) );
                 	$name       = $user->billing_first_name .' '. $user->billing_last_name;
-                	$total_conversions += $order->order_total;
+                	$total_conversions += WC_FUE_Compatibility::get_order_prop( $order, 'order_total' );
                 ?>
                 	<tr>
                     	<td><?php echo '<a href="'. get_edit_post_link( $conversion['email']->id ) .'">'. $conversion['email']->name .'</a>'; ?></td>
-                    	<td><?php echo '<a href="'. get_edit_post_link( $order->id ) .'">Order #'. $order->id .'</a>'; ?></td>
-                    	<td><?php echo woocommerce_price( $order->order_total ); ?></td>
+                    	<td><?php echo '<a href="'. get_edit_post_link( WC_FUE_Compatibility::get_order_prop( $order, 'id' ) ) .'">Order #'. WC_FUE_Compatibility::get_order_prop( $order, 'id' ) .'</a>'; ?></td>
+                    	<td><?php echo wc_price( WC_FUE_Compatibility::get_order_prop( $order, 'order_total' ) ); ?></td>
                         <?php do_action('fue_reports_customer_conversion_row', $conversion); ?>
-                    	<td><?php echo '<a class="button button-secondary" href="'. get_edit_post_link( $order->id ) .'">View Order</a>'; ?></td>
+                    	<td><?php echo '<a class="button button-secondary" href="'. get_edit_post_link( WC_FUE_Compatibility::get_order_prop( $order, 'id' ) ) .'">View Order</a>'; ?></td>
                     	<td>&nbsp;</td>
                 	</tr>
             	<?php 
@@ -388,17 +388,17 @@ if ( $user_id ):
 
                     // If order isn't cancelled, refunded, failed or pending, include its total
                     if ( in_array( $purchase->post_status, array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) {
-                        $lifetime_total += $purchase_order->order_total;
+                        $lifetime_total += WC_FUE_Compatibility::get_order_prop( $purchase_order, 'order_total' );
                     }
                     ?>
                     <tr>
                         <td>
                             <?php
-                            $url = admin_url('post.php?post='. $purchase_order->id .'&action=edit');
-                            printf( __('<a href="%s">%s</a> <br /> (%s)', 'follow_up_emails' ), $url, $purchase_order->get_order_number(), $purchase_order->status );
+                            $url = admin_url('post.php?post='. WC_FUE_Compatibility::get_order_prop( $purchase_order, 'id' ) .'&action=edit');
+                            printf( __('<a href="%s">%s</a> <br /> (%s)', 'follow_up_emails' ), $url, $purchase_order->get_order_number(), WC_FUE_Compatibility::get_order_prop( $purchase_order, 'status' ) );
                             ?>
                         </td>
-                        <td><?php echo date( get_option('date_format') .' '. get_option('time_format') , strtotime( $purchase_order->order_date ) ); ?></td>
+                        <td><?php echo date( get_option('date_format') .' '. get_option('time_format') , strtotime( WC_FUE_Compatibility::get_order_prop( $purchase_order, 'order_date' ) ) ); ?></td>
                         <td><?php echo $purchase_order->get_formatted_order_total(); ?></td>
                         <td>
 	                        <?php
@@ -421,7 +421,7 @@ if ( $user_id ):
         
         <hr>
 
-        <p><?php printf( __( '<strong>Lifetime Value:</strong> %s', 'follow_up_emails' ), '<span style="color:#7EB03B; font-size:1.2em; font-weight:bold;">' . woocommerce_price( $lifetime_total ) . '</span>' ); ?></p>
+        <p><?php printf( __( '<strong>Lifetime Value:</strong> %s', 'follow_up_emails' ), '<span style="color:#7EB03B; font-size:1.2em; font-weight:bold;">' . wc_price( $lifetime_total ) . '</span>' ); ?></p>
 
     </div>
     <div class="col-right">

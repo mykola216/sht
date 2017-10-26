@@ -26,34 +26,35 @@ class FUE_Addon_Woocommerce_Scheduler {
      */
     private function register_hooks() {
         // refunds
-        add_action( 'woocommerce_refund_created', array($this, 'refund_manual') );
-        add_action( 'woocommerce_refund_processed', array($this, 'refund_processed'), 10, 2 );
+        add_action( 'woocommerce_refund_created', array( $this, 'refund_manual' ) );
+        add_action( 'woocommerce_refund_processed', array( $this, 'refund_processed' ), 10, 2 );
 
         // @since 2.2.1 support custom order statuses
-        add_action( 'init', array($this, 'hook_statuses'), 100 );
-        add_action( 'woocommerce_checkout_order_processed', array($this, 'order_status_updated') );
-        add_action( 'woocommerce_order_status_changed', array($this, 'unqueue_status_emails'), 10, 3 );
+        add_action( 'init', array( $this, 'hook_statuses' ), 100 );
+        add_action( 'woocommerce_checkout_order_processed', array( $this, 'order_status_updated' ) );
+        add_action( 'woocommerce_order_status_changed', array( $this, 'unqueue_status_emails' ), 10, 3 );
 
         // downloads
-        add_action( 'woocommerce_order_status_completed', array($this, 'queue_download_reminders') );
-        add_action( 'woocommerce_download_product', array($this, 'remove_queued_download_reminders'), 10, 6);
-        add_action( 'woocommerce_download_product', array($this, 'file_downloaded'), 10, 6);
-        add_action( 'woocommerce_process_product_file_download_paths_grant_access_to_new_file', array($this, 'downloadable_file_added'), 100, 4) ;
+        add_action( 'woocommerce_order_status_completed', array( $this, 'queue_download_reminders' ) );
+        add_action( 'woocommerce_download_product', array( $this, 'remove_queued_download_reminders' ), 10, 6 );
+        add_action( 'woocommerce_download_product', array( $this, 'file_downloaded' ), 10, 6 );
+        add_action( 'woocommerce_process_product_file_download_paths_grant_access_to_new_file', array( $this, 'downloadable_file_added' ), 100, 4 );
 
         // coupons
-        add_action( 'woocommerce_order_add_coupon', array($this, 'queue_coupon_emails'), 10, 4 );
+        add_action( 'woocommerce_new_order_item', array( $this, 'queue_coupon_emails' ), 10, 4 );
 
         // subscriptions
         if ( FUE_Addon_Subscriptions::is_wcs_2() ) {
-            add_action( 'wcs_renewal_order_created', array($this, 'reschedule_last_purchase_emails'), 11, 3 );
+            add_action( 'wcs_renewal_order_created', array( $this, 'reschedule_last_purchase_emails' ), 11, 3 );
         } else {
-            add_action( 'woocommerce_subscriptions_renewal_order_created', array($this, 'reschedule_last_purchase_emails'), 11, 3 );
+            add_action( 'woocommerce_subscriptions_renewal_order_created', array( $this, 'reschedule_last_purchase_emails' ), 11, 3 );
         }
 
-        add_filter( 'fue_insert_email_order', array($this, 'get_correct_email') );
+        add_filter( 'fue_insert_email_order', array( $this, 'get_correct_email' ) );
 
-        add_filter( 'fue_queue_item_filter_conditions', array($this, 'check_item_conditions'), 10, 2 );
-        add_filter( 'fue_queue_item_filter_conditions', array($this, 'check_signup_conditions'), 10, 2 );
+        add_filter( 'fue_queue_item_filter_conditions', array( $this, 'check_item_conditions' ), 10, 2 );
+        add_filter( 'fue_queue_item_filter_conditions', array( $this, 'check_signup_conditions' ), 10, 2 );
+        add_filter( 'fue_queue_item_filter_conditions_before_sending', array( $this, 'check_signup_conditions' ), 10, 2 );
     }
 
     /**
@@ -64,7 +65,7 @@ class FUE_Addon_Woocommerce_Scheduler {
     public function delete_unsent_cart_emails( $customer_id, $user_email = '' ) {
         $args = array(
             'is_cart'   => 1,
-            'is_sent'   => 0
+            'is_sent'   => 0,
         );
 
         if ( $customer_id ) {
@@ -128,7 +129,7 @@ class FUE_Addon_Woocommerce_Scheduler {
      */
     public function refund_manual( $refund_id ) {
 
-        if ( !isset($_POST['api_refund']) || $_POST['api_refund'] === 'true' )
+        if ( ! isset( $_POST['api_refund'] ) || $_POST['api_refund'] === 'true' )
             return;
 
         $refund = WC_FUE_Compatibility::wc_get_order( $refund_id );
@@ -137,9 +138,9 @@ class FUE_Addon_Woocommerce_Scheduler {
             'meta_query' => array(
                 array(
                     'key'   => '_interval_type',
-                    'value' => 'refund_manual'
-                )
-            )
+                    'value' => 'refund_manual',
+                ),
+            ),
         ) );
 
         foreach ( $emails as $email ) {
@@ -148,8 +149,8 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'meta'      => array(
                     'refund_id'     => $refund_id,
                     'refund_amount' => get_post_meta( $refund_id, '_refund_amount', true ),
-                    'refund_reason' => $refund->reason
-                )
+                    'refund_reason' => $refund->reason,
+                ),
             );
             FUE_Sending_Scheduler::queue_email( $insert, $email );
         }
@@ -172,9 +173,9 @@ class FUE_Addon_Woocommerce_Scheduler {
             'meta_query' => array(
                 array(
                     'key'   => '_interval_type',
-                    'value' => $trigger
-                )
-            )
+                    'value' => $trigger,
+                ),
+            ),
         ) );
 
         foreach ( $emails as $email ) {
@@ -183,8 +184,8 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'meta'      => array(
                     'refund_id'     => $refund->id,
                     'refund_amount' => get_post_meta( $refund->id, '_refund_amount', true ),
-                    'refund_reason' => $refund->reason
-                )
+                    'refund_reason' => $refund->reason,
+                ),
             );
             FUE_Sending_Scheduler::queue_email( $insert, $email );
         }
@@ -197,7 +198,7 @@ class FUE_Addon_Woocommerce_Scheduler {
         $statuses = $this->fue_wc->get_order_statuses();
 
         foreach ( $statuses as $status ) {
-            add_action('woocommerce_order_status_'. $status, array($this, 'order_status_updated'), 20);
+            add_action( 'woocommerce_order_status_' . $status, array( $this, 'order_status_updated' ), 20 );
         }
 
     }
@@ -209,7 +210,7 @@ class FUE_Addon_Woocommerce_Scheduler {
      */
     public function order_status_updated( $order_id ) {
 
-        $order = WC_FUE_Compatibility::wc_get_order($order_id);
+        $order = WC_FUE_Compatibility::wc_get_order( $order_id );
 
         FUE_Addon_Woocommerce::record_order( $order );
 
@@ -257,11 +258,15 @@ class FUE_Addon_Woocommerce_Scheduler {
     }
 
     /**
-     * Remove unsent emails with triggers matching the old order status from the queue
+     * Remove unsent emails with triggers matching the old order status from
+     * the queue.
      *
-     * @param int $order_id
-     * @param string $old_status
-     * @param string $new_status
+     * @since 1.0.0
+     * @version 4.5.2
+     *
+     * @param int $order_id Order ID.
+     * @param string $old_status Old order status.
+     * @param string $new_status New order status.
      */
     public function unqueue_status_emails( $order_id, $old_status, $new_status ) {
         $order      = WC_FUE_Compatibility::wc_get_order( $order_id );
@@ -270,16 +275,39 @@ class FUE_Addon_Woocommerce_Scheduler {
             'meta_query'    => array(
                 array(
                     'key'       => '_interval_type',
-                    'value'     => $old_status
-                )
-            )
+                    'value'     => $old_status,
+                ),
+            ),
+        );
+
+        /**
+         * Filter the fue_get_emails' filter when the order status chnaged and returned
+         * emails will be unqueued because **Remove on status change** option
+         * is enabled.
+         *
+         * @since 4.5.2
+         * @version 4.5.2
+         *
+         * @see https://github.com/woocommerce/woocommerce-follow-up-emails/issues/344
+         *
+         * @param array  $filter     Filter for `fue_get_emails`.
+         * @param int    $order_id   Order ID.
+         * @param string $old_status Old Status.
+         * @param string $new_status New Status.
+         */
+        $filter = apply_filters(
+            'fue_unqueue_emails_filter_on_order_status_change',
+            $filter,
+            $order_id,
+            $old_status,
+            $new_status
         );
 
         $emails     = fue_get_emails( 'any', '', $filter );
         $email_ids  = array();
 
         foreach ( $emails as $email ) {
-            if ( !empty( $email->meta['remove_email_status_change'] ) && $email->meta['remove_email_status_change'] == 'yes' ) {
+            if ( ! empty( $email->meta['remove_email_status_change'] ) && $email->meta['remove_email_status_change'] == 'yes' ) {
                 $email_ids[] = $email->id;
             }
         }
@@ -287,12 +315,12 @@ class FUE_Addon_Woocommerce_Scheduler {
         $queue = $scheduler->get_items( array(
             'is_sent'   => 0,
             'order_id'  => $order_id,
-            'email_id'  => $email_ids
+            'email_id'  => $email_ids,
         ) );
 
         foreach ( $queue as $item ) {
             $email_name = get_the_title( $item->email_id );
-            $order->add_order_note( sprintf( __('The email &quot;%s&quot; has been removed due to an order status change', 'follow_up_emails'), $email_name ) );
+            $order->add_order_note( sprintf( __( 'The email &quot;%s&quot; has been removed due to an order status change', 'follow_up_emails' ), $email_name ) );
             $scheduler->delete_item( $item->id );
         }
     }
@@ -307,9 +335,9 @@ class FUE_Addon_Woocommerce_Scheduler {
             'meta_query'    => array(
                 array(
                     'key'       => '_interval_type',
-                    'value'     => 'not_downloaded'
-                )
-            )
+                    'value'     => 'not_downloaded',
+                ),
+            ),
         );
 
         $emails = fue_get_emails( 'storewide', FUE_Email::STATUS_ACTIVE, $args );
@@ -332,13 +360,12 @@ class FUE_Addon_Woocommerce_Scheduler {
                     'product_id'    => $download->product_id,
                     'order_id'      => $order_id,
                     'meta'          => array(
-                        'download_id'   => $download->download_id
-                    )
+                        'download_id'   => $download->download_id,
+                    ),
                 );
                 FUE_Sending_Scheduler::queue_email( $insert, $email, true );
             }
-
-        }
+}
     }
 
     /**
@@ -359,13 +386,13 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
-                    'value'     => 'not_downloaded'
+                    'value'     => 'not_downloaded',
                 ),
                 array(
                     'key'       => '_product_id',
-                    'value'     => $product_id
+                    'value'     => $product_id,
                 )
-            )
+            ),
         );
 
         $emails = fue_get_emails( 'any', '', $args );
@@ -374,7 +401,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             $items = $scheduler->get_items(array(
                 'email_id'  => $email->id,
                 'order_id'  => $order_id,
-                'is_sent'   => 0
+                'is_sent'   => 0,
             ));
 
             foreach ( $items as $item ) {
@@ -399,13 +426,13 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
-                    'value'     => 'downloaded'
+                    'value'     => 'downloaded',
                 ),
                 array(
                     'key'       => '_product_id',
-                    'value'     => $product_id
+                    'value'     => $product_id,
                 )
-            )
+            ),
         );
 
         $emails = fue_get_emails( 'any', FUE_Email::STATUS_ACTIVE, $args );
@@ -421,8 +448,8 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'product_id'    => $product_id,
                 'order_id'      => $order_id,
                 'meta'          => array(
-                    'download_id'   => $download_id
-                )
+                    'download_id'   => $download_id,
+                ),
             );
             FUE_Sending_Scheduler::queue_email( $insert, $email, true );
         }
@@ -440,96 +467,110 @@ class FUE_Addon_Woocommerce_Scheduler {
     public static function downloadable_file_added( $grant_access, $download_id, $product_id, $order ) {
 
         if ( $grant_access ) {
-            $categories = wp_get_post_terms( $product_id, 'product_cat', array('fields' => 'ids') );
+            $categories = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) );
 
             $emails = fue_get_emails( 'storewide', FUE_Email::STATUS_ACTIVE, array(
                 'meta_query' => array(
                     array(
                         'key'       => '_interval_type',
-                        'value'     => 'downloadable_file_added'
-                    )
-                )
+                        'value'     => 'downloadable_file_added',
+                    ),
+                ),
             ) );
 
             foreach ( $emails as $email ) {
 
                 if ( $email->product_id > 0 && $email->product_id != $product_id ) {
                     continue;
-                } elseif ( $email->category_id > 0 && !in_array( $email->category_id, $categories ) ) {
+                } elseif ( $email->category_id > 0 && ! in_array( $email->category_id, $categories ) ) {
                     continue;
                 }
 
                 $insert = array(
-                    'user_id'       => $order->customer_user,
-                    'user_email'    => $order->billing_email,
+                    'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ),
+                    'user_email'    => WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ),
                     'product_id'    => $product_id,
-                    'order_id'      => $order->id,
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                     'meta'          => array(
-                        'download_id'   => $download_id
-                    )
+                        'download_id'   => $download_id,
+                    ),
                 );
                 FUE_Sending_Scheduler::queue_email( $insert, $email, true );
 
             }
-
-        }
+}
 
         return $grant_access;
     }
 
     /**
-     * Schedule emails after a coupon have been used
-     * @param int       $order_id
-     * @param int       $order_item_id
-     * @param string    $code
-     * @param float     $discount_amount
+     * Schedule emails after a coupon have been used.
+     *
+     * @since 1.0.0
+     * @version 4.5.2
+     *
+     * @param int           $item_id  Order item ID.
+     * @param WC_Order_Item $item     Order item object.
+     * @param int           $order_id Order ID.
      */
-    public function queue_coupon_emails( $order_id, $order_item_id, $code, $discount_amount ) {
+    public function queue_coupon_emails( $item_id, $item, $order_id ) {
+        if ( ! is_a( $item, 'WC_Order_Item_Coupon' ) ) {
+            return;
+        }
+
+        $code     = $item->get_code();
+        $discount = $item->get_discount();
+
         $queued = array();
         $coupon = new WC_Coupon( $code );
 
-        if ( !$coupon->exists ) {
+        if ( version_compare( WC_VERSION, '3.0', '>=' ) ) {
+            $exists = ( $coupon->get_id() > 0 );
+        } else {
+            $exists = $coupon->exists;
+        }
+
+        if ( ! $exists ) {
             return;
         }
 
         $args = array(
-            'meta_query'    => array(
-                'relation'  => 'AND',
+            'meta_query'   => array(
+                'relation' => 'AND',
                 array(
-                    'key'       => '_interval_type',
-                    'value'     => 'coupon'
+                    'key'   => '_interval_type',
+                    'value' => 'coupon',
                 )
-            )
+            ),
         );
 
         $emails = fue_get_emails( 'any', FUE_Email::STATUS_ACTIVE, $args );
         $order  = WC_FUE_Compatibility::wc_get_order( $order_id );
 
         foreach ( $emails as $email ) {
-            if ( !isset( $email->meta['coupon'] ) ) {
+            if ( ! isset( $email->meta['coupon'] ) ) {
                 continue;
             }
 
-            if ( !empty( $email->meta['coupon'] ) && $email->meta['coupon'] != $coupon->id ) {
+            if ( ! empty( $email->meta['coupon'] ) && $email->meta['coupon'] != $coupon->id ) {
                 continue;
             }
 
             $insert = array(
-                'user_email'    => $order->billing_email,
-                'order_id'      => $order_id,
-                'meta'          => array(
-                    'coupon_code'       => $code,
-                    'discount_amount'   => $discount_amount
-                )
+                'user_email' => WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ),
+                'order_id'   => $order_id,
+                'meta'       => array(
+                    'coupon_code'     => $code,
+                    'discount_amount' => $discount_amount,
+                ),
             );
 
-            if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email, true ) ) ) {
+            if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email, true ) ) ) {
                 $queued[] = $insert;
             }
-
         }
 
-        if ( !empty( $queued ) ) {
+        if ( ! empty( $queued ) ) {
             self::add_order_notes_to_queued_emails( $queued );
         }
     }
@@ -560,9 +601,9 @@ class FUE_Addon_Woocommerce_Scheduler {
         $always_cats    = array();
         $email_created  = false;
 
-	    $cart_session = FUE_Addon_Woocommerce_Cart::get_user_cart_session( $user_id );
+        $cart_session = FUE_Addon_Woocommerce_Cart::get_user_cart_session( $user_id );
 
-        if ( !$user_email ) {
+        if ( ! $user_email ) {
             $user_email = '';
         }
 
@@ -574,17 +615,21 @@ class FUE_Addon_Woocommerce_Scheduler {
             'product_id'    => 0,
             'email_id'      => 0,
             'user_id'       => $user_id,
-            'is_cart'       => 1
+            'is_cart'       => 1,
         );
 
-        if ( !empty( $user_email ) ) {
+        if ( ! empty( $user_email ) ) {
             $search_params['user_email'] = $user_email;
         }
 
+        // Processing cart emails that target specific product and/or product
+        // category. Emails without product set won't be processed in this loop.
+        //
+        // TODO: Move this out into its own method for readability.
         foreach ( $cart as $item_key => $item ) {
-            // look for cart emails matching the current cart item
+            // Look for cart emails matching the current cart item.
             $emails = $this->get_cart_emails( FUE_Email::STATUS_ACTIVE, array(
-                'product_id' => $item['product_id']
+                'product_id' => $item['product_id'],
             ) );
 
             if ( count( $emails ) == 0 ) {
@@ -601,7 +646,8 @@ class FUE_Addon_Woocommerce_Scheduler {
 
                 if ( count( $queue_check ) > 0 ) {
                     $email_created = true;
-                } elseif ( !in_array( $email->id .'_'. $item['product_id'], $cart_session ) ) {
+                } elseif ( ! in_array( $email->id . '_' . $item['product_id'], $cart_session ) ) {
+
                     if ( $this->is_product_or_category_excluded( $item['product_id'], null, null, $email ) ) {
                         continue;
                     }
@@ -610,20 +656,19 @@ class FUE_Addon_Woocommerce_Scheduler {
                         continue;
                     }
 
-                    $cart_session[] = $email->id .'_'. $item['product_id'];
+                    $cart_session[] = $email->id . '_' . $item['product_id'];
                     $cart_emails[]  = array(
                         'id'        => $email->id,
                         'item'      => $item['product_id'],
-                        'priority'  => $email->priority
+                        'priority'  => $email->priority,
                     );
                 }
-
             }
 
             // always_send product matches
             $emails = $this->get_cart_emails( FUE_Email::STATUS_ACTIVE, array(
                 'product_id' => $item['product_id'],
-                'always_send'   => 1
+                'always_send'   => 1,
             ) );
 
             foreach ( $emails as $email ) {
@@ -634,7 +679,7 @@ class FUE_Addon_Woocommerce_Scheduler {
 
                 if ( count( $check ) > 0 ) {
                     $email_created = true;
-                } elseif ( !in_array( $email->id .'_'. $item['product_id'], $cart_session ) ) {
+                } elseif ( ! in_array( $email->id . '_' . $item['product_id'], $cart_session ) ) {
                     if ( $this->is_product_or_category_excluded( $item['product_id'], null, null, $email ) ) {
                         continue;
                     }
@@ -643,21 +688,20 @@ class FUE_Addon_Woocommerce_Scheduler {
                         continue;
                     }
 
-                    $cart_session[] = $email->id .'_'. $item['product_id'];
+                    $cart_session[] = $email->id . '_' . $item['product_id'];
                     $always_prods[] = array(
                         'id'    => $email->id,
-                        'item'  => $item['product_id']
+                        'item'  => $item['product_id'],
                     );
                 }
-
             }
 
             // always_send category matches
-            $cat_ids  = wp_get_object_terms( $item['product_id'], 'product_cat', array('fields' => 'ids') );
+            $cat_ids  = wp_get_object_terms( $item['product_id'], 'product_cat', array( 'fields' => 'ids' ) );
 
             $emails = $this->get_cart_emails( FUE_Email::STATUS_ACTIVE, array(
                 'always_send'   => 1,
-                'category_id'   => $cat_ids
+                'category_id'   => $cat_ids,
             ) );
 
             foreach ( $emails as $email ) {
@@ -668,7 +712,7 @@ class FUE_Addon_Woocommerce_Scheduler {
 
                 if ( count( $check ) > 0 ) {
                     $email_created = true;
-                } elseif ( !in_array($email->id .'_'. $item['product_id'], $cart_session) ) {
+                } elseif ( ! in_array( $email->id . '_' . $item['product_id'], $cart_session ) ) {
                     if ( $this->is_product_or_category_excluded( $item['product_id'], null, null, $email ) ) {
                         continue;
                     }
@@ -677,50 +721,51 @@ class FUE_Addon_Woocommerce_Scheduler {
                         continue;
                     }
 
-                    $cart_session[] = $email->id .'_'. $item['product_id'];
+                    $cart_session[] = $email->id . '_' . $item['product_id'];
                     $always_cats[] = array(
                         'id'    => $email->id,
-                        'item'  => $item['product_id']
+                        'item'  => $item['product_id'],
                     );
                 }
             }
         }
 
-        if ( !empty($always_prods) ) {
+        if ( ! empty( $always_prods ) ) {
             foreach ( $always_prods as $row ) {
                 $email = new FUE_Email( $row['id'] );
 
                 $insert = array(
-                    'product_id'=> $row['item'],
+                    'product_id' => $row['item'],
                     'is_cart'   => 1,
                     'user_id'   => $user_id,
-                    'user_email'=> $user_email
+                    'user_email' => $user_email,
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $email_created = true;
                 }
             }
         }
 
-        if ( !empty($always_cats) ) {
+        if ( ! empty( $always_cats ) ) {
             foreach ( $always_cats as $row ) {
                 $email = new FUE_Email( $row['id'] );
 
                 $insert = array(
-                    'product_id'=> $row['item'],
+                    'product_id' => $row['item'],
                     'is_cart'   => 1,
                     'user_id'   => $user_id,
-                    'user_email'=> $user_email
+                    'user_email' => $user_email,
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $email_created = true;
                 }
-
             }
         }
 
-        // product matches
-        if ( !empty($cart_emails) ) {
+        // Product matches.
+        if ( ! empty( $cart_emails ) ) {
             // find the one with the highest priority
             $top        = false;
             $highest    = 1000;
@@ -735,29 +780,36 @@ class FUE_Addon_Woocommerce_Scheduler {
                 $email = new FUE_Email( $top['id'] );
 
                 $insert = array(
-                    'product_id'=> $top['item'],
+                    'product_id' => $top['item'],
                     'is_cart'   => 1,
                     'user_id'   => $user_id,
-                    'user_email'=> $user_email
+                    'user_email' => $user_email,
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $email_created = true;
                 }
             }
         }
 
-        // find a category match
-        if ( !$email_created ) {
+        // Find a category match.
+        if ( ! $email_created ) {
             $emails = array();
             foreach ( $cart as $item_key => $item ) {
-                $cat_ids    = wp_get_object_terms( $item['product_id'], 'product_cat', array('fields' => 'ids') );
-
+                $cat_ids = wp_get_object_terms( $item['product_id'], 'product_cat', array( 'fields' => 'ids' ) );
                 if ( empty( $cat_ids ) ) {
                     continue;
                 }
 
+                if ( apply_filters( 'fue_storewide_category_trigger_parent_emails', true ) ) {
+                    foreach ( $cat_ids as $id ) {
+                        $parent_categories = get_ancestors( $id, 'product_cat' );
+                        $cat_ids = array_merge( $cat_ids, $parent_categories );
+                    }
+                }
+
                 $rows = $this->get_cart_emails( FUE_Email::STATUS_ACTIVE, array(
-                    'category_id' => $cat_ids
+                    'category_id' => $cat_ids,
                 ) );
 
                 foreach ( $rows as $email ) {
@@ -766,7 +818,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                     $args['email_id']   = $email->id;
                     $check = Follow_Up_Emails::instance()->scheduler->get_items( $args );
 
-                    if ( count( $check ) == 0 && !in_array($email->id .'_'. $item['product_id'], $cart_session) ) {
+                    if ( count( $check ) == 0 && ! in_array( $email->id . '_' . $item['product_id'], $cart_session ) ) {
                         if ( $this->is_product_or_category_excluded( 0, $cat_ids, null, $email ) ) {
                             continue;
                         }
@@ -775,13 +827,13 @@ class FUE_Addon_Woocommerce_Scheduler {
                             continue;
                         }
 
-                        $cart_session[] = $email->id .'_'. $item['product_id'];
-                        $emails[] = array('id' => $email->id, 'item' => $item['product_id'], 'priority' => $email->priority);
+                        $cart_session[] = $email->id . '_' . $item['product_id'];
+                        $emails[] = array( 'id' => $email->id, 'item' => $item['product_id'], 'priority' => $email->priority );
                     }
                 }
             }
 
-            if ( !empty($emails) ) {
+            if ( ! empty( $emails ) ) {
                 // find the one with the highest priority
                 $top        = false;
                 $highest    = 1000;
@@ -796,31 +848,32 @@ class FUE_Addon_Woocommerce_Scheduler {
                     $email = new FUE_Email( $top['id'] );
 
                     $insert = array(
-                        'product_id'=> $top['item'],
+                        'product_id' => $top['item'],
                         'is_cart'   => 1,
                         'user_id'   => $user_id,
-                        'user_email'=> $user_email
+                        'user_email' => $user_email,
                     );
-                    if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+
+                    if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                         $email_created = true;
                     }
                 }
             }
         }
 
-        if ( !$email_created ) {
-            // find a storewide mailer
+        if ( ! $email_created ) {
+            // Find a storewide mailer.
             $emails = $this->get_cart_emails( FUE_Email::STATUS_ACTIVE, array(
                 'product_id'    => 0,
-                'category_id'   => 0
+                'category_id'   => 0,
             ) );
 
             foreach ( $emails as $email ) {
-                $args = $search_params;
-                $args['email_id']   = $email->id;
-                $check = Follow_Up_Emails::instance()->scheduler->get_items( $args );
+                $args             = $search_params;
+                $args['email_id'] = $email->id;
+                $check            = Follow_Up_Emails::instance()->scheduler->get_items( $args );
 
-                if ( count( $check ) > 0 || in_array($email->id .'_0', $cart_session) ) {
+                if ( count( $check ) > 0 || in_array( $email->id . '_0', $cart_session ) ) {
                     continue;
                 }
 
@@ -829,32 +882,33 @@ class FUE_Addon_Woocommerce_Scheduler {
                         continue;
                     }
                 } else {
-	                // if no $added_product is specified, make sure there are no excluded products in the cart
-	                foreach ( $cart as $item ) {
-		                if ( $this->is_product_or_category_excluded( $item['product_id'], null, null, $email ) ) {
-			                continue 2;
-		                }
-	                }
+                    // If no $added_product is specified, make sure there are no
+                    // excluded products in the cart.
+                    foreach ( $cart as $item ) {
+                        if ( $this->is_product_or_category_excluded( $item['product_id'], null, null, $email ) ) {
+                            continue 2;
+                        }
+                    }
                 }
 
                 if ( $this->exclude_customer_based_on_purchase_history( $customer, $email ) ) {
                     continue;
                 }
 
-                $cart_session[] = $email->id .'_0';
+                $cart_session[] = $email->id . '_0';
 
                 $insert = array(
-                    'is_cart'       => 1,
-                    'product_id'    => ($added_product) ? $added_product : 0,
-                    'user_id'       => $user_id,
-                    'user_email'    =>$user_email
+                    'is_cart'    => 1,
+                    'product_id' => ( $added_product ) ? $added_product : 0,
+                    'user_id'    => $user_id,
+                    'user_email' => $user_email,
                 );
 
                 FUE_Sending_Scheduler::queue_email( $insert, $email );
             }
         }
 
-	    FUE_Addon_Woocommerce_Cart::set_user_cart_session( $user_id, $cart_session );
+        FUE_Addon_Woocommerce_Cart::set_user_cart_session( $user_id, $cart_session );
     }
 
     /**
@@ -866,7 +920,7 @@ class FUE_Addon_Woocommerce_Scheduler {
     protected function queue_product_emails( $emails, $order ) {
         $queued     = array();
 
-        if ( !empty( $emails ) ) {
+        if ( ! empty( $emails ) ) {
             $top_email = reset( $emails );
 
             if ( $top_email ) {
@@ -880,11 +934,11 @@ class FUE_Addon_Woocommerce_Scheduler {
                     'send_on'       => $top_email->get_send_timestamp(),
                     'email_id'      => $top_email->id,
                     'product_id'    => $top_email->product_id,
-                    'order_id'      => $order->id,
-                    'meta'          => $meta
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
+                    'meta'          => $meta,
                 );
 
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $top_email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $top_email ) ) ) {
                     $queued[] = $insert;
                 }
 
@@ -905,16 +959,16 @@ class FUE_Addon_Woocommerce_Scheduler {
                             'send_on'       => $product_email->get_send_timestamp(),
                             'email_id'      => $product_email->id,
                             'product_id'    => $product_email->product_id,
-                            'order_id'      => $order->id,
-                            'meta'          => $meta
+                            'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
+                            'meta'          => $meta,
                         );
 
-                        if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $product_email ) ) ) {
+                        if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $product_email ) ) ) {
                             $queued[] = $insert;
                         }
                     } else {
                         // if schedule is within 60 minutes, add to queue
-                        $interval   = (int)$product_email->interval;
+                        $interval   = (int) $product_email->interval;
 
                         if ( $product_email->interval_type == 'date' ) {
                             continue;
@@ -924,17 +978,17 @@ class FUE_Addon_Woocommerce_Scheduler {
                             if ( $add > 3600 ) continue;
 
                             // less than 60 minutes, add to queue
-                            $send_on = current_time('timestamp') + $add;
+                            $send_on = current_time( 'timestamp' ) + $add;
                         }
 
                         $insert = array(
                             'send_on'       => $send_on,
                             'email_id'      => $product_email->id,
                             'product_id'    => $product_email->product_id,
-                            'order_id'      => $order->id
+                            'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                         );
 
-                        if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $product_email ) ) ) {
+                        if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $product_email ) ) ) {
                             $queued[] = $insert;
                         }
                     }
@@ -958,15 +1012,15 @@ class FUE_Addon_Woocommerce_Scheduler {
         foreach ( $emails as $email ) {
             $skip = apply_filters( 'fue_create_order_always_send', false, $email, $order );
 
-            if (! $skip ) {
+            if ( ! $skip ) {
 
                 $insert = array(
                     'send_on'       => $email->get_send_timestamp(),
                     'email_id'      => $email->id,
                     'product_id'    => $email->product_id,
-                    'order_id'      => $order->id
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
                 }
             }
@@ -985,7 +1039,7 @@ class FUE_Addon_Woocommerce_Scheduler {
     protected function queue_category_emails( $emails, $order ) {
         $queued     = array();
 
-        if ( !empty( $emails ) ) {
+        if ( ! empty( $emails ) ) {
             $top_email = reset( $emails );
 
             if ( $top_email !== false ) {
@@ -994,10 +1048,10 @@ class FUE_Addon_Woocommerce_Scheduler {
                     'send_on'       => $top_email->get_send_timestamp(),
                     'email_id'      => $top_email->id,
                     'product_id'    => $top_email->product_id,
-                    'order_id'      => $order->id
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                 );
 
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $top_email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $top_email ) ) ) {
                     $queued[] = $insert;
                 }
 
@@ -1012,39 +1066,38 @@ class FUE_Addon_Woocommerce_Scheduler {
                             'send_on'       => $cat_email->get_send_timestamp(),
                             'email_id'      => $cat_email->id,
                             'product_id'    => $cat_email->product_id,
-                            'order_id'      => $order->id
+                            'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                         );
 
-                        if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $cat_email ) ) ) {
+                        if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $cat_email ) ) ) {
                             $queued[] = $insert;
                         }
-
-                    } else {
+} else {
                         // if schedule is within 60 minutes, add to queue
-                        $interval   = (int)$cat_email->interval;
+                        $interval   = (int) $cat_email->interval;
 
                         if ( $cat_email->interval_type == 'date' ) {
                             continue;
-                        }
+											}
 
                         $add = FUE_Sending_Scheduler::get_time_to_add( $interval, $cat_email->interval_duration );
 
                         if ( $add > 3600 ) {
                             continue;
-                        }
+											}
 
                         // less than 60 minutes, add to queue
-                        $send_on = current_time('timestamp') + $add;
+                        $send_on = current_time( 'timestamp' ) + $add;
 
                         $insert = array(
                             'send_on'       => $send_on,
                             'email_id'      => $cat_email->id,
                             'product_id'    => $cat_email->product_id,
-                            'order_id'      => $order->id
+                            'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                         );
-                        if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $cat_email ) ) ) {
+                        if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $cat_email ) ) ) {
                             $queued[] = $insert;
-                        }
+											}
                     }
                 }
             }
@@ -1063,7 +1116,7 @@ class FUE_Addon_Woocommerce_Scheduler {
         $queued = array();
 
         foreach ( $emails as $email ) {
-            $interval   = (int)$email->interval;
+            $interval   = (int) $email->interval;
 
             $skip = apply_filters( 'fue_create_order_always_send', false, $email, $order );
 
@@ -1072,10 +1125,10 @@ class FUE_Addon_Woocommerce_Scheduler {
                 $insert = array(
                     'send_on'       => $email->get_send_timestamp(),
                     'email_id'      => $email->id,
-                    'order_id'      => $order->id,
-                    'product_id'    => $email->product_id
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
+                    'product_id'    => $email->product_id,
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
                 }
             }
@@ -1098,13 +1151,12 @@ class FUE_Addon_Woocommerce_Scheduler {
             $insert = array(
                 'send_on'       => $email->get_send_timestamp(),
                 'email_id'      => $email->id,
-                'order_id'      => $order->id
+                'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
             );
-            if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+            if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                 $queued[] = $insert;
             }
-
-        }
+}
 
         return $queued;
 
@@ -1123,14 +1175,14 @@ class FUE_Addon_Woocommerce_Scheduler {
         if ( $user_id > 0 ) {
             $fue_customer = fue_get_customer( $user_id );
 
-            if ( !$fue_customer ) {
+            if ( ! $fue_customer ) {
                 FUE_Addon_Woocommerce::record_order( $order );
                 $fue_customer = fue_get_customer( $user_id );
             }
 
             $fue_customer_id    = $fue_customer->id;
         } else {
-            $fue_customer       = fue_get_customer( 0, $order->billing_email );
+            $fue_customer       = fue_get_customer( 0, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
             $fue_customer_id    = $fue_customer->id;
         }
 
@@ -1155,7 +1207,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                 }
 
                 // category match
-                $cat_ids = wp_get_post_terms( $product_id['product_id'], 'product_cat', array('fields' => 'ids') );
+                $cat_ids = wp_get_post_terms( $product_id['product_id'], 'product_cat', array( 'fields' => 'ids' ) );
 
                 if ( $cat_ids ) {
                     foreach ( $cat_ids as $cat_id ) {
@@ -1170,11 +1222,9 @@ class FUE_Addon_Woocommerce_Scheduler {
                             // purchased from this category more than once
                             $queued = array_merge( $queued, $this->queue_purchase_above_one_emails( 0, $cat_id, $order ) );
                         }
-
-                    }
+}
                 }
                 // end category match
-
             }
 
             if ( count( $queued ) == 0 ) {
@@ -1188,34 +1238,33 @@ class FUE_Addon_Woocommerce_Scheduler {
                     $queued = array_merge( $queued, $this->queue_purchase_above_one_emails( 0, 0, $order ) );
                 }
             }
-
-        }
+}
 
         // look for customer emails
         // check for order_total
-        $triggers = array('order_total_above', 'order_total_below', 'total_orders', 'total_purchases' );
+        $triggers = array( 'order_total_above', 'order_total_below', 'total_orders', 'total_purchases' );
         $emails = fue_get_emails( 'customer', FUE_Email::STATUS_ACTIVE, array(
             'meta_query' => array(
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
                     'value'     => $triggers,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 )
-            )
+            ),
         ) );
 
         foreach ( $emails as $email ) {
-            if ( !$this->customer_email_matches_order( $email, $order ) ) {
+            if ( ! $this->customer_email_matches_order( $email, $order ) ) {
                 continue;
             }
 
             $insert = array(
                 'send_on'       => $email->get_send_timestamp(),
                 'email_id'      => $email->id,
-                'order_id'      => $order->id
+                'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
             );
-            if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+            if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                 $queued[] = $insert;
             }
         }
@@ -1242,32 +1291,30 @@ class FUE_Addon_Woocommerce_Scheduler {
         if ( $email->trigger == 'order_total_above' ) {
 
             if (
-                !isset($meta['order_total_above']) ||
-                $order->order_total < $meta['order_total_above']
+                ! isset( $meta['order_total_above'] ) ||
+                WC_FUE_Compatibility::get_order_prop( $order, 'order_total' ) < $meta['order_total_above']
             ) {
                 return false;
             }
-
-        } elseif ( $email->trigger == 'order_total_below' ) {
+} elseif ( $email->trigger == 'order_total_below' ) {
 
             if (
-                !isset($meta['order_total_below']) ||
-                $order->order_total > $meta['order_total_below']
+                ! isset( $meta['order_total_below'] ) ||
+                WC_FUE_Compatibility::get_order_prop( $order, 'order_total' ) > $meta['order_total_below']
             ) {
                 return false;
-            }
-
-        } elseif ( $email->trigger == 'total_orders' ) {
+					}
+} elseif ( $email->trigger == 'total_orders' ) {
             $mode           = $meta['total_orders_mode'];
             $requirement    = $meta['total_orders'];
 
-            if ( isset($meta['one_time']) && $meta['one_time'] == 'yes' ) {
+            if ( isset( $meta['one_time'] ) && $meta['one_time'] == 'yes' ) {
                 // get the correct email address
                 if ( WC_FUE_Compatibility::get_order_user_id( $order ) > 0 ) {
                     $user = new WP_User( WC_FUE_Compatibility::get_order_user_id( $order ) );
                     $user_email = $user->user_email;
                 } else {
-                    $user_email = $order->billing_email;
+                    $user_email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
                 }
 
                 $search = $wpdb->get_var( $wpdb->prepare(
@@ -1282,34 +1329,34 @@ class FUE_Addon_Woocommerce_Scheduler {
                 if ( $search > 0 ) {
                     return false;
                 }
-            }
+					}
 
             // get user's total number of orders
-            $customer   = fue_get_customer( WC_FUE_Compatibility::get_order_user_id( $order ), $order->billing_email );
+            $customer   = fue_get_customer( WC_FUE_Compatibility::get_order_user_id( $order ), WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
             $num_orders = 0;
 
             if ( $customer ) {
                 $num_orders = $customer->total_orders;
-            }
+					}
 
             if ( $mode == 'less than' && $num_orders >= $requirement ) {
                 return false;
-            } elseif ( $mode == 'equal to' && $num_orders != $requirement ) {
+					} elseif ( $mode == 'equal to' && $num_orders != $requirement ) {
                 return false;
-            } elseif ( $mode == 'greater than' && $num_orders <= $requirement ) {
-                return false;
-            }
+					} elseif ( $mode == 'greater than' && $num_orders <= $requirement ) {
+				return false;
+					}
         } elseif ( $email->trigger == 'total_purchases' ) {
             $mode           = $meta['total_purchases_mode'];
             $requirement    = $meta['total_purchases'];
 
-            if ( isset($meta['one_time']) && $meta['one_time'] == 'yes' ) {
+            if ( isset( $meta['one_time'] ) && $meta['one_time'] == 'yes' ) {
                 // get the correct email address
                 if ( WC_FUE_Compatibility::get_order_user_id( $order ) > 0 ) {
                     $user = new WP_User( WC_FUE_Compatibility::get_order_user_id( $order ) );
                     $user_email = $user->user_email;
                 } else {
-                    $user_email = $order->billing_email;
+                    $user_email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
                 }
 
                 $search = $wpdb->get_var( $wpdb->prepare(
@@ -1328,9 +1375,9 @@ class FUE_Addon_Woocommerce_Scheduler {
 
             // get user's total amount of purchases
             if ( WC_FUE_Compatibility::get_order_user_id( $order ) > 0 ) {
-                $purchases = $wpdb->get_var( $wpdb->prepare("SELECT total_purchase_price FROM {$wpdb->prefix}followup_customers WHERE user_id = %d", WC_FUE_Compatibility::get_order_user_id( $order ) ) );
+                $purchases = $wpdb->get_var( $wpdb->prepare( "SELECT total_purchase_price FROM {$wpdb->prefix}followup_customers WHERE user_id = %d", WC_FUE_Compatibility::get_order_user_id( $order ) ) );
             } else {
-                $purchases = $wpdb->get_var( $wpdb->prepare("SELECT total_purchase_price FROM {$wpdb->prefix}followup_customers WHERE email_address = %s", $order->billing_email) );
+                $purchases = $wpdb->get_var( $wpdb->prepare( "SELECT total_purchase_price FROM {$wpdb->prefix}followup_customers WHERE email_address = %s", WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) ) );
             }
 
             if ( $mode == 'less than' && $purchases >= $requirement ) {
@@ -1346,7 +1393,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                 $wp_user = new WP_User( WC_FUE_Compatibility::get_order_user_id( $order ) );
                 $user_email = $wp_user->user_email;
             } else {
-                $user_email = $order->billing_email;
+                $user_email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
             }
 
             $num = $wpdb->get_var( $wpdb->prepare(
@@ -1385,19 +1432,19 @@ class FUE_Addon_Woocommerce_Scheduler {
                     'key'   => '_interval_type',
                     'value' => 'first_purchase',
                 )
-            )
+            ),
         );
 
         if ( $category_id == 0 ) {
             $args['meta_query'][] = array(
                 'key'   => '_category_id',
                 'value' => array( '', '0' ),
-                'compare' => 'IN'
+                'compare' => 'IN',
             );
         } else {
             $args['meta_query'][] = array(
                 'key'   => '_category_id',
-                'value' => $category_id
+                'value' => $category_id,
             );
         }
 
@@ -1405,12 +1452,12 @@ class FUE_Addon_Woocommerce_Scheduler {
             $args['meta_query'][] = array(
                 'key'   => '_product_id',
                 'value' => array( '', '0' ),
-                'compare' => 'IN'
+                'compare' => 'IN',
             );
         } else {
             $args['meta_query'][] = array(
                 'key'   => '_product_id',
-                'value' => $product_id
+                'value' => $product_id,
             );
         }
 
@@ -1419,8 +1466,8 @@ class FUE_Addon_Woocommerce_Scheduler {
         if ( $emails ) {
             foreach ( $emails as $email ) {
                 $queue_items = Follow_Up_Emails::instance()->scheduler->get_items( array(
-                    'order_id'  => $order->id,
-                    'email_id'  => $email->id
+                    'order_id'  => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
+                    'email_id'  => $email->id,
                 ) );
 
                 // only queue reminders once per order and email
@@ -1432,7 +1479,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                 $insert = array(
                     'send_on'       => $email->get_send_timestamp(),
                     'email_id'      => $email->id,
-                    'order_id'      => $order->id
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                 );
 
                 if ( $product_id ) {
@@ -1447,30 +1494,29 @@ class FUE_Addon_Woocommerce_Scheduler {
                     $categories = $this->get_category_ids_from_order( $order );
                 }
 
-                if ( !empty( $categories ) ) {
+                if ( ! empty( $categories ) ) {
                     // excluded categories
-                    $meta = maybe_unserialize($email->meta);
-                    $excludes = (isset($meta['excluded_categories'])) ? $meta['excluded_categories'] : array();
+                    $meta = maybe_unserialize( $email->meta );
+                    $excludes = (isset( $meta['excluded_categories'] )) ? $meta['excluded_categories'] : array();
 
-                    if ( !is_array( $excludes ) ) {
+                    if ( ! is_array( $excludes ) ) {
                         $excludes = array();
                     }
 
-                    if ( count($excludes) > 0 ) {
+                    if ( count( $excludes ) > 0 ) {
                         foreach ( $categories as $category ) {
                             if ( in_array( $category, $excludes ) ) {
                                 continue 2;
                             }
                         }
                     }
-
-                }
+}
 
                 if ( $this->exclude_customer_based_on_purchase_history( fue_get_customer_from_order( $order ), $email ) ) {
                     continue;
                 }
 
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
                 }
             }
@@ -1495,20 +1541,20 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
-                    'value'     => array('product_purchase_above_one', 'purchase_above_one'),
-                    'compare'   => 'IN'
+                    'value'     => array( 'product_purchase_above_one', 'purchase_above_one' ),
+                    'compare'   => 'IN',
                 )
-            )
+            ),
         );
 
         $args['meta_query'][] = array(
             'key'   => '_category_id',
-            'value' => $category_id
+            'value' => $category_id,
         );
 
         $args['meta_query'][] = array(
             'key'   => '_product_id',
-            'value' => $product_id
+            'value' => $product_id,
         );
 
         $emails = fue_get_emails( 'any', FUE_Email::STATUS_ACTIVE, $args );
@@ -1516,8 +1562,8 @@ class FUE_Addon_Woocommerce_Scheduler {
         if ( $emails ) {
             foreach ( $emails as $email ) {
                 $queue_items = Follow_Up_Emails::instance()->scheduler->get_items( array(
-                    'order_id'  => $order->id,
-                    'email_id'  => $email->id
+                    'order_id'  => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
+                    'email_id'  => $email->id,
                 ) );
 
                 // only queue reminders once per order and email
@@ -1528,7 +1574,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                 $insert = array(
                     'send_on'       => $email->get_send_timestamp(),
                     'email_id'      => $email->id,
-                    'order_id'      => $order->id
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                 );
 
                 if ( $product_id ) {
@@ -1543,30 +1589,29 @@ class FUE_Addon_Woocommerce_Scheduler {
                     $categories = $this->get_category_ids_from_order( $order );
                 }
 
-                if ( !empty( $categories ) ) {
+                if ( ! empty( $categories ) ) {
                     // excluded categories
-                    $meta = maybe_unserialize($email->meta);
-                    $excludes = (isset($meta['excluded_categories'])) ? $meta['excluded_categories'] : array();
+                    $meta = maybe_unserialize( $email->meta );
+                    $excludes = (isset( $meta['excluded_categories'] )) ? $meta['excluded_categories'] : array();
 
-                    if ( !is_array( $excludes ) ) {
+                    if ( ! is_array( $excludes ) ) {
                         $excludes = array();
                     }
 
-                    if ( count($excludes) > 0 ) {
+                    if ( count( $excludes ) > 0 ) {
                         foreach ( $categories as $category ) {
                             if ( in_array( $category, $excludes ) ) {
                                 continue 2;
                             }
                         }
                     }
-
-                }
+}
 
                 if ( $this->exclude_customer_based_on_purchase_history( fue_get_customer_from_order( $order ), $email ) ) {
                     continue;
                 }
 
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
                 }
             }
@@ -1600,31 +1645,31 @@ class FUE_Addon_Woocommerce_Scheduler {
         $variation_ids  = array_unique( $variation_ids );
 
         // product match
-        $always_send_value = ( $always_send ) ? array(1) : array(0,'');
+        $always_send_value = ( $always_send ) ? array( 1 ) : array( 0, '' );
         $args = array(
             'meta_query'    => array(
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
                     'value'     => $triggers,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 ),
                 array(
                     'key'       => '_product_id',
                     'value'     => 0,
-                    'compare'   => '!='
+                    'compare'   => '!=',
                 ),
                 array(
                     'key'       => '_product_id',
                     'value'     => array_merge( $product_ids, $variation_ids ),
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 ),
                 array(
                     'key'       => '_always_send',
                     'value'     => $always_send_value,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 )
-            )
+            ),
         );
 
         $product_emails = fue_get_emails( 'storewide', FUE_Email::STATUS_ACTIVE, $args );
@@ -1633,8 +1678,8 @@ class FUE_Addon_Woocommerce_Scheduler {
         $matched_product_emails = array();
         foreach ( $product_emails as $email ) {
 
-            $meta               = maybe_unserialize($email->meta);
-            $include_variations = isset($meta['include_variations']) && $meta['include_variations'] == 'yes';
+            $meta               = maybe_unserialize( $email->meta );
+            $include_variations = isset( $meta['include_variations'] ) && $meta['include_variations'] == 'yes';
 
             if ( $this->exclude_customer_based_on_purchase_history( fue_get_customer_from_order( $order ), $email ) ) {
                 continue;
@@ -1646,8 +1691,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             } elseif ( $include_variations && in_array( $email->product_id, $variation_ids ) ) {
                 $matched_product_emails[] = $email;
             }
-
-        }
+}
 
         return $matched_product_emails;
     }
@@ -1668,31 +1712,31 @@ class FUE_Addon_Woocommerce_Scheduler {
             return $matching_emails;
         }
 
-        $always_send_value = ( $always_send ) ? array(1) : array(0,'');
+        $always_send_value = ( $always_send ) ? array( 1 ) : array( 0, '' );
         $args = array(
             'meta_query'    => array(
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
                     'value'     => $triggers,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 ),
                 array(
                     'key'       => '_category_id',
                     'value'     => 0,
-                    'compare'   => '!='
+                    'compare'   => '!=',
                 ),
                 array(
                     'key'       => '_category_id',
                     'value'     => $category_ids,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 ),
                 array(
                     'key'       => '_always_send',
                     'value'     => $always_send_value,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 )
-            )
+            ),
         );
 
         $category_emails = fue_get_emails( 'storewide', FUE_Email::STATUS_ACTIVE, $args );
@@ -1724,12 +1768,12 @@ class FUE_Addon_Woocommerce_Scheduler {
 
         // If the order is a renewal order, switch to the parent order
         if ( $this->is_subscription_renewal_order( $order ) ) {
-            $order = WC_FUE_Compatibility::wc_get_order( $order->post->post_parent );
+            $order = WC_FUE_Compatibility::wc_get_order( WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_parent );
         }
 
         if ( $order && ( $order_status == 'processing' || $order_status == 'completed' ) ) {
             $order_user_id = WC_FUE_Compatibility::get_order_user_id( $order );
-            $recipient = ($order_user_id > 0) ? $order_user_id : $order->billing_email;
+            $recipient = ($order_user_id > 0) ? $order_user_id : WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
 
             // if there are any "last purchased" emails, automatically add this order to the queue
             $emails = fue_get_emails( 'customer', FUE_Email::STATUS_ACTIVE, array(
@@ -1737,15 +1781,15 @@ class FUE_Addon_Woocommerce_Scheduler {
                     array(
                         'key'   => '_interval_type',
                         'value' => 'after_last_purchase',
-                    )
-                )
+                    ),
+                ),
             ) );
 
             foreach ( $emails as $email ) {
                 // only schedule 'last_purchase' emails once per order
                 $order_emails = $scheduler->get_items( array(
                     'email_id'  => $email->id,
-                    'order_id'  => $order->id
+                    'order_id'  => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                 ) );
 
                 if ( count( $order_emails ) > 0 ) {
@@ -1755,7 +1799,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                 // look for unsent emails in the queue with the same email ID
                 $queued_emails = $scheduler->get_items( array(
                     'is_sent'   => 0,
-                    'email_id'  => $email->id
+                    'email_id'  => $email->id,
                 ) );
 
                 // loop through the queue and delete unsent entries with identical customers
@@ -1772,7 +1816,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                         // try to match the email address
                         $email_address = get_post_meta( $queue->order_id, '_billing_email', true );
 
-                        if ( $email_address == $order->billing_email ) {
+                        if ( $email_address == WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) ) {
                             $scheduler->delete_item( $queue->id );
                         }
                     }
@@ -1783,9 +1827,9 @@ class FUE_Addon_Woocommerce_Scheduler {
                     'send_on'       => $email->get_send_timestamp(),
                     'email_id'      => $email->id,
                     'product_id'    => 0,
-                    'order_id'      => $order->id
+                    'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
                 }
             }
@@ -1800,7 +1844,7 @@ class FUE_Addon_Woocommerce_Scheduler {
      * @return bool
      */
     protected function is_subscription_renewal_order( $order ) {
-        if ( $order->post->post_parent > 0 && $order->original_order == $order->post->post_parent ) {
+        if ( WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_parent > 0 && $order->original_order == WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_parent ) {
             return true;
         }
 
@@ -1826,29 +1870,29 @@ class FUE_Addon_Woocommerce_Scheduler {
                 array(
                     'key'       => '_interval_type',
                     'value'     => $triggers,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 ),
                 array(
                     'key'       => '_product_id',
-                    'value'     => 0
+                    'value'     => 0,
                 ),
                 array(
                     'key'       => '_category_id',
-                    'value'     => 0
+                    'value'     => 0,
                 )
-            )
+            ),
         ) );
 
         foreach ( $emails as $email ) {
             // excluded categories
-            $meta = maybe_unserialize($email->meta);
-            $excludes = (isset($meta['excluded_categories'])) ? $meta['excluded_categories'] : array();
+            $meta = maybe_unserialize( $email->meta );
+            $excludes = (isset( $meta['excluded_categories'] )) ? $meta['excluded_categories'] : array();
 
-            if ( !is_array( $excludes ) ) {
+            if ( ! is_array( $excludes ) ) {
                 $excludes = array();
             }
 
-            if ( count($excludes) > 0 ) {
+            if ( count( $excludes ) > 0 ) {
                 foreach ( $category_ids as $cat_id ) {
                     if ( in_array( $cat_id, $excludes ) )
                         continue 2;
@@ -1896,19 +1940,19 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'relation'  => 'AND',
                 array(
                     'key'       => '_interval_type',
-                    'value'     => 'date'
+                    'value'     => 'date',
                 ),
                 array(
                     'key'       => '_product_id',
                     'value'     => 0,
-                    'compare'   => '!='
+                    'compare'   => '!=',
                 ),
                 array(
                     'key'       => '_product_id',
                     'value'     => array_merge( $product_ids, $variation_ids ),
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 )
-            )
+            ),
         );
 
         $emails = fue_get_emails( 'any', FUE_Email::STATUS_ACTIVE, $args );
@@ -1923,13 +1967,12 @@ class FUE_Addon_Woocommerce_Scheduler {
                 'send_on'       => $email->get_send_timestamp(),
                 'email_id'      => $email->id,
                 'product_id'    => $email->product_id,
-                'order_id'      => $order->id
+                'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
             );
-            if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+            if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                 $queued[] = $insert;
             }
-
-        }
+}
 
         return $queued;
     }
@@ -1963,23 +2006,23 @@ class FUE_Addon_Woocommerce_Scheduler {
                 array(
                     'key'       => '_interval_type',
                     'value'     => $triggers,
-                    'compare'   => 'IN'
+                    'compare'   => 'IN',
                 )
-            )
+            ),
         );
 
         $emails = fue_get_emails( 'reminder', FUE_Email::STATUS_ACTIVE, $args );
 
         foreach ( $emails as $email ) {
 
-            if ( $email->product_id > 0 && !in_array( $email->product_id, $product_ids ) ) {
+            if ( $email->product_id > 0 && ! in_array( $email->product_id, $product_ids ) ) {
                 // Product ID does not match
                 continue;
             }
 
             $queue_items = Follow_Up_Emails::instance()->scheduler->get_items( array(
-                'order_id'  => $order->id,
-                'email_id'  => $email->id
+                'order_id'  => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
+                'email_id'  => $email->id,
             ) );
 
             // only queue reminders once per order and email
@@ -1995,28 +2038,26 @@ class FUE_Addon_Woocommerce_Scheduler {
                     $variation_id   = $item['variation_id'];
                     $item_id        = $item['product_id'];
 
-                    if ($email->product_id == 0 || ( $item_id == $email->product_id || $variation_id == $email->product_id ) ) {
+                    if ( $email->product_id == 0 || ( $item_id == $email->product_id || $variation_id == $email->product_id ) ) {
                         $qty = $item['qty'];
 
-                        if ( isset($item['item_meta']) && !empty($item['item_meta']) ) {
+                        if ( isset( $item['item_meta'] ) && ! empty( $item['item_meta'] ) ) {
                             foreach ( $item['item_meta'] as $meta_key => $meta_value ) {
 
                                 if ( $meta_key == 'Filters/Case' ) {
                                     $num_products = $meta_value[0];
                                     break;
                                 }
-
-                            }
+}
                         }
-
-                    }
+}
                 }
 
                 // look for a lifespan product variable
                 $lifespan = get_post_meta( $email->product_id, 'filter_lifespan', true );
 
                 if ( $lifespan && $lifespan > 0 ) {
-                    $interval = (int)$lifespan;
+                    $interval = (int) $lifespan;
                     $interval_duration = 'months';
                 }
 
@@ -2027,68 +2068,65 @@ class FUE_Addon_Woocommerce_Scheduler {
                 if ( $qty == 1 ) {
                     // only send the first email
                     $add        = FUE_Sending_Scheduler::get_time_to_add( $interval, $interval_duration );
-                    $send_on    = current_time('timestamp') + $add;
+                    $send_on    = current_time( 'timestamp' ) + $add;
 
                     $insert = array(
                         'send_on'       => $send_on,
                         'email_id'      => $email->id,
                         'product_id'    => $email->product_id,
-                        'order_id'      => $order->id
+                        'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                     );
-                    if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                    if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                         $queued[] = $insert;
                     }
                 } elseif ( $qty == 2 ) {
                     // only send the first and last emails
                     $add        = FUE_Sending_Scheduler::get_time_to_add( $interval, $interval_duration );
-                    $send_on    = current_time('timestamp')+ $add;
+                    $send_on    = current_time( 'timestamp' ) + $add;
 
                     $insert = array(
                         'send_on'       => $send_on,
                         'email_id'      => $email->id,
                         'product_id'    => $email->product_id,
-                        'order_id'      => $order->id
+                        'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                     );
-                    if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                    if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                         $queued[] = $insert;
                     }
 
-
                     $last       = FUE_Sending_Scheduler::get_time_to_add( $interval, $interval_duration );
-                    $send_on    = current_time('timestamp') + $add + $last;
+                    $send_on    = current_time( 'timestamp' ) + $add + $last;
 
                     $insert = array(
                         'send_on'       => $send_on,
                         'email_id'      => $email->id,
                         'product_id'    => $email->product_id,
-                        'order_id'      => $order->id
+                        'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                     );
-                    if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                    if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                         $queued[] = $insert;
                     }
                 } else {
                     // send all emails
                     $add    = FUE_Sending_Scheduler::get_time_to_add( $interval, $interval_duration );
                     $last   = 0;
-                    for ($x = 1; $x <= $qty; $x++) {
-                        $send_on    = current_time('timestamp') + $add + $last;
+                    for ( $x = 1; $x <= $qty; $x++ ) {
+                        $send_on    = current_time( 'timestamp' ) + $add + $last;
                         $last       += $add;
 
                         $insert = array(
                             'send_on'       => $send_on,
                             'email_id'      => $email->id,
                             'product_id'    => $email->product_id,
-                            'order_id'      => $order->id
+                            'order_id'      => WC_FUE_Compatibility::get_order_prop( $order, 'id' ),
                         );
-                        if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                        if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                             $queued[] = $insert;
                         }
                     }
                 }
-
-            }
-
-        }
+}
+}
 
         return $queued;
 
@@ -2111,8 +2149,8 @@ class FUE_Addon_Woocommerce_Scheduler {
             return false;
         }
 
-        if ( !empty( $meta['excluded_customers_products'] ) ) {
-            if ( !is_array( $meta['excluded_customers_products'] ) ) {
+        if ( ! empty( $meta['excluded_customers_products'] ) ) {
+            if ( ! is_array( $meta['excluded_customers_products'] ) ) {
                 $meta['excluded_customers_products'] = array( $meta['excluded_customers_products'] );
             }
 
@@ -2133,15 +2171,15 @@ class FUE_Addon_Woocommerce_Scheduler {
             }
         }
 
-        if ( !$skip && !empty( $meta['excluded_customers_categories'] ) ) {
-            if ( !is_array( $meta['excluded_customers_categories'] ) ) {
+        if ( ! $skip && ! empty( $meta['excluded_customers_categories'] ) ) {
+            if ( ! is_array( $meta['excluded_customers_categories'] ) ) {
                 $meta['excluded_customers_categories'] = array( $meta['excluded_customers_categories'] );
             }
 
             $category_ids = implode( ',', $meta['excluded_customers_categories'] );
             $found = 0;
 
-            if ( !empty( $category_ids ) ) {
+            if ( ! empty( $category_ids ) ) {
                 $sql = "SELECT COUNT(*)
                     FROM {$wpdb->prefix}followup_order_categories c, {$wpdb->prefix}followup_customer_orders o
                     WHERE o.followup_customer_id = %d
@@ -2169,19 +2207,19 @@ class FUE_Addon_Woocommerce_Scheduler {
         $excluded = false;
 
         if ( $product_id ) {
-            $categories = wp_get_object_terms( $product_id, 'product_cat', array('fields' => 'ids') );
+            $categories = wp_get_object_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) );
         } elseif ( $category_ids ) {
             $categories = $category_ids;
         } else {
             $categories = $this->get_category_ids_from_order( $order );
         }
 
-        if ( !empty( $categories ) ) {
+        if ( ! empty( $categories ) ) {
             // excluded categories
-            $meta       = maybe_unserialize($email->meta);
-            $excludes   = (isset($meta['excluded_categories'])) ? $meta['excluded_categories'] : array();
+            $meta       = maybe_unserialize( $email->meta );
+            $excludes   = (isset( $meta['excluded_categories'] )) ? $meta['excluded_categories'] : array();
 
-            if ( !is_array( $excludes ) || empty( $excludes ) ) {
+            if ( ! is_array( $excludes ) || empty( $excludes ) ) {
                 return $excluded;
             }
 
@@ -2207,7 +2245,7 @@ class FUE_Addon_Woocommerce_Scheduler {
         $orders     = array();
 
         if ( $email->type == 'storewide' ) {
-            //$orders = $this->get_matching_storewide_orders( $email );
+            // $orders = $this->get_matching_storewide_orders( $email );
         } elseif ( $email->type == 'customer' ) {
 
         }
@@ -2225,9 +2263,9 @@ class FUE_Addon_Woocommerce_Scheduler {
      * @return array
      */
     public function get_correct_email( $data ) {
-        if ( !empty( $data['order_id'] ) ) {
+        if ( ! empty( $data['order_id'] ) ) {
             $order = WC_FUE_Compatibility::wc_get_order( $data['order_id'] );
-            $data['user_email'] = $order->billing_email;
+            $data['user_email'] = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
         }
 
         return $data;
@@ -2253,7 +2291,7 @@ class FUE_Addon_Woocommerce_Scheduler {
 
         $conditions         = $this->fue_wc->wc_conditions->get_store_conditions();
         $email              = new FUE_Email( $item->email_id );
-        $email_conditions   = !empty($email->conditions) ? $email->conditions : array();
+        $email_conditions   = ! empty( $email->conditions ) ? $email->conditions : array();
 
         foreach ( $email_conditions as $email_condition ) {
 
@@ -2266,8 +2304,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                     return $passed;
                 }
             }
-
-        }
+}
 
         return true;
     }
@@ -2291,7 +2328,7 @@ class FUE_Addon_Woocommerce_Scheduler {
 
         $conditions         = $this->fue_wc->wc_conditions->get_signup_conditions();
         $email              = new FUE_Email( $item->email_id );
-        $email_conditions   = !empty($email->conditions) ? $email->conditions : array();
+        $email_conditions   = ! empty( $email->conditions ) ? $email->conditions : array();
 
         foreach ( $email_conditions as $email_condition ) {
 
@@ -2304,8 +2341,7 @@ class FUE_Addon_Woocommerce_Scheduler {
                     return $passed;
                 }
             }
-
-        }
+}
 
         return true;
     }
@@ -2317,13 +2353,13 @@ class FUE_Addon_Woocommerce_Scheduler {
      * @param array $queued
      */
     public function add_order_notes_to_queued_emails( $queued ) {
-        if (! is_array( $queued ) ) {
+        if ( ! is_array( $queued ) ) {
             return;
         }
 
         foreach ( $queued as $row ) {
-            if ( isset($row['order_id']) && $row['order_id'] > 0 ) {
-                $_order = WC_FUE_Compatibility::wc_get_order($row['order_id']);
+            if ( isset( $row['order_id'] ) && $row['order_id'] > 0 ) {
+                $_order = WC_FUE_Compatibility::wc_get_order( $row['order_id'] );
                 $email  = new FUE_Email( $row['email_id'] );
 
                 if ( empty( $row['send_on'] ) ) {
@@ -2331,10 +2367,10 @@ class FUE_Addon_Woocommerce_Scheduler {
                 }
 
                 $email_trigger  = apply_filters( 'fue_interval_str', $email->get_trigger_string(), $email );
-                $send_date      = date( get_option('date_format') .' '. get_option('time_format'), $row['send_on'] );
+                $send_date      = date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $row['send_on'] );
 
                 $note = sprintf(
-                    __('Email queued: %s scheduled on %s<br/>Trigger: %s', 'follow_up_emails'),
+                    __( 'Email queued: %1$s scheduled on %1$s<br/>Trigger: %1$s', 'follow_up_emails' ),
                     $email->name,
                     $send_date,
                     $email_trigger
@@ -2350,7 +2386,7 @@ class FUE_Addon_Woocommerce_Scheduler {
      * @param WC_Order $order
      */
     protected function remove_signup_emails_on_purchase( $order ) {
-        $user_id        = $order->customer_user;
+        $user_id        = WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' );
         $signup_emails  = fue_get_emails( 'signup', FUE_Email::STATUS_ACTIVE );
         $email_ids      = array();
 
@@ -2360,14 +2396,14 @@ class FUE_Addon_Woocommerce_Scheduler {
 
         foreach ( $signup_emails as $signup_email ) {
             if (
-                !empty( $signup_email->meta['remove_signup_emails_on_purchase'] ) &&
+                ! empty( $signup_email->meta['remove_signup_emails_on_purchase'] ) &&
                 $signup_email->meta['remove_signup_emails_on_purchase'] == 'yes'
             ) {
                 $email_ids[] = $signup_email->id;
             }
         }
 
-        if ( !empty( $email_ids ) ) {
+        if ( ! empty( $email_ids ) ) {
             $wpdb           = Follow_Up_Emails::instance()->wpdb;
             $email_ids_csv  = implode( ',', $email_ids );
 
@@ -2396,7 +2432,7 @@ class FUE_Addon_Woocommerce_Scheduler {
         $order_status   = WC_FUE_Compatibility::get_order_status( $order );
         $triggers       = array( $order_status );
 
-        $triggers = apply_filters( 'fue_order_triggers', $triggers, $order->id, $email_type );
+        $triggers = apply_filters( 'fue_order_triggers', $triggers, WC_FUE_Compatibility::get_order_prop( $order, 'id' ), $email_type );
 
         return $triggers;
     }
@@ -2413,7 +2449,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             $order = WC_FUE_Compatibility::wc_get_order( $order );
         }
 
-        if ( 1 != get_post_meta( $order->id, '_fue_recorded', true ) ) {
+        if ( 1 != get_post_meta( WC_FUE_Compatibility::get_order_prop( $order, 'id' ), '_fue_recorded', true ) ) {
             FUE_Addon_Woocommerce::record_order( $order );
         }
 
@@ -2421,7 +2457,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             "SELECT product_id, variation_id
             FROM {$wpdb->prefix}followup_order_items
             WHERE order_id = %d",
-            $order->id
+            WC_FUE_Compatibility::get_order_prop( $order, 'id' )
         ), ARRAY_A );
 
         return $product_ids;
@@ -2439,7 +2475,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             $order = WC_FUE_Compatibility::wc_get_order( $order );
         }
 
-        if ( 1 != get_post_meta( $order->id, '_fue_recorded', true ) ) {
+        if ( 1 != get_post_meta( WC_FUE_Compatibility::get_order_prop( $order, 'id' ), '_fue_recorded', true ) ) {
             FUE_Addon_Woocommerce::record_order( $order );
         }
 
@@ -2447,7 +2483,7 @@ class FUE_Addon_Woocommerce_Scheduler {
             "SELECT category_id
             FROM {$wpdb->prefix}followup_order_categories
             WHERE order_id = %d",
-            $order->id
+            WC_FUE_Compatibility::get_order_prop( $order, 'id' )
         ) );
 
         return array_unique( $category_ids );
@@ -2464,15 +2500,15 @@ class FUE_Addon_Woocommerce_Scheduler {
             'meta_query' => array(
                 array(
                     'key'   => '_interval_type',
-                    'value' => 'cart'
-                )
-            )
+                    'value' => 'cart',
+                ),
+            ),
         );
 
         if ( isset( $args['product_id'] ) ) {
             $query['meta_query'][] = array(
                     'key'   => '_product_id',
-                    'value' => absint( $args['product_id'] )
+                    'value' => absint( $args['product_id'] ),
             );
         }
 
@@ -2480,19 +2516,18 @@ class FUE_Addon_Woocommerce_Scheduler {
             $query['meta_query'][] = array(
                 'key'       => '_category_id',
                 'value'     => $args['category_id'],
-                'compare'   => 'IN'
+                'compare'   => 'IN',
             );
         }
 
         if ( isset( $args['always_send'] ) ) {
             $query['meta_query'][] = array(
                 'key'   => '_always_send',
-                'value' => $args['always_send']
+                'value' => $args['always_send'],
             );
         }
 
-        //$args = array_merge( $query, $args );
-
+        // $args = array_merge( $query, $args );
         return fue_get_emails( 'any', $status, $query );
     }
 

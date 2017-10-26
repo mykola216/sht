@@ -11,10 +11,18 @@ class FUE_Addon_Woocommerce_Admin_Products {
     public function __construct() {
         add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts') );
         add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
-        add_action( 'woocommerce_product_write_panels', array( $this, 'add_product_data_panel' ) );
+        add_action( 'init', array( $this, 'init' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_lists' ), 10, 2 );
 
         add_action( 'woocommerce_checkout_order_processed', array( $this, 'add_customer_to_lists' ) );
+    }
+
+    public function init() {
+        if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+            add_action( 'woocommerce_product_write_panels', array( $this, 'add_product_data_panel' ) );
+        } else {
+            add_action( 'woocommerce_product_data_panels', array( $this, 'add_product_data_panel' ) );
+        }
     }
 
     public function add_scripts() {
@@ -108,7 +116,7 @@ class FUE_Addon_Woocommerce_Admin_Products {
                 continue;
             }
 
-            Follow_Up_Emails::instance()->newsletter->add_subscriber( $order->billing_email, $product_lists );
+            Follow_Up_Emails::instance()->newsletter->add_subscriber( WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ), $product_lists );
         }
     }
 

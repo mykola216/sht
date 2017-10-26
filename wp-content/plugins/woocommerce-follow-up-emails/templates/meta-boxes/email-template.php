@@ -2,8 +2,7 @@
 /* @var FUE_Email $email */
 $templates = fue_get_installed_templates();
 ?>
-<select id="template" name="template" class="select2" data-placeholder="<?php _e('Please select a template', 'follow_up_emails'); ?>" style="width: 100%;">
-    <option value=""></option>
+<select id="template" name="template" style="width: 100%;">
     <?php
     foreach ( $templates as $template ):
         $template = fue_template_basename( $template );
