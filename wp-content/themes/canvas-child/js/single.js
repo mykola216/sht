@@ -82,7 +82,7 @@ jQuery(document).ready(function ($) {
     });
     jQuery(".canvas-child-tooltip").tooltip({
         show: 400,
-        hide: { delay: 3000, duration: 400 },
+        hide: { delay: 1000, duration: 400 },
         content: function () {
             return jQuery(this).attr('title');
         }
