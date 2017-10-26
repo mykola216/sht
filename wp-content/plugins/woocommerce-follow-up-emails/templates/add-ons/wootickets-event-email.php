@@ -12,8 +12,8 @@
     </thead>
     <tbody>
     <?php
-    $customer   = $order->billing_first_name .' '. $order->billing_last_name;
-    $email      = $order->billing_email;
+    $customer   = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+    $email      = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
 
     foreach( $order->get_items() as $item ):
         $product_id = $item['product_id'];
@@ -26,14 +26,14 @@
         $ticket_name    = get_the_title( $product_id );
         $url            = admin_url('edit.php?post_type=post&page=tickets-attendees&event_id='. $event_id);
         $event          = '<a href="'. $url .'">'. get_the_title( $event_id ) .'</a>';
-        $amount         = $order->order_total;
+        $amount         = WC_FUE_Compatibility::get_order_prop( $order, 'order_total' );
         $product        = WC_FUE_Compatibility::wc_get_product( $product_id );
         $amount         = $product->get_price();
         ?>
         <tr>
             <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $ticket_name .' &times; '. $item['qty'] ); ?></td>
             <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $event ); ?></td>
-            <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( woocommerce_price( $amount ) ); ?></td>
+            <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( wc_price( $amount ) ); ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

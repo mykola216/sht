@@ -17,9 +17,9 @@
 
         if ( $post->post_type == 'shop_order' ) {
             $order      = WC_FUE_Compatibility::wc_get_order( $_id );
-            $customer   = $order->billing_first_name .' '. $order->billing_last_name;
-            $email      = $order->billing_email;
-            $amount     = $order->order_total;
+            $customer   = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+            $email      = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
+            $amount     = WC_FUE_Compatibility::get_order_prop( $order, 'order_total' );
             $event      = '-';
             $ticket_name= '-';
 
@@ -49,7 +49,7 @@
         <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $email ); ?></td>
         <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $event ); ?></td>
         <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $ticket_name ); ?></td>
-        <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( woocommerce_price( $amount ) ); ?></td>
+        <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( wc_price( $amount ) ); ?></td>
         <td style="text-align:left; border: 1px solid #eee;"><?php echo $post->post_date; ?></td>
     </tr>
     <?php endforeach; ?>

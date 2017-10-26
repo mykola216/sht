@@ -57,7 +57,7 @@ jQuery( function ( $ ) {
             jQuery(".adjust_date_tr").show();
             $(".wootickets-selector").show();
             $(".wc-products-selector").hide();
-        } else if ( type.substr( 0, 7 ) == "ticket_" ) {
+        } else if ( 'string' === typeof type && type.substr( 0, 7 ) == "ticket_" ) {
             $(".wootickets-selector").show();
             $(".wc-products-selector").hide();
         } else {

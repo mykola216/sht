@@ -114,7 +114,7 @@ class FUE_Subscribers_List_Table extends WP_List_Table {
             'list'      => $list_filter,
             'orderby'   => isset($_GET['orderby']) ? $_GET['orderby'] : 'date_added',
             'order'     => isset($_GET['order']) ? $_GET['order'] : 'DESC',
-            'length'    => 20,
+            'length'    => $per_page,
             'page'      => $current_page
         ) );
 

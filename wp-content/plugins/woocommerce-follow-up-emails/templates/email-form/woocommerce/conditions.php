@@ -53,7 +53,7 @@ $condition_shipping_method  = !empty( $conditions[ $idx ]['shipping_method'] ) ?
     <?php $shipping_methods = WC_Shipping::instance()->get_shipping_methods(); ?>
     <select id="conditions_<?php echo $idx; ?>_shipping_method" name="conditions[<?php echo $idx; ?>][shipping_method]" class="select2-init">
         <?php foreach ( $shipping_methods as $method ): ?>
-            <option value="<?php echo $method->id; ?>" <?php selected( $condition_shipping_method, $method->id ); ?>><?php echo esc_attr( $method->title ); ?></option>
+            <option value="<?php echo $method->id; ?>" <?php selected( $condition_shipping_method, $method->id ); ?>><?php echo esc_attr( $method->method_title ); ?></option>
         <?php endforeach; ?>
     </select>
 </div>

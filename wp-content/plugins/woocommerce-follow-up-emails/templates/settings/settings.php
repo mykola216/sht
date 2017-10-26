@@ -28,10 +28,6 @@
             include 'settings-subscribers.php';
             break;
 
-        case 'documentation':
-            include 'settings-documentation.php';
-            break;
-
         case 'integration':
             include 'settings-integration.php';
             break;

@@ -35,7 +35,7 @@ $items          = $this->get_rsvp_tickets( $order_id );
         <tr>
             <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $ticket_name .' &times; '. $item['qty'] ); ?></td>
             <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( $event ); ?></td>
-            <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( woocommerce_price( $amount ) ); ?></td>
+            <td style="text-align:left; border: 1px solid #eee;"><?php echo wp_kses_post( wc_price( $amount ) ); ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

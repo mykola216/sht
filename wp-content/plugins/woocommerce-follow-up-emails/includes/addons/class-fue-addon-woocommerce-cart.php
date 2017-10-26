@@ -54,7 +54,7 @@ class FUE_Addon_Woocommerce_Cart {
             WC()->cart = null;
             $this->init_wc_cart( $item->user_id, $item->user_email );
 
-            wp_redirect( get_permalink( woocommerce_get_page_id( 'cart' ) ) );
+            wp_redirect( get_permalink( wc_get_page_id( 'cart' ) ) );
             exit;
         }
     }
@@ -386,6 +386,10 @@ class FUE_Addon_Woocommerce_Cart {
         }
 
         FUE_Addon_Woocommerce::init_wc_session();
+
+        if (! function_exists( 'wc_cart_totals_order_total_html' ) ) {
+            include_once( WC()->plugin_path() .'/includes/wc-cart-functions.php' );
+        }
 
         $cart_row = self::get_cart( $user_id, $email );
 

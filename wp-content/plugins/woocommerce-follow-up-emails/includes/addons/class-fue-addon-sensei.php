@@ -984,7 +984,7 @@ class FUE_Addon_Sensei {
         <li class="var hideable var_sensei var_sensei_course"><strong>{course_name}</strong> <img class="help_tip" title="<?php _e('The name of the course', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL ; ?>/images/help.png" width="16" height="16" /></li>
         <li class="var hideable var_sensei var_sensei_course"><strong>{course_url}</strong> <img class="help_tip" title="<?php _e('The raw URL to the course', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL ; ?>/images/help.png" width="16" height="16" /></li>
         <li class="var hideable var_sensei var_sensei_course"><strong>{course_link}</strong> <img class="help_tip" title="<?php _e('The link to the course with the course name as the display text', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL ; ?>/images/help.png" width="16" height="16" /></li>
-        <li class="var hideable var_sensei var_sensei_course"><strong>{course_results}</strong> <img class="help_tip" title="<?php _e('The link to the course results page', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL ; ?>/images/help.png" width="16" height="16" /></li>
+        <li class="var hideable var_sensei var_sensei_course"><strong>{course_results_url}</strong> <img class="help_tip" title="<?php _e('The URL to the course results page', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL ; ?>/images/help.png" width="16" height="16" /></li>
 
         <?php if ( self::is_certificates_installed() ): ?>
             <li class="var hideable var_sensei var_sensei_course"><strong>{certificate_url}</strong> <img class="help_tip" title="<?php _e('The raw URL to the course certificate', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL ; ?>/images/help.png" width="16" height="16" /></li>
@@ -1012,22 +1012,22 @@ class FUE_Addon_Sensei {
      */
     public function register_variable_replacements( $var, $email_data, $email, $queue_item ) {
         $variables = array(
-            'teacher_first_name'    => '',
-            'teacher_last_name'     => '',
-            'teacher_name'          => '',
-            'course_name'       => '',
-            'course_url'        => '',
-            'course_link'       => '',
-            'course_results'    => '',
-            'certificate_url'   => '',
-            'certificate_link'  => '',
-            'lesson_name'       => '',
-            'lesson_url'        => '',
-            'lesson_link'       => '',
-            'quiz_url'          => '',
-            'quiz_link'         => '',
-            'quiz_grade'        => '',
-            'quiz_passmark'     => ''
+            'teacher_first_name' => '',
+            'teacher_last_name'  => '',
+            'teacher_name'       => '',
+            'course_name'        => '',
+            'course_url'         => '',
+            'course_link'        => '',
+            'course_results_url' => '',
+            'certificate_url'    => '',
+            'certificate_link'   => '',
+            'lesson_name'        => '',
+            'lesson_url'         => '',
+            'lesson_link'        => '',
+            'quiz_url'           => '',
+            'quiz_link'          => '',
+            'quiz_grade'         => '',
+            'quiz_passmark'      => ''
         );
 
         // use test data if the test flag is set
@@ -1178,6 +1178,11 @@ class FUE_Addon_Sensei {
                 $variables['certificate_url']   = self::get_certificate_url( $meta['course_id'], $queue_item->user_id );
                 $variables['certificate_link']  = '<a href="'. $variables['certificate_url'] .'">'. $variables['course_name'] .'</a>';
             }
+
+            // See https://github.com/woocommerce/woocommerce-follow-up-emails/issues/357.
+            $variables['course_results_url'] = esc_url( Sensei()->course_results->get_permalink( $meta['course_id'] ) );
+            $variables['quiz_passmark']      = Sensei_Utils::sensei_course_pass_grade( $meta['course_id'] );
+            $variables['quiz_grade']         = Sensei_Utils::sensei_course_user_grade( $meta['course_id'], $queue_item->user_id );
         }
 
         if ( !empty( $meta['lesson_id'] ) ) {
@@ -1219,19 +1224,20 @@ class FUE_Addon_Sensei {
      * @return array
      */
     protected function add_test_variable_replacements( $variables, $email_data, $email ) {
-        $variables['teacher_first_name']    = 'Jane';
-        $variables['teacher_last_name']     = 'Doe';
-        $variables['teacher_name']          = 'Jane Doe';
-        $variables['course_name']   = 'Test Course';
-        $variables['course_url']    = site_url();
-        $variables['course_link']   = '<a href="'. site_url() .'">Test Course</a>"';
-        $variables['lesson_name']   = 'Test Lesson';
-        $variables['lesson_url']    = site_url();
-        $variables['lesson_link']   = '<a href="'. site_url() .'">Test Course</a>"';
-        $variables['quiz_url']      = site_url();
-        $variables['quiz_link']     = '<a href="'. site_url() .'">View the lesson quiz</a>"';
-        $variables['quiz_grade']    = 87;
-        $variables['quiz_passmark'] = 90;
+        $variables['teacher_first_name'] = 'Jane';
+        $variables['teacher_last_name']  = 'Doe';
+        $variables['teacher_name']       = 'Jane Doe';
+        $variables['course_name']        = 'Test Course';
+        $variables['course_url']         = site_url();
+        $variables['course_link']        = '<a href="'. site_url() .'">Test Course</a>"';
+        $variables['course_results_url'] = site_url();
+        $variables['lesson_name']        = 'Test Lesson';
+        $variables['lesson_url']         = site_url();
+        $variables['lesson_link']        = '<a href="'. site_url() .'">Test Course</a>"';
+        $variables['quiz_url']           = site_url();
+        $variables['quiz_link']          = '<a href="'. site_url() .'">View the lesson quiz</a>"';
+        $variables['quiz_grade']         = 87;
+        $variables['quiz_passmark']      = 90;
         $variables['certificate_url']   = site_url();
         $variables['certificate_link']  = '<a href="'. site_url() .'">View Certificate</a>';
 

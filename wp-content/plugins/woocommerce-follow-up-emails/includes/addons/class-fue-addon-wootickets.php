@@ -974,7 +974,7 @@ class FUE_Addon_Wootickets {
                 }
 
                 $insert = array(
-                    'user_id'       => $order->user_id,
+                    'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'user_id' ),
                     'order_id'      => $order_id,
                     'product_id'    => $ticket_id,
                     'email_id'      => $email->id,
@@ -1061,16 +1061,18 @@ class FUE_Addon_Wootickets {
         $items = $order->get_items();
 
         foreach ( $items as $item ) {
-            $ticket_id = (isset($item['id'])) ? $item['id'] : $item['product_id'];
+            $ticket_id = is_callable( array( $item, 'get_product_id' ) )
+                ? $item->get_product_id()
+                : $item['product_id'];
 
             // if $item is a ticket, load the event where the ticket is attached to
             $event_id = get_post_meta( $ticket_id, '_tribe_wooticket_for_event', true );
 
-            if (! $event_id ) {
+            if ( ! $event_id ) {
                 continue;
             }
 
-            if (! in_array($ticket_id, $tickets) ) {
+            if ( ! in_array( $ticket_id, $tickets ) ) {
                 $tickets[] = $ticket_id;
             }
         }
@@ -1096,27 +1098,28 @@ class FUE_Addon_Wootickets {
                         $taxonomy = 'tribe_events_cat';
                     }
 
-                    $ticket_terms   = get_the_terms( $ticket_id, $taxonomy );
+                    $event_id       = get_post_meta( $ticket_id, '_tribe_wooticket_for_event', true );
+                    $ticket_terms   = get_the_terms( $event_id, $taxonomy );
                     $terms          = array();
 
-                    if ( $ticket_terms && !is_wp_error( $ticket_terms ) ) {
+                    if ( $ticket_terms && ! is_wp_error( $ticket_terms ) ) {
                         foreach ( $ticket_terms as $ticket_term ) {
                             $terms[ $ticket_term->term_id ] = $ticket_term->name;
                         }
                     }
 
-                    if ( !array_key_exists( $email->category_id, $terms ) ) {
+                    if ( ! array_key_exists( $email->category_id, $terms ) ) {
                         continue;
                     }
                 }
 
                 $insert = array(
-                    'user_id'       => $order->user_id,
+                    'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'user_id' ),
                     'order_id'      => $order_id,
                     'product_id'    => $ticket_id,
                     'email_id'      => $email->id
                 );
-                if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
+                if ( ! is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
                 }
             }
@@ -1357,7 +1360,7 @@ class FUE_Addon_Wootickets {
             $order = WC_FUE_Compatibility::wc_get_order( $order_id );
 
             if ( $order ) {
-                $email = $order->billing_email;
+                $email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
             } else {
                 $email = get_post_meta( $id, '_tribe_rsvp_email', true );
 
@@ -1394,9 +1397,9 @@ class FUE_Addon_Wootickets {
 
         if ( $post->post_type == 'shop_order' ) {
             $order      = WC_FUE_Compatibility::wc_get_order( $order_id );
-            $customer   = $order->billing_first_name .' '. $order->billing_last_name;
-            $email      = $order->billing_email;
-            $amount     = $order->order_total;
+            $customer   = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+            $email      = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
+            $amount     = WC_FUE_Compatibility::get_order_prop( $order, 'order_total' );
             $event      = '-';
             $ticket_name= '-';
 
@@ -1531,7 +1534,7 @@ class FUE_Addon_Wootickets {
             $order = WC_FUE_Compatibility::wc_get_order( $order );
         }
 
-        if ( 1 != get_post_meta( $order->id, '_fue_recorded', true ) ) {
+        if ( 1 != get_post_meta( WC_FUE_Compatibility::get_order_prop( $order, 'id' ), '_fue_recorded', true ) ) {
             FUE_Addon_Woocommerce::record_order( $order );
         }
 
@@ -1539,7 +1542,7 @@ class FUE_Addon_Wootickets {
             "SELECT category_id
             FROM {$wpdb->prefix}followup_order_categories
             WHERE order_id = %d",
-            $order->id
+            WC_FUE_Compatibility::get_order_prop( $order, 'id' )
         ) );
 
         return array_unique( $category_ids );
@@ -1567,13 +1570,21 @@ class FUE_Addon_Wootickets {
         return 0;
     }
 
-    protected function get_ticket_thumbnail( $ticket_id ) {
-        $product        = WC_FUE_Compatibility::wc_get_product( $ticket_id );
-        $thumbnail      = $product->get_image( 'shop_thumbnail', array( 'title' => '' ) );
-        $ticket_image   = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $ticket_id ) ), $thumbnail );
-
-        return $ticket_image;
-    }
+	/**
+	 * Ticket thubnail returned within an anchor tag linking back to the ticket.
+	 *
+	 * @param integer
+	 * @return string Empty string when invalid ticket_id was given.
+	 */
+	protected function get_ticket_thumbnail( $ticket_id ) {
+		$product        = WC_FUE_Compatibility::wc_get_product( $ticket_id );
+		$ticket_image   = '';
+		if ( $product ) {
+			$thumbnail      = $product->get_image( 'shop_thumbnail', array( 'title' => '' ) );
+			$ticket_image   = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $ticket_id ) ), $thumbnail );
+		}
+		return $ticket_image;
+	}
 
     protected function get_event_data( $event_id ) {
 

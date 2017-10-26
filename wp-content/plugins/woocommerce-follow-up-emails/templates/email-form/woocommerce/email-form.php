@@ -1,14 +1,4 @@
 <div class="options_group wc-products-selector">
-    <p class="form-field">
-        <label for="storewide_type"><?php _e('Enable for', 'follow_up_emails'); ?></label>
-        <select name="meta[storewide_type]" id="storewide_type" class="">
-            <option value="all" <?php selected( $storewide_type, 'all' ); ?>><?php _e('All products', 'follow_up_emails'); ?></option>
-            <option value="products" <?php selected( $storewide_type, 'products' ); ?>><?php _e('A specific product', 'follow_up_emails'); ?></option>
-            <option value="categories" <?php selected( $storewide_type, 'categories' ); ?>><?php _e('A specific category', 'follow_up_emails'); ?></option>
-        </select>
-        <input type="hidden" name="storewide_type" id="storewide_type_hidden" disabled value="" />
-    </p>
-
     <div class="non-signup reminder hideable <?php do_action('fue_form_product_tr_class', $email); ?> product_tr">
         <p class="form-field">
             <label for="product_ids"><?php _e('Product', 'follow_up_emails'); ?></label>

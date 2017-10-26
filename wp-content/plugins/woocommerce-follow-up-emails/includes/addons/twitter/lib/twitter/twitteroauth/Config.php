@@ -13,6 +13,13 @@ class Config
     protected $timeout = 5;
     /** @var int how long to wait while connecting to the API */
     protected $connectionTimeout = 5;
+    /** @var int How many times we retry request when API is down */
+    protected $maxRetries = 0;
+    /** @var int Delay in seconds before we retry the request */
+    protected $retriesDelay = 1;
+
+
+
     /**
      * Decode JSON Response as associative Array
      *
@@ -26,6 +33,12 @@ class Config
     /** @var array Store proxy connection details */
     protected $proxy = array();
 
+    /** @var bool Whether to encode the curl requests with gzip or not */
+    protected $gzipEncoding = true;
+
+    /** @var integer Size for Chunked Uploads */
+    protected $chunkSize = 250000; // 0.25 MegaByte
+
     /**
      * Set the connection and response timeouts.
      *
@@ -36,6 +49,18 @@ class Config
     {
         $this->connectionTimeout = (int)$connectionTimeout;
         $this->timeout = (int)$timeout;
+    }
+
+    /**
+     *  Set the number of times to retry on error and how long between each.
+     *
+     * @param int $maxRetries
+     * @param int $retriesDelay
+     */
+    public function setRetries($maxRetries, $retriesDelay)
+    {
+        $this->maxRetries = (int)$maxRetries;
+        $this->retriesDelay = (int)$retriesDelay;
     }
 
     /**
@@ -60,5 +85,25 @@ class Config
     public function setProxy(array $proxy)
     {
         $this->proxy = $proxy;
+    }
+
+    /**
+     * Whether to encode the curl requests with gzip or not.
+     *
+     * @param boolean $gzipEncoding
+     */
+    public function setGzipEncoding($gzipEncoding)
+    {
+        $this->gzipEncoding = (bool)$gzipEncoding;
+    }
+
+    /**
+     * Set the size of each part of file for chunked media upload.
+     *
+     * @param int $value
+     */
+    public function setChunkSize($value)
+    {
+        $this->chunkSize = (int)$value;
     }
 }

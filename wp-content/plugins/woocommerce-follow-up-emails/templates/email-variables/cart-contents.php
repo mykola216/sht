@@ -14,13 +14,16 @@
         <tr class="order_item">
             <td class="td" style="text-align: center; vertical-align: middle; border: 1px solid #eee; font-family: 'Helvetica Neue', Helvetica,Roboto, Arial, sans-serif; word-wrap: break-word; color: #737373; padding: 12px;">
                 <?php
-                $thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
+				$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
+				// Protocol agcnostic approach doesn't work for email clients
+				$protocol  = is_ssl() ? 'https://' : 'http://';
+				$thumbnail = str_replace( '//', $protocol, $thumbnail );
 
-                if ( ! $_product->is_visible() ) {
-                    echo $thumbnail;
-                } else {
-                    printf( '<a href="%s">%s</a>', esc_url( $_product->get_permalink( $cart_item ) ), $thumbnail );
-                }
+				if ( ! $_product->is_visible() ) {
+					echo $thumbnail;
+				} else {
+					printf( '<a href="%s">%s</a>', esc_url( $_product->get_permalink( $cart_item ) ), $thumbnail );
+				}
                 ?>
             </td>
             <td class="td" style="text-align: left; vertical-align: middle; border: 1px solid #eee; font-family: 'Helvetica Neue', Helvetica,Roboto, Arial, sans-serif; word-wrap: break-word; color: #737373; padding: 12px;">

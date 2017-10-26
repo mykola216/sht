@@ -58,45 +58,7 @@
     </div>
 
     <div id="settings_details" class="panel fue_panel">
-        <div class="options_group">
-        <?php if ( $email->type == 'storewide' ): ?>
-            <p class="form-field">
-                <label for="always_send">
-                    <?php _e('Always Send', 'follow_up_emails'); ?>
-                </label>
-                <input type="hidden" name="always_send" id="always_send_off" value="0" />
-                <input type="checkbox" class="checkbox" name="always_send" id="always_send" value="1" <?php if ($email->always_send == 1) echo 'checked'; ?> />
-                <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('Do you want this email to ALWAYS send? Use this setting carefully, as this setting could result in multiple emails being sent per order', 'follow_up_emails'); ?>">
-            </p>
-        <?php else: ?>
-            <input type="hidden" name="always_send" id="always_send_off" value="1" />
-        <?php endif; ?>
-
-        <?php if ( !in_array( $email->type, array('signup', 'manual') ) ): ?>
-            <p class="form-field">
-                <label for="meta_one_time">
-                    <?php _e('Send once per customer', 'follow_up_emails'); ?>
-                </label>
-                <input type="hidden" name="meta[one_time]" id="meta_one_time_off" value="no" />
-                <input type="checkbox" class="checkbox" name="meta[one_time]" id="meta_one_time" value="yes" <?php if (isset($email->meta['one_time']) && $email->meta['one_time'] == 'yes') echo 'checked'; ?> />
-                <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('A customer will only receive this email once, even if purchased multiple times at different dates', 'follow_up_emails'); ?>">
-            </p>
-
-            <p class="form-field">
-                <label for="adjust_date">
-                    <?php _e('Delay existing email', 'follow_up_emails'); ?>
-                </label>
-                <input type="hidden" name="meta[adjust_date]" id="adjust_date_off" value="no" />
-                <input type="checkbox" class="checkbox" name="meta[adjust_date]" id="adjust_date" value="yes" <?php if (isset($email->meta['adjust_date']) && $email->meta['adjust_date'] == 'yes') echo 'checked'; ?> />
-                <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('If you check increase delay - instead of scheduling a new email - if the customer already has this email scheduled it will delay that scheduled email to the new future date.', 'follow_up_emails'); ?>">
-            </p>
-        <?php endif; ?>
-
-        </div> <!-- /options_group -->
-
-        <?php do_action('fue_email_form_settings', $email); ?>
-
-
+        <?php include FUE_TEMPLATES_DIR .'/meta-boxes/email-settings.php'; ?>
     </div>
 
     <div id="email_settings" class="panel fue_panel">
@@ -105,7 +67,7 @@
                 <?php _e('Send a copy of this email', 'follow_up_emails'); ?>
             </label>
             <input type="text" name="meta[bcc]" id="email_bcc" value="<?php echo (isset($email->meta['bcc'])) ? esc_attr($email->meta['bcc']) : ''; ?>" class="regular-text" />
-            <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('All these emails will be blind carbon copied to this address', 'follow_up_emails'); ?>">
+            <span class="description"><?php _e('All these emails will be blind carbon copied to this address', 'follow_up_emails'); ?></span>
         </p>
 
         <p class="form-field">
@@ -113,7 +75,7 @@
                 <?php _e('From/Reply-To Name', 'follow_up_emails'); ?>
             </label>
             <input type="text" name="meta[from_name]" id="email_from_name" value="<?php echo (isset($email->meta['from_name'])) ? esc_attr($email->meta['from_name']) : ''; ?>" class="regular-text" />
-            <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('The name that your emails will come from and replied to', 'follow_up_emails'); ?>">
+            <span class="description"><?php _e('The name that your emails will come from and replied to', 'follow_up_emails'); ?></span>
         </p>
 
         <p class="form-field">
@@ -121,7 +83,7 @@
                 <?php _e('From/Reply-To Address', 'follow_up_emails'); ?>
             </label>
             <input type="text" name="meta[from_address]" id="email_from" value="<?php echo (isset($email->meta['from_address'])) ? esc_attr($email->meta['from_address']) : ''; ?>" class="regular-text" />
-            <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('The email address that your emails will come from and replied to', 'follow_up_emails'); ?>">
+            <span class="description"><?php _e('The email address that your emails will come from and replied to', 'follow_up_emails'); ?></span>
         </p>
     </div>
 
@@ -135,9 +97,8 @@
 
         <p class="form-field tracking_on" style="display: none;">
             <label for="tracking"><?php _e('Link Tracking', 'follow_up_emails'); ?></label>
-            <input type="text" name="tracking" id="tracking" class="test-email-field" value="<?php echo esc_attr($email->tracking); ?>" placeholder="e.g. utm_campaign=Follow-up-Emails-by-75nineteen" style="width: 75%;" />
-            <img width="16" height="16" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" class="help_tip" title="<?php _e('The value inserted here will be appended to all URLs in the Email Body', 'follow_up_emails'); ?>">
-            <span class="description" style="margin-left:80px;"><a href="https://support.google.com/analytics/answer/1033867?hl=en">Guide To Get The Tracking Link</a></span><?php /*@todo*/ ?>
+            <input type="text" name="tracking" id="tracking" class="test-email-field" value="<?php echo esc_attr($email->tracking); ?>" placeholder="e.g. utm_campaign=Follow-up-Emails-by-75nineteen" style="width: 75%; display: block; float: none;" />
+            <span class="description"><?php _e('Appended to all URLs in the Email Body.', 'follow_up_emails'); ?> <a href="https://support.google.com/analytics/answer/1033867?hl=en"><?php _e( 'Get the Tracking Link.', 'follow_up_emails' ); ?></a></span>
         </p>
     </div>
 

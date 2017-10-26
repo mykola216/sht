@@ -158,13 +158,13 @@ class FUE_Addon_Woocommerce_Mailer {
                                 ? WC_FUE_Compatibility::get_order_user_id( $order )
                                 : 0;
                             $key = $order_user_id
-                                   .'|'. $order->billing_email
-                                   .'|'. $order->billing_first_name
-                                   .' '. $order->billing_last_name;
+                                   .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' )
+                                   .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' )
+                                   .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
                             $value = array(
                                 $order_user_id,
-                                $order->billing_email,
-                                $order->billing_first_name .' '. $order->billing_last_name
+                                WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ),
+                                WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' )
                             );
 
                             $found_user_ids[] = $order_user_id;
@@ -200,8 +200,8 @@ class FUE_Addon_Woocommerce_Mailer {
                             $order_user_id  = (WC_FUE_Compatibility::get_order_user_id( $order ) > 0)
                                 ? WC_FUE_Compatibility::get_order_user_id( $order )
                                 : 0;
-                            $key            = $order_user_id .'|'. $order->billing_email .'|'. $order->billing_first_name .' '. $order->billing_last_name;
-                            $value          = array( $order_user_id, $order->billing_email, $order->billing_first_name .' '. $order->billing_last_name );
+                            $key            = $order_user_id .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+                            $value          = array( $order_user_id, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ), WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' ) );
 
                             $found_user_ids[] = $order_user_id;
                             if (! isset($found_recipients[$key]) ) {
@@ -259,8 +259,8 @@ class FUE_Addon_Woocommerce_Mailer {
                         if ( $order_status != 'processing' && $order_status != 'completed' ) continue;
 
                         $order_user_id  = (WC_FUE_Compatibility::get_order_user_id( $order ) > 0) ? WC_FUE_Compatibility::get_order_user_id( $order ) : 0;
-                        $key            = $order_user_id .'|'. $order->billing_email .'|'. $order->billing_first_name .' '. $order->billing_last_name;
-                        $value          = array( $order_user_id, $order->billing_email, $order->billing_first_name .' '. $order->billing_last_name );
+                        $key            = $order_user_id .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+                        $value          = array( $order_user_id, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ), WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' ) );
 
                         if (! isset($recipients[$key]) ) {
                             $recipients[$key] = $value;
@@ -293,8 +293,8 @@ class FUE_Addon_Woocommerce_Mailer {
                 }
 
                 $order_user_id  = (WC_FUE_Compatibility::get_order_user_id( $order ) > 0) ? WC_FUE_Compatibility::get_order_user_id( $order ) : 0;
-                $key            = $order_user_id .'|'. $order->billing_email .'|'. $order->billing_first_name .' '. $order->billing_last_name;
-                $value          = array( $order_user_id, $order->billing_email, $order->billing_first_name .' '. $order->billing_last_name );
+                $key            = $order_user_id .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+                $value          = array( $order_user_id, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ), WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' ) );
 
                 if (! isset($recipients[$key]) ) {
                     $recipients[$key] = $value;
@@ -343,9 +343,9 @@ class FUE_Addon_Woocommerce_Mailer {
 
             }
 
-            $email_data['email_to']     = $order->billing_email;
-            $email_data['first_name']   = $order->billing_first_name;
-            $email_data['last_name']    = $order->billing_last_name;
+            $email_data['email_to']     = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
+            $email_data['first_name']   = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' );
+            $email_data['last_name']    = WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
             $email_data['order_id']     = $queue_item->order_id;
 
             $email_data['cname'] = $email_data['first_name'] .' '. $email_data['last_name'];
@@ -365,6 +365,10 @@ class FUE_Addon_Woocommerce_Mailer {
      * @return void
      */
     public function register_email_variable_replacements( $var, $email_data, $email, $queue_item = null ) {
+
+        if ( ! in_array( $email->type, array( 'customer', 'storewide', 'reminder', 'subscription', 'wc_bookings', 'points_and_rewards' ) ) ) {
+            return;
+        }
 
         $variables = $this->get_variables_for_email_type( $email->type );
 
@@ -398,6 +402,7 @@ class FUE_Addon_Woocommerce_Mailer {
                     'order_subtotal'            => '',
                     'order_tax'                 => '',
                     'order_pay_method'          => '',
+                    'order_pay_url'             => '',
                     'order_billing_address'     => '',
                     'order_shipping_address'    => '',
                     'order_billing_phone'       => '',
@@ -448,6 +453,7 @@ class FUE_Addon_Woocommerce_Mailer {
                     'order_subtotal'        => '',
                     'order_tax'             => '',
                     'order_pay_method'      => '',
+                    'order_pay_url'         => '',
                     'order_billing_address' => '',
                     'order_shipping_address'=> '',
                     'order_billing_phone'   => '',
@@ -463,6 +469,7 @@ class FUE_Addon_Woocommerce_Mailer {
                     'order_subtotal'            => '',
                     'order_tax'                 => '',
                     'order_pay_method'          => '',
+                    'order_pay_url'             => '',
                     'order_billing_address'     => '',
                     'order_shipping_address'    => '',
                     'order_billing_phone'       => '',
@@ -553,7 +560,7 @@ class FUE_Addon_Woocommerce_Mailer {
                 $email->id,
                 $email_data['user_id'],
                 $email_data['email_to'],
-                add_query_arg( 'fue_cart_redirect', 1, get_permalink( woocommerce_get_page_id( 'cart' ) ) )
+                add_query_arg( 'fue_cart_redirect', 1, get_permalink( wc_get_page_id( 'cart' ) ) )
             );
         } elseif ( $queue_item->order_id > 0 ) {
             $order  = WC_FUE_Compatibility::wc_get_order( $queue_item->order_id );
@@ -575,17 +582,18 @@ class FUE_Addon_Woocommerce_Mailer {
             $order      = WC_FUE_Compatibility::wc_get_order( $queue_item->order_id );
             $order_id   = $order->get_order_number();
 
-            $replacements['order_billing_phone']    = $order->billing_phone;
+            $replacements['order_billing_phone']    = WC_FUE_Compatibility::get_order_prop( $order, 'billing_phone' );
             $replacements['order_shipping_phone']   = (isset($order->shipping_phone)) ? $order->shipping_phone : '';
-            $replacements['order_date']             = date_i18n(get_option('date_format'), strtotime($order->order_date));
-            $replacements['order_datetime']         = date_i18n(get_option('date_format') .' '. get_option('time_format'), strtotime($order->order_date));
+            $replacements['order_date']             = date_i18n(get_option('date_format'), strtotime(WC_FUE_Compatibility::get_order_prop( $order, 'order_date' )));
+            $replacements['order_datetime']         = date_i18n(get_option('date_format') .' '. get_option('time_format'), strtotime(WC_FUE_Compatibility::get_order_prop( $order, 'order_date' )));
             $replacements['order_billing_address']  = $order->get_formatted_billing_address();
             $replacements['order_shipping_address'] = $order->get_formatted_shipping_address();
             $replacements['order_number']           = $order_id;
             $replacements['dollars_spent_order']    = FUE_Addon_Woocommerce::format_price( $order->get_total() );
             $replacements['order_subtotal']         = FUE_Addon_Woocommerce::format_price( $order->get_subtotal() );
             $replacements['order_tax']              = FUE_Addon_Woocommerce::format_price( $order->get_total_tax() );
-            $replacements['order_pay_method']       = $order->payment_method_title;
+            $replacements['order_pay_method']       = WC_FUE_Compatibility::get_order_prop( $order, 'payment_method_title' );
+            $replacements['order_pay_url']          = $order->get_checkout_payment_url();
 
         }
 
@@ -602,6 +610,9 @@ class FUE_Addon_Woocommerce_Mailer {
             foreach ( $items as $item ) {
                 $item_id  = $item['product_id'];
                 $_product = WC_FUE_Compatibility::wc_get_product( $item_id );
+                if ( ! $_product ) {
+                    continue;
+                }
 
                 if ( method_exists( $_product, 'get_permalink' ) ) {
                     $product_permalink = $_product->get_permalink();
@@ -678,7 +689,7 @@ class FUE_Addon_Woocommerce_Mailer {
 
 
         if ( isset($meta['refund_amount']) )
-            $refund_amount = strip_tags( woocommerce_price($meta['refund_amount']) );
+            $refund_amount = strip_tags( wc_price($meta['refund_amount']) );
 
         if ( isset($meta['refund_reason']) )
             $refund_reason = $meta['refund_reason'];
@@ -711,7 +722,12 @@ class FUE_Addon_Woocommerce_Mailer {
             if ( $product ) {
                 $file = $product->get_file( $queue_item->meta['download_id'] );
 
-                $replacements['download_url']       = $order->get_download_url( $email->product_id, $queue_item->meta['download_id'] );
+                $replacements['download_url']       = add_query_arg( array(
+                    'download_file' => $email->product_id,
+                    'order'         => $order->get_order_key(),
+                    'email'         => urlencode( $order->get_billing_email() ),
+                    'key'           => $queue_item->meta['download_id'],
+                ), trailingslashit( home_url() ) );
                 $replacements['download_filename']  = $file['name'];
             }
         }
@@ -732,21 +748,22 @@ class FUE_Addon_Woocommerce_Mailer {
 
         $email_type = $email->type;
 
-        $item_url       = '';
-        $item_sku       = '';
-        $item_price     = '12.50';
-        $item_qty       = 1;
-        $order_date     = '';
-        $order_datetime = '';
-        $order_subtotal = '';
-        $order_tax      = '';
-        $order_pay_method= '';
-        $order_id       = $email_data['order_id'];
-        $product_id     = $email_data['product_id'];
-        $download_url   = admin_url();
-        $download_name  = 'Test File';
-        $categories     = '';
-        $username       = 'jdoe007';
+        $item_url         = '';
+        $item_sku         = '';
+        $item_price       = '12.50';
+        $item_qty         = 1;
+        $order_date       = '';
+        $order_datetime   = '';
+        $order_subtotal   = '';
+        $order_tax        = '';
+        $order_pay_method = '';
+        $order_pay_url    = '';
+        $order_id         = $email_data['order_id'];
+        $product_id       = $email_data['product_id'];
+        $download_url     = admin_url();
+        $download_name    = 'Test File';
+        $categories       = '';
+        $username         = 'jdoe007';
 
         $replacements   = array();
         $replacements['cart_contents']  = '';
@@ -758,29 +775,29 @@ class FUE_Addon_Woocommerce_Mailer {
                 // make sure the order exist
                 $order = WC_FUE_Compatibility::wc_get_order($order_id);
 
-                if (! $order->id) {
+                if ( ! WC_FUE_Compatibility::get_order_prop( $order, 'id' )) {
                     die(__('The Order ID does not exist. Please try again.'));
                 }
 
-                $order_date     = date_i18n(get_option('date_format'), strtotime($order->order_date));
-                $order_datetime = date_i18n(get_option('date_format') .' '. get_option('time_format'), strtotime($order->order_date));
-                $order_id       = $order->get_order_number();
-                $order_total    = FUE_Addon_Woocommerce::format_price( $order->get_total() );
-                $order_subtotal = FUE_Addon_Woocommerce::format_price( $order->get_subtotal() );
-                $order_tax      = FUE_Addon_Woocommerce::format_price( $order->get_total_tax() );
-                $order_pay_method = $order->payment_method_title;
+                $order_date       = date_i18n(get_option('date_format'), strtotime(WC_FUE_Compatibility::get_order_prop( $order, 'order_date' )));
+                $order_datetime   = date_i18n(get_option('date_format') .' '. get_option('time_format'), strtotime(WC_FUE_Compatibility::get_order_prop( $order, 'order_date' )));
+                $order_id         = $order->get_order_number();
+                $order_total      = FUE_Addon_Woocommerce::format_price( $order->get_total() );
+                $order_subtotal   = FUE_Addon_Woocommerce::format_price( $order->get_subtotal() );
+                $order_tax        = FUE_Addon_Woocommerce::format_price( $order->get_total_tax() );
+                $order_pay_method = WC_FUE_Compatibility::get_order_prop( $order, 'payment_method_title' );
 
                 $billing_address    = $order->get_formatted_billing_address();
                 $shipping_address   = $order->get_formatted_shipping_address();
-                $billing_phone      = $order->billing_phone;
+                $billing_phone      = WC_FUE_Compatibility::get_order_prop( $order, 'billing_phone' );
                 $shipping_phone     = (isset($order->shipping_phone)) ? $order->shipping_phone : '';
 
                 $lists = FUE_Addon_Woocommerce::list_order_items( $order );
 
-                $customer_first = $order->billing_first_name;
-                $customer_last  = $order->billing_last_name;
-                $customer_email = $order->billing_email;
-                $user_id        = $order->customer_user;
+                $customer_first = WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' );
+                $customer_last  = WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+                $customer_email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
+                $user_id        = WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' );
 
                 if ( $user_id ) {
                     $user       = new WP_User( $user_id );
@@ -789,10 +806,10 @@ class FUE_Addon_Woocommerce_Mailer {
                     $username   = '';
                 }
             } else {
-                $order_id       = '798';
-                $order_total    = FUE_Addon_Woocommerce::format_price( 121.40 );
-                $order_subtotal = FUE_Addon_Woocommerce::format_price( 120 );
-                $order_tax      = FUE_Addon_Woocommerce::format_price( 1.40 );
+                $order_id         = '798';
+                $order_total      = FUE_Addon_Woocommerce::format_price( 121.40 );
+                $order_subtotal   = FUE_Addon_Woocommerce::format_price( 120 );
+                $order_tax        = FUE_Addon_Woocommerce::format_price( 1.40 );
                 $order_pay_method = 'PayPal';
 
                 // check if user wants to simulate email from a specific order
@@ -898,6 +915,7 @@ class FUE_Addon_Woocommerce_Mailer {
             $replacements['order_subtotal']         = $order_subtotal;
             $replacements['order_tax']              = $order_tax;
             $replacements['order_pay_method']       = $order_pay_method;
+            $replacements['order_pay_url']          = $order_pay_url;
             $replacements['customer_first_name']    = $customer_first;
             $replacements['customer_last_name']     = $customer_last;
             $replacements['customer_name']          = $customer_first .' '. $customer_last;
@@ -1024,8 +1042,8 @@ class FUE_Addon_Woocommerce_Mailer {
             $item_list_csv = 'Item 1, Item 2';
             $item_cats = '<ul><li>Category 1</li><li>Category 2</li></ul>';
 
-            $spent_order    = strip_tags( woocommerce_price(19.99) );
-            $spent_total    = strip_tags( woocommerce_price(3250) );
+            $spent_order    = strip_tags( wc_price(19.99) );
+            $spent_total    = strip_tags( wc_price(3250) );
             $total_orders   = 12;
             $last_order_date= $order_date;
 
@@ -1114,17 +1132,19 @@ class FUE_Addon_Woocommerce_Mailer {
 
         $spent_order = 0;
         if ( $order ) {
-            $replacements['amount_spent_order'] = FUE_Addon_Woocommerce::format_price( $order->order_total );
-            $replacements['dollar_spent_order'] = $replacements['amount_spent_order'];
+            $spent_order = FUE_Addon_Woocommerce::format_price( WC_FUE_Compatibility::get_order_prop( $order, 'order_total' ) );
+
+            $replacements['dollar_spent_order'] = $spent_order;
             $replacements['order_subtotal']     = FUE_Addon_Woocommerce::format_price( $order->get_subtotal() );
             $replacements['order_tax']          = FUE_Addon_Woocommerce::format_price( $order->get_total_tax() );
-            $replacements['order_pay_method']   = $order->payment_method_title;
+            $replacements['order_pay_method']   = WC_FUE_Compatibility::get_order_prop( $order, 'payment_method_title' );
+            $replacements['order_pay_url']      = $order->get_checkout_payment_url();
         }
 
-        $replacements['amount_spent_order']    = $spent_order;
-        $replacements['amount_spent_total']    = $spent_total;
-        $replacements['number_orders']          = $num_orders;
-        $replacements['last_purchase_date']     = $last_purchase;
+        $replacements['amount_spent_order'] = $spent_order;
+        $replacements['amount_spent_total'] = $spent_total;
+        $replacements['number_orders']      = $num_orders;
+        $replacements['last_purchase_date'] = $last_purchase;
 
         return $replacements;
     }
@@ -1145,11 +1165,17 @@ class FUE_Addon_Woocommerce_Mailer {
         $item_price = '';
         $item_sku   = '';
         $item_url   = '';
+        $variation_ids = array();
 
         if ( !empty($queue_item->product_id) ) {
             $_product   = WC_FUE_Compatibility::wc_get_product( $queue_item->product_id );
+
+            if ( $_product->has_child() ) {
+                $variation_ids = $_product->get_children();
+            }
+
             $item_sku   = $_product->get_sku();
-            $cats       = get_the_terms($_product->id, 'product_cat');
+            $cats       = get_the_terms( $_product->get_id(), 'product_cat' );
 
             if (is_array($cats) && !empty($cats)) {
                 foreach ($cats as $cat) {
@@ -1177,15 +1203,16 @@ class FUE_Addon_Woocommerce_Mailer {
 
             if ( $order instanceof WC_Order ) {
                 foreach ( $order->get_items() as $order_item ) {
-                    if ( $order_item['product_id'] == $queue_item->product_id ) {
-                        $replacements['item_quantity'] = $order_item['qty'];
-                        break;
-                    }
-                }
+                 if ( $order_item['product_id'] == $queue_item->product_id ) {
+                   if ( empty( $replacements['item_quantity'] ) ) {
+                    $replacements['item_quantity'] = $order_item['qty'];
+                   }
+                   if ( empty( $item_price ) && in_array( $order_item['product_id'], $variation_ids ) || $order_item['product_id'] == $queue_item->product_id ) {
+                    $item_price = strip_tags( wc_price( $order_item['line_subtotal'] / $order_item['qty'] ) );
+                   }
+                 }
+             }
             }
-
-            $item_price = strip_tags( $_product->get_price_html() );
-
         }
 
         $replacements['item_name']      = $item_name;
@@ -1282,9 +1309,8 @@ class FUE_Addon_Woocommerce_Mailer {
      * @return string
      */
     private function get_plain_order_total( $order ) {
-        $total = function_exists('wc_price') ? wc_price( $order->get_total() ) : woocommerce_price( $order->get_total() );
+        $total = function_exists('wc_price') ? wc_price( $order->get_total() ) : wc_price( $order->get_total() );
         $total = strip_tags( $total );
         return $total;
     }
-    
 }

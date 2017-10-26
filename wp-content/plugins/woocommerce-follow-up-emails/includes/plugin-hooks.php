@@ -9,8 +9,6 @@ add_action('wp_dashboard_setup',    'FUE_Admin_Controller::dashboard_widget');
 // menu
 add_action('admin_menu',            'FUE_Admin_Controller::add_menu', 20);
 
-add_action('admin_init',            'FUE_Admin_Controller::admin_redirects' );
-
 // replace custom menu URLs with their actual values
 add_filter('clean_url',             'FUE_Admin_Controller::replace_email_form_url', 0, 3);
 

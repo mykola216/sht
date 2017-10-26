@@ -34,7 +34,7 @@
             $item['name'],
             $sku,
             $item['qty'],
-            woocommerce_price( $item['price'] ),
+            wc_price( $item['price'] ),
             $categories
         );
     } ?>

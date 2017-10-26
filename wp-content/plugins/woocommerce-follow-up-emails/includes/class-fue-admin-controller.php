@@ -6,28 +6,6 @@
  * Controller for the Admin Panel
  */
 class FUE_Admin_Controller {
-
-    /**
-     * Handle redirects to welcome page after install and updates.
-     *
-     * Transient must be present, the user must have access rights, and we must ignore the network/bulk plugin updaters.
-     */
-    public static function admin_redirects() {
-        if ( ! get_transient( '_fue_activation_redirect' ) || is_network_admin() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_follow_up_emails' ) ) {
-            return;
-        }
-
-        delete_transient( '_fue_activation_redirect' );
-
-        if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'fue-about' ) ) ) {
-            return;
-        }
-
-        // If the user needs to install, send them to the setup wizard
-        wp_safe_redirect( admin_url( 'index.php?page=fue-about' ) );
-        exit;
-    }
-
     /**
      * Register the menu items
      */
@@ -363,7 +341,7 @@ class FUE_Admin_Controller {
         $email_batch_interval   = get_option( 'fue_batch_interval', 10 );
         $spf                    = get_option( 'fue_spf', array() );
         $dkim                   = get_option( 'fue_dkim', array() );
-        $tab                    = (isset($_GET['tab'])) ? $_GET['tab'] : 'documentation';
+        $tab                    = (isset($_GET['tab'])) ? $_GET['tab'] : 'system';
 
         include FUE_TEMPLATES_DIR .'/settings/settings.php';
     }

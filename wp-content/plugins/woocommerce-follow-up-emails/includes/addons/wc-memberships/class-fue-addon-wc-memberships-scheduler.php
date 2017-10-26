@@ -3,10 +3,37 @@
 class FUE_Addon_WC_Memberships_Scheduler {
 
     public function __construct() {
-        add_action( 'wc_memberships_user_membership_status_changed', array($this, 'queue_status_emails'), 10, 3 );
-        add_action( 'wc_memberships_user_membership_created', array($this, 'queue_membership_active_emails'), 10, 2 );
-        add_action( 'wc_memberships_grant_membership_access_from_purchase', array($this, 'schedule_reminders_from_purchase'), 10, 2 );
-        add_filter( 'fue_skip_email_sending', array($this, 'skip_sending_if_status_changed'), 10, 3 );
+        add_action( 'wc_memberships_user_membership_status_changed', array( $this, 'queue_status_emails' ), 10, 3 );
+        add_action( 'wc_memberships_user_membership_created', array( $this, 'queue_membership_active_emails' ), 10, 2 );
+        add_action( 'wc_memberships_grant_membership_access_from_purchase', array( $this, 'schedule_reminders_from_purchase' ), 10, 2 );
+        add_filter( 'fue_skip_email_sending', array( $this, 'skip_sending_if_status_changed' ), 10, 3 );
+        add_action( 'fue_record_order', array( $this, 'maybe_apply_membership' ) );
+    }
+
+    /**
+     * Return all emails with type of memberships given an interval type.
+     *
+     * @param string $interval_type Interval type to query.
+     * @return array
+     */
+    private function get_membership_emails( $interval_type = '' ) {
+        $meta_query = array(
+            'meta_query'    => array(
+                array(
+                    'key'   => '_prev_type',
+                    'value' => 'wc_memberships',
+                ),
+            ),
+        );
+
+        if ( ! empty( $interval_type ) ) {
+            $meta_query['meta_query'][] = array(
+                'key'   => '_interval_type',
+                'value' => $interval_type,
+            );
+        }
+
+        return fue_get_emails( 'any', FUE_Email::STATUS_ACTIVE, $meta_query );
     }
 
     /**
@@ -17,26 +44,21 @@ class FUE_Addon_WC_Memberships_Scheduler {
      * @param string $new_status New status, without the wcm- prefix
      */
     public function queue_status_emails( $membership, $old_status, $new_status ) {
-        $emails = fue_get_emails( 'wc_memberships', FUE_Email::STATUS_ACTIVE, array(
-            'meta_query'    => array(
-                array(
-                    'key'   => '_interval_type',
-                    'value' => 'wcm-'. $new_status
-                )
-            )
-        ) );
+        $emails = $this->get_membership_emails( 'wcm-' . $new_status );
+
         foreach ( $emails as $email ) {
-            if ( !empty( $email->meta['plan_id'] ) & $membership->get_plan_id() != $email->meta['plan_id'] ) {
+            if ( ! empty( $email->meta['plan_id'] ) && $membership->get_plan_id() != $email->meta['plan_id'] ) {
                 continue;
             }
+
             // look for duplicates
             $items = Follow_Up_Emails::instance()->scheduler->get_items(array(
                 'is_sent'   => 0,
                 'email_id'  => $email->id,
-                'user_id'   => $membership->get_user_id()
+                'user_id'   => $membership->get_user_id(),
             ));
 
-            if ( $this->membership_id_mismatch( $membership->get_id(), $items ) ) {
+            if ( $this->membership_id_matches( $membership->get_id(), $items ) ) {
                 continue;
             }
 
@@ -44,14 +66,14 @@ class FUE_Addon_WC_Memberships_Scheduler {
                 'send_on'       => $email->get_send_timestamp(),
                 'user_id'       => $membership->get_user_id(),
                 'email_id'      => $email->id,
-                'meta'          => array('membership_id' => $membership->get_id() )
+                'meta'          => array( 'membership_id' => $membership->get_id() ),
             );
             FUE_Sending_Scheduler::queue_email( $insert, $email );
         }
 
-        if ( $new_status == 'active' ) {
+        if ( 'active' == $new_status ) {
             $this->schedule_expiration_reminders( $membership );
-        } elseif ( $old_status == 'active' ) {
+        } elseif ( 'active' == $old_status ) {
             $this->clear_expiration_reminders( $membership );
         }
     }
@@ -89,31 +111,31 @@ class FUE_Addon_WC_Memberships_Scheduler {
      */
     public function schedule_expiration_reminders( $membership ) {
         $end_date = $membership->get_end_date( 'timestamp' );
-        if ( current_time('timestamp', true) > $end_date ) {
+
+        if ( current_time( 'timestamp', true ) > $end_date ) {
             return;
         }
-        $emails = fue_get_emails( 'wc_memberships', FUE_Email::STATUS_ACTIVE, array(
-            'meta_query'    => array(
-                array(
-                    'key'   => '_interval_type',
-                    'value' => 'membership_before_expire'
-                )
-            )
-        ));
+
+        $emails = $this->get_membership_emails( 'membership_before_expire' );
+
         foreach ( $emails as $email ) {
+            if ( ! empty( $email->meta['plan_id'] ) && $membership->get_plan_id() != $email->meta['plan_id'] ) {
+                continue;
+            }
+
             // look for duplicates
             $items = Follow_Up_Emails::instance()->scheduler->get_items(array(
                 'is_sent'   => 0,
                 'email_id'  => $email->id,
-                'user_id'   => $membership->get_user_id()
+                'user_id'   => $membership->get_user_id(),
             ));
 
-            if ( $this->membership_id_mismatch( $membership->get_id(), $items ) ) {
+            if ( $this->membership_id_matches( $membership->get_id(), $items ) ) {
                 continue;
             }
 
             // add this email to the queue
-            $interval   = (int)$email->interval_num;
+            $interval   = (int) $email->interval_num;
             $add        = FUE_Sending_Scheduler::get_time_to_add( $interval, $email->interval_duration );
             $send_on    = $end_date - $add;
 
@@ -126,7 +148,7 @@ class FUE_Addon_WC_Memberships_Scheduler {
                 'send_on'       => $send_on,
                 'user_id'       => $membership->get_user_id(),
                 'email_id'      => $email->id,
-                'meta'          => array('membership_id' => $membership->get_id() )
+                'meta'          => array( 'membership_id' => $membership->get_id() ),
             );
             FUE_Sending_Scheduler::queue_email( $insert, $email );
         }
@@ -137,19 +159,12 @@ class FUE_Addon_WC_Memberships_Scheduler {
      * @param WC_Memberships_User_Membership $membership
      */
     public function clear_expiration_reminders( $membership ) {
-        $emails = fue_get_emails( 'wc_memberships', FUE_Email::STATUS_ACTIVE, array(
-            'meta_query'    => array(
-                array(
-                    'key'   => '_interval_type',
-                    'value' => 'membership_before_expire'
-                )
-            )
-        ));
+        $emails = $this->get_membership_emails( 'membership_before_expire' );
 
         foreach ( $emails as $email ) {
             $items = Follow_Up_Emails::instance()->scheduler->get_items(array(
                 'email_id'  => $email->id,
-                'user_id'   => $membership->get_user_id()
+                'user_id'   => $membership->get_user_id(),
             ));
 
             foreach ( $items as $item ) {
@@ -196,10 +211,10 @@ class FUE_Addon_WC_Memberships_Scheduler {
         return $skip;
     }
 
-    private function membership_id_mismatch( $membership_id, $items ) {
-        if ( !empty( $items ) ) {
+    private function membership_id_matches( $membership_id, $items ) {
+        if ( ! empty( $items ) ) {
             foreach ( $items as $item ) {
-                if ( !empty( $item->meta['membership_id'] ) && $item->meta['membership_id'] == $membership_id ) {
+                if ( ! empty( $item->meta['membership_id'] ) && $item->meta['membership_id'] == $membership_id ) {
                     return true;
                 }
             }
@@ -212,12 +227,12 @@ class FUE_Addon_WC_Memberships_Scheduler {
         $current_status = $membership->get_status();
         $changed        = false;
 
-        if ( $email->trigger == 'membership_before_expire' && $current_status != 'active' ) {
+        if ( 'membership_before_expire' == $email->trigger && 'active' != $current_status ) {
             $changed = true;
         } else {
             $statuses = wc_memberships_get_user_membership_statuses();
             foreach ( array_keys( $statuses ) as $status ) {
-                $trimmed_status = ltrim( $status, 'wcm-' );
+                $trimmed_status = str_replace( 'wcm-', '', $status );
                 if ( $email->trigger == $status && $trimmed_status != $current_status ) {
                     $changed = true;
                     break;
@@ -226,5 +241,19 @@ class FUE_Addon_WC_Memberships_Scheduler {
         }
 
         return $changed;
+    }
+
+    public function maybe_apply_membership( $order_id ) {
+        $granted_memberships = wc_memberships_get_order_access_granted_memberships( $order_id );
+
+        // this order grants a membership, attempt to schedule
+        if ( ! empty( $granted_memberships ) ) {
+            foreach ( array_keys( $granted_memberships ) as $user_membership_id ) {
+                $user_membership = wc_memberships_get_user_membership( $user_membership_id );
+
+                // maybe schedule, since this function has duplicate checks
+                $this->schedule_expiration_reminders( $user_membership );
+            }
+        }
     }
 }

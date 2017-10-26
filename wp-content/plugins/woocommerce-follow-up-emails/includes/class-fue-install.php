@@ -43,6 +43,10 @@ class FUE_Install {
      * Register admin notices
      */
     public function add_notices() {
+        if ( true !== (bool) get_option( 'fue_welcome_notice', false ) ) {
+            add_action( 'admin_notices', array( $this, 'welcome_notice' ) );
+        }
+
         if ( get_option( 'fue_needs_update' ) == 1 ) {
             add_action( 'admin_notices', array( $this, 'install_notice' ) );
         }
@@ -50,6 +54,20 @@ class FUE_Install {
         if ( !empty($_GET['fue-data-updated']) ) {
             add_action( 'admin_notices', array( $this, 'updated_notice' ) );
         }
+    }
+
+    /**
+     * Display a welcome notice
+     */
+    public function welcome_notice() {  
+      update_option( 'fue_welcome_notice', true );
+    ?>
+      <div class="updated">
+        <?php
+        echo '<p><strong>' . __( 'Thanks for installing Follow-Up Emails.', 'woocommerce-product-addons' ) . '</strong></p><p>' . sprintf( __( 'Before diving in, we highly recommend taking the time to read about %1$semail types%2$s and %3$scampaigns%2$s in the %4$sdocumentation%2$s.', 'woocommerce-product-addons' ), '<a href="https://docs.woocommerce.com/document/automated-follow-up-emails-docs/">', '</a>', '<a href="https://docs.woocommerce.com/document/automated-follow-up-emails-docs/email-campaigns/">', '<a href="https://docs.woocommerce.com/document/automated-follow-up-emails-docs/">' ) . '</p><p>' . sprintf( __( 'Ready to get started? %sCreate a new email campaign%s.','woocommerce-product-addons' ), '<a href="' . esc_url( admin_url( 'post-new.php?post_type=follow_up_email' ) ) . '">', '</a>' ) . '</p>';
+        ?>
+      </div>
+    <?php
     }
 
     /**
@@ -107,9 +125,7 @@ class FUE_Install {
             // Update complete
             delete_option( 'fue_needs_update' );
 
-            // What's new redirect
-            delete_transient( '_fue_activation_redirect' );
-            wp_redirect( admin_url( 'index.php?page=fue-about&fue-updated=true' ) );
+            wp_redirect( admin_url() );
             exit;
         }
 
@@ -150,15 +166,6 @@ class FUE_Install {
         update_option( 'fue_version', FUE_VERSION );
 
         do_action( 'fue_install' );
-
-        // Redirect to welcome screen
-        if ( is_null( $current_db_version ) ) {
-            set_transient( '_fue_activation_redirect', 1, 30 );
-        // Show welcome screen for major updates only
-        } elseif ( version_compare( $current_version, $major_version, '<' ) ) {
-            set_transient( '_fue_activation_redirect', 1, 30 );
-        }
-
     }
 
     /**

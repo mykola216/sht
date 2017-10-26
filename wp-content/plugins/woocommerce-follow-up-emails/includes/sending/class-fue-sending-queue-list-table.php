@@ -271,7 +271,7 @@ class FUE_Sending_Queue_List_Table extends WP_List_Table {
 
         return sprintf(
             __('<a href="%s">#%d %s</a><br/><small>(%s)</small>', 'follow_up_emails'),
-            'admin.php?page=followup-emails-form&id='. $item['email_id'],
+            admin_url( 'admin.php?page=followup-emails-form&id='. $item['email_id'] ),
             $item['email_id'],
             $email->name,
             $email->get_trigger_string()
