@@ -62,6 +62,9 @@ class FUE_Addon_Twitter_Tweeter {
 
         foreach ( $items as $item ) {
             $product = WC_FUE_Compatibility::wc_get_product( $item['product_id'] );
+            if ( ! $product ) {
+                continue;
+            }
             $items_array[] = $product->get_title();
         }
 

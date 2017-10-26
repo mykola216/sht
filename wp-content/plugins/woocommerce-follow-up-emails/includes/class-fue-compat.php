@@ -372,6 +372,54 @@ if ( ! class_exists( 'WC_FUE_Compatibility' ) ) :
 
         }
 
+        /**
+         * Get order property with compatibility check on order getter introduced
+         * in WC 3.0.
+         *
+         * @since 4.4.19
+         *
+         * @param WC_Order $order Order object.
+         * @param string   $prop  Property name.
+         *
+         * @return mixed Property value
+         */
+        public static function get_order_prop( $order, $prop ) {
+            $modifier = function ( $a ) {
+                return $a;
+            };
+
+            switch ( $prop ) {
+                case 'order_total':
+                    $getter = array( $order, 'get_total' );
+                    break;
+                case 'post':
+                    $getter = array( $order, 'get_id' );
+                    $modifier = function ( $a ) {
+                        return get_post( $a );
+                    };
+                    break;
+                case 'completed_date':
+                    $getter = array( $order, 'get_date_completed' );
+                    $modifier = function ( $wc_date_time  ) {
+                        return is_a( $wc_date_time, 'WC_DateTime' ) ? date( 'Y-m-d H:i:s', $wc_date_time->getTimestamp() ) : '';
+                    };
+                    break;
+                case 'order_date':
+                    $getter = array( $order, 'get_date_created' );
+                    $modifier = function ( $wc_date_time  ) {
+                        return is_a( $wc_date_time, 'WC_DateTime' ) ? date( 'Y-m-d H:i:s', $wc_date_time->getTimestamp() ) : '';
+                    };
+                    break;
+                case 'customer_user':
+                    $getter = array( $order, 'get_customer_id' );
+                    break;
+                default:
+                    $getter = array( $order, 'get_' . $prop );
+                    break;
+            }
+
+            return is_callable( $getter ) ? $modifier( call_user_func( $getter ) ) : $order->{ $prop };
+        }
     }
 
 

@@ -118,28 +118,28 @@
         <tr valign="top">
             <th>
                 <label for="bcc"><?php _e('BCC', 'follow_up_emails'); ?></label>
-                <img class="help_tip" title="<?php _e('All emails will be blind carbon copied to this address', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL .'/images/help.png'; ?>" width="16" height="16" />
             </th>
             <td>
                 <input type="text" name="bcc" id="bcc" value="<?php echo esc_attr( $bcc ); ?>" />
+                <p class="description"><?php _e('All emails will be blind carbon copied to this address.', 'follow_up_emails'); ?></p>
             </td>
         </tr>
         <tr valign="top">
             <th>
                 <label for="from_name"><?php _e('From/Reply-To Name', 'follow_up_emails'); ?></label>
-                <img class="help_tip" title="<?php _e('The name that your emails will come from and replied to', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL .'/images/help.png'; ?>" width="16" height="16" />
             </th>
             <td>
                 <input type="text" name="from_name" id="from_name" value="<?php echo esc_attr( $from_name ); ?>" />
+                <p class="description"><?php _e('The name that your emails will come from and replied to.', 'follow_up_emails'); ?></p>
             </td>
         </tr>
         <tr valign="top">
             <th>
                 <label for="from_email"><?php _e('From/Reply-To Email', 'follow_up_emails'); ?></label>
-                <img class="help_tip" title="<?php _e('The email address that your emails will come from and replied to', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL .'/images/help.png'; ?>" width="16" height="16" />
             </th>
             <td>
                 <input type="text" name="from_email" id="from_email" value="<?php echo esc_attr( $from ); ?>" />
+                <p class="description"><?php _e('The email address that your emails will come from and replied to.', 'follow_up_emails'); ?></p>
             </td>
         </tr>
         </tbody>
@@ -149,22 +149,22 @@
 	
     <h3><?php _e('Bounce Settings', 'follow_up_emails'); ?></h3>
     
-    <p><?php _e('To which email address should all of your bounced emails go? No premium version needed.', 'follow_up_emails'); ?></p>
+    <p><?php _e('Which email address should all of your bounced emails be sent to? No premium version needed.', 'follow_up_emails'); ?></p>
 
     <table id="emails_form" class="form-table">
         <tbody>
         <tr valign="top">
             <th class="titledesc">
                 <label for="bounce_email"><?php _e('Bounce Address', 'follow_up_emails'); ?></label>
-                <img class="help_tip" title="<?php _e('Undelivered emails will be sent to this address', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL .'/images/help.png'; ?>" width="16" height="16" />
             </th>
             <td>
                 <input type="text" name="bounce[email]" id="bounce_email" value="<?php echo esc_attr( $bounce['email'] ); ?>" />
+                <p class="description"><?php _e('Undelivered emails will be sent to this address.', 'follow_up_emails'); ?></p>
             </td>
         </tr>
         <tr valign="top">
             <th class="titledesc">
-                <label for="bounce_handling"><?php _e('Automatic bounce handling', 'follow_up_emails'); ?></label>
+                <label for="bounce_handling"><?php _e('Automatic Bounce Handling', 'follow_up_emails'); ?></label>
             </th>
             <td>
                 <input type="checkbox" name="bounce[handle_bounces]" id="bounce_handling" value="1" <?php checked( 1, $bounce['handle_bounces'] ); ?> />

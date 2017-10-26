@@ -40,19 +40,19 @@ class FUE_Addon_Twitter_Frontend {
      */
     public function checkout_form_fields() {
         if ( $this->fue_twitter->settings['checkout_fields'] ) {
-            fue_get_template( '/twitter/checkout-form.php', array(), 'follow-up-emails', FUE_TEMPLATES_DIR .'/add-ons/' );
+            fue_get_template( '/add-ons/twitter/checkout-form.php', array(), 'follow-up-emails', FUE_TEMPLATES_DIR );
         }
     }
 
     public function account_display_handle() {
         if ( $this->fue_twitter->settings['account_fields'] ) {
-            fue_get_template( '/twitter/account-display-handle.php', array(), 'follow-up-emails', FUE_TEMPLATES_DIR .'/add-ons/' );
+            fue_get_template( '/add-ons/twitter/account-display-handle.php', array(), 'follow-up-emails', FUE_TEMPLATES_DIR );
         }
     }
 
     public function edit_account_form() {
         if ( $this->fue_twitter->settings['account_fields'] ) {
-            fue_get_template( '/twitter/account-form.php', array(), 'follow-up-emails', FUE_TEMPLATES_DIR .'/add-ons/' );
+			fue_get_template( '/add-ons/twitter/account-form.php', array(), 'follow-up-emails', FUE_TEMPLATES_DIR );
         }
     }
 

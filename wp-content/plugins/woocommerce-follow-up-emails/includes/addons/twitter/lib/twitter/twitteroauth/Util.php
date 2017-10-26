@@ -14,13 +14,13 @@ class Util
      */
     public static function urlencodeRfc3986($input)
     {
+        $output = '';
         if (is_array($input)) {
-            return array_map(array(__NAMESPACE__ . '\Util', 'urlencodeRfc3986'), $input);
+            $output = array_map(array( __NAMESPACE__ . '\Util', 'urlencodeRfc3986' ), $input);
         } elseif (is_scalar($input)) {
-            return rawurlencode($input);
-        } else {
-            return '';
+            $output = rawurlencode($input);
         }
+        return $output;
     }
 
     /**
@@ -38,13 +38,13 @@ class Util
      * parameters like this
      * array('a' => array('b','c'), 'd' => 'e')
      *
-     * @param mixed $input
+     * @param string $input
      *
      * @return array
      */
     public static function parseParameters($input)
     {
-        if (!isset($input) || !$input) {
+        if (!is_string($input)) {
             return array();
         }
 
@@ -75,13 +75,13 @@ class Util
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string
      */
-    public static function buildHttpQuery($params)
+    public static function buildHttpQuery(array $params)
     {
-        if (!$params) {
+        if (empty($params)) {
             return '';
         }
 

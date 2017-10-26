@@ -10,10 +10,7 @@ class Request
     protected $parameters;
     protected $httpMethod;
     protected $httpUrl;
-    // for debug purposes
-    public $baseString;
     public static $version = '1.0';
-    public static $POST_INPUT = 'php://input';
 
     /**
      * Constructor
@@ -66,22 +63,10 @@ class Request
     /**
      * @param string $name
      * @param string $value
-     * @param bool   $allowDuplicates
      */
-    public function setParameter($name, $value, $allowDuplicates = true)
+    public function setParameter($name, $value)
     {
-        if ($allowDuplicates && isset($this->parameters[$name])) {
-            // We have already added parameter(s) with this name, so add to the list
-            if (is_scalar($this->parameters[$name])) {
-                // This is the first duplicate, so transform scalar (string)
-                // into an array so we can add the duplicates
-                $this->parameters[$name] = array($this->parameters[$name]);
-            }
-
-            $this->parameters[$name][] = $value;
-        } else {
-            $this->parameters[$name] = $value;
-        }
+        $this->parameters[$name] = $value;
     }
 
     /**
@@ -171,16 +156,10 @@ class Request
     {
         $parts = parse_url($this->httpUrl);
 
-        $scheme = (isset($parts['scheme'])) ? $parts['scheme'] : 'http';
-        $port = (isset($parts['port'])) ? $parts['port'] : (($scheme == 'https') ? '443' : '80');
-        $host = (isset($parts['host'])) ? strtolower($parts['host']) : '';
-        $path = (isset($parts['path'])) ? $parts['path'] : '';
+        $scheme = $parts['scheme'];
+        $host = strtolower($parts['host']);
+        $path = $parts['path'];
 
-        if (($scheme == 'https' && $port != '443')
-            || ($scheme == 'http' && $port != '80')
-        ) {
-            $host = "$host:$port";
-        }
         return "$scheme://$host$path";
     }
 
@@ -212,21 +191,13 @@ class Request
     /**
      * Builds the Authorization: header
      *
-     * @param string|null $realm
-     *
      * @return string
      * @throws TwitterOAuthException
      */
-    public function toHeader($realm = null)
+    public function toHeader()
     {
         $first = true;
-        if ($realm) {
-            $out = 'Authorization: OAuth realm="' . Util::urlencodeRfc3986($realm) . '"';
-            $first = false;
-        } else {
-            $out = 'Authorization: OAuth';
-        }
-
+        $out = 'Authorization: OAuth';
         foreach ($this->parameters as $k => $v) {
             if (substr($k, 0, 5) != "oauth") {
                 continue;
@@ -234,7 +205,7 @@ class Request
             if (is_array($v)) {
                 throw new TwitterOAuthException('Arrays not supported in headers');
             }
-            $out .= ($first) ? ' ' : ',';
+            $out .= ($first) ? ' ' : ', ';
             $out .= Util::urlencodeRfc3986($k) . '="' . Util::urlencodeRfc3986($v) . '"';
             $first = false;
         }
@@ -256,9 +227,9 @@ class Request
      */
     public function signRequest(SignatureMethod $signatureMethod, Consumer $consumer, Token $token = null)
     {
-        $this->setParameter("oauth_signature_method", $signatureMethod->getName(), false);
+        $this->setParameter("oauth_signature_method", $signatureMethod->getName());
         $signature = $this->buildSignature($signatureMethod, $consumer, $token);
-        $this->setParameter("oauth_signature", $signature, false);
+        $this->setParameter("oauth_signature", $signature);
     }
 
     /**

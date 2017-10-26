@@ -170,7 +170,7 @@ var clicks_rendered = opens_rendered = ctor_rendered = false;
                     $conversions_total  = 0;
 
                     foreach ( $conversions as $conversion ) {
-                        $conversions_total += $conversion['order']->order_total;
+                        $conversions_total += WC_FUE_Compatibility::get_order_prop( $conversion['order'], 'order_total' );
                     }
 
                     $email_row = new FUE_Email( $report->email_id );
@@ -190,7 +190,7 @@ var clicks_rendered = opens_rendered = ctor_rendered = false;
                         <td><a class="row-title" href="admin.php?page=followup-emails-reports&tab=linkclick_view&eid=<?php echo urlencode($report->email_id); ?>&ename=<?php echo urlencode($report->email_name); ?>"><span class="dashicons-before dashicons-yes"></span> <?php echo $clicked; ?></a></td>
                         <td><a class="row-title" href="admin.php?page=followup-emails-reports&tab=bounces_view&eid=<?php echo urlencode($report->email_id); ?>&ename=<?php echo urlencode($report->email_name); ?>"><span class="dashicons-before dashicons-flag"></span> <?php echo $bounces; ?></a></td>
                         <td><span class="dashicons-before dashicons-desktop"></span> <?php echo $web_opened; ?></td>
-                        <td><?php printf('%d (%s)', $num_conversions, woocommerce_price($conversions_total)); ?></td>
+                        <td><?php printf('%d (%s)', $num_conversions, wc_price($conversions_total)); ?></td>
                     </tr><?php
                 }
             }

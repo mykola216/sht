@@ -1996,7 +1996,7 @@ class FUE_AJAX {
 
         if ( $posts ) foreach ( $posts as $post ) {
 
-            $product = get_product( $post );
+            $product = wc_get_product( $post );
 
             if ( WC_Subscriptions_Product::is_subscription( $product ) )
                 $found_products[ $post ] = $product->get_formatted_name();
@@ -2318,7 +2318,7 @@ class FUE_AJAX {
             $event_id = get_post_meta( $post, '_tribe_wooticket_for_event', true );
 
             if ( $event_id && $event_id > 0 ) {
-                $product = get_product( $post );
+                $product = wc_get_product( $post );
                 $found_products[ $post ] = $product->get_formatted_name();
             }
 
@@ -2414,7 +2414,7 @@ class FUE_AJAX {
 
             $product = WC_FUE_Compatibility::wc_get_product( $post );
 
-            if ( $product->product_type && $product->product_type == 'booking' ) {
+            if ( $product->is_type( 'booking' ) ) {
                 $found_products[ $post ] = $product->get_formatted_name();
             }
 
@@ -2499,7 +2499,7 @@ class FUE_AJAX {
 
                 // warn if the allotted memory for PHP is less than 64MB
                 // or if the total unfiltered orders is > 3000
-                $memory = fue_let_to_num( WP_MEMORY_LIMIT );
+                $memory = fue_let_to_num( WP_MAX_MEMORY_LIMIT );
 
                 if ( $memory < 67108864 ) {
                     $response['warning'] = __("Warning: Your WordPress memory limit is less than the recommended 64MB. If importing fails, please try increasing this value.\n\nDo you wish to continue?", 'follow_up_emails');
@@ -2762,9 +2762,9 @@ class FUE_AJAX {
                 $customer   = fue_get_customer_from_order( $order );
                 if ( $customer ) {
                     if ( isset( $customers[ $customer->id ] ) ) {
-                        $customers[ $customer->id ] += $order->order_total;
+                        $customers[ $customer->id ] += WC_FUE_Compatibility::get_order_prop( $order, 'order_total' );
                     } else {
-                        $customers[ $customer->id ] = $order->order_total;
+                        $customers[ $customer->id ] = WC_FUE_Compatibility::get_order_prop( $order, 'order_total' );
                     }
                 }
                 $results[] = array(

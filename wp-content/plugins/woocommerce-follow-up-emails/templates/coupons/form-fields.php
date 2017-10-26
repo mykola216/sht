@@ -13,7 +13,9 @@ $coupons    = self::get_coupons();
             else:
                 ?>
                 <label for="send_coupon" class="long"><?php _e('Generate &amp; Send a Coupon Code', 'follow_up_emails'); ?></label>
-                <a href="admin.php?page=followup-emails-coupons&action=new-coupon" class="button-secondary"><?php _e('No coupons found. Create a Coupon', 'follow_up_emails'); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=followup-emails-coupons&action=new-coupon' );?>" class="button-secondary">
+					<?php _e('No coupons found. Create a Coupon', 'follow_up_emails'); ?>
+				</a>
             <?php
             endif;
             ?>

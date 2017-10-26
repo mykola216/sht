@@ -25,7 +25,7 @@
             <thead>
             <tr>
                 <td style="" id="cb" class="manage-column column-cb check-column" scope="col"><label for="cb-select-all-1" class="screen-reader-text"><?php _e('Select All', 'follow_up_emails'); ?></label><input type="checkbox" id="cb-select-all-1"></td>
-                <th scope="col" id="priority" class="manage-column column-priority" width="80"><?php _e('Priority', 'follow_up_emails'); ?> <img class="help_tip" title="<?php _e('Priorities define the order at which emails are queued. If an order matches multiple emails, and always send is not enabled, the priority order will define which email is queued for that customer order.', 'follow_up_emails'); ?>" src="<?php echo FUE_TEMPLATES_URL; ?>/images/help.png" width="16" height="16" /></th>
+                <th scope="col" id="priority" class="manage-column column-priority" width="80"><?php _e('Priority', 'follow_up_emails'); ?></th>
                 <th scope="col" id="title" class="manage-column column-title column-primary" width="200" style=""><?php _e('Name', 'follow_up_emails'); ?></th>
                 <th scope="col" id="amount" class="manage-column column-interval" style=""><?php _e('Interval', 'follow_up_emails'); ?></th>
                 <th scope="col" id="usage_count" class="manage-column column-usage_count" style=""><?php _e('Used', 'follow_up_emails'); ?></th>
@@ -93,9 +93,6 @@
             <?php endif; ?>
             </tbody>
         </table>
-        <div class="fue_table_footer">
-            <div class="order_message"></div>
-        </div>
 
         <p>
             <select class="bulk-action-select bulk-action-<?php echo $type->id; ?>-active" name="bulk_action_<?php echo $type->id; ?>_active">
@@ -181,10 +178,7 @@
             <?php endif; ?>
             </tbody>
         </table>
-        <div class="fue_table_footer">
-            <div class="order_message"></div>
-        </div>
-
+        
         <p>
             <select class="bulk-action-select bulk-action-<?php echo $type->id; ?>-archived" name="bulk_action_<?php echo $type->id; ?>_archived">
                 <option value=""><?php _e('Bulk Actions', 'follow_up_emails'); ?></option>
