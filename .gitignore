@@ -14,3 +14,4 @@ wp-content/db.php
 wp-content/w3-total-cache-config-preview.php
 *.DS_Store
 /wp-content/plugins/media-placeholders/
+/adminer.php

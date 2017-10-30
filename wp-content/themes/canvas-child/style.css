@@ -918,7 +918,8 @@ div.woocommerce-message {
     border-radius: 0;
     background: #f0a818;
     margin-top: -12px;
-    margin-bottom: 28px; }
+    margin-bottom: 28px;
+    text-decoration: none !important; }
     @media (min-width: 0px) and (max-width: 767px) {
       div.woocommerce-message .wc-forward {
         height: 44px;

@@ -1067,6 +1067,7 @@ div.woocommerce-message  {
 		background: #f0a818;
 		margin-top: -12px;
 		margin-bottom: 28px;
+		text-decoration: none !important;
 		@include mobile {
 			height: 44px;
 			font-size: 18px !important;
