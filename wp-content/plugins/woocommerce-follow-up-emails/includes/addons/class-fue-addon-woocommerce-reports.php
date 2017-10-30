@@ -26,9 +26,9 @@ class FUE_Addon_Woocommerce_Reports {
             $email_meta = maybe_unserialize( $email_row->meta );
 
             if ( $email_row->interval_type == 'order_total_above' && isset($email_meta['order_total_above']) ) {
-                $meta = woocommerce_price($email_meta['order_total_above']);
+                $meta = wc_price($email_meta['order_total_above']);
             } elseif ( $email_row->interval_type == 'order_total_below' && isset($email_meta['order_total_below']) ) {
-                $meta = woocommerce_price( $email_meta['order_total_below'] );
+                $meta = wc_price( $email_meta['order_total_below'] );
             }
         }
 
@@ -39,7 +39,7 @@ class FUE_Addon_Woocommerce_Reports {
 
         if ( $report->order_id && $report->order_id != 0 ) {
             $order = WC_FUE_Compatibility::wc_get_order($report->order_id);
-            $email = $order->billing_email;
+            $email = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
         }
 
         return $email;

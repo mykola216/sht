@@ -37,7 +37,7 @@ if ( !class_exists( 'DNSTypes' ) ):
             $this->types_by_name[$name]=$id;
         }
 
-        function DNSTypes()
+        function __construct()
         {
             $this->types_by_id=array();
             $this->types_by_name=array();

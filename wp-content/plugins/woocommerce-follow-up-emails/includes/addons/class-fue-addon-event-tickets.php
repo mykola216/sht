@@ -45,14 +45,11 @@ class FUE_Addon_Event_Tickets extends  FUE_Addon_Wootickets {
             'triggers'              => $triggers,
             'durations'             => Follow_Up_Emails::$durations,
             'long_description'      => __(
-                'Create emails based upon the event/ticket status for The Events Calendar.<br />Increase revenue with a
-                custom lifecycle marketing program from Outbound Commerce. It’s email marketing for busy eCommerce
-                businesses built by experienced eCommerce and marketing professionals.',
+                'Create emails based upon the event/ticket status for The Events Calendar.',
                 'follow_up_emails'
             ),
             'short_description'     => __(
-                'Not sure where to start? Let Outbound Commerce help. Get email marketing for busy eCommerce businesses
-                built by experienced eCommerce and marketing professionals.',
+                'Create emails based upon the event/ticket status for The Events Calendar.',
                 'follow_up_emails'
             )
         );
@@ -252,25 +249,26 @@ class FUE_Addon_Event_Tickets extends  FUE_Addon_Wootickets {
         if ( class_exists( 'Tribe__Tickets_Plus__Commerce__WooCommerce__Main' ) ) {
             $woo_tickets    = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
             $ticket         = $woo_tickets->get_ticket( $event_id, $ticket_id );
+			if ( is_a( $ticket, 'Tribe__Tickets__Ticket_Object' ) ) {
+				// Ticket Vars
+				$ticket_sale_start  = '';
+				$ticket_sale_end    = '';
 
-            // Ticket Vars
-            $ticket_sale_start  = '';
-            $ticket_sale_end    = '';
+				if ( $ticket->start_date ) {
+    				$ticket_sale_start = date_i18n( wc_date_format() .' '. wc_time_format(), strtotime( $ticket->start_date ) );
+				}
 
-            if ( $ticket->start_date ) {
-                $ticket_sale_start = date_i18n( wc_date_format() .' '. wc_time_format(), strtotime( $ticket->start_date ) );
-            }
+				if ( $ticket->end_date ) {
+    				$ticket_sale_end = date_i18n( wc_date_format() .' '. wc_time_format(), strtotime( $ticket->end_date ) );
+				}
 
-            if ( $ticket->end_date ) {
-                $ticket_sale_end = date_i18n( wc_date_format() .' '. wc_time_format(), strtotime( $ticket->end_date ) );
-            }
-
-            $variables['ticket_name']           = $ticket->name;
-            $variables['ticket_description']    = $ticket->description;
-            $variables['ticket_sale_start']     = $ticket_sale_start;
-            $variables['ticket_sale_end']       = $ticket_sale_end;
-            $variables['ticket_cost']           = woocommerce_price( $ticket->price );
-            $variables['ticket_excerpt']        = $ticket->description;
+				$variables['ticket_name']           = $ticket->name;
+				$variables['ticket_description']    = $ticket->description;
+				$variables['ticket_sale_start']     = $ticket_sale_start;
+				$variables['ticket_sale_end']       = $ticket_sale_end;
+				$variables['ticket_cost']           = wc_price( $ticket->price );
+				$variables['ticket_excerpt']        = $ticket->description;
+			}
         }
 
         $event = $this->get_event_data( $event_id );

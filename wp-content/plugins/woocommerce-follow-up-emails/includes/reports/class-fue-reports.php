@@ -74,7 +74,7 @@ class FUE_Reports {
         wp_localize_script( 'fue-user-report-link', 'FUE_USER_REPORT', array(
             'options_title' => __('Personal Options'),
             'reports_title' => __('Customer Data', 'follow_up_emails'),
-            'reports_link'  => 'admin.php?page=followup-emails-reports&tab=reportuser_view&email='. urlencode($user->user_email) .'&user_id='. $user->ID
+            'reports_link'  => admin_url( 'admin.php?page=followup-emails-reports&tab=reportuser_view&email='. urlencode($user->user_email) .'&user_id='. $user->ID ),
         ) );
     }
 
@@ -149,8 +149,6 @@ class FUE_Reports {
         if ( isset($_GET['fuepx']) && $_GET['fuepx'] == 1 ) {
             if (!isset($_GET['data'])||empty($_GET['data'])) return;
 
-            header("Content-Type: image/gif");
-
             $data   = base64_decode($_GET['data']);
             $parsed = array();
             parse_str($data, $parsed);
@@ -173,6 +171,25 @@ class FUE_Reports {
             $tracker = new FUE_Report_Email_Tracking( Follow_Up_Emails::instance() );
             $tracker->log_event( 'open', $log_data );
 
+            // print the pixel
+            // Create an image, 1x1 pixel in size
+            $im=imagecreate(1,1);
+
+            // Set the background colour
+            $white=imagecolorallocate($im,255,255,255);
+
+            // Allocate the background colour
+            imagesetpixel($im,1,1,$white);
+
+            // Set the image type
+            header("content-type:image/jpg");
+
+            // Create a JPEG file from the image
+            imagejpeg($im);
+
+            // Free memory associated with the image
+            imagedestroy($im);
+            exit;
         }
     }
 
@@ -830,11 +847,11 @@ class FUE_Reports {
                 continue;
             }
 
-            if ( !empty( $filter['user_id'] ) && $filter['user_id'] != $order->customer_user ) {
+            if ( !empty( $filter['user_id'] ) && $filter['user_id'] != WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ) ) {
                 continue;
             }
 
-            if ( !empty( $filter['email'] ) && $filter['email'] != $order->billing_email ) {
+            if ( !empty( $filter['email'] ) && $filter['email'] != WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) ) {
                 continue;
             }
 

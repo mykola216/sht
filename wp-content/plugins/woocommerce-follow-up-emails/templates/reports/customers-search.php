@@ -112,7 +112,7 @@ class FUE_Reports_Customers_Table extends WP_List_Table {
                     ));
 
                     if ( $date ) {
-                        $user['last_order_date'] = date( get_option( 'date_format' ), strtotime( $date ) );
+                        $user['last_order_date'] = date( wc_date_format(), strtotime( $date ) );
                     }
                 }
             }
@@ -155,7 +155,7 @@ class FUE_Reports_Customers_Table extends WP_List_Table {
 
             case 'lifetime_value':
                 $value = max(0, $user['total_purchase_price']);
-                $value = (function_exists( 'woocommerce_price' ) ) ? woocommerce_price( $value ) : 'n/a';
+                $value = (function_exists( 'wc_price' ) ) ? wc_price( $value ) : 'n/a';
                 break;
 
             case 'last_order_date':

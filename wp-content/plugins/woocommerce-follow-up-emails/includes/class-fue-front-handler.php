@@ -122,15 +122,30 @@ class FUE_Front_Handler {
             ! isset( $_POST['_wpnonce'] )
             || ! wp_verify_nonce( $_POST['_wpnonce'], 'fue_subscribe' )
         ) {
-            wp_die('Sorry, your browser submitted an invalid request. Please try again.');
+            wp_die( 'Sorry, your browser submitted an invalid request. Please try again.' );
         }
 
-        $back   = $_POST['_wp_http_referer'];
-        $email  = !empty( $_POST['fue_subscriber_email'] ) ? $_POST['fue_subscriber_email'] : '';
-        $list   = !empty( $_POST['fue_email_list'] ) ? $_POST['fue_email_list'] : '';
+		$back   = ! empty( $_POST['_wp_http_referer'] ) ? wc_clean( $_POST['_wp_http_referer'] ) : site_url();
+		$email  = ! empty( $_POST['fue_subscriber_email'] ) ? wc_clean( $_POST['fue_subscriber_email'] ) : '';
+		$list   = ! empty( $_POST['fue_email_list'] ) ? wc_clean( $_POST['fue_email_list'] ) : '';
+
+		$posted_lists = explode( ',', $list );
+
+		// Validate lists.
+		$valid_lists = fue_get_subscription_lists();
+
+		$valid_list_names = array();
+		foreach ( $valid_lists as $valid_list ) {
+			$valid_list_names[] = $valid_list['list_name'];
+		}
+
+		foreach ( $posted_lists as $i => $posted_list ) {
+			if ( ! in_array( $posted_list, $valid_list_names ) ) {
+				unset( $posted_lists[ $i ] );
+			}
+		}
+
         $id     = fue_add_subscriber( $email, $list );
-
-
 
         if ( is_wp_error( $id ) ) {
             $args = array(

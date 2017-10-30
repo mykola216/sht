@@ -26,7 +26,7 @@ class FUE_Addon_Woocommerce_Admin {
      */
     private function register_hooks() {
         // initial order import
-        add_action( 'admin_notices', array($this, 'order_import_check') );
+        add_action( 'admin_notices', array($this, 'order_import_check'), 15 );
         add_action( 'fue_admin_controller', array($this, 'order_import_page') );
         add_action( 'fue_admin_controller', array($this, 'data_update_page') );
 

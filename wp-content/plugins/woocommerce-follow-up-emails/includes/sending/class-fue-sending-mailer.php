@@ -131,7 +131,7 @@ class FUE_Sending_Mailer {
                 wc_unschedule_action( 'sfn_followup_emails', $param, 'fue' );
                 wc_schedule_single_action( $queue_item->send_on, 'sfn_followup_emails', $param, 'fue' );
 
-                $format = get_option( 'date_format' ) .' '. get_option( 'time_format' );
+                $format = wc_date_format() .' '. wc_time_format();
                 $date1 = date_i18n( $format, $current_time );
                 $date2 = date_i18n( $format, $queue_item->send_on );
                 return new WP_Error( 'fue_queue_error', sprintf( __('Email tried to send too early. Scheduled on %s but attempted to send on %s', 'follow_up_emails'), $date2, $date1 ) );
@@ -765,10 +765,14 @@ class FUE_Sending_Mailer {
             $billing_first_name = get_user_meta( $queue_item->user_id, 'billing_first_name', true );
             $billing_last_name  = get_user_meta( $queue_item->user_id, 'billing_last_name', true );
 
+            $order_email        = get_post_meta( $queue_item->order_id, '_billing_email', true );
+            $order_first_name   = get_post_meta( $queue_item->order_id, '_billing_first_name', true );
+            $order_last_name    = get_post_meta( $queue_item->order_id, '_billing_last_name', true );
+
             // if the customer's billing data are empty, fallback to using data from WP_User
-            $data['email_to']     = (empty($billing_email)) ? $wp_user->user_email : $billing_email;
-            $data['first_name']   = (empty($billing_first_name)) ? $wp_user->first_name : $billing_first_name;
-            $data['last_name']    = (empty($billing_last_name)) ? $wp_user->last_name : $billing_last_name;
+            $data['email_to']   = $billing_email      ?: ( $order_email      ?: $wp_user->user_email );
+            $data['first_name'] = $billing_first_name ?: ( $order_first_name ?: $wp_user->first_name );
+            $data['last_name']  = $billing_last_name  ?: ( $order_last_name  ?: $wp_user->last_name );
 
             // customer's complete name
             $data['cname'] = $data['first_name'] .' '. $data['last_name'];

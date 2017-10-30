@@ -148,7 +148,11 @@ class FUE_Sending_Queue_Item {
             'message'   => $message
         );
 
-        if ( !isset( $this->meta['notes'] ) ) {
+        if ( ! is_array( $this->meta ) ) {
+            $this->meta = array();
+        }
+
+        if ( !isset( $this->meta['notes'] ) || ! is_array( $this->meta ) ) {
             $this->meta['notes'] = array();
         }
 

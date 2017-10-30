@@ -206,13 +206,14 @@ class FUE_Meta_Boxes {
      * Add custom metaboxes
      */
     public function add_meta_boxes() {
+        add_meta_box( 'fue-email-actions', __( 'Follow-up Actions', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_actions', 'follow_up_email', 'side', 'high' );
+
         add_meta_box( 'fue-email-details', __( 'Follow-up Details', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_details_view', 'follow_up_email', 'normal', 'high' );
 
         add_meta_box( 'fue-email-type', __( 'Follow-up Type', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_type_view', 'follow_up_email', 'side', 'high' );
         add_meta_box( 'fue-email-template', __( 'Template', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_template_view', 'follow_up_email', 'side', 'high' );
         add_meta_box( 'fue-email-variables', __( 'Variables', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_variables_view', 'follow_up_email', 'side', 'high' );
         add_meta_box( 'fue-email-test', __( 'Send Test', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_test_view', 'follow_up_email', 'side', 'low' );
-        add_meta_box( 'fue-email-actions', __( 'Follow-up Actions', 'follow-up-emails' ), 'FUE_Meta_Boxes::email_actions', 'follow_up_email', 'side', 'high' );
 
         remove_meta_box( 'slugdiv', 'follow_up_email', 'normal' );
     }

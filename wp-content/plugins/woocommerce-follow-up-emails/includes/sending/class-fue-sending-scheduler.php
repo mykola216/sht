@@ -864,7 +864,10 @@ class FUE_Sending_Scheduler {
     }
 
     /**
-     * Insert a queue item to the followup_email_orders table
+     * Insert a queue item to the followup_email_orders table.
+     *
+     * @since 1.0.0
+     * @version 4.5.2
      *
      * @param array $data
      * @param bool  $schedule_event Pass false to not register a new scheduled event
@@ -875,6 +878,25 @@ class FUE_Sending_Scheduler {
         $item = new FUE_Sending_Queue_Item();
 
         $data = apply_filters( 'fue_insert_email_order', $data );
+
+        /**
+         * Filters whether to preempt email schduling return value.
+         *
+         * Returning a non-false value from the filter will short-circuit
+         * email scheduling with that value.
+         *
+         * @since 4.5.2
+         *
+         * @param false|WP_Error|int $preempt        Whether to preempt email
+         *                                           insertion's return value.
+         * @param array              $data           Email data.
+         * @param bool               $schedule_event Whether to schedule email
+         *                                           or not.
+         */
+        $pre = apply_filters( 'pre_fue_insert_email_order', false, $data, $schedule_event );
+        if ( false !== $pre ) {
+            return $pre;
+        }
 
         foreach ( $data as $field => $value ) {
             if ( isset( $item->$field ) ) {

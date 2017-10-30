@@ -132,10 +132,15 @@ jQuery( function ( $ ) {
         fue_toggle_elements();
     }).change();
 
-    // Test Email
+    // Test Email.
     jQuery("#fue-email-test").on("click", "#test_send", function() {
         var $btn    = jQuery(this);
         var old_val = $btn.val();
+        var $email  = jQuery( '#email' );
+
+        if ( $email.length && '' === $email.val() ) {
+            return;
+        }
 
         $btn
             .val("Please wait...")
@@ -410,6 +415,8 @@ jQuery( function ( $ ) {
 
             $("#fue-email-variables").unblock();
 
+            $("#send_coupon").trigger("change");
+
             bind_tooltips();
         });
 
@@ -633,11 +640,18 @@ function init_select2_fields() {
         jQuery(this).select2(select2_args).addClass( 'enhanced' );
     } );
 
-    init_fue_product_search();
-    init_fue_customer_search();
-    init_fue_select();
-    init_fue_coupon_search();
-
+	if ( typeof init_fue_product_search === "function" ) {
+		init_fue_product_search();
+	}
+	if ( typeof init_fue_customer_search === "function" ) {
+		init_fue_customer_search();
+	}
+	if ( typeof init_fue_select === "function" ) {
+		init_fue_select();
+	}
+	if ( typeof init_fue_coupon_search === "function" ) {
+		init_fue_coupon_search();
+	}
 }
 
 // bind Tips

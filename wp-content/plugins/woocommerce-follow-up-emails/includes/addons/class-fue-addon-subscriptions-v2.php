@@ -33,7 +33,7 @@ class FUE_Addon_Subscriptions_V2 {
      * @param FUE_Sending_Queue_Item    $queue_item
      */
     public function register_variable_replacements( $var, $email_data, $email, $queue_item ) {
-        if ( $email->type != 'subscription' ) {
+        if ( 'subscription' !== $email->type ) {
             return;
         }
 
@@ -51,10 +51,10 @@ class FUE_Addon_Subscriptions_V2 {
             'item_names_list'       => '',
             'item_categories'       => '',
             'item_name'             => '',
-            'item_quantity'         => ''
+            'item_quantity'         => '',
         );
 
-        if ( $email->type == 'manual' ) {
+        if ( 'manual' == $email->type ) {
             $variables = $this->add_manual_email_variables( $variables, $email_data, $queue_item, $email );
         } else {
             // use test data if the test flag is set
@@ -78,7 +78,7 @@ class FUE_Addon_Subscriptions_V2 {
      * @return array
      */
     protected function add_manual_email_variables( $variables, $email_data, $queue_item, $email ) {
-        if ( isset( $queue_item->meta['send_type'] ) && $queue_item->meta['send_type'] == 'active_subscription' ) {
+        if ( isset( $queue_item->meta['send_type'] ) && 'active_subscription' == $queue_item->meta['send_type'] ) {
             // recipient_key is the subscription ID
             if ( empty( $queue_item->meta['recipient_key'] ) ) {
                 return $variables;
@@ -86,14 +86,14 @@ class FUE_Addon_Subscriptions_V2 {
 
             $subscription = wcs_get_subscription( $queue_item->meta['recipient_key'] );
 
-            if ( !$subscription ) {
+            if ( ! $subscription ) {
                 return $variables;
             }
 
             $lists = FUE_Addon_Woocommerce::list_order_items( $subscription );
             $items = $lists['items'];
 
-            if ( !empty( $email->product_id ) ) {
+            if ( ! empty( $email->product_id ) ) {
                 $subscription_items = $items;
                 $items              = array();
 
@@ -103,7 +103,6 @@ class FUE_Addon_Subscriptions_V2 {
                         break;
                     }
                 }
-
             }
 
             if ( empty( $items ) ) {
@@ -116,7 +115,7 @@ class FUE_Addon_Subscriptions_V2 {
 
             foreach ( $items as $item ) {
                 $item_names[]   = $item['name'];
-                $sku            = (!empty( $item['sku'] )) ? '('. $item['sku'] .')' : '';
+                $sku            = ( ! empty( $item['sku'] ) ) ? '('. $item['sku'] .')' : '';
 
                 $item_list .= '<li><a href="'. $item['link'] .'">'. $item['name'] .'</a></li>';
 
@@ -157,7 +156,7 @@ class FUE_Addon_Subscriptions_V2 {
             $variables['subs_first_payment']= $data['first_payment_cost'];
             $variables['subs_cost_term']    = $data['cost_term'];
             $variables['subs_cost']         = $data['cost'];
-            $variables['subs_id']           = $subscription->id;
+            $variables['subs_id']           = $subscription->get_id();
 
         }
 
@@ -192,7 +191,9 @@ class FUE_Addon_Subscriptions_V2 {
             $items              = array();
 
             foreach ( $subscription_items as $item ) {
-                if ( in_array( $email->product_id, array( $item['product']->id, $item['product']->variation_id ) ) ) {
+				$item_product_id = self::subs_v_gte( '2.2.0' ) ? $item['product']->get_id() : $item['product']->id;
+				$item_product_variation_id = self::subs_v_gte( '2.2.0' ) ? $item['product']->get_id() : $item['product']->variation_id;
+                if ( in_array( $email->product_id, array( $item_product_id, $item_product_variation_id ) ) ) {
                     $items[] = $item;
                     break;
                 }
@@ -228,7 +229,6 @@ class FUE_Addon_Subscriptions_V2 {
         $item_list          .= '</ul>';
         $item_cats          .= '</ul>';
         $item_list_csv = implode( ', ', $item_names );
-
         if ( count( $items ) == 1 ) {
             $item = current( $items );
             $variables['item_name']     = $item['name'];
@@ -251,7 +251,7 @@ class FUE_Addon_Subscriptions_V2 {
         $variables['subs_first_payment']= $data['first_payment_cost'];
         $variables['subs_cost_term']    = $data['cost_term'];
         $variables['subs_cost']         = $data['cost'];
-        $variables['subs_id']           = $subscription->id;
+        $variables['subs_id']           = $subscription->get_id();
 
         return $variables;
     }
@@ -345,11 +345,11 @@ class FUE_Addon_Subscriptions_V2 {
                 $variables['subs_first_payment']= $data['first_payment_cost'];
                 $variables['subs_cost_term']    = $data['cost_term'];
                 $variables['subs_cost']         = $data['cost'];
-                $variables['subs_id']           = $subscription->id;
+                $variables['subs_id']           = $subscription->get_id();
 
-                $variables['customer_first_name']   = $subscription->billing_first_name;
-                $variables['customer_name']         = $subscription->billing_first_name .' '. $subscription->billing_last_name;
-                $variables['customer_email']        = $subscription->billing_email;
+                $variables['customer_first_name']   = $subscription->get_billing_first_name();
+                $variables['customer_name']         = $subscription->get_billing_first_name() .' '. $subscription->get_billing_last_name();
+                $variables['customer_email']        = $subscription->get_billing_email();
 
                 $user = $subscription->get_user();
                 $variables['customer_username'] = $user->user_login;
@@ -381,13 +381,13 @@ class FUE_Addon_Subscriptions_V2 {
                     continue;
                 }
 
-                $user_id = get_post_meta( $subscription->ID, '_customer_user', true );
+                $user_id = get_post_meta( $subscription->get_id(), '_customer_user', true );
 
-                $user_email = $subscription->billing_email;
-                $first_name = $subscription->billing_first_name;
-                $last_name  = $subscription->billing_last_name;
+                $user_email = $subscription->get_billing_email();
+                $first_name = $subscription->get_billing_first_name();
+                $last_name  = $subscription->get_billing_last_name();
 
-                $recipients[$subscription->id] = array($user_id, $user_email, $first_name .' '. $last_name);
+                $recipients[ $subscription->get_id() ] = array( $user_id, $user_email, $first_name . ' ' . $last_name );
 
             }
 
@@ -416,7 +416,7 @@ class FUE_Addon_Subscriptions_V2 {
     public static function trigger_subscription_status_emails( $subscription, $new_status, $old_status ) {
 
         if ( $new_status == 'active' ) {
-            if ( $subscription->suspension_count > 0 ) {
+            if ( $subscription->get_suspension_count() > 0 ) {
                 // reactivated
                 self::subscription_reactivated( $subscription );
             }
@@ -435,7 +435,10 @@ class FUE_Addon_Subscriptions_V2 {
                     break;
 
                 case 'cancelled':
-                    self::subscription_cancelled( $subscription );
+                    // Do not cancel when previous status was pending payment (user has not signed up for subscription yet)
+                    if ( 'pending' !== $old_status ) {
+                        self::subscription_cancelled( $subscription );
+                    }
                     break;
 
                 case 'expired':
@@ -460,7 +463,7 @@ class FUE_Addon_Subscriptions_V2 {
      */
     public static function update_reminder_dates( $wc_subscription, $date_type, $datetime ) {
         $scheduler  = Follow_Up_Emails::instance()->scheduler;
-        $order_id   = $wc_subscription->post->post_parent;
+        $order_id   = self::subs_v_gte( '2.2.0' ) ? $wc_subscription->get_parent() : $wc_subscription->post->post_parent;
 
         if ( !$order_id ) {
             return;
@@ -510,7 +513,7 @@ class FUE_Addon_Subscriptions_V2 {
         global $wpdb;
 
         $product_ids    = self::get_subscription_product_ids( $subscription );
-        $search_key     = self::get_queue_meta_search_string( $subscription->id );
+        $search_key     = self::get_queue_meta_search_string( $subscription->get_id() );
 
         array_push( $product_ids, 0 );
 
@@ -542,8 +545,8 @@ class FUE_Addon_Subscriptions_V2 {
             }
         }
 
-        $order_id = ($subscription->order) ? $subscription->order->id : 0;
-        self::add_to_queue( $order_id, $triggers, $subscription->id, $subscription->get_user_id() );
+        $order_id = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
+        self::add_to_queue( $order_id, $triggers, $subscription->get_id(), $subscription->get_user_id() );
 
     }
 
@@ -553,13 +556,13 @@ class FUE_Addon_Subscriptions_V2 {
      * @param WC_Subscription $subscription
      */
     public static function subscription_pending_cancellation( $subscription ) {
-        $order_id = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $triggers = array('subs_pending_cancel');
 
         // get the user's email address
         $user = new WP_User( $subscription->get_user_id() );
 
-        self::add_to_queue($order_id, $triggers, $subscription->id, $user->user_email);
+        self::add_to_queue($order_id, $triggers, $subscription->get_id(), $user->user_email);
     }
 
     /**
@@ -570,13 +573,13 @@ class FUE_Addon_Subscriptions_V2 {
     public static function subscription_cancelled( $subscription ) {
         self::remove_active_subscription_emails( $subscription );
 
-        $order_id = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $triggers = array('subs_cancelled');
 
         // get the user's email address
         $user = new WP_User( $subscription->get_user_id() );
 
-        self::add_to_queue($order_id, $triggers, $subscription->id, $user->user_email);
+        self::add_to_queue($order_id, $triggers, $subscription->get_id(), $user->user_email);
     }
 
     /**
@@ -586,10 +589,10 @@ class FUE_Addon_Subscriptions_V2 {
      */
     public static function subscription_expired( $subscription ) {
 
-        $order_id   = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id   = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $triggers[] = 'subs_expired';
 
-        self::add_to_queue($order_id, $triggers, $subscription->id, $subscription->get_user_id());
+        self::add_to_queue($order_id, $triggers, $subscription->get_id(), $subscription->get_user_id());
     }
 
     /**
@@ -600,9 +603,9 @@ class FUE_Addon_Subscriptions_V2 {
     public static function subscription_reactivated( $subscription ) {
         global $wpdb;
 
-        $order_id       = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id       = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $product_ids    = self::get_subscription_product_ids( $subscription );
-        $search_key     = self::get_queue_meta_search_string( $subscription->id );
+        $search_key     = self::get_queue_meta_search_string( $subscription->get_id() );
 
         array_push( $product_ids, 0 );
 
@@ -630,7 +633,7 @@ class FUE_Addon_Subscriptions_V2 {
 
         $triggers[] = 'subs_reactivated';
 
-        self::add_to_queue( $order_id, $triggers, $subscription->id, $subscription->get_user_id() );
+        self::add_to_queue( $order_id, $triggers, $subscription->get_id(), $subscription->get_user_id() );
     }
 
     /**
@@ -639,10 +642,10 @@ class FUE_Addon_Subscriptions_V2 {
      * @param WC_Subscription $subscription
      */
     public static function suspended_subscription( $subscription ) {
-        $order_id       = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id       = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $triggers[]     = 'subs_suspended';
 
-        self::add_to_queue( $order_id, $triggers, $subscription->id, $subscription->get_user_id() );
+        self::add_to_queue( $order_id, $triggers, $subscription->get_id(), $subscription->get_user_id() );
     }
 
     /**
@@ -652,9 +655,13 @@ class FUE_Addon_Subscriptions_V2 {
      * @param string $status
      */
     public function subscription_payment_failed( $subscription, $status ) {
-        $order_id = ($subscription->order) ? $subscription->order->id : 0;
-
-        self::add_to_queue( $order_id, array('subs_payment_failed'), $subscription->id, $subscription->get_user_id() );
+        $order_id = $subscription->get_last_order();
+        self::add_to_queue(
+			$order_id,
+			array( 'subs_payment_failed' ),
+			$subscription->get_id(),
+			$subscription->get_user_id()
+		);
     }
 
     /**
@@ -669,10 +676,10 @@ class FUE_Addon_Subscriptions_V2 {
         $triggers[] = 'subs_renewal_order';
 
         // remove the _fue_recorded meta key that WCS copies from the original order
-        delete_post_meta( $renewal_order->id, '_fue_recorded' );
+        delete_post_meta( WC_FUE_Compatibility::get_order_prop( $renewal_order, 'id' ), '_fue_recorded' );
 
-        $order_id = ($subscription->order) ? $subscription->order->id : 0;
-        self::add_to_queue( $order_id, $triggers, $subscription->id, $subscription->get_user_id() );
+        $order_id = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
+        self::add_to_queue( $order_id, $triggers, $subscription->get_id(), $subscription->get_user_id() );
 
         return $renewal_order;
     }
@@ -685,9 +692,9 @@ class FUE_Addon_Subscriptions_V2 {
     public static function remove_active_subscription_emails( $subscription ) {
         global $wpdb;
 
-        $order_id       = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id       = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $product_ids    = self::get_subscription_product_ids( $subscription );
-        $search_key     = self::get_queue_meta_search_string( $subscription->id );
+        $search_key     = self::get_queue_meta_search_string( $subscription->get_id() );
 
         array_push( $product_ids, 0 );
 
@@ -722,7 +729,7 @@ class FUE_Addon_Subscriptions_V2 {
      * @param WC_Subscription $subscription
      */
     public static function set_renewal_reminder( $subscription ) {
-        $order_id   = ($subscription->order) ? $subscription->order->id : 0;
+        $order_id   = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
         $queued     = array();
 
         $renewal_date = $subscription->get_date( "next_payment" );
@@ -749,7 +756,7 @@ class FUE_Addon_Subscriptions_V2 {
 
         if ( count($emails) > 0 ) {
             $product_ids = self::get_subscription_product_ids( $subscription );
-            $search_key = self::get_queue_meta_search_string( $subscription->id );
+            $search_key = self::get_queue_meta_search_string( $subscription->get_id() );
 
             foreach ( $emails as $email ) {
                 // product_id filter
@@ -804,7 +811,7 @@ class FUE_Addon_Subscriptions_V2 {
                     'order_id'      => $order_id
                 );
 
-                $insert['meta']['subs_key'] = $subscription->id;
+                $insert['meta']['subs_key'] = $subscription->get_id();
 
                 if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
@@ -825,7 +832,8 @@ class FUE_Addon_Subscriptions_V2 {
      * @param WC_Subscription $subscription
      */
     public static function set_expiration_reminder( $subscription ) {
-        $order_id   = ($subscription->order) ? $subscription->order->id : 0;
+		$order      = is_callable( array( $subscription, 'get_parent' ) ) ? $subscription->get_parent() : $subscription->order;
+        $order_id   = ( $order ) ? WC_FUE_Compatibility::get_order_prop( $order, 'id' ) : 0;
         $queued     = array();
 
         $expiry_date = $subscription->get_date('end');
@@ -852,7 +860,7 @@ class FUE_Addon_Subscriptions_V2 {
 
         if ( count($emails) > 0 ) {
             $product_ids    = self::get_subscription_product_ids( $subscription );
-            $search_key     = self::get_queue_meta_search_string( $subscription->id );
+            $search_key     = self::get_queue_meta_search_string( $subscription->get_id() );
 
             foreach ( $emails as $email ) {
                 // product_id filter
@@ -908,7 +916,7 @@ class FUE_Addon_Subscriptions_V2 {
                     'order_id'      => $order_id
                 );
 
-                $insert['meta']['subs_key'] = $subscription->id;
+                $insert['meta']['subs_key'] = $subscription->get_id();
 
                 if ( !is_wp_error( FUE_Sending_Scheduler::queue_email( $insert, $email ) ) ) {
                     $queued[] = $insert;
@@ -942,19 +950,19 @@ class FUE_Addon_Subscriptions_V2 {
 
                 if ( $subscription ) {
 
-                    if ( $email->interval_type == 'subs_suspended' && $subscription->status != 'on-hold' ) {
+                    if ( $email->interval_type == 'subs_suspended' && $subscription->get_status() != 'on-hold' ) {
                         $delete = true;
                         $skip = true;
-                    } elseif ( $email->interval_type == 'subs_expired' && $subscription->status != 'expired' ) {
+                    } elseif ( $email->interval_type == 'subs_expired' && $subscription->get_status() != 'expired' ) {
                         $delete = true;
                         $skip = true;
-                    } elseif ( ($email->interval_type == 'subs_activated' || $email->interval_type == 'subs_renewed' || $email->interval_type == 'subs_reactivated') && $subscription->status != 'active' ) {
+                    } elseif ( ($email->interval_type == 'subs_activated' || $email->interval_type == 'subs_renewed' || $email->interval_type == 'subs_reactivated') && $subscription->get_status() != 'active' ) {
                         $delete = true;
                         $skip = true;
-                    } elseif ( $email->interval_type == 'subs_cancelled' && $subscription->status != 'cancelled' ) {
+                    } elseif ( $email->interval_type == 'subs_cancelled' && $subscription->get_status() != 'cancelled' ) {
                         $delete = true;
                         $skip = true;
-                    } elseif ( $email->interval_type == 'subs_before_renewal' && $subscription->status != 'active' ) {
+                    } elseif ( $email->interval_type == 'subs_before_renewal' && $subscription->get_status() != 'active' ) {
                         $delete = true;
                         $skip = true;
                     }
@@ -1254,7 +1262,7 @@ class FUE_Addon_Subscriptions_V2 {
                 $subscription = wcs_get_subscription( $the_subscription->ID );
 
                 if ( $subscription->get_completed_payment_count() >= 2 ) {
-                    $order_id = ($subscription->order) ? $subscription->order->id : 0;
+                    $order_id = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
                     $in_queue = $wpdb->get_var( $wpdb->prepare(
                         "SELECT COUNT(*)
                         FROM {$wpdb->prefix}followup_email_orders
@@ -1268,7 +1276,7 @@ class FUE_Addon_Subscriptions_V2 {
                         continue;
                     }
 
-                    $orders[] = $subscription->id;
+                    $orders[] = $subscription->get_id();
                 }
             }
         } elseif ( $email->trigger == 'subs_reactivated' ) {
@@ -1291,8 +1299,8 @@ class FUE_Addon_Subscriptions_V2 {
                 }
 
                 $subscription   = wcs_get_subscription( $the_subscription->ID );
-                $order_id       = ($subscription->order) ? $subscription->order->id : 0;
-                if ( !empty( $subscription->suspension_count ) && $subscription->suspension_count > 0 ) {
+                $order_id       = ($subscription->get_parent()) ? WC_FUE_Compatibility::get_order_prop( $subscription->get_parent(), 'id' ) : 0;
+                if ( !empty( $subscription->get_suspension_count() ) && $subscription->get_suspension_count() > 0 ) {
 
                     $in_queue = $wpdb->get_var( $wpdb->prepare(
                         "SELECT COUNT(*)
@@ -1307,7 +1315,7 @@ class FUE_Addon_Subscriptions_V2 {
                         continue;
                     }
 
-                    $orders[] = $subscription->id;
+                    $orders[] = $subscription->get_id();
                 }
             }
         } elseif ( $email->trigger == 'subs_renewal_order' ) {
@@ -1363,7 +1371,7 @@ class FUE_Addon_Subscriptions_V2 {
                 if ( $in_queue ) {
                     continue;
                 }
-
+				// $subscription is of type stdClass
                 $orders[] = $subscription->ID;
             }
         }
@@ -1434,21 +1442,28 @@ class FUE_Addon_Subscriptions_V2 {
 			}
 
 			$subscription = wcs_get_subscription( $insert['meta']['subs_key'] );
-
-	        switch ( $followup->trigger ) {
-		        case 'subs_activated':
+			switch ( $followup->trigger ) {
+				case 'subs_activated':
 					$trigger_date = $subscription->get_date( 'start', 'site' );
-			        break;
+					break;
 
-		        case 'subs_expired':
+				case 'subs_expired':
 				case 'subs_before_expire':
 					$trigger_date = $subscription->get_date( 'end', 'site' );
-			        break;
+					break;
 
-		        case 'subs_before_expire':
-			        $trigger_date = $subscription->get_date( 'end', 'site' );
-			        break;
+				case 'subs_before_expire':
+					$trigger_date = $subscription->get_date( 'end', 'site' );
+					break;
 
+				case 'subs_cancelled':
+					// Do not import when no payments have been completed
+					$trigger_date = ( $subscription->get_completed_payment_count() >= 1 ) ? $subscription->get_date( 'end', 'site' ) : 0;
+					break;
+
+				case 'subs_before_renewal':
+					$trigger_date = $subscription->get_time( 'next_payment' );
+					break;
 		        default:
 			        $trigger_date = 0;
 			        break;
@@ -1483,8 +1498,8 @@ class FUE_Addon_Subscriptions_V2 {
             if ( empty($emails_string) )
                 return;
 
-            $subject    = sprintf( __('Subscription payment failed for #%s'), $subscription->id );
-            $message    = sprintf( __('<p>A subscription payment has failed. The subscription has now been automatically put on hold.</p><p><a href="%s">View Subscription</a></p>'), admin_url('post.php?post='. $subscription->id .'&action=edit') );
+            $subject    = sprintf( __('Subscription payment failed for #%s'), $subscription->get_id() );
+            $message    = sprintf( __('<p>A subscription payment has failed. The subscription has now been automatically put on hold.</p><p><a href="%s">View Subscription</a></p>'), admin_url('post.php?post='. $subscription->get_id() .'&action=edit') );
 
             $recipients = array();
 
@@ -1655,17 +1670,20 @@ class FUE_Addon_Subscriptions_V2 {
         if ( is_numeric( $subscription ) ) {
             $subscription = wcs_get_subscription( $subscription );
         }
+		// last_payment_date deprecated
+		$last_payment_key = self::subs_v_gte( '2.2.0' ) ? 'last_order_date_paid' : 'last_payment_date';
+		$start_key  = self::subs_v_gte( '2.2.0' ) ? 'date_created' : 'start';
 
         $data = array(
-            'start_date'        => date_i18n( wc_date_format(), $subscription->get_time( 'start', 'site' ) ),
+            'start_date'        => $subscription->get_date( $start_key, 'site' ) ,
             'trial_end_date'    => $subscription->get_date( 'trial_end', 'site' ),
             'trial_length'      => '',
-            'last_payment_date' => $subscription->get_date( 'last_payment', 'site' ),
+            'last_payment_date' => $subscription->get_date( $last_payment_key, 'site' ),
             'next_payment_date' => $subscription->get_date( 'next_payment', 'site' ),
             'end_date'          => $subscription->get_date( 'end', 'site' ),
             'days_to_renew'     => '',
-            'first_payment_cost'=> woocommerce_price( $subscription->get_total_initial_payment() ),
-            'cost'              => woocommerce_price( $subscription->get_total() ),
+            'first_payment_cost'=> wc_price( $subscription->get_total_initial_payment() ),
+            'cost'              => wc_price( $subscription->get_total() ),
             'cost_term'         => $subscription->get_formatted_order_total(),
         );
 
@@ -1696,7 +1714,7 @@ class FUE_Addon_Subscriptions_V2 {
         if ( $data['trial_end_date'] ) {
             $data['trial_end_date'] = fue_format_date( $data['trial_end_date'] );
 
-            $trial_period = $subscription->trial_period;
+            $trial_period = $subscription->get_trial_period();
 
             $start_time = $subscription->get_time( 'start', 'site' );
 
@@ -1732,4 +1750,54 @@ class FUE_Addon_Subscriptions_V2 {
         return rtrim( ltrim( $serialized, 'a:1{' ), '}' );
     }
 
+	/**
+	 * Is subscription version greater than given version?
+	 *
+	 * @param string $version
+	 * @return bool
+	 */
+	public static function subs_v_gte( $version ){ 
+		return version_compare( WC_Subscriptions::$version, $version , '>=' );
+	}
+
+	/**
+	 * Remove queued emails when subscription status changes.
+	 *
+	 * @param $subscription
+	 * @param $old_status
+	 * @param $new_status
+	 */
+	public function remove_subscription_payment_failed_email( $subscription, $new_status, $old_status ) {
+		if ( 'active' !== $new_status ) {
+			return;
+		}
+		$order_id = $subscription->get_last_order();
+		$filter     = array(
+			'meta_query'    => array(
+				array(
+					'key'       => '_interval_type',
+					'value'     => 'subs_payment_failed',
+				),
+			),
+		);
+
+		$emails     = fue_get_emails( 'any', '', $filter );
+		$email_ids  = array();
+		foreach ( $emails as $email ) {
+			$key = 'remove_email_status_change';
+			if ( ! empty( $email->meta[ $key ] ) && 'yes' == $email->meta[ $key ] ) {
+				$email_ids[] = $email->id;
+			}
+		}
+		$queue = Follow_Up_Emails::instance()->scheduler->get_items( array(
+			'is_sent'   => 0,
+			'order_id'  => $order_id,
+			'email_id'  => $email_ids,
+		) );
+		foreach ( $queue as $item ) {
+			$email_name = get_the_title( $item->email_id );
+			$subscription->add_order_note( sprintf( __( 'The email &quot;%s&quot; has been removed due to the order status changing to active.', 'follow_up_emails' ), $email_name ) );
+			Follow_Up_Emails::instance()->scheduler->delete_item( $item->id );
+		}
+	}
 }

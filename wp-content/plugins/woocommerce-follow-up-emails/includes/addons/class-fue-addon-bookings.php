@@ -36,16 +36,21 @@ class FUE_Addon_Bookings {
         add_action( 'fue_email_variables_list', array($this, 'email_variables_list') );
         add_action( 'fue_email_manual_variables_list', array($this, 'email_variables_list') );
 
-        add_action( 'fue_before_variable_replacements', array($this, 'register_variable_replacements'), 10, 4 );
+        add_action( 'fue_before_variable_replacements', array($this, 'register_variable_replacements'), 11, 4 );
 
-        add_action( 'woocommerce_new_booking', array($this, 'booking_created') );
+        // Booking created trigger.
+        add_action( 'woocommerce_new_booking', array( $this, 'booking_created' ) );
+        add_action( 'woocommerce_booking_in-cart_to_unpaid', array( $this, 'booking_created_from_cart' ) );
+        add_action( 'woocommerce_booking_in-cart_to_pending-confirmation', array( $this, 'booking_created_from_cart' ) );
+
         foreach ( self::$statuses as $status ) {
             add_action( 'woocommerce_booking_'. $status, array($this, 'booking_status_updated') );
         }
 
-
         // manually trigger status changes because WC Bookings doesn't trigger these when saving from the admin screen
         add_action( 'save_post', array( $this, 'maybe_trigger_status_update' ), 11, 1 );
+
+        add_filter( 'fue_unqueue_emails_filter_on_order_status_change', array( $this, 'maybe_unqueue_emails_on_status_change' ), 10, 4 );
 
         add_action( 'fue_email_form_trigger_fields', array($this, 'email_form_triggers'), 9, 3 );
 
@@ -126,7 +131,7 @@ class FUE_Addon_Bookings {
         <div class="send-type-bookings send-type-div">
             <select id="booking_event_id" name="booking_event_id" class="select2" style="width: 400px;">
                 <?php foreach ( $products as $product ): ?>
-                    <option value="<?php echo $product->id; ?>"><?php echo esc_html( $product->get_title() ); ?></option>
+                    <option value="<?php echo $product->get_id(); ?>"><?php echo esc_html( $product->get_title() ); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -182,8 +187,8 @@ class FUE_Addon_Bookings {
                 $order_id       = $wpdb->get_var( $wpdb->prepare("SELECT order_id FROM {$wpdb->prefix}woocommerce_order_items WHERE order_item_id = %d", $order_item_id) );
                 $order          = WC_FUE_Compatibility::wc_get_order( $order_id );
 
-                $key = $user_id .'|'. $order->billing_email .'|'. $order->billing_first_name .' '. $order->billing_last_name;
-                $recipients[$key] = array($user_id, $order->billing_email, $order->billing_first_name .' '. $order->billing_last_name);
+                $key = $user_id .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) .'|'. WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' );
+                $recipients[$key] = array($user_id, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ), WC_FUE_Compatibility::get_order_prop( $order, 'billing_first_name' ) .' '. WC_FUE_Compatibility::get_order_prop( $order, 'billing_last_name' ));
 
             }
 
@@ -264,7 +269,7 @@ class FUE_Addon_Bookings {
         <li class="var hideable var_wc_bookings"><strong>{booking_time}</strong> <img class="help_tip" title="<?php _e('The time of the booked product or service', 'follow_up_emails'); ?>" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" width="16" height="16" /></li>
         <li class="var hideable var_wc_bookings"><strong>{booking_amount}</strong> <img class="help_tip" title="<?php _e('The amount or cost of the booked product or service', 'follow_up_emails'); ?>" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" width="16" height="16" /></li>
         <li class="var hideable var_wc_bookings"><strong>{booking_resource}</strong> <img class="help_tip" title="<?php _e('The resource booked', 'follow_up_emails'); ?>" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" width="16" height="16" /></li>
-        <li class="var hideable var_wc_bookings"><strong>{booking_persons}</strong> <img class="help_tip" title="<?php _e('The count of persons this booking is for', 'follow_up_emails'); ?>" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" width="16" height="16" /></li>
+        <li class="var hideable var_wc_bookings"><strong>{booking_persons}</strong> <img class="help_tip" title="<?php _e( 'The list of persons with counts for this booking', 'follow_up_emails' ); ?>" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/help.png" width="16" height="16" /></li>
     <?php
     }
 
@@ -314,7 +319,7 @@ class FUE_Addon_Bookings {
      * @return array
      */
     protected function add_variable_replacements( $variables, $email_data, $queue_item, $email ) {
-        if ( $queue_item->order_id && $queue_item->product_id ) {
+        if ( $queue_item->order_id || $queue_item->product_id ) {
             $item_id = $queue_item->product_id;
 
             // booking data
@@ -332,23 +337,25 @@ class FUE_Addon_Bookings {
             $booking            = get_wc_booking( $booking_id );
             $booking_product    = $booking->get_product();
             $booking_order      = $booking->get_order();
-            $booking_start      = $booking->get_start_date( get_option( 'date_format' ) .' ', get_option( 'time_format' ) );
-            $booking_end        = $booking->get_end_date( get_option( 'date_format' ) .' ', get_option( 'time_format' ) );
-            $booking_date     = $booking->get_start_date( get_option( 'date_format' ), '' );
-            $booking_time     = $booking->get_start_date( '', get_option( 'time_format' ) );
-            $booking_amount   = woocommerce_price( $booking->cost );
+            $booking_start      = $booking->get_start_date( wc_date_format() .' ', wc_time_format() );
+            $booking_end        = $booking->get_end_date( wc_date_format() .' ', wc_time_format() );
+            $booking_date     = $booking->get_start_date( wc_date_format(), '' );
+            $booking_time     = $booking->get_start_date( '', wc_time_format() );
+            $booking_amount   = wc_price( $booking->cost );
             $booking_persons  = '';
             $booking_resource = ( $booking->resource_id > 0 ) ? get_the_title( $booking->resource_id ) : '';
 
-            if ( $booking->has_persons() ) {
-                $booking_persons = '<ul>';
-
-                foreach ( $booking->get_persons() as $person_id => $num ) {
-                    $booking_persons .= '<li>' . get_the_title( $person_id ) . ': ' . $num . '</li>';
-                }
-
-                $booking_persons .= '</ul>';
-            }
+			if ( $booking->get_persons_total() > 0 ) {
+				$booking_persons = $booking->get_persons();
+				$persons_html = '<p><strong>' . esc_html( __( 'No. of persons', 'follow_up_emails' ) ) . '</strong><br /><ul>';
+				foreach( $booking_persons as $person_id => $count ){
+					$person_type = new WC_Product_Booking_Person_Type( $person_id );
+					$person_name = $person_type->get_name();
+					$persons_html .= "<li>$person_name: $count</li>";
+				}
+				$persons_html .= '</ul></p>';
+				$booking_persons = $persons_html;
+			}
 
             $used_cats  = array();
             $item_cats  = '<ul>';
@@ -400,7 +407,7 @@ class FUE_Addon_Bookings {
                 foreach ( $booking_order->get_items() as $item_id => $item ) {
                     $product_id     = !empty( $item['product_id'] ) ? $item['product_id'] : $item['id'];
 
-                    if ( $booking_product->id == $product_id ) {
+                    if ( $booking_product->get_id() == $product_id ) {
                         $variables['item_quantity'] = $item['qty'];
 
                         if ( isset( $item['Duration'] ) ) {
@@ -429,12 +436,12 @@ class FUE_Addon_Bookings {
         $variables['item_url']                  = '#';
         $variables['item_category']             = 'Appointments';
         $variables['item_quantity']             = 1;
-        $variables['booking_start']             = date( get_option( 'date_format' ) .' '. get_option( 'time_format' ), current_time('timestamp') + 86400 );
-        $variables['booking_end']               = date( get_option( 'date_format' ) .' '. get_option( 'time_format' ), current_time('timestamp') + (86400*2) );
+        $variables['booking_start']             = date( wc_date_format()  .' '. wc_time_format() , current_time('timestamp') + 86400 );
+        $variables['booking_end']               = date( wc_date_format() .' '. wc_time_format(), current_time('timestamp') + (86400*2) );
         $variables['booking_duration']          = '3 Hours';
-        $variables['booking_date']              = date( get_option( 'date_format' ), current_time('timestamp') + 86400 );
-        $variables['booking_time']              = date( get_option( 'time_format' ), current_time('timestamp') + 86400 );
-        $variables['booking_amount']            = woocommerce_price( 77 );
+        $variables['booking_date']              = date( wc_date_format(), current_time('timestamp') + 86400 );
+        $variables['booking_time']              = date( wc_time_format(), current_time('timestamp') + 86400 );
+        $variables['booking_amount']            = wc_price( 77 );
         $variables['booking_resource']          = '';
         $variables['booking_persons']           = '';
         $variables['order_billing_address']     = '77 North Beach Dr., Miami, FL 35122';
@@ -444,18 +451,41 @@ class FUE_Addon_Bookings {
     }
 
     /**
-     * Queue emails after a booking has been created
-     * @param int $booking_id
+     * Queue emails after a booking has been created.
+     *
+     * Since this excludes `in-cart` status when booking is created initially,
+     * this gets triggered only when booking is created manually.
+     *
+     * @since 1.0.0
+     * @version 4.5.2
+     *
+     * @param int $booking_id Booking ID.
      */
     public function booking_created( $booking_id ) {
         $booking = get_wc_booking( $booking_id );
 
-        // stop FUE from scheduling blank emails after adding a booking product to the cart
-        if ( $booking->status == 'in-cart' ) {
+        // Stop FUE from scheduling blank emails after adding a booking product
+        // to the cart.
+        if ( 'in-cart' === $booking->status ) {
             return;
         }
 
-        $this->create_email_order( $booking_id, array('booking_created') );
+        $this->create_email_order( $booking_id, array( 'booking_created' ) );
+    }
+
+    /**
+     * Queue emails after a booking has been created.
+     *
+     * Created bookings from checkout flow always start with `in-cart` status
+     * which then transition to either `unpaid` or `pending-confirmation`.
+     *
+     * @since 4.5.2
+     * @version 4.5.2
+     *
+     * @param int $booking_id Booking ID.
+     */
+    public function booking_created_from_cart( $booking_id ) {
+        $this->create_email_order( $booking_id, array( 'booking_created' ) );
     }
 
     /**
@@ -512,6 +542,67 @@ class FUE_Addon_Bookings {
         }
 
         return $post_id;
+    }
+
+    /**
+     * Override `fue_get_emails` filter when removing emails from the queue.
+     *
+     * This only happens if **Remove on status change** option is enabled.
+     *
+     * @since 4.5.2
+     * @version 4.5.2
+     *
+     * @see https://github.com/woocommerce/woocommerce-follow-up-emails/issues/344
+     *
+     * @param array  $filter     Filter arg for `fue_get_emails`.
+     * @param int    $order_id   Order ID.
+     * @param string $old_status Old order status.
+     * @param string $new_status New order status.
+     */
+    public function maybe_unqueue_emails_on_status_change( $filter, $order_id, $old_status, $new_status ) {
+        // Order statuses criteria for Booking follow-up type when ever order
+        // status is updated.
+        if ( ! in_array( $old_status, array( 'processing', 'completed' ) ) ) {
+            return $filter;
+        }
+        if ( ! in_array( $new_status, array( 'on-hold', 'pending', 'cancelled' ) ) ) {
+            return $filter;
+        }
+
+        if ( ! class_exists( 'WC_Booking_Data_Store' ) ) {
+            return $filter;
+        }
+        if ( ! is_callable( array( 'WC_Booking_Data_Store', 'get_booking_ids_from_order_id' ) ) ) {
+            return $filter;
+        }
+
+        // Bail out if no bookings in the order.
+        $booking_ids = WC_Booking_Data_Store::get_booking_ids_from_order_id( $order_id );
+        if ( empty( $booking_ids ) ) {
+            return $filter;
+        }
+
+        // Triggers that fit for unqueue emails when ever order status is updated.
+        $triggers = array(
+            'booking_created',
+            'booking_status_confirmed',
+            'booking_status_paid',
+            'booking_status_complete',
+            'before_booking_event',
+            'after_booking_event',
+        );
+
+        $current_triggers = ! empty( $filter['meta_query'][0]['value'] )
+            ? $filter['meta_query'][0]['value']
+            : array();
+        $current_triggers = ! is_array( $current_triggers )
+            ? array( $current_triggers )
+            : $current_triggers;
+
+        $filter['meta_query'][0]['value'] = array_merge( $current_triggers, $triggers );
+        $filter['meta_query'][0]['compare'] = 'IN';
+
+        return $filter;
     }
 
     /**
@@ -848,11 +939,14 @@ class FUE_Addon_Bookings {
 
             if ( $order ) {
                 $user_id = WC_FUE_Compatibility::get_order_user_id( $order );
-                if ( $user_id ) {
-                    $user                   = new WP_User($user_id);
-                    $insert['user_id']      = $user_id;
-                    $insert['user_email']   = $user->user_email;
-                }
+            } else {
+                $user_id = $booking->customer_id;
+            }
+
+            if ( $user_id ) {
+                $user                   = new WP_User($user_id);
+                $insert['user_id']      = $user_id;
+                $insert['user_email']   = $user->user_email;
             }
 
             // Remove the nonce to avoid infinite loop because doing a

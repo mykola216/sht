@@ -34,7 +34,7 @@ class FUE_Admin_Actions {
                 $recipients[$key] = array( 0, $post['recipient_email'], '' );
             }
         } elseif ( $send_type == 'subscribers' ) {
-            $list        = !empty( $post['email_list'] ) ? $post['email_list'] : '';
+            $list        = !empty( $post['email_list'] ) ? $post['email_list'] : false;
             $subscribers = fue_get_subscribers( array('list' => $list) );
 
             foreach ( $subscribers as $subscriber ) {
@@ -699,6 +699,10 @@ class FUE_Admin_Actions {
             }
 
         }
+
+        if ( isset( $data['log_level'] ) ) {
+            update_option( 'fue_log_level', $data['log_level'] );
+        }
     }
 
     /**
@@ -835,7 +839,7 @@ class FUE_Admin_Actions {
             exit;
         } elseif ( !empty($post['button_create_list']) ) {
             $list       = stripslashes( $_POST['list_name'] );
-            $redirect   = 'admin.php?page=followup-emails-subscribers&added_list=' . urlencode( $list );
+            $redirect   = admin_url( 'admin.php?page=followup-emails-subscribers&added_list=' . urlencode( $list ) );
 
             Follow_Up_Emails::instance()->newsletter->add_list( $list );
 
@@ -1261,7 +1265,7 @@ class FUE_Admin_Actions {
 
                 if ( ! empty( $_GET['_product_id'] ) ) {
                     $product_id = intval( $_GET['_product_id'] );
-                    $product    = get_product( $product_id );
+                    $product    = wc_get_product( $product_id );
 
                     if ( false === $product ) {
                         wp_die( __( 'Action failed. Invalid product ID.', 'follow_up_emails' ) );

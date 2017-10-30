@@ -423,7 +423,7 @@ class FUE_Addon_Woocommerce {
      */
     public static function get_product_downloadables( $product_id ) {
         $product = WC_FUE_Compatibility::wc_get_product( $product_id );
-        $downloadables = ($product) ? $product->get_files() : array();
+        $downloadables = ( $product ) ? ( version_compare( WC_VERSION, '3.0', '<' ) ? $product->get_files() : $product->get_downloads() ) : array();
         $files = array();
 
         if ( !empty( $downloadables ) ) {
@@ -449,7 +449,7 @@ class FUE_Addon_Woocommerce {
             if ( is_a($product, 'WC_Product_Subscription_Variation') ) {
                 $identifier = '#' . $id;
                 $attributes = $product->get_variation_attributes();
-                $extra_data = ' &ndash; ' . implode( ', ', $attributes ) . ' &ndash; ' . woocommerce_price( $product->get_price() );
+                $extra_data = ' &ndash; ' . implode( ', ', $attributes ) . ' &ndash; ' . wc_price( $product->get_price() );
 
                 $products[$id] = sprintf( __( '%s &ndash; %s%s', 'woocommerce' ), $identifier, $product->get_title(), $extra_data );
             }
@@ -584,7 +584,7 @@ class FUE_Addon_Woocommerce {
 
         $order_categories   = array();
         $wc2                = WC_FUE_Compatibility::is_wc_version_gt('2.0');
-        $order_id           = $order->id;
+        $order_id           = WC_FUE_Compatibility::get_order_prop( $order, 'id' );
         $user_id            = WC_FUE_Compatibility::get_order_user_id( $order );
 
         $recorded = get_post_meta( $order_id, '_fue_recorded', true );
@@ -608,7 +608,7 @@ class FUE_Addon_Woocommerce {
             $customer   = $wpdb->get_row( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}followup_customers WHERE user_id = %d", $user_id) );
         } else {
             $user_id    = 0;
-            $email      = $order->billing_email;
+            $email      = WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' );
             $customer   = $wpdb->get_row( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}followup_customers WHERE email_address = %s", $email) );
         }
 
@@ -616,7 +616,7 @@ class FUE_Addon_Woocommerce {
             $insert = array(
                 'user_id'               => $user_id,
                 'email_address'         => $email,
-                'total_purchase_price'  => $order_total,
+                'total_purchase_price'  => 0,
                 'total_orders'          => 1
             );
 
@@ -629,7 +629,7 @@ class FUE_Addon_Woocommerce {
         $order_recorded = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}followup_customer_orders WHERE order_id = {$order_id}");
 
         if ( 0 == $order_recorded ) {
-            $wpdb->insert( $wpdb->prefix .'followup_customer_orders', array('followup_customer_id' => $customer->id, 'order_id' => $order_id, 'price' => $order->order_total) );
+            $wpdb->insert( $wpdb->prefix .'followup_customer_orders', array('followup_customer_id' => $customer->id, 'order_id' => $order_id, 'price' => WC_FUE_Compatibility::get_order_prop( $order, 'order_total' )) );
         }
 
         // update order totals
@@ -713,6 +713,8 @@ class FUE_Addon_Woocommerce {
         }
 
         update_post_meta( $order_id, '_fue_recorded', true );
+
+        do_action( 'fue_record_order', $order_id );
     }
 
     /**
@@ -834,15 +836,15 @@ class FUE_Addon_Woocommerce {
             $start_date = null;
 
             if ( $email->trigger == 'first_purchase' ) {
-                $start_date = $order->post->post_date;
+                $start_date = WC_FUE_Compatibility::get_order_prop( $order, 'post' )->post_date;
             }
 
             $insert = apply_filters( 'fue_wc_import_insert', array(
                 'send_on'       => $email->get_send_timestamp( $start_date ),
                 'email_id'      => $email->id,
                 'order_id'      => $order_id,
-                'user_id'       => $order->customer_user,
-                'user_email'    => $order->billing_email
+                'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ),
+                'user_email'    => WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' )
             ), $email );
 
             if ( $insert ) {
@@ -1013,7 +1015,7 @@ class FUE_Addon_Woocommerce {
                     if ( $user_id ) {
                         $customer = fue_get_customer( $user_id );
                     } else {
-                        $customer = fue_get_customer( 0, $order->billing_email );
+                        $customer = fue_get_customer( 0, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
                     }
 
                     if ( ! $customer ) {
@@ -1049,7 +1051,7 @@ class FUE_Addon_Woocommerce {
                     if ( $user_id ) {
                         $customer = fue_get_customer( $user_id );
                     } else {
-                        $customer = fue_get_customer( 0, $order->billing_email );
+                        $customer = fue_get_customer( 0, WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ) );
                     }
 
                     if ( ! $customer ) {
@@ -1161,7 +1163,7 @@ class FUE_Addon_Woocommerce {
                     FROM {$wpdb->prefix}followup_email_orders
                     WHERE `user_email` = %s
                     AND `email_id` = %d",
-                        $order->billing_email,
+                        WC_FUE_Compatibility::get_order_prop( $order, 'billing_email' ),
                         $email->id
                     ) );
 
@@ -1173,12 +1175,12 @@ class FUE_Addon_Woocommerce {
                 }
 
                 // adjust date only applies to non-guest orders
-                if ( $adjust_date && $order->customer_user > 0 ) {
+                if ( $adjust_date && WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ) > 0 ) {
                     // check for similar existing and unsent email orders
                     // and adjust the date to send instead of inserting a duplicate row
                     $similar_emails = $this->fue->scheduler->get_items( array(
                         'email_id'      => $email->id,
-                        'user_id'       => $order->customer_user,
+                        'user_id'       => WC_FUE_Compatibility::get_order_prop( $order, 'customer_user' ),
                         'product_id'    => $email->product_id,
                         'is_cart'       => 0,
                         'is_sent'       => 0

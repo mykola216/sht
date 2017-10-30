@@ -141,7 +141,7 @@ if ( empty($reports) ) {
     <?php
     else:
         foreach ( $reports as $report ):
-            $url = 'admin.php?page=followup-emails-reports&tab=reportuser_view&user_id='. $report->user_id .'&email='. $report->email_address;
+            $url = admin_url( 'admin.php?page=followup-emails-reports&tab=reportuser_view&user_id='. $report->user_id .'&email='. $report->email_address );
 
             if (! empty($report->customer_name) ) {
                 $name = '<strong><a href="'. $url .'">'. stripslashes($report->customer_name) .'</a></strong>';
