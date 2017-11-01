@@ -664,26 +664,31 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle {
 /* Widgets - end */
 /* Quantity input field */
 .quantity {
-  height: 32px;
+  height: 39px;
   margin-right: 4% !important;
   width: 16%; }
 
 .quantity input {
-  border: 1px solid #fa2 !important; }
+  border: none !important; }
 
 .quantity input.qty {
-  height: 32px;
+  height: 39px;
   font-size: 14px;
   font-weight: bold;
   width: 100% !important;
-  margin-right: 0; }
+  margin-right: 0;
+  margin-bottom: 0;
+  padding: 0; }
+  @media (min-width: 0px) and (max-width: 767px) {
+    .quantity input.qty {
+      padding-right: 10px; } }
 
 .quantity input.minus,
 .quantity input.plus {
   background: #f70 !important;
   box-shadow: none !important;
   color: white !important;
-  height: 16px;
+  height: 20px;
   line-height: 14px !important;
   margin: 0;
   padding: 0;
@@ -703,7 +708,7 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle {
 
 .quantity input.minus {
   border-radius: 0 0 2px 0;
-  bottom: 0px;
+  bottom: 0;
   top: auto; }
 
 /* Quantity input field - end */
