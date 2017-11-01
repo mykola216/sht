@@ -5,14 +5,14 @@
     color: #f70;
     cursor: pointer;
     display: inline-block;
-    font-size: 10px;
     font-weight: bold;
-    height: 11px;
-    line-height: 11px;
+    font-size: 12px;
+    height: 18px;
+    line-height: 16px;
     margin-left: 5px;
     text-align: center;
     vertical-align: middle;
-    width: 11px;
+    width: 18px;
 }
 @media only screen and (max-width: 768px) {
     .canvas-child-tooltip {
