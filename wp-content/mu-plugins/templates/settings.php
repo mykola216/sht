@@ -363,6 +363,12 @@
 				<td colspan="2" bgcolor="#abc"><strong>Cart page</strong></td>
 			</tr>
 			<tr valign="top">
+				<th scope="row">Coupon text</th>
+				<td>
+					<input type="text" name="steigerhouttrend_options[coupon_text]" value="<?php echo $st_options['coupon_text']; ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row">Coupon button text</th>
 				<td>
 					<input type="text" name="steigerhouttrend_options[coupon_btn_text]" value="<?php echo $st_options['coupon_btn_text']; ?>" />

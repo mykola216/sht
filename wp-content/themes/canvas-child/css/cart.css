@@ -52,8 +52,11 @@ tr.shipping td span.amount{
 
 
 a.checkout-button {
-	padding: 10px;
+	padding: 10px !important;
 	width: 100%;
+	text-decoration: none !important;
+	font-size: 22px !important;
+	font-family: "Open Sans" !important;
 }
 
 #quick-order {

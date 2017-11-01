@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+global $st_options;
+
 wc_print_notices();
 
 do_action( 'woocommerce_before_cart' ); ?>
@@ -134,7 +136,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 				<?php if ( wc_coupons_enabled() ) { ?>
 					<div class="coupon">
 
-						<label for="coupon_code"><?php _e( 'Coupon', 'woocommerce' ); ?>:</label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" /> <input type="submit" class="button" name="apply_coupon" value="<?php esc_attr_e( 'Kortingsboncode invullen', 'woocommerce' ); ?>" />
+						<label for="coupon_code"><?php _e( 'Coupon', 'woocommerce' ); ?>:</label> <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php echo $st_options['coupon_text']; ?>" /> <input type="submit" class="button" name="apply_coupon" value="<?php echo $st_options['coupon_btn_text']; ?>" />
 
 						<?php do_action( 'woocommerce_cart_coupon' ); ?>
 					</div>
