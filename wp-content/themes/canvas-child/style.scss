@@ -798,9 +798,10 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
 
 /* Quantity input field */
 .quantity {
+
 	height: 32px;
-	margin-right: 5px !important;
-	width: 60px;
+	margin-right: 4% !important;
+	width: 16%;
 }
 .quantity input {
 	border: 1px solid #fa2 !important;
@@ -810,6 +811,7 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
 	font-size: 14px;
 	font-weight: bold;
 	width: 100% !important;
+	margin-right: 0;
 }
 .quantity input.minus,
 .quantity input.plus {
@@ -933,9 +935,8 @@ ul.products li.product a span.price del{
 .single-product .ui-selectmenu-open ul.behandeling-nanolak.animated li:hover > span,
 .single-product .ui-selectmenu-open ul.behandeling-nanolak.animated li.selectedItem > span {
 	color: #f70;
-	font-weight: bold;
-	font-size: 1.2em;
-	text-shadow: -1px 1px 0px #000;
+	font-weight: 400;
+	font-size: 20px;
 }
 .single-product .ui-selectmenu-open ul.behandeling.animated li:before,
 .single-product .ui-selectmenu-open ul.behandeling-kleur.animated li:before,
