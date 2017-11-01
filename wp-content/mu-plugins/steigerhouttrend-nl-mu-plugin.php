@@ -155,6 +155,7 @@ class Steigerhouttrend_Nl_MU_Plugin {
 		$options['read_more_text']      = wp_filter_nohtml_kses( $options['read_more_text'] );
 		$options['hide_more_text']      = wp_filter_nohtml_kses( $options['hide_more_text'] );
 		$options['coupon_btn_text']       = wp_filter_nohtml_kses( $options['coupon_btn_text'] );
+		$options['coupon_text']       = wp_filter_nohtml_kses( $options['coupon_text'] );
 
 		return $options;
 	}
