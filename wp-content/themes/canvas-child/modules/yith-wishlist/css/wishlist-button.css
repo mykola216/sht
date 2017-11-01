@@ -1,14 +1,15 @@
 #tab-1 div.yith-wcwl-add-to-wishlist {
     box-sizing: border-box;
     display: inline-block;
-    float: left;
-    margin: 0;
-    width: 185px;
+    float: right;
 }
 #tab-1 div.yith-wcwl-add-to-wishlist span.feedback {
     display: block;
-    font-size: 9px;
+    font-size: 13px;
     width: 100%;
+    line-height: 14px;
+    max-width: 190px;
+    padding-top: 5px;
 }
 #tab-1 div.yith-wcwl-add-to-wishlist a {
     border-radius: 3px;
@@ -17,32 +18,33 @@
     color: #ff7700 !important;
     display: inline-block;
     font-family: Arial, sans-serif;
-    font-size: 14px;
     margin: 0px;
-    padding: 5px;
+    padding: 8px;
     text-decoration: none;
+    font-size: 0;
+    float: right;
+
 }
-#tab-1 div.yith-wcwl-add-to-wishlist a:hover {
+
+#tab-1 div.yith-wcwl-add-to-wishlist a:hover, #tab-1 div.yith-wcwl-add-to-wishlist .yith-wcwl-wishlistaddedbrowse a  {
     background: #ff7700;
     color: white !important;
 }
-#tab-1 div.yith-wcwl-add-to-wishlist a.add_to_wishlist:before {
+#tab-1 div.yith-wcwl-add-to-wishlist a:before {
     content: "\f487";
     font-family: 'dashicons';
-    font-size: 18px;
+    font-size: 26px;
     vertical-align: middle;
 }
 @media (max-width: 768px) {
     #tab-1 div.yith-wcwl-add-to-wishlist {
-        width: 100%;
+        width: auto;
         margin-top: 20px;
     }
     #tab-1 div.yith-wcwl-add-to-wishlist a {
         font-size: 0;
-        line-height: 34px;
-        float: right;
+        line-height: 39px;
         width: 35px;
-        margin-right: 5px;
     }
     #tab-1 div.yith-wcwl-add-to-wishlist a.add_to_wishlist:before {
         font-size: 35px;

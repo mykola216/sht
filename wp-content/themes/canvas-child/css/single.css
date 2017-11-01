@@ -4,7 +4,9 @@ img.attachment-shop_thumbnail {
 	box-sizing: border-box;
 	padding: 4px;
 }
-
+.woocommerce .summary p.price ins {
+	font-size: 30px;
+}
 
 #product-description ul {
 	list-style: none outside none;
@@ -157,7 +159,7 @@ img.attachment-shop_thumbnail {
 }
 #tab-1 div.product_totals span.ginput_total {
 	color: black;
-	font-size: 17px;
+	font-size: 22px;
 	font-weight: bold;
 }
 .product_totals .gform_fields .gfield {
@@ -177,12 +179,13 @@ img.attachment-shop_thumbnail {
 }
 #product-summary-tabs > div.panel button.single_add_to_cart_button,
 .woocommerce-tabs .panel button.single_add_to_cart_button {
-    float: left;
+    float: right;
     line-height: 21px;
-    margin-right: 5px;
+    margin-right: 0;
     padding: 5px;
     text-transform: none;
-}
+	width: 80%;
+	}
 /* "Add to cart" button - end */
 
 
