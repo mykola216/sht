@@ -58,6 +58,9 @@ a.checkout-button {
 	font-size: 22px !important;
 	font-family: "Open Sans" !important;
 }
+a.checkout-button:after {
+	display: inline-block;
+}
 
 #quick-order {
 	background-color: #663366 !important;
