@@ -689,7 +689,7 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle {
 
 .quantity input.minus,
 .quantity input.plus {
-  background: #f70 !important;
+  background: #959595 !important;
   box-shadow: none !important;
   color: white !important;
   height: 20px;
