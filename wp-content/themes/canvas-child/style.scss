@@ -1740,6 +1740,11 @@ body #wrapper #content .button.gform_button_select_files:focus{
 	text-decoration: underline;
 }
 
+.breadcrumbs {
+	margin-top: 20px;
+	font-size: 13px;
+}
+
 @media print {
 	body.canvas_child_print_button .print-button,
 	body.canvas_child_print_button .breadcrumbs,
