@@ -195,9 +195,9 @@ ul.behandeling li:hover, ul.behandeling-kleur li:hover, ul.behandeling-nanolak l
     /*border: 1px solid;*/
 }
 ul.behandeling li:nth-child(1), ul.behandeling-kleur li:nth-child(1), ul.behandeling-nanolak li:nth-child(1) {
-    background-position: 0 100px;
-    height: auto !important;
-    line-height: inherit;
+    background-position: 0 -434px;
+    height: 50px !important;
+    line-height: 46px;
     color: inherit;
     text-shadow: none
 
@@ -218,7 +218,7 @@ ul.behandeling li:nth-child(5) {
     background-position: 0 -327px;
 }
 ul.behandeling li:nth-child(6) {
-    background-position: 0 -434px;
+    background-image: url("../images/wood-nanocoating.png");
 }
 ul.behandeling li:nth-child(7) {
     background-position: 0 -541px;
@@ -245,7 +245,8 @@ ul.behandeling-kleur li:nth-child(5) {
 
 /* new form class behandeling-nanolak (form-2) */
 ul.behandeling-nanolak li:nth-child(2) {
-    background-position: 0 -434px;
+    background-position: 0;
+    background-image: url("../images/wood-nanocoating.png");
 }
 ul.behandeling-nanolak li:nth-child(3) {
     background-position: 0 -541px;
