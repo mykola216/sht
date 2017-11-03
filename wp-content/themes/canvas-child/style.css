@@ -954,6 +954,9 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 
 /* Cart - end*/
 /* Checkout */
+body.woocommerce-checkout #navigation {
+  display: none !important; }
+
 .payment_methods li:first-child:last-child input[name="payment_method"] {
   display: inline-block !important; }
 
