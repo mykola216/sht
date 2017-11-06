@@ -29,6 +29,16 @@ tr.shipping td span.amount{
 #shipping_method li {
 	list-style: none !important;
 }
+.payment_methods + .form-row a.button {
+    display: none;
+}
+input[name='woocommerce_checkout_place_order'] {
+    display: block;
+    width: 100%;
+    font-size: 22px !important;
+    font-family: "Open Sans";
+    float: none !important;
+}
 
 
 @media only screen and (min-width: 768px) {

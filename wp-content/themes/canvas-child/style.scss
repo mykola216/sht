@@ -264,6 +264,10 @@ a.print-button/*:not(#print_button_id)*/ {
 	border-top: 1px solid #aaaaaa !important;
 	padding: 10px 0 0;
 }
+#mc_embed_signup .mc-field-group .asterisk {
+	top: 35px !important;
+	right: 5px !important;
+}
 hr {
 	background-color: #aaaaaa;
 }
@@ -798,25 +802,33 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
 
 /* Quantity input field */
 .quantity {
-	height: 32px;
-	margin-right: 5px !important;
-	width: 60px;
+
+	height: 39px;
+	margin-right: 4% !important;
+	width: 16%;
 }
 .quantity input {
-	border: 1px solid #fa2 !important;
+	border: none !important;
 }
 .quantity input.qty {
-	height: 32px;
+	height: 39px;
 	font-size: 14px;
 	font-weight: bold;
 	width: 100% !important;
+	margin-right: 0;
+	margin-bottom: 0;
+	padding: 0;
+	@include mobile {
+		padding-right: 10px;
+	}
 }
+
 .quantity input.minus,
 .quantity input.plus {
-	background: #f70 !important;
+	background: #959595 !important;
 	box-shadow: none !important;
 	color: white !important;
-	height: 16px;
+	height: 20px;
 	line-height: 14px !important;
 	margin: 0;
 	padding: 0;
@@ -836,7 +848,7 @@ body.archive .widget.woocommerce_products_of_the_day .widgettitle{
 }
 .quantity input.minus {
 	border-radius: 0 0 2px 0;
-	bottom: 0px;
+	bottom: 0;
 	top: auto;
 }
 /* Quantity input field - end */
@@ -933,9 +945,8 @@ ul.products li.product a span.price del{
 .single-product .ui-selectmenu-open ul.behandeling-nanolak.animated li:hover > span,
 .single-product .ui-selectmenu-open ul.behandeling-nanolak.animated li.selectedItem > span {
 	color: #f70;
-	font-weight: bold;
-	font-size: 1.2em;
-	text-shadow: -1px 1px 0px #000;
+	font-weight: 400;
+	font-size: 20px;
 }
 .single-product .ui-selectmenu-open ul.behandeling.animated li:before,
 .single-product .ui-selectmenu-open ul.behandeling-kleur.animated li:before,
@@ -959,7 +970,7 @@ ul.products li.product a span.price del{
 .single-product .ui-selectmenu-open ul.behandeling-kleur.animated li.selectedItem:before,
 .single-product .ui-selectmenu-open ul.behandeling-nanolak.animated li:hover:before,
 .single-product .ui-selectmenu-open ul.behandeling-nanolak.animated li.selectedItem:before {
-	right:-65%;
+	right:-75%;
 }
 .single-product .ui-selectmenu-open ul.behandeling.animated li.selectedItem > span,
 .single-product .ui-selectmenu-open ul.behandeling.animated li.selectedItem:before,
@@ -1067,6 +1078,7 @@ div.woocommerce-message  {
 		background: #f0a818;
 		margin-top: -12px;
 		margin-bottom: 28px;
+		text-decoration: none !important;
 		@include mobile {
 			height: 44px;
 			font-size: 18px !important;
@@ -1102,6 +1114,11 @@ body.woocommerce-cart .cross-sells ul.products li.product a span.price {
 /* Cart - end*/
 
 /* Checkout */
+body.woocommerce-checkout {
+	#navigation {
+		display: none!important;
+	}
+}
 .payment_methods li:first-child:last-child input[name="payment_method"] {
 	display: inline-block !important;
 }
@@ -1714,6 +1731,25 @@ body #wrapper #content .button.gform_button_select_files:focus{
 		padding-right:0;
 	}
 }
+@include mobile {
+	.nav-toggle.icon a {
+		display: none;
+	}
+	.nav-toggle:before {
+		content: url("images/mobile-menu-sht.png");
+		padding: 6px 7px 2px 2px;
+	}
+}
+
+#main .breadcrumb-trail a, .page-template-default .entry a, .our-team p a, .clients p a, #contact-page .entry p a, .description-wrapper p a {
+	text-decoration: underline;
+}
+
+.breadcrumbs {
+	margin-top: 20px;
+	font-size: 13px;
+}
+
 @media print {
 	body.canvas_child_print_button .print-button,
 	body.canvas_child_print_button .breadcrumbs,
@@ -1731,17 +1767,51 @@ body #wrapper #content .button.gform_button_select_files:focus{
 	body.canvas_child_print_button.woocommerce-cart table.cart tbody tr:not(.cart_item),
 
 	body.canvas_child_print_button.single-product #main > *:not(.product):not(.product_title),
-	body.canvas_child_print_button.single-product #main .product > *:not(.images),
-	body.canvas_child_print_button.single-product #main .product .images > *:not(.woocommerce-main-image){
+	body.canvas_child_print_button.single-product #main .product > *:not(.images):not(.entry-summary),
+	body.canvas_child_print_button.single-product #main .product .images > *:not(.woocommerce-main-image):not(.thumbnails){
 		display: none !important;
 	}
-
-	body.canvas_child_print_button.single-product #main .product_title,
-	body.canvas_child_print_button.single-product #main .images img{
+	body.canvas_child_print_button.single-product #main .product_title {
+		width: 100%;
 		text-align:center;
-		width:100% !important;
-		height:auto !important;
 	}
+	body.canvas_child_print_button.single-product #main .images {
+		float: left;
+		width: 90mm;
+		img{
+			width:100% !important;
+			height:auto !important;
+		}
+	}
+	body.canvas_child_print_button.single-product #main .entry-summary {
+		float: right;
+		&> *:not(#product-summary-tabs) {
+			display: none;
+		}
+		#product-summary-tabs {
+			width: 85mm;
+			p {
+				margin-bottom: 0 !important;
+				font-size: 12px !important;
+			}
+			#tab-1 label.gfield_label {
+				font-size: 12px;
+			}
+			#tab-1 li.gfield {
+				margin: 0 !important;
+			}
+			.single_add_to_cart_button, .yith-wcwl-add-to-wishlist {
+				display: none !important;
+			}
+			.div.panel div.product_totals {
+				padding: 0 10px !important;
+			}
+			.ginput_container.ginput_container_radio {
+				margin: 0 !important;
+			}
+		}
+	}
+
 
 	body.canvas_child_print_button .woocommerce table .product-thumbnail,
 	body.canvas_child_print_button .woocommerce table .product-price {
@@ -1762,17 +1832,4 @@ body #wrapper #content .button.gform_button_select_files:focus{
 	body.canvas_child_print_button .woocommerce table td{
 		border: 1px solid #eee !important;
 	}
-}
-@include mobile {
-	.nav-toggle.icon a {
-		display: none;
-	}
-	.nav-toggle:before {
-		content: url("images/mobile-menu-sht.png");
-		padding: 6px 7px 2px 2px;
-	}
-}
-
-#main .breadcrumb-trail a, .page-template-default .entry a, .our-team p a, .clients p a, #contact-page .entry p a, .description-wrapper p a {
-	text-decoration: underline;
 }

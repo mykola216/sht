@@ -81,8 +81,9 @@ jQuery(document).ready(function ($) {
             .attr('title', jQuery(this).html());
     });
     jQuery(".canvas-child-tooltip").tooltip({
+        hover: true,
         show: 400,
-        hide: { delay: 3000, duration: 400 },
+        hide: { delay: 1000, duration: 400 },
         content: function () {
             return jQuery(this).attr('title');
         }

@@ -9,6 +9,7 @@ table.cart a.remove {
 	font-size: 18px !important;
 	font-weight: 400;
 	line-height: 20px !important;
+	text-decoration: none;
 }
 
 
@@ -51,8 +52,14 @@ tr.shipping td span.amount{
 
 
 a.checkout-button {
-	padding: 10px;
+	padding: 10px !important;
 	width: 100%;
+	text-decoration: none !important;
+	font-size: 22px !important;
+	font-family: "Open Sans" !important;
+}
+a.checkout-button:after {
+	display: inline-block;
 }
 
 #quick-order {
@@ -63,30 +70,16 @@ a.checkout-button {
 	background-color: #884488 !important;
 }
 
-.coupon span:before {
-    color: #9aa789;
-    font-family: FontAwesome;
-    margin-right: 7px;
-}
-.coupon span.message:before{
-    content: "\f05d";
-	color: green;
-}
-.coupon span.error:before{
-	content: "\f05c";
-	color: red;
-}
-div.woocommerce-message,
-.coupon span {
+div.woocommerce-message {
     color: #000;
     font-weight: 400;
 	font-family: "Open Sans";
 }
-.coupon span.message{
-	color:green;
+.coupon .message {
+	display: none;
 }
-.coupon span.error{
-	color:red;
+.coupon input[name="apply_coupon"] {
+	background: #959595 !important;
 }
 div.cross-sells > h2 {
     font-size: 18px;
@@ -114,21 +107,27 @@ div.cross-sells > ul > li > div.product-excerpt:after {
 	}
 
 	.coupon {
-		width: 48%;
-		margin-right: 2%;
+		width: 100%;
+		float: none;
 	}
-	.coupon input.button[name=apply_coupon] {
-		line-height: 18px;
-		margin-top: 10px;
-	}
-	#popup-box-send-email-cart-items-btn, input.button[name=update_cart] {
-		float: right;
-		width: 50%!important;
+	table.cart td.actions .coupon input[name="coupon_code"],
+	.coupon input.button[name="apply_coupon"],
+	#popup-box-send-email-cart-items-btn,
+	input.button[name=update_cart] {
+		min-height: 50px;
 		line-height: 17px;
+	}
+	table.cart td.actions .coupon input[name="coupon_code"],
+	#popup-box-send-email-cart-items-btn {
+		float: left;
+		width: 49%;
+		margin-right: 1%;
+		margin-top: 0!important;
 		margin-bottom: 0!important;
 	}
-	input.button[name=update_cart] {
-		margin-top: 15px;
+	.coupon input.button[name="apply_coupon"], input.button[name=update_cart] {
+		float: right;
+		width: 50% !important;
+		margin: 0!important;
 	}
-
 }
