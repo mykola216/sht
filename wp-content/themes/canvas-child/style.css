@@ -1590,3 +1590,16 @@ body #wrapper #content .button.gform_button_select_files:focus {
   body.canvas_child_print_button .woocommerce table th,
   body.canvas_child_print_button .woocommerce table td {
     border: 1px solid #eee !important; } }
+.cart_totals a.checkout-button.button span {
+  font-weight: bold; }
+
+#order_review #place_order {
+  font-weight: bold; }
+#order_review input#place_order:after {
+  font-family: "FontAwesome";
+  content: "\f178";
+  margin-left: .618em; }
+
+@media only screen and (max-width: 359px) {
+  #product-summary-tabs > div.panel button.single_add_to_cart_button.button {
+    width: 60%; } }
