@@ -68,8 +68,11 @@ class WOE_Formatter_Xls extends WOE_Formatter {
 			$this->objPHPExcel->getActiveSheet()->freezePane( 'A2' );
 		}
 
-		//rename
-		$this->objPHPExcel->getActiveSheet()->setTitle( __( 'Orders', 'woocommerce-order-export' ) );
+		//rename Sheet1
+		if( empty($this->settings['sheet_name']) )
+			$this->settings['sheet_name'] = __( 'Orders', 'woocommerce-order-export' );
+		$sheet_name = WC_Order_Export_Engine::make_filename( $this->settings['sheet_name'] );
+		$this->objPHPExcel->getActiveSheet()->setTitle( $sheet_name );
 
 		// right-to-left worksheet?
 		if( $this->settings['direction_rtl'] )

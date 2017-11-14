@@ -20,34 +20,33 @@ class WF_PrRevImpExpCsv_Exporter {
 			$selected_pr_rev_ids = '';
 		}
 
-		$export_reply				 = ! empty( $_POST['v_replycolumn'] ) ? '1' : '' ; 
-
-		$export_limit                = ! empty( $_POST['limit'] ) ? intval( $_POST['limit'] ) : '';
-		$delimiter                   = ! empty( $_POST['delimiter'] ) ? $_POST['delimiter']  : ',';
-		$stars           			 = ! empty( $_POST['stars'] ) ? $_POST['stars'] : '';
-		$owner           			 = ! empty( $_POST['owner'] ) ? $_POST['owner'] : '';
-		$products           		 = ! empty( $_POST['products'] ) ? $_POST['products'] : '';
-		$limit 						 = ! empty($limit) ? $limit : '';
+		$export_reply	= ! empty( $_POST['v_replycolumn'] ) ? '1' : '' ; 
+		$export_limit	= ! empty( $_POST['limit'] ) ? intval( $_POST['limit'] ) : '';
+		$delimiter	= ! empty( $_POST['delimiter'] ) ? $_POST['delimiter']  : ',';
+		$stars		= ! empty( $_POST['stars'] ) ? $_POST['stars'] : '';
+		$owner		= ! empty( $_POST['owner'] ) ? $_POST['owner'] : '';
+		$products	= ! empty( $_POST['products'] ) ? $_POST['products'] : '';
+		$limit		= ! empty($limit) ? $limit : '';
 
 		if ( $limit > $export_limit )
 			$limit = $export_limit;
 
-		$pr_rev_date_from        	 = ! empty( $_POST['pr_rev_date_from'] ) ? $_POST['pr_rev_date_from']  : date('Y-m-d 00:00', 0) ;
-		$pr_rev_date_to          	 = ! empty( $_POST['pr_rev_date_to'] ) ? $_POST['pr_rev_date_to']  : date('Y-m-d 23:59', current_time('timestamp'));
-
-		$csv_columns                 = include( 'data/data-wf-post-columns-review.php' );
-		$user_columns_name           = ! empty( $_POST['columns_name'] ) ? $_POST['columns_name'] : $csv_columns;
-		$export_columns              = ! empty( $_POST['columns'] ) ? $_POST['columns'] : '';
+		$pr_rev_date_from	= ! empty( $_POST['pr_rev_date_from'] ) ? $_POST['pr_rev_date_from']  : date('Y-m-d 00:00', 0) ;
+		$pr_rev_date_to		= ! empty( $_POST['pr_rev_date_to'] ) ? $_POST['pr_rev_date_to']  : date('Y-m-d 23:59', current_time('timestamp'));
+		$csv_columns		= include( 'data/data-wf-post-columns-review.php' );
+		$user_columns_name	= ! empty( $_POST['columns_name'] ) ? $_POST['columns_name'] : $csv_columns;
+		$export_columns		= ! empty( $_POST['columns'] ) ? $_POST['columns'] : '';
 
 		if ( $limit > $export_limit )
 			$limit = $export_limit;
 		
-		$settings 				= get_option( 'woocommerce_'.WF_PROD_IMP_EXP_ID.'_settings', null );
-		$ftp_server  			= isset( $settings['rev_ftp_server'] ) ? $settings['rev_ftp_server'] : '';
-		$ftp_user				= isset( $settings['rev_ftp_user'] ) ? $settings['rev_ftp_user'] : '';
-		$ftp_password           = isset( $settings['rev_ftp_password'] ) ? $settings['rev_ftp_password'] : '';
-		$use_ftps         		= isset( $settings['rev_use_ftps'] ) ? $settings['rev_use_ftps'] : '';
-		$enable_ftp_ie         	= isset( $settings['rev_enable_ftp_ie'] ) ? $settings['rev_enable_ftp_ie'] : '';
+		$settings		= get_option( 'woocommerce_'.WF_PROD_IMP_EXP_ID.'_settings', null );
+		$ftp_server		= isset( $settings['rev_ftp_server'] ) ? $settings['rev_ftp_server'] : '';
+		$ftp_user		= isset( $settings['rev_ftp_user'] ) ? $settings['rev_ftp_user'] : '';
+		$ftp_password		= isset( $settings['rev_ftp_password'] ) ? $settings['rev_ftp_password'] : '';
+		$ftp_port		= isset( $settings['rev_ftp_port'] ) ? $settings['rev_ftp_port'] : 21;
+		$use_ftps		= isset( $settings['rev_use_ftps'] ) ? $settings['rev_use_ftps'] : '';
+		$enable_ftp_ie		= isset( $settings['rev_enable_ftp_ie'] ) ? $settings['rev_enable_ftp_ie'] : '';
 		
 		$wpdb->hide_errors();
 		@set_time_limit(0);
@@ -188,10 +187,10 @@ class WF_PrRevImpExpCsv_Exporter {
 		}
 		if( $enable_ftp_ie ) {
 			if( $use_ftps ) {
-				$ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
+				$ftp_conn = @ftp_ssl_connect($ftp_server,$ftp_port) or die("Could not connect to $ftp_server:$ftp_port");
 			}
 			else {
-				$ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
+				$ftp_conn = @ftp_connect($ftp_server,$ftp_port) or die("Could not connect to $ftp_server:$ftp_port");
 			}
 			$login = ftp_login($ftp_conn, $ftp_user, $ftp_password);
 			ftp_pasv($ftp_conn, TRUE);
@@ -267,7 +266,12 @@ class WF_PrRevImpExpCsv_Exporter {
 					{
 						$row[] = self::format_data( $comment->$column );
 					}
-				} 
+				}
+				elseif($column == 'product_title' && !empty($temp_product_id) )
+				{
+				    $temp_product_object = ( isset($temp_product_id) && WC()->version >='3.0') ? wc_get_product( $temp_product_id ) : get_product( $temp_product_id );
+				    $row[] = $temp_product_object->get_title();
+				}
 				else 
 				{
 					if($column === 'product_SKU' && !empty($temp_product_id))

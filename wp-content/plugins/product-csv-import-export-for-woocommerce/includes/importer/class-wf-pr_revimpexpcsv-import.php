@@ -975,6 +975,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$ftp_server_path	= ! empty( $_POST['rev_ftp_server_path'] ) ? $_POST['rev_ftp_server_path'] : '';
 		$ftp_user		= ! empty( $_POST['rev_ftp_user'] ) ? $_POST['rev_ftp_user'] : '';
 		$ftp_password           = ! empty( $_POST['rev_ftp_password'] ) ? $_POST['rev_ftp_password'] : '';
+		$ftp_port		= ! empty($_POST[ 'rev_ftp_port' ]) ? $_POST[ 'rev_ftp_port' ] : 21;
 		$use_ftps         	= ! empty( $_POST['rev_use_ftps'] ) ? true : false;
 		
 		
@@ -982,6 +983,7 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 		$settings[ 'rev_ftp_server' ]		= $ftp_server;
 		$settings[ 'rev_ftp_user' ]		= $ftp_user;
 		$settings[ 'rev_ftp_password' ]		= $ftp_password;
+		$settings[ 'rev_ftp_port' ]		= $ftp_port;
 		$settings[ 'rev_use_ftps' ]		= $use_ftps;
 		$settings[ 'rev_enable_ftp_ie' ]	= $enable_ftp_ie;
 		$settings[ 'rev_ftp_server_path' ]	= $ftp_server_path;
@@ -992,30 +994,32 @@ class WF_PrRevImpExpCsv_Import extends WP_Importer {
 					   
 		update_option( 'wf_review_import_ftp', $settings );
 		
-		$ftp_conn = $use_ftps ? ftp_ssl_connect($ftp_server) : ftp_connect($ftp_server);
+		$ftp_conn = $use_ftps ? @ftp_ssl_connect($ftp_server,$ftp_port) : @ftp_connect($ftp_server,$ftp_port);
 		$error_message = "";
 		$success = false;
 		if($ftp_conn == false){
-			$error_message = "There is connection problem\n";
+			$error_message = "Not able to connect to the server please check <b>FTP Server Host / IP</b> and <b>Port number</b>. \n";
 		}
 		
 		if(empty($error_message)){
-			if(ftp_login($ftp_conn, $ftp_user, $ftp_password) == false){
-				$error_message = "Not able to login \n";
+			if(@ftp_login($ftp_conn, $ftp_user, $ftp_password) == false){
+				$error_message = "Connected to FTP Server.<br/>But, not able to login please check <b>FTP User Name</b> and <b>Password.</b>\n";
 			}
 		}
-		ftp_pasv($ftp_conn, TRUE);
+		
 		if(empty($error_message)){
-
-                if (ftp_get($ftp_conn, ABSPATH.$local_file, $server_file, FTP_BINARY)) {
+			ftp_pasv($ftp_conn, TRUE);
+			if (@ftp_get($ftp_conn, ABSPATH.$local_file, $server_file, FTP_BINARY)) {
 				$error_message =  "";
 				$success = true;
-			} else {
-				$error_message = "There was a problem while downloading the specified File <b>".$server_file."</b> .\n";
+			} 
+			else {
+				$error_message = "Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import-review.csv</b>.\n";
 			}
 		}
-		
-		ftp_close($ftp_conn);
+		if($ftp_conn != false) {
+			ftp_close($ftp_conn);
+		}
 		if($success){
 			$this->file_url = $local_file;
 		}else{

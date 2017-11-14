@@ -48,4 +48,12 @@ abstract class WOE_Formatter {
 	public function truncate() {
 		ftruncate( $this->handle, 0 );
 	}
+
+	protected function convert_literals( $s ) {
+		$s = str_replace( '\r', "\r", $s );
+		$s = str_replace( '\t', "\t", $s );
+		$s = str_replace( '\n', "\n", $s );
+
+		return $s;
+	}
 }

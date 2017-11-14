@@ -585,7 +585,12 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 	 */
 	public function import() {
 		global $woocommerce, $wpdb;
-
+		if( !defined('XA_INVENTORY_STOCK_STATUS') ) {
+			define( 'XA_INVENTORY_STOCK_STATUS', get_option( 'woocommerce_manage_stock' ) );
+		}
+		if( !defined('XA_INVENTORY_STOCK_THRESHOLD') ) {
+			define( 'XA_INVENTORY_STOCK_THRESHOLD', get_option( 'woocommerce_notify_no_stock_amount' ) );
+		}
 		wp_suspend_cache_invalidation( true );
 
 		$this->hf_log_data_change( 'csv-import', '---' );
@@ -1458,14 +1463,16 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 		$ftp_server_path	= ! empty( $_POST['pro_ftp_server_path'] ) ? $_POST['pro_ftp_server_path'] : '';
 		$ftp_user		= ! empty( $_POST['pro_ftp_user'] ) ? $_POST['pro_ftp_user'] : '';
 		$ftp_password           = ! empty( $_POST['pro_ftp_password'] ) ? $_POST['pro_ftp_password'] : '';
+		$ftp_port		= ! empty( $_POST['pro_ftp_port'] ) ? $_POST['pro_ftp_port'] : 21;
 		$use_ftps         	= ! empty( $_POST['pro_use_ftps'] ) ? true : false;
 		
 		
 		$settings = array();
 		$settings[ 'pro_ftp_server' ]		= $ftp_server;
-		$settings[ 'pro_ftp_user' ]			= $ftp_user;
+		$settings[ 'pro_ftp_user' ]		= $ftp_user;
 		$settings[ 'pro_ftp_password' ]		= $ftp_password;
-		$settings[ 'pro_use_ftps' ]			= $use_ftps;
+		$settings[ 'pro_ftp_port' ]		= $ftp_port;
+		$settings[ 'pro_use_ftps' ]		= $use_ftps;
 		$settings[ 'pro_enable_ftp_ie' ]	= $enable_ftp_ie;
 		$settings[ 'pro_ftp_server_path' ]	= $ftp_server_path;
 		
@@ -1475,26 +1482,26 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 		
 		update_option( 'wf_product_import_ftp', $settings );
 		
-		$ftp_conn = $use_ftps ? ftp_ssl_connect($ftp_server) : ftp_connect($ftp_server);
+		$ftp_conn = $use_ftps ? @ftp_ssl_connect($ftp_server, $ftp_port) : @ftp_connect($ftp_server,$ftp_port);
 		$error_message = "";
 		$success = false;
 		if($ftp_conn == false){
-			$error_message = "There is connection problem\n";
+			$error_message = "Not able to connect to the server please check <b>FTP Server Host / IP</b> and <b>Port number</b>. \n";
 		}
 		else
 		{
 			if(! @ftp_login($ftp_conn, $ftp_user, $ftp_password)){
-				$error_message = "Not able to login \n";
+				$error_message = "Connected to FTP Server.<br/>But, not able to login please check <b>FTP User Name</b> and <b>Password.</b>\n";
 			}
 		}
 		
 		if(empty($error_message)){
 			ftp_pasv($ftp_conn, TRUE);
-			if (ftp_get($ftp_conn, ABSPATH.$local_file, $server_file, FTP_BINARY)) {
+			if (@ftp_get($ftp_conn, ABSPATH.$local_file, $server_file, FTP_BINARY)) {
 				$error_message =  "";
 				$success = true;
 			} else {
-				$error_message = "There was a problem while downloading the specified File <b>".$server_file."</b> .\n";
+				$error_message = "Failed to Download Specified file in FTP Server File Path.<br/><br/><b>Possible Reasons</b><br/><b>1.</b> File path may be invalid.<br/><b>2.</b> Maybe File / Folder Permission missing for specified file or folder in path.<br/><b>3.</b> Write permission may be missing for file <b>plugins/product-csv-import-export-for-woocommerce/temp-import.csv</b> .\n";
 			}
 		}
 		
@@ -1505,7 +1512,7 @@ _e( 'Step 2...', 'wf_csv_import_export' ) . ' ';
 			$this->file_url = $local_file;
 		}else{
 			die($error_message);
-		}	
+		}
 		return true;
 	}
 

@@ -5,11 +5,11 @@
  * Description:  Google AdWords dynamic conversion value tracking for WooCommerce.
  * Author:       Wolf+Bär Agency
  * Author URI:   https://wolfundbaer.ch
- * Version:      1.4.6
+ * Version:      1.4.7
  * License:      GPLv2 or later
  * Text Domain:  woocommerce-google-adwords-conversion-tracking-tag
  * WC requires at least: 2.6.0
- * WC tested up to: 3.1.2
+ * WC tested up to: 3.2.1
  **/
 
 // TODO add validation for the input fields. Try to use jQuery validation in the form.
@@ -72,7 +72,7 @@ class WGACT {
 		add_action( 'admin_notices', array( $this, 'ask_for_rating_notices_if_not_asked_before' ) );
 
 		// add the Google AdWords tag to the thankyou part of the page within the body tags
-		add_action( 'woocommerce_thankyou', array( $this, 'GoogleAdWordsTag' ) );
+		add_action( 'wp_head', array( $this, 'GoogleAdWordsTag' ) );
 
 		// fix WordPress CDATA filter as per ticket https://core.trac.wordpress.org/ticket/3670
 		add_action( 'template_redirect', array( $this, 'cdata_template_redirect' ), -1 );
@@ -394,78 +394,88 @@ class WGACT {
         }
     }
 
-	public function GoogleAdWordsTag( $order_id ) {
+	public function GoogleAdWordsTag() {
 
 		$conversion_id    = $this->get_conversion_id();
 		$conversion_label = $this->get_conversion_label();
 
-		// get order from URL and evaluate order total
-		$order = new WC_Order( $order_id );
 
-		$options             = get_option( 'wgact_plugin_options' );
-		$order_total_setting = $options['order_total_logic'];
-		$order_total         = 0 == $order_total_setting ? $order->get_subtotal() : $order->get_total();
-
-		// use the right function to get the currency depending on the WooCommerce version
-		$order_currency      = $this->woocommerce_3_and_above() ? $order->get_currency() : $order->get_order_currency();
-
-		// the filter is deprecated
-		// $order_total_filtered = apply_filters( 'wgact_conversion_value_filter', $order_total, $order );
-
-
-		?>
-
+	    ?>
         <!--noptimize-->
-        <!-- START Google Code for Sales (AdWords) Conversion Page -->
-		<?php
+        <!-- Global site tag (gtag.js) - Google AdWords: <?php echo $conversion_id ?> -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-<?php echo $conversion_id ?>"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-		// Only run conversion script if the payment has not failed. (has_status('completed') is too restrictive)
-		// And use the order meta to check if the conversion code has already run for this order ID. If yes, don't run it again.
-		// Also don't run the pixel if an admin or shop manager is logged in.
-		// TODO $order->get_order_currency() is deprecated. Switch to $order->get_currency() at a later point somewhen in 2018
-		if ( ! $order->has_status( 'failed' ) && ! current_user_can( 'edit_others_pages' ) ) {
-			?>
-
-        <script type="text/javascript">
-            /* <![CDATA[ */
-            var google_conversion_id = <?php echo json_encode( $conversion_id, JSON_NUMERIC_CHECK ); ?>;
-            var google_conversion_language = "en";
-            var google_conversion_format = "3";
-            var google_conversion_color = "ffffff";
-            var google_conversion_label = <?php echo json_encode( $conversion_label ); ?>;
-            var google_conversion_order_id = "<?php echo $order_id; ?>";
-            var google_conversion_value = <?php echo $order_total; ?>;
-            var google_conversion_currency = <?php echo json_encode( $order_currency ); ?>;
-            var google_remarketing_only = false;
-            /* ]]> */
+            gtag('config', 'AW-<?php echo $conversion_id ?>');
         </script>
-        <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-        </script>
-        <noscript>
-            <div style="display:inline;">
-                <img height="1" width="1" style="border-style:none;" alt=""
-                     src="//www.googleadservices.com/pagead/conversion/<?php echo $conversion_id; ?>/?value=<?php echo $order_total; ?>&amp;currency_code=<?php echo $order_currency; ?>&amp;label=<?php echo $conversion_label; ?>&amp;guid=ON&amp;oid=<?php echo $order_id; ?>&amp;script=0"/>
-            </div>
-        </noscript>
-			<?php
-
-		} else {
-
-			?>
-
-            <!-- The AdWords pixel has not been inserted. Possible reasons: -->
-            <!--    You are logged into WooCommerce as admin or shop manager. -->
-            <!--    The order payment has failed. -->
-            <!--    The pixel has already been fired. To prevent double counting the pixel is not being fired again. -->
-
-			<?php
-		} // end if order status
-
-		?>
-
-        <!-- END Google Code for Sales (AdWords) Conversion Page -->
         <!--/noptimize-->
+
+
 		<?php
+
+        if ( is_order_received_page() ) {
+
+
+
+	        // get order from URL and evaluate order total
+	        $order_key      = $_GET['key'];
+	        $order          = new WC_Order( wc_get_order_id_by_order_key( $order_key ) );
+
+	        $options             = get_option( 'wgact_plugin_options' );
+	        $order_total_setting = $options['order_total_logic'];
+	        $order_total         = 0 == $order_total_setting ? $order->get_subtotal() : $order->get_total();
+
+	        // use the right function to get the currency depending on the WooCommerce version
+	        $order_currency = $this->woocommerce_3_and_above() ? $order->get_currency() : $order->get_order_currency();
+
+	        // the filter is deprecated
+	        // $order_total_filtered = apply_filters( 'wgact_conversion_value_filter', $order_total, $order );
+
+
+	        ?>
+
+            <!--noptimize-->
+            <!-- Global site tag (gtag.js) - Google AdWords: <?php echo $conversion_id ?> -->
+	        <?php
+
+	        // Only run conversion script if the payment has not failed. (has_status('completed') is too restrictive)
+	        // Also don't run the pixel if an admin or shop manager is logged in.
+	        // TODO $order->get_order_currency() is deprecated. Switch to $order->get_currency() at a later point somewhen in 2018
+	        if ( ! $order->has_status( 'failed' ) && ! current_user_can( 'edit_others_pages' ) ) {
+		        ?>
+
+                <!-- Event tag for WooCommerce Checkout conversion page -->
+                <script>
+                    gtag('event', 'conversion', {
+                        'send_to': 'AW-<?php echo $conversion_id ?>/<?php echo $conversion_label ?>',
+                        'value': <?php echo $order_total; ?>,
+                        'currency': <?php echo json_encode( $order_currency ); ?>,
+                        'transaction_id': '<?php echo $order->get_order_number(); ?>',
+                    });
+                </script>
+		        <?php
+
+	        } else {
+
+		        ?>
+
+                <!-- The AdWords pixel has not been inserted. Possible reasons: -->
+                <!--    You are logged into WooCommerce as admin or shop manager. -->
+                <!--    The order payment has failed. -->
+                <!--    The pixel has already been fired. To prevent double counting the pixel is not being fired again. -->
+
+		        <?php
+	        } // end if order status
+
+	        ?>
+
+            <!-- END Google Code for Sales (AdWords) Conversion Page -->
+            <!--/noptimize-->
+	        <?php
+        }
 	}
 
 	private function get_conversion_id() {

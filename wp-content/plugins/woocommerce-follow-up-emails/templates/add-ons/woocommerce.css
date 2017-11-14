@@ -113,7 +113,7 @@
         text-transform: none;
         line-height: 1;
         -webkit-font-smoothing: antialiased;
-        margin-right: 0.618em;
+        margin-right: .618em;
         content: "";
         text-decoration: none; }
     #woocommerce-product-data ul.wc-tabs li.follow-ups_options a:before,
@@ -129,3 +129,5 @@
 
 .woocommerce_options_panel .fue_lists_field label {
   width: 100%; }
+
+/*# sourceMappingURL=woocommerce.css.map */

@@ -8,12 +8,12 @@ if ( class_exists( 'WOE_Formatter_sv' ) ) {
 }
 
 abstract class WOE_Formatter_sv extends WOE_Formatter {
-	protected $type;
-	protected $enclosure;
-	protected $linebreak;
-	protected $delimiter;
-	protected $encoding;
-	protected $rows;
+	var $type;
+	var $enclosure;
+	var $linebreak;
+	var $delimiter;
+	var $encoding;
+	var $rows;
 
 	public function __construct( $mode, $filename, $settings, $format, $labels ) {
 		parent::__construct( $mode, $filename, $settings, $format, $labels );
@@ -91,17 +91,9 @@ abstract class WOE_Formatter_sv extends WOE_Formatter {
 			}
 			fwrite( $this->handle, '</table>' );
 		} else {
-			do_action( "woe_{$this->type}_print_footer", $this->handle );
+			do_action( "woe_{$this->type}_print_footer", $this->handle, $this );
 		}
 		parent::finish();
-	}
-
-	protected function convert_literals( $s ) {
-		$s = str_replace( '\r', "\r", $s );
-		$s = str_replace( '\t', "\t", $s );
-		$s = str_replace( '\n', "\n", $s );
-
-		return $s;
 	}
 
 	protected function prepare_array( &$arr ) {

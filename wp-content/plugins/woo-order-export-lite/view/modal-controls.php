@@ -2,8 +2,7 @@
     <div class='div_meta' >
         <label><?php _e('Meta key', 'woocommerce-order-export')?>:</label>
         <div id="custom_meta_products_mode">
-            <label><input id="custom_meta_products_mode_all" type="radio" name="custom_meta_products_mode" value="all"> <?php _e('All meta', 'woocommerce-order-export') ?></label>
-            <label><input id="custom_meta_products_mode_used" type="radio" name="custom_meta_products_mode" value="used"> <?php _e('Hide unused', 'woocommerce-order-export') ?></label>
+            <label><input id="custom_meta_products_mode_used" type="checkbox" name="custom_meta_products_mode" value="used"> <?php _e('Hide unused fields', 'woocommerce-order-export') ?></label>
         </div>
         <select id='select_custom_meta_products'>
         </select>
@@ -16,16 +15,16 @@
             };
             ?>
         </select>
-        <label><?php _e('Column Name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_meta_products'/>
+        <label><?php _e('Column name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_meta_products'/>
         <div style="text-align: right;">
-            <button  id='button_custom_meta_products' class='button-secondary'><?php _e('Add Field', 'woocommerce-order-export')?></button>
+            <button  id='button_custom_meta_products' class='button-secondary'><?php _e('Add field', 'woocommerce-order-export')?></button>
         </div>
     </div>
     <div class='div_custom'>
-        <label><?php _e('Column Name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_field_products'/>
+        <label><?php _e('Column name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_field_products'/>
         <label><?php _e('Value', 'woocommerce-order-export')?>:</label><input type='text' id='value_custom_field_products'/>
         <div style="text-align: right;">
-            <button  id='button_custom_field_products' class='button-secondary'><?php _e('Add Static Field', 'woocommerce-order-export')?></button>
+            <button  id='button_custom_field_products' class='button-secondary'><?php _e('Add static field', 'woocommerce-order-export')?></button>
         </div>
     </div>
 </div>
@@ -35,20 +34,20 @@
         <label><?php _e('Meta key', 'woocommerce-order-export')?>:</label>
         <div id="custom_meta_coupons_mode" style="display: none;">
             <label><input id="custom_meta_coupons_mode_all" type="radio" name="custom_meta_coupons_mode" value="all"> <?php _e('All meta', 'woocommerce-order-export') ?></label>
-            <label><input id="custom_meta_coupons_mode_used" type="radio" name="custom_meta_coupons_mode" value="used"> <?php _e('Hide unused', 'woocommerce-order-export') ?></label>
+            <label><input id="custom_meta_coupons_mode_used" type="radio" name="custom_meta_coupons_mode" value="used"> <?php _e('Hide unused fields', 'woocommerce-order-export') ?></label>
         </div>
         <select id='select_custom_meta_coupons'>
         </select>
-        <label><?php _e('Column Name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_meta_coupons'/></label>
+        <label><?php _e('Column name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_meta_coupons'/></label>
         <div style="text-align: right;">
-            <button  id='button_custom_meta_coupons' class='button-secondary'><?php _e('Add Field', 'woocommerce-order-export')?></button>
+            <button  id='button_custom_meta_coupons' class='button-secondary'><?php _e('Add field', 'woocommerce-order-export')?></button>
         </div>
     </div>
     <div class='div_custom'>
-        <label><?php _e('Column Name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_field_coupons'/></label>
+        <label><?php _e('Column name', 'woocommerce-order-export')?>:</label><input type='text' id='colname_custom_field_coupons'/></label>
         <label><?php _e('Value', 'woocommerce-order-export')?>:</label><input type='text' id='value_custom_field_coupons'/></label>
         <div style="text-align: right;">
-            <button  id='button_custom_field_coupons' class='button-secondary'><?php _e('Add Static Field', 'woocommerce-order-export')?></button>
+            <button  id='button_custom_field_coupons' class='button-secondary'><?php _e('Add static field', 'woocommerce-order-export')?></button>
         </div>
     </div>
 </div>

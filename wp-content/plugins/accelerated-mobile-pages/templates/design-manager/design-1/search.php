@@ -30,6 +30,7 @@
 
 <?php do_action('ampforwp_post_before_loop') ?>
 	<?php
+		$count = 1;
 		if ( get_query_var( 'paged' ) ) {
 	        $paged = get_query_var('paged');
 	    } elseif ( get_query_var( 'page' ) ) {
@@ -71,33 +72,31 @@
                     	 </time>
 		          </div>
 
-				<?php if ( has_post_thumbnail() || ( ampforwp_is_custom_field_featured_image() && ampforwp_cf_featured_image_src() ) ) {
-					if ( has_post_thumbnail()) {     
-						$thumb_id = get_post_thumbnail_id();
-						$thumb_url_array = wp_get_attachment_image_src($thumb_id, 'thumbnail', true);
-						$thumb_url = $thumb_url_array[0];
-					}
-					else{
-						$thumb_url = ampforwp_cf_featured_image_src();
-					}
-					?>
+				<?php if ( ampforwp_has_post_thumbnail() ) {  
+					$thumb_url = ampforwp_get_post_thumbnail();
+					if($thumb_url){ ?>
 						<div class="home-post-image">
 							<a href="<?php  echo trailingslashit( trailingslashit($ampforwp_post_url) . AMPFORWP_AMP_QUERY_VAR );?>">
-								<amp-img src=<?php echo $thumb_url ?> width=100 height=75></amp-img>
+								<amp-img src=<?php echo esc_url($thumb_url); ?> width=100 height=75></amp-img>
 							</a>
 						</div>
 					<?php }
+				}
 						if( has_excerpt() ){
 							$content = get_the_excerpt();
 						}else{
 							$content = get_the_content();
 						} ?>
 					<p><?php global $redux_builder_amp;
+								if($redux_builder_amp['excerpt-option-design-1']== true) {
 								$excertp_length = $redux_builder_amp['amp-design-1-excerpt'];
-								echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); ?></p>
+								echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); }?></p>
 				</div>
 	        </div>
-	    <?php endwhile;  ?>
+	    <?php
+	    do_action('ampforwp_between_loop',$count,$this);
+		         $count++;
+	     endwhile;  ?>
 		    <div class="amp-wp-content pagination-holder">
 
 		        <div id="pagination">

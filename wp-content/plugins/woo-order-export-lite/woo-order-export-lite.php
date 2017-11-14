@@ -5,9 +5,11 @@
  * Description: Export orders from WooCommerce with ease ( Excel/CSV/XML/Json supported )
  * Author: AlgolPlus
  * Author URI: http://algolplus.com/
- * Version: 1.4.5
+ * Version: 1.5.0
  * Text Domain: woocommerce-order-export
  * Domain Path: /i18n/languages/
+ * WC requires at least: 2.6.0
+ * WC tested up to: 3.2.0
  *
  * Copyright: (c) 2015 AlgolPlus LLC. (algol.plus@gmail.com)
  *
@@ -22,9 +24,23 @@
  */
 if ( !defined( 'ABSPATH' ) )
 	exit; // Exit if accessed directly
-	
-if ( !is_admin() AND !defined('DOING_CRON') ) 
-	return; //don't load for frontend !
+
+// a small function to check startup conditions 
+if( ! function_exists("woe_check_running_options") ) {
+	function woe_check_running_options() {
+		$is_backend           = is_admin();
+		$is_cron              = defined( 'DOING_CRON' );
+		$is_frontend_checkout = isset( $_REQUEST['wc-ajax'] ) && $_REQUEST['wc-ajax'] === 'checkout'
+								|| isset( $_POST['woocommerce_checkout_place_order'] )
+								|| preg_match( '/\bwc\-api\b/', filter_input( INPUT_SERVER, 'REQUEST_URI' ) );
+
+		return $is_backend || $is_cron || $is_frontend_checkout;
+	}
+}		
+
+if ( ! woe_check_running_options() ) {
+	return;
+} //don't load for frontend !
 	
 // Check if WooCommerce is active
 if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -51,15 +67,18 @@ if( class_exists( 'WC_Order_Export_Admin' ) ) {
 }	
 
 include 'classes/class-wc-order-export-admin.php';
-include 'classes/class-wc-order-export-engine.php';
-include 'classes/class-wc-order-export-data-extractor.php';
-include 'classes/class-wc-order-export-data-extractor-ui.php';
+include 'classes/admin/class-wc-order-export-ajax.php';
+include 'classes/admin/class-wc-order-export-manage.php';
+include 'classes/core/class-wc-order-export-engine.php';
+include 'classes/core/class-wc-order-export-data-extractor.php';
+include 'classes/core/class-wc-order-export-data-extractor-ui.php';
 
+define( 'WOE_PLUGIN_BASENAME', plugin_basename(__FILE__) );
 $wc_order_export = new WC_Order_Export_Admin();
 register_activation_hook( __FILE__, array($wc_order_export,'install') );
 register_deactivation_hook( __FILE__, array($wc_order_export,'uninstall') );
-add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array($wc_order_export,'add_action_links') );
 
 // fight with ugly themes which add empty lines
 if ( $wc_order_export->must_run_ajax_methods() AND !ob_get_level() )
 	ob_start();
+//Done

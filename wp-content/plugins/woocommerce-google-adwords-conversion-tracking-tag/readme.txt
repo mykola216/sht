@@ -2,9 +2,9 @@
 Contributors: alekv
 Donate link: http://www.wolfundbaer.ch/donations/
 Tags: woocommerce, woocommerce conversion tracking, google adwords, adwords, conversion, conversion value, conversion tag, conversion pixel, conversion value tracking, conversion tracking, conversion tracking adwords, conversion tracking pixel, conversion tracking script, track conversions, tracking code manager
-Requires at least: 3.1
+Requires at least: 3.7
 Tested up to: 4.8.2
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,7 @@ This plugin <strong>tracks the value of WooCommerce orders in Google AdWords</st
 
 <strong>Highlights</strong>
 
+* The plugin has been updated with the newest AdWords conversion tracking script that deals with the new Apple cookie tracking prevention. [Apple Intelligent Tracking Prevention](https://webkit.org/blog/7675/intelligent-tracking-prevention/) and [New AdWords Conversion Tracking Tag](https://support.google.com/adwords/answer/7521212)
 * Very precise by preventing duplicate reporting effectively, excluding admins and shop managers from tracking, and not counting failed payments.
 * Very easy to install and maintain.
 
@@ -64,6 +65,8 @@ You can send the link to the front page of your shop too if you think it would b
 
 == Changelog ==
 
+= 1.4.7 =
+* New: Switched over to the newest version of the AdWords conversion tracking pixel
 = 1.4.6 =
 * Tweak: Disabled minification through Autoptimize
 = 1.4.5 =

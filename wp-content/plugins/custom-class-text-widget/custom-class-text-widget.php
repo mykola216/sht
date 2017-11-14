@@ -10,7 +10,7 @@ Author URI: http://www.inigo.net
  
     class customClassText extends WP_Widget {
         function customClassText() {
-            parent::WP_Widget('customclasstext', $name = 'Custom Class Text Widget');
+            parent::__construct('customclasstext', $name = 'Custom Class Text Widget');    
         }
  
         function widget($args, $instance) {

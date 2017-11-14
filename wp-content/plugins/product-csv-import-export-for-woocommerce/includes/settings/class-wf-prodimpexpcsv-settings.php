@@ -14,12 +14,14 @@ class WF_ProdImpExpCsv_Settings {
 		$pro_ftp_server                             = ! empty( $_POST['pro_ftp_server'] ) ? $_POST['pro_ftp_server'] : '';
 		$pro_ftp_user                               = ! empty( $_POST['pro_ftp_user'] ) ? $_POST['pro_ftp_user'] : '';
 		$pro_ftp_password                           = ! empty( $_POST['pro_ftp_password'] ) ? $_POST['pro_ftp_password'] : '';
+		$pro_ftp_port	                            = ! empty( $_POST['pro_ftp_port'] ) ? $_POST['pro_ftp_port'] : 21;
 		$pro_use_ftps                               = ! empty( $_POST['pro_use_ftps'] ) ? true : false;
 		$pro_enable_ftp_ie                          = ! empty( $_POST['pro_enable_ftp_ie'] ) ? true : false;
 
                 $rev_ftp_server                             = ! empty( $_POST['rev_ftp_server'] ) ? $_POST['rev_ftp_server'] : '';
                 $rev_ftp_user                               = ! empty( $_POST['rev_ftp_user'] ) ? $_POST['rev_ftp_user'] : '';
                 $rev_ftp_password                           = ! empty( $_POST['rev_ftp_password'] ) ? $_POST['rev_ftp_password'] : '';
+		$rev_ftp_port	                            = ! empty( $_POST['rev_ftp_port'] ) ? $_POST['rev_ftp_port'] : 21;
                 $rev_use_ftps                               = ! empty( $_POST['rev_use_ftps'] ) ? true : false;
                 $rev_enable_ftp_ie                          = ! empty( $_POST['rev_enable_ftp_ie'] ) ? true : false;
                 
@@ -48,20 +50,21 @@ class WF_ProdImpExpCsv_Settings {
                 $rev_auto_import_merge                      = ! empty( $_POST['rev_auto_import_merge'] ) ?  true : false;
 
 
-		        $settings				= array();
-        		$settings[ 'pro_ftp_server' ]		= $pro_ftp_server;
-        		$settings[ 'pro_ftp_user' ]			= $pro_ftp_user;
-        		$settings[ 'pro_ftp_password' ]		= $pro_ftp_password;
-        		$settings[ 'pro_use_ftps' ]			= $pro_use_ftps;
-        		$settings[ 'pro_enable_ftp_ie' ]            = $pro_enable_ftp_ie;
+		$settings				= array();
+		$settings[ 'pro_ftp_server' ]		= $pro_ftp_server;
+		$settings[ 'pro_ftp_user' ]		= $pro_ftp_user;
+		$settings[ 'pro_ftp_password' ]		= $pro_ftp_password;
+		$settings[ 'pro_ftp_port' ]		= $pro_ftp_port;
+		$settings[ 'pro_use_ftps' ]		= $pro_use_ftps;
+		$settings[ 'pro_enable_ftp_ie' ]	= $pro_enable_ftp_ie;
                 
                 $settings[ 'pro_auto_export' ]		= $pro_auto_export;
-                $settings[ 'pro_auto_export_start_time' ]	= $pro_auto_export_start_time;
+                $settings[ 'pro_auto_export_start_time']= $pro_auto_export_start_time;
                 $settings[ 'pro_auto_export_interval' ]	= $pro_auto_export_interval;
                 $settings[ 'pro_auto_export_profile' ]	= $pro_auto_export_profile;
                 
                 $settings[ 'pro_auto_import' ]		= $pro_auto_import;
-                $settings[ 'pro_auto_import_start_time' ]	= $pro_auto_import_start_time;
+                $settings[ 'pro_auto_import_start_time']= $pro_auto_import_start_time;
                 $settings[ 'pro_auto_import_interval' ]	= $pro_auto_import_interval;
                 $settings[ 'pro_auto_import_profile' ]	= $pro_auto_import_profile;
                 $settings[ 'pro_auto_import_merge' ]	= $pro_auto_import_merge;
@@ -70,11 +73,12 @@ class WF_ProdImpExpCsv_Settings {
                 
 
 
-                $settings[ 'rev_ftp_server' ]       = $rev_ftp_server;
-                $settings[ 'rev_ftp_user' ]         = $rev_ftp_user;
-                $settings[ 'rev_ftp_password' ]     = $rev_ftp_password;
-                $settings[ 'rev_use_ftps' ]         = $rev_use_ftps;
-                $settings[ 'rev_enable_ftp_ie' ]            = $rev_enable_ftp_ie;
+                $settings[ 'rev_ftp_server' ]	    = $rev_ftp_server;
+                $settings[ 'rev_ftp_user' ]	    = $rev_ftp_user;
+                $settings[ 'rev_ftp_password' ]	    = $rev_ftp_password;
+		$settings[ 'rev_ftp_port' ]	    = $rev_ftp_port;
+                $settings[ 'rev_use_ftps' ]	    = $rev_use_ftps;
+                $settings[ 'rev_enable_ftp_ie' ]    = $rev_enable_ftp_ie;
                 
                 $settings[ 'rev_auto_export' ]      = $rev_auto_export;
                 $settings[ 'rev_auto_export_start_time' ]   = $rev_auto_export_start_time;

@@ -7,7 +7,7 @@ require_once( AMP__DIR__ . '/includes/sanitizers/class-amp-base-sanitizer.php' )
  */
 class AMP_Iframe_Sanitizer extends AMP_Base_Sanitizer {
 	const FALLBACK_HEIGHT = 400;
-	const SANDBOX_DEFAULTS = 'allow-scripts allow-same-origin';
+	const SANDBOX_DEFAULTS = 'allow-scripts allow-same-origin allow-popups';
 
 	public static $tag = 'iframe';
 
@@ -97,7 +97,6 @@ class AMP_Iframe_Sanitizer extends AMP_Base_Sanitizer {
 					$out[ $name ] = $this->sanitize_dimension( $value, $name );
 					break;
 
-
 				case 'frameborder':
 					if ( '0' !== $value && '1' !== $value ) {
 						$value = '0';
@@ -117,8 +116,8 @@ class AMP_Iframe_Sanitizer extends AMP_Base_Sanitizer {
 			}
 		}
 
-		if ( ! isset( $out[ 'sandbox' ] ) ) {
-			$out[ 'sandbox' ] = self::SANDBOX_DEFAULTS;
+		if ( ! isset( $out['sandbox'] ) ) {
+			$out['sandbox'] = self::SANDBOX_DEFAULTS;
 		}
 
 		return $out;

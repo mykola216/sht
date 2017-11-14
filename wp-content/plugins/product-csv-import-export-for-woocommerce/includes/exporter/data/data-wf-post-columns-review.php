@@ -21,6 +21,7 @@ return apply_filters('product_reviews_csv_product_post_columns', array(
     'verified' => 'verified',
     'title' => 'title',
     //Product SKU associated with the comment
-    'product_SKU' => 'product_SKU',
+    'product_SKU' => 'product_SKU',	    //comment_post_ID must be exported to export Product SKU 
+    'product_title' => 'product_title',	    //comment_post_ID must be exported to export Product Title
     'comment_alter_id' => 'comment_alter_id',
 ));

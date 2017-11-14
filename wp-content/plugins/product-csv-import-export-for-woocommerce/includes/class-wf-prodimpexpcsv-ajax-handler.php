@@ -12,6 +12,7 @@ class WF_ProdImpExpCsv_AJAX_Handler {
 		add_action( 'wp_ajax_woocommerce_csv_import_request', array( $this, 'csv_import_request' ) );
 		add_action( 'wp_ajax_woocommerce_csv_import_regenerate_thumbnail', array( $this, 'regenerate_thumbnail' ) );
                 add_action( 'wp_ajax_product_csv_export_mapping_change', array( $this, 'export_mapping_change_columns' ) );
+		add_action( 'wp_ajax_product_test_ftp_connection', array( $this, 'test_ftp_credentials' ) );
 	}
 	
 	/**
@@ -126,6 +127,31 @@ class WF_ProdImpExpCsv_AJAX_Handler {
 
         echo $res;
         exit;
+    }
+    
+    /**
+     * Ajax event to test FTP details
+     */
+    public function test_ftp_credentials(){
+		$wf_prod_ftp_details			= array();
+		$wf_prod_ftp_details['host']		= ! empty($_POST['ftp_host']) ? $_POST['ftp_host'] : '';
+		$wf_prod_ftp_details['port']		= ! empty($_POST['ftp_port']) ? $_POST['ftp_port'] : 21;
+		$wf_prod_ftp_details['userid']		= ! empty($_POST['ftp_userid']) ? $_POST['ftp_userid'] : '';
+		$wf_prod_ftp_details['password']	= ! empty($_POST['ftp_password']) ? $_POST['ftp_password'] : '';
+		$wf_prod_ftp_details['use_ftps']	= ! empty($_POST['use_ftps']) ? $_POST['use_ftps'] : 0;
+		$ftp_conn = (!empty($wf_prod_ftp_details['use_ftps'])) ? @ftp_ssl_connect($wf_prod_ftp_details['host'], $wf_prod_ftp_details['port']) : @ftp_connect($wf_prod_ftp_details['host'], $wf_prod_ftp_details['port']);
+		if($ftp_conn == false)
+		{
+			die("<div id= 'prod_ftp_test_msg' style = 'color : red'>Could not connect to Host. Server host / IP or Port may be wrong.</div>");
+		}
+		if( @ftp_login($ftp_conn,$wf_prod_ftp_details['userid'],$wf_prod_ftp_details['password']) )
+		{
+			die("<div id= 'prod_ftp_test_msg' style = 'color : green'>Successfully logged in.</div>");
+		}
+		else
+		{
+			die("<div id= 'prod_ftp_test_msg' style = 'color : blue'>Connected to host but could not login. Server UserID or Password may be wrong or Try with / without FTPS .</div>");
+		}
     }
 
 }

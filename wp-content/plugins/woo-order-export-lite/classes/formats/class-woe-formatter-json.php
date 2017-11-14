@@ -8,7 +8,9 @@ class WOE_Formatter_Json extends WOE_Formatter {
 
 	public function start( $data = '' ) {
 		parent::start( $data );
-		$start_text  = "[" ;
+
+		$start_text = $this->convert_literals( $this->settings[ 'start_tag' ] );
+
 		fwrite( $this->handle, apply_filters( "woe_json_start_text", $start_text) );
 	}
 
@@ -65,7 +67,8 @@ class WOE_Formatter_Json extends WOE_Formatter {
 	}
 
 	public function finish( $data = '' ) {
-		$end_text  = "\n]" ;
+		$end_text = $this->convert_literals( $this->settings[ 'end_tag' ] );
+
 		fwrite( $this->handle, apply_filters( "woe_json_end_text", $end_text) );
 		parent::finish();
 	}

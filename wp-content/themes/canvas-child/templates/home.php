@@ -215,7 +215,11 @@ $text_our_cli = get_field('text_our_clients', 'option');
                 $link = get_sub_field('link');
                 ?>
                 <a  href="<?php echo $link; ?>" rel="nofollow">
-                    <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['alt']; ?>">
+                    <img src="<?php
+                        if (isset($img['url'])) {
+                            echo $img['url'];
+                        }
+                    ?>" alt="<?php //echo $img['alt']; ?>">
                 </a>
             <?php endwhile; ?>
         </div>

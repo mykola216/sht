@@ -18,7 +18,7 @@
                 <th><?php _e('Column Header', 'wf_csv_import_export'); ?></th>
                 <th><?php _e('Evaluation Field', 'wf_csv_import_export'); ?>
                     <?php $plugin_url = WF_ProdImpExpCsv_Admin_Screen::hf_get_wc_path(); ?>
-                    <img class="help_tip" style="float:none;" data-tip="<?php _e('Assign constant value HikeFoce to post_author:</br>=HikeFoce</br>Add $5 to Price:sale_price:</br>+5</br>Reduce $5 to Price:sale_price:</br>-5</br>Multiple 1.05 to Price:sale_price:</br>*1.05</br>Divide Price:sale_price by 2:</br>/2</br>Append a value By HikeFoce to post_title:</br>&By HikeFoce</br>Prepend a value HikeFoce to post_title:</br>&HikeFoce [VAL].', 'wf_csv_import_export'); ?>" src="<?php echo $plugin_url; ?>/assets/images/help.png" height="20" width="20" /> 
+                    <img class="help_tip" style="float:none;" data-tip="<?php _e('Assign constant value HikeFoce to post_author:</br>=HikeFoce</br>Add 5% to Price:sale_price:</br>+5%</br>Reduce 5% from Price:sale_price:</br>-5%</br>Add $5 to Price:sale_price:</br>+5</br>Reduce $5 to Price:sale_price:</br>-5</br>Multiple 1.05 to Price:sale_price:</br>*1.05</br>Divide Price:sale_price by 2:</br>/2</br>Append a value By HikeFoce to post_title:</br>&By HikeFoce</br>Prepend a value HikeFoce to post_title:</br>&HikeFoce [VAL].', 'wf_csv_import_export'); ?>" src="<?php echo $plugin_url; ?>/assets/images/help.png" height="20" width="20" /> 
                 </th>
             </tr>
         </thead>

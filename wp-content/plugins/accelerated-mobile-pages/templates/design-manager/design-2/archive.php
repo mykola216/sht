@@ -68,6 +68,8 @@
  	} ?>
 
 	<?php if ( have_posts() ) : while ( have_posts() ) : the_post();
+		$count = "";
+		$count = 1;
 		$ampforwp_amp_post_url =  trailingslashit( get_permalink() ) . AMPFORWP_AMP_QUERY_VAR ;
 
 		$ampforwp_amp_post_url  = user_trailingslashit( $ampforwp_amp_post_url );
@@ -79,32 +81,26 @@
 			} ?>
 
 		<div class="amp-wp-content amp-loop-list">
-			<?php if ( has_post_thumbnail() || ( ampforwp_is_custom_field_featured_image() && ampforwp_cf_featured_image_src() ) ) {
-				if ( has_post_thumbnail()) {   
-					$thumb_id = get_post_thumbnail_id();
-					$thumb_url_array = wp_get_attachment_image_src($thumb_id, 'thumbnail', true);
-					$thumb_url = $thumb_url_array[0];
-				}
-				else{
-					$thumb_url = ampforwp_cf_featured_image_src();
-				}
-				?>
-				<div class="home-post_image">
-					<a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>">
-						<amp-img
-							src=<?php echo $thumb_url ?>
-							<?php ampforwp_thumbnail_alt(); ?>
-							<?php if( $redux_builder_amp['ampforwp-homepage-posts-image-modify-size'] ) { ?>
-								width=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-width'] ?>
-								height=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-height'] ?>
-							<?php } else { ?>
-								width=100
-								height=75
-							<?php } ?>
-						></amp-img>
-					</a>
-				</div>
-			<?php } ?>
+			<?php if ( ampforwp_has_post_thumbnail() ) {  
+				$thumb_url = ampforwp_get_post_thumbnail();
+				if($thumb_url){ ?>
+					<div class="home-post_image">
+						<a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>">
+							<amp-img
+								src=<?php echo esc_url($thumb_url); ?>
+								<?php ampforwp_thumbnail_alt(); ?>
+								<?php if( $redux_builder_amp['ampforwp-homepage-posts-image-modify-size'] ) { ?>
+									width=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-width'] ?>
+									height=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-height'] ?>
+								<?php } else { ?>
+									width=100
+									height=75
+								<?php } ?>
+							></amp-img>
+						</a>
+					</div>
+				<?php } 
+			} ?>
 
 			<div class="amp-wp-post-content">
 
@@ -117,13 +113,22 @@
 						$content = get_the_content();
 					}
 				?>
-		        <p><?php echo wp_trim_words( strip_shortcodes( $content ) , '15' ); ?></p>
-
+		       <p class="large-screen-excerpt">
+				<?php  echo wp_trim_words( strip_shortcodes(  $content ) , '15'); ?> </p>
+		        <p class="small-screen-excerpt" > <?php    
+					if($redux_builder_amp['excerpt-option-design-2']== true) {
+						$excertp_length='';
+						$excertp_length = $redux_builder_amp['amp-design-2-excerpt']; 
+						echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); } ?> 
+				</p>
 		    </div>
             <div class="cb"></div>
 		</div>
 
-	<?php endwhile;  ?>
+	<?php
+	do_action('ampforwp_between_loop',$count,$this);
+		         $count++;
+	 endwhile;  ?>
 
 		<div class="amp-wp-content pagination-holder">
 

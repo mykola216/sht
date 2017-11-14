@@ -58,11 +58,12 @@ class WF_ProdImpExpCsv_Exporter {
 		if ( $limit > $export_limit )
 			$limit = $export_limit;
 		
-		$settings 				= get_option( 'woocommerce_'.WF_PROD_IMP_EXP_ID.'_settings', null );
-		$ftp_server  			= isset( $settings['pro_ftp_server'] ) ? $settings['pro_ftp_server'] : '';
-		$ftp_user				= isset( $settings['pro_ftp_user'] ) ? $settings['pro_ftp_user'] : '';
+		$settings 		= get_option( 'woocommerce_'.WF_PROD_IMP_EXP_ID.'_settings', null );
+		$ftp_server  		= isset( $settings['pro_ftp_server'] ) ? $settings['pro_ftp_server'] : '';
+		$ftp_user		= isset( $settings['pro_ftp_user'] ) ? $settings['pro_ftp_user'] : '';
 		$ftp_password           = isset( $settings['pro_ftp_password'] ) ? $settings['pro_ftp_password'] : '';
-		$use_ftps         		= isset( $settings['pro_use_ftps'] ) ? $settings['pro_use_ftps'] : '';
+		$ftp_port		= isset( $settings['pro_ftp_port'] ) ? $settings['pro_ftp_port'] : 21;
+		$use_ftps         	= isset( $settings['pro_use_ftps'] ) ? $settings['pro_use_ftps'] : '';
 		$enable_ftp_ie         	= isset( $settings['pro_enable_ftp_ie'] ) ? $settings['pro_enable_ftp_ie'] : '';
 		
 		$wpdb->hide_errors();
@@ -540,10 +541,10 @@ class WF_ProdImpExpCsv_Exporter {
 		
 		if( $enable_ftp_ie ) {
 			if( $use_ftps ) {
-				$ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
+				$ftp_conn = @ftp_ssl_connect($ftp_server,$ftp_port) or die("Could not connect to $ftp_server:$ftp_port");
 			}
 			else {
-				$ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
+				$ftp_conn = @ftp_connect($ftp_server,$ftp_port) or die("Could not connect to $ftp_server:$ftp_port");
 			}
 			$login = ftp_login($ftp_conn, $ftp_user, $ftp_password);
 

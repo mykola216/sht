@@ -193,31 +193,47 @@ class WF_CSV_Parser {
 		if(!empty($evaluation_field)){
 			$operator = substr($evaluation_field, 0, 1);
 			if(in_array($operator, array('=', '+', '-', '*', '/', '&'))){
-				$eval_val = substr($evaluation_field, 1);
-				switch($operator){
-					case '=':
-					$processed_value = trim($eval_val); 
-					break;
-					case '+':
-					$processed_value = $this->hf_currency_formatter($value) + $eval_val; 
-					break;
-					case '-': 
-					$processed_value = $value - $eval_val; 
-					break;
-					case '*': 
-					$processed_value = $value * $eval_val; 
-					break;
-					case '/': 
-					$processed_value = $value / $eval_val; 
-					break;
-					case '&': 
-					if (strpos($eval_val, '[VAL]') !== false) {
-						$processed_value = str_replace('[VAL]',$value,$eval_val);								 
+				if( strpos( $evaluation_field, '%', -0) )	//Execute when % is given in evaluation field, format +10% or -10%
+				{
+					$eval_val = substr($evaluation_field, 1,-1);
+					switch($operator)
+					{
+						case '+':
+							$processed_value = $value + ( ( $value * $eval_val) / 100 ); 
+							break;
+						case '-': 
+							$processed_value = $value - ( ( $value * $eval_val ) / 100 ); 
+							break;
 					}
-					else{
-						$processed_value = $value . $eval_val;
+				}
+				else
+				{
+					$eval_val = substr($evaluation_field, 1);
+					switch($operator){
+						case '=':
+						$processed_value = trim($eval_val); 
+						break;
+						case '+':
+						$processed_value = $this->hf_currency_formatter($value) + $eval_val; 
+						break;
+						case '-': 
+						$processed_value = $value - $eval_val; 
+						break;
+						case '*': 
+						$processed_value = $value * $eval_val; 
+						break;
+						case '/': 
+						$processed_value = $value / $eval_val; 
+						break;
+						case '&': 
+						if (strpos($eval_val, '[VAL]') !== false) {
+							$processed_value = str_replace('[VAL]',$value,$eval_val);								 
+						}
+						else{
+							$processed_value = $value . $eval_val;
+						}
+						break;					
 					}
-					break;					
 				}
 			}	
 		}
@@ -476,6 +492,61 @@ class WF_CSV_Parser {
 					$product['post_status'] = 'publish';
 				}
 			}
+		}
+		
+		//Automatically Update the Product Inventory stock status based on out of stock threshold value
+		//For both Merging or Inserting
+		if( XA_INVENTORY_STOCK_STATUS == 'yes' )
+		{
+			if( $merging && empty( $postmeta['stock_status'] ))
+			{
+				$temp_product = wc_get_product($post_id);
+				if( (! empty($temp_product)) && $temp_product->managing_stock() )
+				{
+					if( (! empty($postmeta['stock'])) && XA_INVENTORY_STOCK_THRESHOLD < $postmeta['stock'] )
+					{
+						$postmeta['stock_status'] = 'instock';
+					}
+					elseif( (! empty($postmeta['stock'])) && XA_INVENTORY_STOCK_THRESHOLD >= $postmeta['stock'] )
+					{
+						$postmeta['stock_status'] = 'outofstock';
+					}
+				}
+				elseif( (! empty($temp_product)) && (! empty($postmeta['manage_stock'])) && $postmeta['manage_stock'] == 'yes' )
+				{
+					$temp_product_quantity = (! empty($postmeta['stock'])) ? $postmeta['stock'] : $temp_product->get_stock_quantity();
+					if( XA_INVENTORY_STOCK_THRESHOLD < $temp_product_quantity )
+					{
+						$postmeta['stock_status'] = 'instock';
+					}
+					elseif( XA_INVENTORY_STOCK_THRESHOLD >= $temp_product_quantity )
+					{
+						$postmeta['stock_status'] = 'outofstock';
+					}
+				}
+			}
+			elseif( ! $merging && empty($postmeta['stock_status']) )
+			{
+				if( empty($postmeta['manage_stock']) || ( (! empty($postmeta['manage_stock']) ) && $postmeta['manage_stock'] == 'no') )
+				{
+					$postmeta['stock_status'] = 'instock';
+				}
+				elseif( ( ! empty($postmeta['manage_stock']) ) &&  $postmeta['manage_stock'] == 'yes' )
+				{
+					if( ( !empty($postmeta['stock']) ) && XA_INVENTORY_STOCK_THRESHOLD < $postmeta['stock'] )
+					{
+						$postmeta['stock_status'] = 'instock';
+					}
+					else
+					{
+						$postmeta['stock_status'] = 'outofstock';
+					}
+				}
+			}
+		}
+		elseif( ( ! $merging ) && empty( $postmeta['stock_status'] ) )
+		{
+			$postmeta['stock_status'] = 'instock';
 		}
 
 		// Put set core product postmeta into product array

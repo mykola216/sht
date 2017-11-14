@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 include_once 'abstract-class-woe-formatter-sv.php';
 
 class WOE_Formatter_Tsv extends WOE_Formatter_sv {
-	protected $type = 'tsv';
+	var $type = 'tsv';
 
 	public function __construct( $mode, $filename, $settings, $format, $labels ) {
 		parent::__construct( $mode, $filename, $settings, $format, $labels );
@@ -20,6 +20,9 @@ class WOE_Formatter_Tsv extends WOE_Formatter_sv {
 	}
 
 	protected function delete_tabulation_callback( $value ) {
+		// show linebreaks as literals
+		$value = str_replace( "\n", '\n', $value );
+		$value = str_replace( "\r", '\r', $value );
 		return str_replace( $this->delimiter, '', $value );
 	}
 

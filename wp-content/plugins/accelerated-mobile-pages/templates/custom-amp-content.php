@@ -12,7 +12,15 @@ function ampforwp_custom_post_content_sanitizer( $data, $post ) {
       global $post;
       $amp_current_post_id = get_the_ID() ;
       if ( is_home() && $redux_builder_amp['amp-frontpage-select-option'] ) {
-        $amp_current_post_id = $redux_builder_amp['amp-frontpage-select-option-pages'];
+          //Custom AMP Editor Support for WPML  #1138
+           include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+           if( is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' )){
+            $amp_current_post_id = get_option('page_on_front');
+            
+           }
+           else{
+              $amp_current_post_id = $redux_builder_amp['amp-frontpage-select-option-pages'];
+            }
       }
     	$amp_custom_post_content_input 	= get_post_meta($amp_current_post_id, 'ampforwp_custom_content_editor', true);
       $amp_custom_post_content_check  = get_post_meta($amp_current_post_id, 'ampforwp_custom_content_editor_checkbox', true);
@@ -27,9 +35,13 @@ function ampforwp_custom_post_content_sanitizer( $data, $post ) {
               apply_filters( 'amp_content_embed_handlers', array(
           				'AMP_Twitter_Embed_Handler' => array(),
           				'AMP_YouTube_Embed_Handler' => array(),
+                  'AMP_DailyMotion_Embed_Handler' => array(),
+                  'AMP_Vimeo_Embed_Handler' => array(),
+                  'AMP_SoundCloud_Embed_Handler' => array(),
           				'AMP_Instagram_Embed_Handler' => array(),
           				'AMP_Vine_Embed_Handler' => array(),
           				'AMP_Facebook_Embed_Handler' => array(),
+                  'AMP_Pinterest_Embed_Handler' => array(),
           				'AMP_Gallery_Embed_Handler' => array(),
               ) ),
               apply_filters(  'amp_content_sanitizers', array(
@@ -38,6 +50,7 @@ function ampforwp_custom_post_content_sanitizer( $data, $post ) {
           				 'AMP_Img_Sanitizer' => array(),
           				 'AMP_Video_Sanitizer' => array(),
           				 'AMP_Audio_Sanitizer' => array(),
+                   'AMP_Playbuzz_Sanitizer' => array(),
           				 'AMP_Iframe_Sanitizer' => array(
           					 'add_placeholder' => true,
           				 ),
@@ -56,18 +69,29 @@ function ampforwp_custom_post_content_sanitizer( $data, $post ) {
 
 
 function ampforwp_custom_content_meta_register() {
+    global $redux_builder_amp;
 
-  add_meta_box( 'custom_content_editor', __( 'Custom AMP Editor', 'accelerated-mobile-pages' ), 'amp_content_editor_title_callback', 'post','normal', 'default' );
+    $user_level = '';
+    $user_level = current_user_can( 'manage_options' );
 
-  global $redux_builder_amp;
-  if($redux_builder_amp['amp-on-off-for-all-pages']){
-    add_meta_box( 'custom_content_editor', __( 'Custom AMP Editor','accelerated-mobile-pages' ), 'amp_content_editor_title_callback', 'page','normal', 'default' );
-  }
+    if (  isset( $redux_builder_amp['amp-meta-permissions'] ) && $redux_builder_amp['amp-meta-permissions'] == 'all' ) {
+      $user_level = true;
+    }
 
-  // Assign Pagebuilder Meta Box
-  if ( $redux_builder_amp['ampforwp-content-builder'] ) {
-    add_meta_box( 'custom_content_sidebar', __( 'AMP Page Builder', 'accelerated-mobile-pages' ), 'amp_content_sidebar_callback', 'page','side', 'default' );
-  }  
+    if ( $user_level ) {
+        if($redux_builder_amp['amp-on-off-for-all-posts']) {
+          add_meta_box( 'custom_content_editor', __( 'Custom AMP Editor', 'accelerated-mobile-pages' ), 'amp_content_editor_title_callback', 'post','normal', 'default' );
+        }
+
+        if($redux_builder_amp['amp-on-off-for-all-pages']){
+          add_meta_box( 'custom_content_editor', __( 'Custom AMP Editor','accelerated-mobile-pages' ), 'amp_content_editor_title_callback', 'page','normal', 'default' );
+        }
+
+        // Assign Pagebuilder Meta Box // Legecy pagebuilder
+        if ( $redux_builder_amp['ampforwp-content-builder'] ) {
+          add_meta_box( 'custom_content_sidebar', __( 'AMP Page Builder', 'accelerated-mobile-pages' ), 'amp_content_sidebar_callback', 'page','side', 'default' );
+        }  
+    }
 
 }
 add_action('add_meta_boxes','ampforwp_custom_content_meta_register');
@@ -135,8 +159,13 @@ function amp_content_editor_meta_save ( $post_id ) {
       update_post_meta($post_id, 'ampforwp_custom_content_editor', $_POST[ 'ampforwp_custom_content_editor' ] );
     }
     // Save data of Custom AMP Editor CheckBox
-    if ( isset( $_POST['ampforwp_custom_content_editor'] ) ) {
-        update_post_meta($post_id, 'ampforwp_custom_content_editor_checkbox', $_POST[ 'ampforwp_custom_content_editor_checkbox' ] );
+    if ( isset( $_POST['ampforwp_custom_content_editor'] ) ) { 
+      $ampforwp_custom_editor_checkbox = null;      
+      if(isset($_POST[ 'ampforwp_custom_content_editor_checkbox' ])){
+        $ampforwp_custom_editor_checkbox = $_POST[ 'ampforwp_custom_content_editor_checkbox' ];
+      }
+      update_post_meta($post_id, 'ampforwp_custom_content_editor_checkbox', $ampforwp_custom_editor_checkbox );
+      
     }
 
 

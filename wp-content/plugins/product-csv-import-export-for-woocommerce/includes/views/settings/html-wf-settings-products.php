@@ -2,9 +2,10 @@
 $settings 		= get_option( 'woocommerce_'.WF_PROD_IMP_EXP_ID.'_settings', null );
 
 $pro_ftp_server  		= isset( $settings['pro_ftp_server'] ) ? $settings['pro_ftp_server'] : '';
-$pro_ftp_user		= isset( $settings['pro_ftp_user'] ) ? $settings['pro_ftp_user'] : '';
-$pro_ftp_password           = isset( $settings['pro_ftp_password'] ) ? $settings['pro_ftp_password'] : '';
-$pro_use_ftps         	= isset( $settings['pro_use_ftps'] ) ? $settings['pro_use_ftps'] : '';
+$pro_ftp_user			= isset( $settings['pro_ftp_user'] ) ? $settings['pro_ftp_user'] : '';
+$pro_ftp_password		= isset( $settings['pro_ftp_password'] ) ? $settings['pro_ftp_password'] : '';
+$pro_ftp_port			= isset( $settings['pro_ftp_port'] ) ? $settings['pro_ftp_port'] : 21;
+$pro_use_ftps			= isset( $settings['pro_use_ftps'] ) ? $settings['pro_use_ftps'] : '';
 $pro_enable_ftp_ie         	= isset( $settings['pro_enable_ftp_ie'] ) ? $settings['pro_enable_ftp_ie'] : '';
 
 $pro_auto_export         	= isset( $settings['pro_auto_export'] ) ? $settings['pro_auto_export'] : 'Disabled';
@@ -24,6 +25,7 @@ $pro_auto_import_skip    = isset( $settings['pro_auto_import_skip'] ) ? $setting
 $rev_ftp_server  		= isset( $settings['rev_ftp_server'] ) ? $settings['rev_ftp_server'] : '';
 $rev_ftp_user		= isset( $settings['rev_ftp_user'] ) ? $settings['rev_ftp_user'] : '';
 $rev_ftp_password           = isset( $settings['rev_ftp_password'] ) ? $settings['rev_ftp_password'] : '';
+$rev_ftp_port           = isset( $settings['rev_ftp_port'] ) ? $settings['rev_ftp_port'] : 21;
 $rev_use_ftps         	= isset( $settings['rev_use_ftps'] ) ? $settings['rev_use_ftps'] : '';
 $rev_enable_ftp_ie         	= isset( $settings['rev_enable_ftp_ie'] ) ? $settings['rev_enable_ftp_ie'] : '';
 
@@ -37,7 +39,13 @@ $rev_auto_import_interval   = isset( $settings['rev_auto_import_interval'] ) ? $
 $rev_auto_import_profile    = isset( $settings['rev_auto_import_profile'] ) ? $settings['rev_auto_import_profile'] : '';
 $rev_auto_import_merge    = isset( $settings['rev_auto_import_merge'] ) ? $settings['rev_auto_import_merge'] : 0;
 
-
+//For Product and Review Test FTP 
+wp_enqueue_script('woocommerce-prod-all-piep-test-ftp', plugins_url( basename( plugin_dir_path( WF_ProdImpExpCsv_FILE ) ) . '/js/piep_test_ftp_connection.js', basename( __FILE__ )));
+$xa_prod_all_piep_ftp = array( 'admin_ajax_url'		=> admin_url( 'admin-ajax.php' ) );
+//For Product Test FTP 
+wp_localize_script('woocommerce-prod-all-piep-test-ftp', 'xa_prod_piep_test_ftp', $xa_prod_all_piep_ftp);
+//For Review Test FTP
+wp_localize_script('woocommerce-prod-all-piep-test-ftp', 'xa_prod_review_test_ftp', $xa_prod_all_piep_ftp);
 
 wp_localize_script('woocommerce-product-csv-importer', 'woocommerce_product_csv_cron_params', array('pro_enable_ftp_ie' => $pro_enable_ftp_ie ,'pro_auto_export' => $pro_auto_export,'pro_auto_import' => $pro_auto_import ));
 if ( $pro_scheduled_timestamp = wp_next_scheduled( 'wf_woocommerce_csv_im_ex_auto_export_products' ) ) {
@@ -113,12 +121,28 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 				</tr>
 				<tr>
 					<th>
+						<label for="pro_ftp_port"><?php _e( 'FTP Port', 'wf_csv_import_export' ); ?></label>
+					</th>
+					<td>
+						<input type="text" name="pro_ftp_port" id="pro_ftp_port"  value="<?php echo $pro_ftp_port; ?>" class="input-text" />
+					</td>
+				</tr>
+				<tr>
+					<th>
 						<label for="pro_use_ftps"><?php _e( 'Use FTPS', 'wf_csv_import_export' ); ?></label>
 					</th>
 					<td>
 						<input type="checkbox" name="pro_use_ftps" id="pro_use_ftps" class="checkbox" <?php checked( $pro_use_ftps, 1 ); ?> />
 					</td>
 				</tr>
+				<tr>
+					<th>
+					    <input type="button" id="prod_test_ftp_connection" class="button button-primary" value="<?php _e( 'Test FTP', 'wf_csv_import_export' ); ?>" />
+					    <span class ="spinner " ></span>
+					</th>
+					<td id="prod_ftp_test_notice"></td>
+				</tr>
+				<tr></tr>
 				
 				
 				
@@ -296,12 +320,27 @@ if ( $rev_scheduled_import_timestamp = wp_next_scheduled( 'wf_pr_rev_csv_im_ex_a
 						</td>
 					</tr>
 					<tr>
+					<th>
+						<label for="rev_ftp_port"><?php _e( 'FTP Port', 'wf_csv_import_export' ); ?></label>
+					</th>
+					<td>
+						<input type="text" name="rev_ftp_port" id="rev_ftp_port"  value="<?php echo $rev_ftp_port; ?>" class="input-text" />
+					</td>
+					</tr>
+					<tr>
 						<th>
 							<label for="rev_use_ftps"><?php _e( 'Use FTPS', 'wf_csv_import_export' ); ?></label>
 						</th>
 						<td>
 							<input type="checkbox" name="rev_use_ftps" id="rev_use_ftps" class="checkbox" <?php checked( $rev_use_ftps, 1 ); ?> />
 						</td>
+					</tr>
+					<tr>
+						<th>
+							<input type="button" id="rev_test_ftp_connection" class="button button-primary" value="<?php _e( 'Test FTP', 'wf_csv_import_export' ); ?>" />
+							<span class ="spinner " ></span>
+						</th>
+						<td id="prod_rev_ftp_test_notice"></td>
 					</tr>
 					
 					

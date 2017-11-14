@@ -15,7 +15,8 @@ function bind_events() {
             method: "get_order_custom_fields_values",
             action: "order_exporter"
         };
-
+        var val_op = jQuery( '#custom_fields_compare' ).val();
+        jQuery( '#text_custom_fields' ).val( '' );
         jQuery.post( ajaxurl, data, function( response ) {
             jQuery( '#select_custom_fields' ).remove();
             jQuery( '#select_custom_fields--select2 select' ).select2('destroy');
@@ -25,7 +26,8 @@ function bind_events() {
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                var $select = jQuery( '<div id="select_custom_fields--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                var $select = jQuery( '<div id="select_custom_fields--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top;' 
+                    + 'display: ' + (('LIKE' === val_op) ? 'none' : 'inline-block') + ';">'
                     + '<select id="select_custom_fields">' + options + '</select></div>' );
                 $select.insertBefore( jQuery( '#add_custom_fields' ) )
                 $select.find('select').select2({ tags: true });
@@ -70,10 +72,12 @@ function bind_events() {
         var val_op = jQuery( '#custom_fields_compare' ).val();
         if ( 'LIKE' === val_op ) {
             jQuery( "#select_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#select_custom_fields--select2" ).hide();
             jQuery( "#text_custom_fields" ).css('display', 'inline' ).attr( 'disabled', false );
         }
         else {
             jQuery( "#select_custom_fields" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( '#select_custom_fields--select2' ).css('display', 'inline' );
             jQuery( "#text_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
         }
     });
@@ -88,6 +92,9 @@ function bind_events() {
             method: "get_products_attributes_values",
             action: "order_exporter"
         };
+        
+        var val_op = jQuery( '#attributes_compare' ).val();
+        jQuery( '#text_attributes' ).val( '' );
 
         jQuery.post( ajaxurl, data, function( response ) {
             jQuery( '#select_attributes--select2 select' ).select2('destroy');
@@ -98,7 +105,8 @@ function bind_events() {
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                var $select = jQuery( '<div id="select_attributes--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                var $select = jQuery( '<div id="select_attributes--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top;' 
+                    + 'display: ' + (('LIKE' === val_op) ? 'none' : 'inline-block') + ';">'
                     + '<select id="select_attributes">' + options + '</select></div>' );
                 $select.insertBefore( jQuery( '#add_attributes' ) )
                 $select.find('select').select2({ tags: true });
@@ -144,10 +152,12 @@ function bind_events() {
         var val_op = jQuery( '#attributes_compare' ).val();
         if ( 'LIKE' === val_op ) {
             jQuery( "#select_attributes" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#select_attributes--select2" ).hide();
             jQuery( "#text_attributes" ).css('display', 'inline' ).attr( 'disabled', false );
         }
         else {
             jQuery( "#select_attributes" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#select_attributes--select2" ).css('display', 'inline' );
             jQuery( "#text_attributes" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
         }
     });
@@ -162,6 +172,9 @@ function bind_events() {
             method: "get_products_itemmeta_values",
             action: "order_exporter"
         };
+        
+        var val_op = jQuery( '#itemmeta_compare' ).val();
+        jQuery( '#text_itemmeta' ).val( '' );
 
         jQuery.post( ajaxurl, data, function( response ) {
             jQuery( '#select_itemmeta--select2 select' ).select2('destroy');
@@ -171,7 +184,8 @@ function bind_events() {
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                var $select = jQuery( '<div id="select_itemmeta--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                var $select = jQuery( '<div id="select_itemmeta--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top;' 
+                    + 'display: ' + (('LIKE' === val_op) ? 'none' : 'inline-block') + ';">'
                     + '<select id="select_itemmeta">' + options + '</select></div>' );
                 $select.insertBefore( jQuery( '#add_itemmeta' ) )
                 $select.find('select').select2({ tags: true });
@@ -204,7 +218,7 @@ function bind_events() {
                 jQuery( '#itemmeta_check' ).select2(select2WODropdownOpts);
 
                 jQuery( '#itemmeta_check option' ).each( function() {
-                    jQuery( '#itemmeta_check option[value=\"' + jQuerySelectorEscape(jQuery( this ).val()) + '\"]:not(:last)' ).remove();
+                    jQuery( '#itemmeta_check option[value=\"' + jQuery( this ).val() + '\"]:not(:last)' ).remove(); // jQuerySelectorEscape ?
                 } );
 
                 jQuery( "input#select_itemmeta" ).val( '' );
@@ -218,10 +232,12 @@ function bind_events() {
         var val_op = jQuery( '#itemmeta_compare' ).val();
         if ( 'LIKE' === val_op ) {
             jQuery( "#select_itemmeta" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#select_itemmeta--select2" ).hide();
             jQuery( "#text_itemmeta" ).css('display', 'inline' ).attr( 'disabled', false );
         }
         else {
             jQuery( "#select_itemmeta" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#select_itemmeta--select2" ).css('display', 'inline' );
             jQuery( "#text_itemmeta" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
         }
     });
@@ -309,6 +325,9 @@ function bind_events() {
             action: "order_exporter"
         };
 
+        var val_op = jQuery( '#product_custom_fields_compare' ).val();
+        jQuery( '#text_product_custom_fields' ).val( '' );
+
         jQuery.post( ajaxurl, data, function( response ) {
             jQuery( '#select_product_custom_fields--select2 select' ).select2('destroy');
             jQuery( '#select_product_custom_fields, #select_product_custom_fields--select2' ).remove();
@@ -317,7 +336,8 @@ function bind_events() {
                 jQuery.each( response, function( index, value ) {
                     options += '<option>' + value + '</option>';
                 } );
-                var $select = jQuery( '<div id="select_product_custom_fields--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top; display: inline-block;">'
+                var $select = jQuery( '<div id="select_product_custom_fields--select2" style="margin-top: 0px;margin-right: 6px; vertical-align: top;' 
+                    + 'display: ' + (('LIKE' === val_op) ? 'none' : 'inline-block') + ';">'
                     + '<select id="select_product_custom_fields">' + options + '</select></div>' );
                 $select.insertBefore( jQuery( '#add_product_custom_fields' ) )
                 $select.find('select').select2({ tags: true });
@@ -362,10 +382,12 @@ function bind_events() {
         var val_op = jQuery( '#product_custom_fields_compare' ).val();
         if ( 'LIKE' === val_op ) {
             jQuery( "#select_product_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
+            jQuery( "#select_product_custom_fields--select2" ).hide();
             jQuery( "#text_product_custom_fields" ).css('display', 'inline' ).attr( 'disabled', false );
         }
         else {
             jQuery( "#select_product_custom_fields" ).css( 'display', 'inline-block' ).attr( 'disabled', false );
+            jQuery( "#select_product_custom_fields--select2" ).css('display', 'inline' );
             jQuery( "#text_product_custom_fields" ).css( 'display', 'none' ).attr( 'disabled', 'disabled' );
         }
     });
@@ -440,7 +462,7 @@ function bind_events() {
     });
 
     jQuery('input[name=custom_meta_products_mode]').change(function() {
-        if (jQuery(this).val() == 'all') {
+        if ( !jQuery( this ).is( ':checked' ) ) {
             var options = '<option></option>';
             jQuery.each( window.order_products_custom_meta_fields, function( index, value ) {
                 options += '<option value="' + escapeStr(value)  + '">' + value + '</option>';
@@ -962,7 +984,11 @@ function escapeStr(str)
         '"': '&quot;',
         "'": '&#39;',
         "/": '&#x2F;'
-      };
+    };
+
+    jQuery.each( entityMap, function( key, value ) {
+        str = String(str).replace( value, key );
+    });
 
     return String(str).replace(/[&<>"'\/]/g, function (s) {
       return entityMap[s];

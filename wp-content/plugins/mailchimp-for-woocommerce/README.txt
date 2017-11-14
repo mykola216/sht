@@ -22,6 +22,7 @@ With MailChimp for WooCommerce, you’ll have the power to:
 - View detailed data on your marketing performance in your MailChimp Dashboard.
 - Grow your audience and sell more stuff with Facebook and Instagram Ad Campaigns in MailChimp.
 - Automatically embed a pop-up form that converts your website visitors to subscribers.
+- Add discount codes created in WooCommerce to your emails and automations with a Promo Code content block
 
 ###A note for current WooCommerce integration users
 This plugin supports our most powerful API 3.0 features, and is intended for users who have not yet integrated their WooCommerce stores with MailChimp.
@@ -33,7 +34,7 @@ You can run this new integration at the same time as your current WooCommerce in
 Here are some things to know before you begin this process.
 
 - This plugin requires you to have the [WooCommerce plugin](https://woocommerce.com/) already installed and activated in WordPress.
-- Your hosting environment must meet [WooCommerce's minimum requirements](https://docs.woocommerce.com/document/server-requirements), including PHP 5.6 or greater.
+- Your hosting environment must meet [WooCommerce's minimum requirements](https://docs.woocommerce.com/document/server-requirements), including PHP 7.0 or greater.
 - We recommend you use this plugin in a staging environment before installing it on production servers. To learn more about staging environments, [check out these related Wordpress plugins](https://wordpress.org/plugins/search.php?q=staging).
 - MailChimp for WooCommerce syncs the customer’s first name, last name, email address, and orders.
 - WooCommerce customers who haven't signed up for marketing emails will appear in the **Transactional** portion of your list, and cannot be exported.
@@ -49,6 +50,11 @@ You’ll need to do a few things to connect your WooCommerce store to MailChimp.
 For more information on settings and configuration, please visit our Knowledge Base: [http://kb.mailchimp.com/integrations/e-commerce/connect-or-disconnect-mailchimp-for-woocommerce](http://kb.mailchimp.com/integrations/e-commerce/connect-or-disconnect-mailchimp-for-woocommerce)
 
 == Changelog ==
+= 2.1.1 =
+* To address performance issues previously reported, we've changed the action hook of "woocommerce_cart_updated" to use a filter "woocommerce_update_cart_action_cart_updated"
+
+= 2.1.0 =
+* Added Promo Code support.
 
 = 2.0.2 =
 * Added new logs feature to help troubleshoot isolated sync and data feed issues.

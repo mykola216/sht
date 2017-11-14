@@ -11,7 +11,7 @@ return apply_filters( 'woocommerce_csv_product_postmeta_defaults', array(
 	'price'                       => '',
 	'visibility'                  => 'visible',
 	'stock'                       => 0,
-	'stock_status'                => 'instock',
+	'stock_status'                => '',
 	'backorders'                  => 'no',
 	'manage_stock'                => 'no',
 	'sale_price'                  => '',

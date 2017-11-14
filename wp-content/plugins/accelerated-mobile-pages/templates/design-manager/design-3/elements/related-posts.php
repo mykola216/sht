@@ -6,17 +6,25 @@
 
 		// declaring this variable here to prevent debug errors
 		$args = null;
-
+		$orderby = 'ID';
+		// Check for the order of related posts
+		if( isset( $redux_builder_amp['ampforwp-single-order-of-related-posts'] ) && $redux_builder_amp['ampforwp-single-order-of-related-posts'] ){
+			$orderby = 'rand';
+		}
 		// Custom Post types 
        if( $current_post_type = get_post_type( $post )) {
                 // The query arguments
+       		//#1263
+       		if($current_post_type != 'page'){
                 $args = array(
                     'posts_per_page'=> $int_number_of_related_posts,
                     'order' => 'DESC',
-                    'orderby' => 'ID',
+                    'orderby' => $orderby,
                     'post_type' => $current_post_type,
                     'post__not_in' => array( $post->ID )
-                );   			
+
+                );  
+            } 			
 		}//end of block for custom Post types
 
 		if($redux_builder_amp['ampforwp-single-select-type-of-related']==2){
@@ -25,12 +33,13 @@
 							$category_ids = array();
 							foreach($categories as $individual_category) $category_ids[] = $individual_category->term_id;
 							$args=array(
-							    'category__in' => $category_ids,
-							    'post__not_in' => array($post->ID),
-							    'posts_per_page'=> $int_number_of_related_posts,
-							    'ignore_sticky_posts'=>1,
-									'has_password' => false ,
-									'post_status'=> 'publish'
+							    'category__in'		 => $category_ids,
+							    'post__not_in'		 => array($post->ID),
+							    'posts_per_page'	 => $int_number_of_related_posts,
+							    'ignore_sticky_posts'=> 1,
+								'has_password' 		 => false ,
+								'post_status'		 => 'publish',
+								'orderby' 			 => $orderby,
 							);
 						}
 			} //end of block for categories
@@ -38,16 +47,17 @@
 		 if($redux_builder_amp['ampforwp-single-select-type-of-related']==1) {
 					$ampforwp_tags = get_the_tags($post->ID);
 						if ($ampforwp_tags) {
-										$tag_ids = array();
-										foreach($ampforwp_tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
-										$args=array(
-										   'tag__in' => $tag_ids,
-										    'post__not_in' => array($post->ID),
-										    'posts_per_page'=> $int_number_of_related_posts,
-										    'ignore_sticky_posts'=>1,
-												'has_password' => false ,
-												'post_status'=> 'publish'
-										);
+								$tag_ids = array();
+								foreach($ampforwp_tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
+									$args=array(
+									   'tag__in' 			 => $tag_ids,
+									    'post__not_in' 		 => array($post->ID),
+									    'posts_per_page'	 => $int_number_of_related_posts,
+									    'ignore_sticky_posts'=> 1,
+											'has_password' 	 => false ,
+											'post_status'	 => 'publish',
+											'orderby' 		 => $orderby,
+									);
 					}
 			}//end of block for tags
 			$my_query = new wp_query( $args );
@@ -63,18 +73,15 @@
 															$related_post_permalink = trailingslashit($related_post_permalink);
 															$related_post_permalink = user_trailingslashit( $related_post_permalink . AMPFORWP_AMP_QUERY_VAR );
 														?>
-														<li class="<?php if ( has_post_thumbnail() ) { echo'has_related_thumbnail'; } else { echo 'no_related_thumbnail'; } ?>">
+														<li class="<?php if ( ampforwp_has_post_thumbnail() ) { echo'has_related_thumbnail'; } else { echo 'no_related_thumbnail'; } ?>">
                                                             <a href="<?php echo esc_url( $related_post_permalink ); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>">
-									            <?php
-										            $thumb_id_2 = get_post_thumbnail_id();
-										            $thumb_url_array_2 = wp_get_attachment_image_src($thumb_id_2, 'thumbnail', true);
-										            $thumb_url_2 = $thumb_url_array_2[0];
-									            ?>
-
-															<?php if ( has_post_thumbnail() ) { ?>
-									            	<amp-img src="<?php echo esc_url( $thumb_url_2 ); ?>" width="150" height="150" layout="responsive"></amp-img>
-															<?php } ?>
-                                                              </a>
+												<?php if ( ampforwp_has_post_thumbnail() ) { 
+													$thumb_url = ampforwp_get_post_thumbnail();
+													if($thumb_url){?>
+										            	<amp-img src="<?php echo esc_url( $thumb_url ); ?>" width="150" height="150" layout="responsive"></amp-img>
+													<?php } 
+													}?>
+                                              		</a>
 								                <div class="related_link">
 								                    <a href="<?php echo esc_url( $related_post_permalink ); ?>"><?php the_title(); ?></a>
 								                    <?php if(has_excerpt()){

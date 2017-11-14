@@ -72,11 +72,11 @@
     padding: 5px;
 }
 #fields_control .div1 {
-    width: 70%;
+    width: 60%;
     float:left;
 }
 #fields_control .div2 {
-    width: 30%;
+    width: 40%;
     float:left;
 }
 #fields_control .div_meta label {
@@ -181,6 +181,12 @@ input.date{
 .wc_oe-select-interval{
     width: 150px;
 }
+.wc_oe-select-weekday {
+    width: 80px;
+}
+#d-shedule-3 input[type="submit"] {
+    margin: 3px;
+}
 
 
 .clearfix:before,
@@ -208,7 +214,7 @@ input.date{
 #schedule-1{
     margin-top: 8px;
 }
-#schedule-2{
+#schedule-2, #schedule-3{
     margin-top: 8px;
 }
 .ftp-settings label{
@@ -391,6 +397,12 @@ input.date{
 #date_format_block, #time_format_block {
     display: inline-block;
     width: 48%;
+    vertical-align: top;
+}
+
+#custom_date_format_block input, #custom_time_format_block input {
+    width: 70%;
+    margin-left: 41px;
 }
 
 #date_format_block select, #time_format_block select {
@@ -514,6 +526,7 @@ input.date{
 
 #my-sort select {
     width: 30%;
+    font-weight: normal;
 }
 #my-sort {
     font-weight: bold;
@@ -532,4 +545,55 @@ input.date{
 .without-dropdown.select2-dropdown,
 .without-dropdown .select2-search--inline {
     display: none;
+}
+
+.profiles #bulk_action{
+    width: 70px;
+}
+
+.like-input {
+    width: 120px;
+}
+
+#d-schedule-3 .block {
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
+#d-schedule-3 .block.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+#d-schedule-3 .input-times {
+    width: 100%;
+    min-height: 30px;
+    background-color: white;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: text;
+    margin: 3px;
+    display: inline-block;
+}
+
+#d-schedule-3 .time {
+    background-color: #e4e4e4;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: default;
+    float: left;
+    margin: 5px;
+    padding: 0 5px;
+}
+
+#d-schedule-3 .btn-delete {
+    color: #999;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 2px;
+}
+
+#d-schedule-3 .btn-delete:hover {
+    color: #333;
 }

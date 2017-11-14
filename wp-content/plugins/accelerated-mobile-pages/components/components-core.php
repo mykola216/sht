@@ -93,6 +93,30 @@ function amp_title(){
     }
 }
 
+// Excerpt
+function amp_excerpt(){
+		global $redux_builder_amp, $post;
+	$ID = '';
+	if(is_home() && $redux_builder_amp['amp-frontpage-select-option'] == 1){
+		if( $redux_builder_amp['ampforwp-title-on-front-page'] ) {
+			$ID = $redux_builder_amp['amp-frontpage-select-option-pages'];
+		}
+	}
+	else
+		$ID = $post->ID;
+	if( $ID!=null ){  ?>
+			<p><?php 
+				 if(has_excerpt()){
+					$content = get_the_excerpt();
+				}else{
+					$content = get_the_content();
+				}
+				echo wp_trim_words( strip_shortcodes( $content ) , '15' ); 
+			?></p>
+<?php
+    }
+}
+
 
 //Menus
 function amp_menu(){
@@ -134,10 +158,10 @@ function amp_featured_image( ){
 }
 
 // Author Box
-function amp_author_box( $author_url="" ){
+function amp_author_box($args=array() ){
 	global $loadComponent;
 	if(isset($loadComponent['AMP-author-box']) && $loadComponent['AMP-author-box']==true){
-		ampforwp_framework_get_author_box($author_url );
+		ampforwp_framework_get_author_box($args);
 	}
 }
 
@@ -173,10 +197,10 @@ function amp_post_navigation( ){
 }
 
 // Related Posts
-function amp_related_posts( ){
+function amp_related_posts($argsdata = array()){
 	global $loadComponent;
 	if(isset($loadComponent['AMP-related-posts']) && $loadComponent['AMP-related-posts']==true){
-		echo ampforwp_framework_get_related_posts( );
+		echo ampforwp_framework_get_related_posts( $argsdata);
 	}
 }
 
@@ -217,7 +241,7 @@ function amp_header_core(){
     // Homepage
 	if ( is_home() ) {
 		
-    	$bodyClass = 'amp-index '.esc_attr( $thisTemplate->get( 'body_class' ) ); 
+    	$bodyClass = 'amp-index amp-home'.esc_attr( $thisTemplate->get( 'body_class' ) ); 
     	if ($redux_builder_amp['amp-frontpage-select-option'] == 1) {
 			$bodyClass = 'single-post design_3_wrapper';
         }
@@ -251,7 +275,7 @@ function amp_header_core(){
 			</style>
 
 		</head>
-		<body class="<?php echo $bodyClass; ?>">
+		<body <?php ampforwp_body_class($bodyClass); ?>>
 		<?php do_action('amp_start', $thisTemplate); ?>
 		<?php do_action('ampforwp_body_beginning', $thisTemplate);  
 }
@@ -324,6 +348,19 @@ $thisTemplate = new AMP_Post_Template($post_id);
     	do_action('ampforwp_after_post_content',$thisTemplate); ?>
 	</div>
 <?php }
+
+function amp_date($args=array()){
+		global $redux_builder_amp;
+		if(isset($args['format']) && $args['format']=='traditional'){
+			$post_date = esc_html( get_the_date() ) . ' '.esc_html( get_the_time());
+        }else{
+        	$post_date =  human_time_diff(
+        						get_the_time('U', get_the_ID() ), 
+        						current_time('timestamp') ) .' '. ampforwp_translation( $redux_builder_amp['amp-translator-ago-date-text'],
+        						'ago');
+        }
+        echo '<div class="loop-date">'.$post_date.'</div>';
+	}
 
 //Load font Compoment
 	$fontComponent = array();

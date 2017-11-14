@@ -1,5 +1,5 @@
 <?php /* Rows template (Going to be hidden) */ ?>
-    <div class="amppb-templates">
+    <div class="amppb-templates"  data-type="text/html">
     	 <?php /* == This is the 1 column row template == */ ?>
 		    <div class="amppb-row amppb-col-1" id="conatiner-{id}">
 		 		<input type="hidden" name="column-data" value="">
@@ -56,7 +56,6 @@
 
 
 global $moduleTemplate;
-wp_enqueue_script( 'tinymce_js', includes_url( 'js/tinymce/' ) . 'wp-tinymce.php', array( 'jquery' ), false, true );
 ?>
 		<div class="amppb-module-templates hidden">
     		<?php 
@@ -74,7 +73,7 @@ wp_enqueue_script( 'tinymce_js', includes_url( 'js/tinymce/' ) . 'wp-tinymce.php
     		}
     		?>
         </div>
-        <div class="amppb-fields-templates hidden">
+        <div class="amppb-fields-templates hidden" data-type="text/html">
         	<div id="textarea">
 	        	<p class="form-control">
 	        		<label for="{id}">{label}</label>
@@ -97,10 +96,18 @@ wp_enqueue_script( 'tinymce_js', includes_url( 'js/tinymce/' ) . 'wp-tinymce.php
         	<div id="upload">
 	        	<p class="form-control">
 	        		<label for="{id}">{label}</label>
-	        		<input type="button" class="button selectImage" value="Select image" id="">
-					<img id="ampforwp-preview-image" src="{default_value}" />
-					<input type="hidden" name="ampforwp_image_id" id="{id}" value="" class="regular-text" />
+	        		<input type="button" class="button selectImage" value="Select image" id="" data-imageselactor="single">
+					<img id="ampforwp-preview-image" src="#" />
+					<input type="hidden" name="ampforwp_image_id" id="{id}" class="regular-text" value="{default_value}"/>
 	        	</p>
+        	</div>
+			<div id="multi_upload">
+	        	<div class="form-control">
+	        		<label for="{id}">{label}</label>
+	        		<input type="button" class="button selectImage" value="Select image" data-imageselactor="multiple" id="">
+					<input type="hidden" name="ampforwp_image_id" id="{id}" class="regular-text" value="{default_value}"/>
+					<div class="sample-gallery-template">{default_images}</div>
+	        	</div>
         	</div>
         	<div id="select">
 	        	<p class="form-control">

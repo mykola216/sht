@@ -2,16 +2,26 @@
 if ( !defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
-/** @var WC_Order_Export_Admin $WC_Order_Export */
-$settings_export[ $WC_Order_Export->settings_name_now ]      = get_option( $WC_Order_Export->settings_name_now, array() );
-$settings_export[ $WC_Order_Export->settings_name_profiles ] = get_option( $WC_Order_Export->settings_name_profiles, array() );
-$settings_export[ $WC_Order_Export->settings_name_actions ]  = get_option( $WC_Order_Export->settings_name_actions , array() );
-$settings_export[ $WC_Order_Export->settings_name_cron ]     = get_option( $WC_Order_Export->settings_name_cron, array() );
+
+$modes = array(
+    WC_Order_Export_Manage::EXPORT_NOW,
+    WC_Order_Export_Manage::EXPORT_PROFILE,
+    WC_Order_Export_Manage::EXPORT_SCHEDULE,
+    WC_Order_Export_Manage::EXPORT_ORDER_ACTION
+);
+
+$settings_export = array();
+$setting_names = array();
+foreach ($modes as $mode) {
+    $setting_name = WC_Order_Export_Manage::get_settings_name_for_mode($mode);
+    $setting_names[ $mode ] = $setting_name;
+    $settings_export[ $mode ] = WC_Order_Export_Manage::get( $mode );
+}
 
 $type_labels = !$WC_Order_Export::is_full_version() ? array() : array(
-	$WC_Order_Export->settings_name_profiles => __( 'Profiles', 'woocommerce-order-export' ),
-	$WC_Order_Export->settings_name_actions  => __( 'Order Change', 'woocommerce-order-export' ),
-	$WC_Order_Export->settings_name_cron     => __( 'Scheduled Exports', 'woocommerce-order-export' ),
+	WC_Order_Export_Manage::EXPORT_PROFILE      => __( 'Profiles', 'woocommerce-order-export' ),
+	WC_Order_Export_Manage::EXPORT_ORDER_ACTION => __( 'Status Change', 'woocommerce-order-export' ),
+	WC_Order_Export_Manage::EXPORT_SCHEDULE     => __( 'Scheduled Exports', 'woocommerce-order-export' ),
 );
 ?>
 <div class="clearfix"></div>
@@ -22,12 +32,12 @@ $type_labels = !$WC_Order_Export::is_full_version() ? array() : array(
                 <h2 class="woe-box-title"><?php _e( 'Export settings', 'woocommerce-order-export' ) ?></h2>
                 <div class="row">
                     <div class="col-sm-12 form-group">
-                        <h6 class="woe-fake-label"><?php _e( 'Copy these settings and use it to migrate plugin to another wordpress install', 'woocommerce-order-export' ) ?></h6>
+                        <h6 class="woe-fake-label"><?php _e( 'Copy these settings and use it to migrate plugin to another WordPress install.', 'woocommerce-order-export' ) ?></h6>
                     </div>
                     <div class="col-sm-8 form-group woe-input-simple">
                         <select id="tools-export-selector">
                             <option data-json='<?php echo json_encode( $settings_export, JSON_PRETTY_PRINT ) ?>'><?php _e( 'All', 'woocommerce-order-export' ) ?></option>
-                            <option data-json='<?php echo json_encode( $settings_export[ $WC_Order_Export->settings_name_now ], JSON_PRETTY_PRINT ) ?>'>
+                            <option data-json='<?php echo json_encode( $settings_export[ WC_Order_Export_Manage::EXPORT_NOW ], JSON_PRETTY_PRINT ) ?>'>
 		                        <?php _e( 'Export Now', 'woocommerce-order-export' ) ?></option>
 		                    <?php foreach ( $type_labels as $group => $label ): ?>
                                 <optgroup label="<?php echo $label ?>"></optgroup>
@@ -50,11 +60,11 @@ $type_labels = !$WC_Order_Export::is_full_version() ? array() : array(
                 <h2 class="woe-box-title"><?php _e( 'Import settings', 'woocommerce-order-export' ) ?></h2>
                 <div class="row">
                     <div class="col-sm-12 form-group">
-                        <h6 class="woe-fake-label"><?php _e( 'Paste text into this field to import settings into the current wordpress install.', 'woocommerce-order-export' ) ?></h6>
+                        <h6 class="woe-fake-label"><?php _e( 'Paste text into this field to import settings into the current WordPress install.', 'woocommerce-order-export' ) ?></h6>
                     </div>
                     <div class="col-sm-8 form-group woe-input-simple">
                         <textarea rows="7" id="tools-import-text" name="tools-import"></textarea>
-                        <p class="help-block"><?php _e( 'This process will overwrite your "Advanced Order Export" settings!', 'woocommerce-order-export' ) ?></p>
+                        <p class="help-block"><?php _e( 'This process will overwrite your settings for "Advanced Order Export For WooCommerce" !', 'woocommerce-order-export' ) ?></p>
                     </div>
                 </div>
                 <div class="row">

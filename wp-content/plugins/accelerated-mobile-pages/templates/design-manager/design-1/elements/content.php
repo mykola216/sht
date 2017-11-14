@@ -23,7 +23,8 @@ if( array_key_exists( 'enable-excerpt-single' , $redux_builder_amp ) ) {
 			// Custom/Alternative AMP content added through post meta
 			$ampforwp_the_content = $this->get( 'ampforwp_amp_content' );
 		}
-
+		//Filter to modify the Content
+		$ampforwp_the_content = apply_filters('ampforwp_modify_the_content', $ampforwp_the_content);
 		if($redux_builder_amp['amp-pagination']) {
 			$ampforwp_new_content = explode('<!--nextpage-->', $ampforwp_the_content);
 		      	$queried_var = get_query_var('page');
@@ -41,7 +42,7 @@ if( array_key_exists( 'enable-excerpt-single' , $redux_builder_amp ) ) {
 		do_action('ampforwp_after_post_content',$this) ; ?>
 	<!--Post Next-Previous Links-->
 	<?php
-		if($redux_builder_amp['enable-single-next-prev']) { ?>
+		if($redux_builder_amp['enable-single-next-prev'] && !is_page() ) { ?>
 			<!--IF Starts here-->
 			<div class="amp-wp-content post-pagination-meta">
 				<div id="pagination">

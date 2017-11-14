@@ -5,7 +5,7 @@ Plugin URI: https://www.xadapter.com/product/product-import-export-plugin-for-wo
 Description: Import and Export Products and Product Reviews From and To your WooCommerce Store.
 Author: Xadapter
 Author URI: https://www.xadapter.com/shop/
-Version: 3.4.0
+Version: 3.5.3
 Text Domain: wf_csv_import_export
 */
 
@@ -27,6 +27,7 @@ if( !defined('WF_PR_REV_IMP_EXP_ID') ){
 if( !defined('WF_PR_REV_CSV_IM_EX') ){
 	define( "WF_PR_REV_CSV_IM_EX", "wf_pr_rev_csv_im_ex" );
 }
+
 /**
  * Check if WooCommerce is active
  */

@@ -1,21 +1,25 @@
 <?php
 
-	$ftp_server = '';
-	$ftp_user = '';
-	$ftp_password = '';
-	$use_ftps = '';
-	$enable_ftp_ie = '';	
-	$ftp_server_path = '';	
+	$ftp_server	= '';
+	$ftp_user	= '';
+	$ftp_password	= '';
+	$ftp_port	= '';
+	$use_ftps	= '';
+	$enable_ftp_ie	= '';	
+	$ftp_server_path= '';	
 	if(!empty($ftp_settings)){
-		$ftp_server = !empty($ftp_settings[ 'pro_ftp_server' ]) ? $ftp_settings[ 'pro_ftp_server' ] : '';
-		$ftp_user = !empty($ftp_settings[ 'pro_ftp_user' ]) ? $ftp_settings[ 'pro_ftp_user' ] : '';
-		$ftp_password = !empty($ftp_settings[ 'pro_ftp_password' ]) ? $ftp_settings[ 'pro_ftp_password' ] : '';
-		$use_ftps = !empty($ftp_settings[ 'pro_use_ftps' ]) ? $ftp_settings[ 'pro_use_ftps' ] : '';
-		$enable_ftp_ie = !empty($ftp_settings[ 'pro_enable_ftp_ie' ]) ? $ftp_settings[ 'pro_enable_ftp_ie' ] : '';
-		$ftp_server_path = !empty($ftp_settings[ 'pro_ftp_server_path' ]) ? $ftp_settings[ 'pro_ftp_server_path' ] : '';
+		$ftp_server	= !empty($ftp_settings[ 'pro_ftp_server' ]) ? $ftp_settings[ 'pro_ftp_server' ] : '';
+		$ftp_user	= !empty($ftp_settings[ 'pro_ftp_user' ]) ? $ftp_settings[ 'pro_ftp_user' ] : '';
+		$ftp_password	= !empty($ftp_settings[ 'pro_ftp_password' ]) ? $ftp_settings[ 'pro_ftp_password' ] : '';
+		$ftp_port	= !empty($ftp_settings[ 'pro_ftp_port' ]) ? $ftp_settings[ 'pro_ftp_port' ] : 21;
+		$use_ftps	= !empty($ftp_settings[ 'pro_use_ftps' ]) ? $ftp_settings[ 'pro_use_ftps' ] : '';
+		$enable_ftp_ie	= !empty($ftp_settings[ 'pro_enable_ftp_ie' ]) ? $ftp_settings[ 'pro_enable_ftp_ie' ] : '';
+		$ftp_server_path= !empty($ftp_settings[ 'pro_ftp_server_path' ]) ? $ftp_settings[ 'pro_ftp_server_path' ] : '';
 		
 	}
-
+	wp_enqueue_script('woocommerce-prod-piep-test-ftp', plugins_url( basename( plugin_dir_path( WF_ProdImpExpCsv_FILE ) ) . '/js/piep_test_ftp_connection.js', basename( __FILE__ )));
+	$xa_prod_piep_ftp = array( 'admin_ajax_url'		=> admin_url( 'admin-ajax.php' ) );
+	wp_localize_script('woocommerce-prod-piep-test-ftp', 'xa_prod_piep_test_ftp', $xa_prod_piep_ftp);
 ?>
 <div>
 	<p><?php _e( 'You can import products (in CSV format) in to the shop using any of below methods.', 'wf_csv_import_export' ); ?></p>
@@ -97,6 +101,14 @@
 								</tr>
 								<tr>
 									<th>
+										<label for="pro_ftp_port"><?php _e( 'FTP Port', 'wf_csv_import_export' ); ?></label>
+									</th>
+									<td>
+										<input type="text" name="pro_ftp_port" id="pro_ftp_port" placeholder="21 (default) " value="<?php echo $ftp_port; ?>" class="input-text" />
+									</td>
+								</tr>
+								<tr>
+									<th>
 										<label for="pro_ftp_server_path"><?php _e( 'FTP Server Path', 'wf_csv_import_export' ); ?></label>
 									</th>
 									<td>
@@ -111,6 +123,13 @@
 									<td>
 										<input type="checkbox" name="pro_use_ftps" id="pro_use_ftps" class="checkbox" <?php checked( $use_ftps, 1 ); ?> />
 									</td>
+								</tr>
+								<tr>
+									<th>
+									    <input type="button" id="prod_test_ftp_connection" class="button button-primary" value="<?php _e( 'Test FTP', 'wf_csv_import_export' ); ?>" />
+									    <span class ="spinner " ></span>
+									</th>
+									<td id="prod_ftp_test_notice"></td>
 								</tr>
 							</table>
 						</td>

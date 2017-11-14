@@ -5,18 +5,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WOE_Formatter_Xml extends WOE_Formatter {
 
+	public function __construct( $mode, $filename, $settings, $format, $labels ) {
+		parent::__construct( $mode, $filename, $settings, $format, $labels );
+		
+        $this->linebreak = apply_filters( "woe_xml_output_linebreak", "\n");
+	}
+	
 	public function start( $data = '' ) {
 		parent::start( $data );
-		fwrite( $this->handle, apply_filters( "woe_xml_output_header", '<?xml version="1.0" encoding="UTF-8"?>') . "\n" );
+		
+		fwrite( $this->handle, apply_filters( "woe_xml_output_header", '<?xml version="1.0" encoding="UTF-8"?>') . $this->linebreak );
+		
 		if(@$this->settings['prepend_raw_xml'])
-			fwrite( $this->handle, $this->settings['prepend_raw_xml'] . "\n" );
+			fwrite( $this->handle, $this->settings['prepend_raw_xml'] . $this->linebreak );
         
         fwrite( $this->handle, apply_filters( "woe_xml_output_before_root_tag", ''));
         
 		if($this->settings['root_tag'])	
-			fwrite( $this->handle, "<" . $this->settings['root_tag'] . ">\n" );
+			fwrite( $this->handle, "<" . $this->settings['root_tag'] . ">" . $this->linebreak );
         
         fwrite( $this->handle, apply_filters( "woe_xml_output_after_root_tag", ''));
+        
 	}
 
 	public function output( $rec ) {
@@ -71,14 +80,15 @@ class WOE_Formatter_Xml extends WOE_Formatter {
 			$xml = apply_filters( "woe_xml_output_filter", $xml, $rec );
 		}
 
-		fwrite( $this->handle, $xml . "\n" );
+		fwrite( $this->handle, $xml . $this->linebreak );
 	}
 
 	public function finish( $data = '' ) {
 		if($this->settings['root_tag'])	
-			fwrite( $this->handle, "</" . $this->settings['root_tag'] . ">\n" );
+			fwrite( $this->handle, "</" . $this->settings['root_tag'] . ">" . $this->linebreak );
 		if(@$this->settings['append_raw_xml'])
-			fwrite( $this->handle, $this->settings['append_raw_xml'] . "\n" );
+			fwrite( $this->handle, $this->settings['append_raw_xml'] . $this->linebreak );
+		do_action( "woe_xml_print_footer", $this->handle, $this);	
 		parent::finish();
 	}
     

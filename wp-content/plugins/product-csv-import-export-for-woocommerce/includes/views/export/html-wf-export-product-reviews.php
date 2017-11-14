@@ -39,7 +39,7 @@
                 <td>
                     <select id="v_prods" name="products[]" data-placeholder="<?php _e('Any Product', 'wf_csv_import_export'); ?>" class="wc-enhanced-select" multiple="multiple">
                         <?php
-                        $query = new WP_Query( array( 'post_type' => 'product','post_status'      => 'publish','suppress_filters' => true   ) );
+                        $query = new WP_Query( array( 'post_type' => 'product','post_status'      => 'publish','suppress_filters' => true, 'posts_per_page' => -1  ) );
                         $products = $query->posts;
                         foreach ($products as $product) {
                             echo '<option value="' . $product->ID . '">' . $product->post_title . '</option>';

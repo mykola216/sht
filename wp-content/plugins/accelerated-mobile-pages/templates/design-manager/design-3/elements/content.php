@@ -24,28 +24,28 @@
 				// Custom/Alternative AMP content added through post meta
 				$ampforwp_the_content = $this->get( 'ampforwp_amp_content' );
 			}
-
-			// echo $this->get( 'post_amp_content' ); // amphtml content; no kses
-		if($redux_builder_amp['amp-pagination']) {
-			$ampforwp_new_content = explode('<!--nextpage-->', $ampforwp_the_content);
-		    $queried_var = get_query_var('page');
-		    if ( $queried_var > 1 ) {
-		      $queried_var = $queried_var -1   ;
-		    }
-		    else{
-		    	 $queried_var = 0;
-		    }
-		    echo $ampforwp_new_content[$queried_var];
-	 	} else{
-	 		echo $ampforwp_the_content;
-	 	}//#1015 pegazee
-	 	do_action('ampforwp_after_post_content',$this) ; //Post After Content here ?>
+			//Filter to modify the Content
+			$ampforwp_the_content = apply_filters('ampforwp_modify_the_content', $ampforwp_the_content);
+			if($redux_builder_amp['amp-pagination']) {
+				$ampforwp_new_content = explode('<!--nextpage-->', $ampforwp_the_content);
+			    $queried_var = get_query_var('page');
+			    if ( $queried_var > 1 ) {
+			      $queried_var = $queried_var -1   ;
+			    }
+			    else{
+			    	 $queried_var = 0;
+			    }
+			    echo $ampforwp_new_content[$queried_var];
+		 	} else{
+		 		echo $ampforwp_the_content;
+		 	}//#1015 pegazee
+		 	do_action('ampforwp_after_post_content',$this) ; //Post After Content here ?>
 	</div>
 	<!--Post Content Ends here-->
 
 	<!--Post Next-Previous Links-->
 	<?php global $redux_builder_amp;
-		if($redux_builder_amp['enable-single-next-prev']) { ?>
+		if($redux_builder_amp['enable-single-next-prev'] && !is_page() ) { ?>
 			<div class="amp-wp-content post-pagination-meta">
 				<div id="pagination">
                 <?php $next_post = get_next_post();

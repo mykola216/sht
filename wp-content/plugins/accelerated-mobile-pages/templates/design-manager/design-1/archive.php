@@ -41,6 +41,7 @@
 <article class="amp-wp-article ampforwp-custom-index amp-wp-home">
 
 	<?php do_action('ampforwp_post_before_loop') ?>
+	<?php $count = 1; ?>
 
 	  <?php if ( is_archive() ) {
 	    the_archive_title( '<h1 class="page-title">', '</h1>' );
@@ -61,7 +62,7 @@
 				}
 			}	
 	  } ?>
-
+	  	<?php  do_action('ampforwp_between_loop',$count); ?>
 		<?php  if ( have_posts() ) : while ( have_posts() ) : the_post();
 
 			$ampforwp_amp_post_url =  trailingslashit( get_permalink() ) . AMPFORWP_AMP_QUERY_VAR ;
@@ -89,20 +90,13 @@
 							</time>
           </div>
 
-				<?php if ( has_post_thumbnail() || ( ampforwp_is_custom_field_featured_image() && ampforwp_cf_featured_image_src() ) ) {
-					if ( has_post_thumbnail()) {  
-						$thumb_id = get_post_thumbnail_id();
-						$thumb_url_array = wp_get_attachment_image_src($thumb_id, 'thumbnail', true);
-						$thumb_url = $thumb_url_array[0];
-						}
-						else{
-								$thumb_url = ampforwp_cf_featured_image_src();
-							}
-						?>
+				<?php if (ampforwp_has_post_thumbnail() ) {  
+					$thumb_url = ampforwp_get_post_thumbnail();
+					if($thumb_url){ ?>
 						<div class="home-post-image">
 							<a href="<?php echo esc_url( $ampforwp_amp_post_url ); ?>">
 								<amp-img
-									src=<?php echo $thumb_url ?>
+									src=<?php echo esc_url($thumb_url); ?>
 									<?php ampforwp_thumbnail_alt(); ?>
 									<?php if( $redux_builder_amp['ampforwp-homepage-posts-image-modify-size'] ) { ?>
 										width=<?php global $redux_builder_amp; echo $redux_builder_amp['ampforwp-homepage-posts-design-1-2-width'] ?>
@@ -115,17 +109,22 @@
 							</a>
 						</div>
 					<?php }
+				}
 						if( has_excerpt() ){
 							$content = get_the_excerpt();
 						}else{
 							$content = get_the_content();
 						} ?>
 					<p><?php global $redux_builder_amp;
+								if($redux_builder_amp['excerpt-option-design-1']== true) {
 								$excertp_length = $redux_builder_amp['amp-design-1-excerpt'];
-								echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); ?></p>
+								echo wp_trim_words( strip_shortcodes( $content ) ,  $excertp_length ); }?></p>
 				</div>
 	        </div>
-	    <?php endwhile;  ?>
+	    <?php 
+	     do_action('ampforwp_between_loop',$count,$this);
+		         $count++;
+	     endwhile;  ?>
 		    <div class="amp-wp-content pagination-holder">
 
 		        <div id="pagination">

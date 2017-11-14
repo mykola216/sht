@@ -1,19 +1,24 @@
 <?php
 
-$ftp_server = '';
-$ftp_user = '';
-$ftp_password = '';
-$use_ftps = '';
-$enable_ftp_ie = '';	
-$ftp_server_path = '';	
+$ftp_server	= '';
+$ftp_user	= '';
+$ftp_password	= '';
+$ftp_port	= '';
+$use_ftps	= '';
+$enable_ftp_ie	= '';	
+$ftp_server_path= '';	
 if(!empty($ftp_settings)){
-	$ftp_server = !empty($ftp_settings[ 'rev_ftp_server' ]) ? $ftp_settings[ 'rev_ftp_server' ] : '';
-	$ftp_user = !empty($ftp_settings[ 'rev_ftp_user' ]) ? $ftp_settings[ 'rev_ftp_user' ] : '';
-	$ftp_password = !empty($ftp_settings[ 'rev_ftp_password' ]) ? $ftp_settings[ 'rev_ftp_password' ] : '';
-	$use_ftps = !empty($ftp_settings[ 'rev_use_ftps' ]) ? $ftp_settings[ 'rev_use_ftps' ] : '';
-	$enable_ftp_ie = !empty($ftp_settings[ 'rev_enable_ftp_ie' ]) ? $ftp_settings[ 'rev_enable_ftp_ie' ] : '';
-	$ftp_server_path = !empty($ftp_settings[ 'rev_ftp_server_path' ]) ? $ftp_settings[ 'rev_ftp_server_path' ] : '';				
+	$ftp_server	= !empty($ftp_settings[ 'rev_ftp_server' ]) ? $ftp_settings[ 'rev_ftp_server' ] : '';
+	$ftp_user	= !empty($ftp_settings[ 'rev_ftp_user' ]) ? $ftp_settings[ 'rev_ftp_user' ] : '';
+	$ftp_password	= !empty($ftp_settings[ 'rev_ftp_password' ]) ? $ftp_settings[ 'rev_ftp_password' ] : '';
+	$ftp_port	= !empty($ftp_settings[ 'rev_ftp_port' ]) ? $ftp_settings[ 'rev_ftp_port' ] : 21;
+	$use_ftps	= !empty($ftp_settings[ 'rev_use_ftps' ]) ? $ftp_settings[ 'rev_use_ftps' ] : '';
+	$enable_ftp_ie	= !empty($ftp_settings[ 'rev_enable_ftp_ie' ]) ? $ftp_settings[ 'rev_enable_ftp_ie' ] : '';
+	$ftp_server_path= !empty($ftp_settings[ 'rev_ftp_server_path' ]) ? $ftp_settings[ 'rev_ftp_server_path' ] : '';				
 }
+wp_enqueue_script('woocommerce-prod-rev-test-ftp', plugins_url( basename( plugin_dir_path( WF_ProdImpExpCsv_FILE ) ) . '/js/piep_test_ftp_connection.js', basename( __FILE__ )));
+$xa_rev_piep_ftp = array( 'admin_ajax_url'		=> admin_url( 'admin-ajax.php' ) );
+wp_localize_script('woocommerce-prod-rev-test-ftp', 'xa_prod_review_test_ftp', $xa_rev_piep_ftp);
 
 ?>
 <div>
@@ -77,6 +82,14 @@ if(!empty($ftp_settings)){
 										</td>
 									</tr>
 									<tr>
+									<th>
+										<label for="rev_ftp_port"><?php _e( 'FTP Port', 'wf_csv_import_export' ); ?></label>
+									</th>
+									<td>
+										<input type="text" name="rev_ftp_port" id="rev_ftp_port" placeholder="21 (default) " value="<?php echo $ftp_port; ?>" class="input-text" />
+									</td>
+									</tr>
+									<tr>
 										<th>
 											<label for="rev_ftp_server_path"><?php _e( 'FTP Server Path', 'wf_csv_import_export' ); ?></label>
 										</th>
@@ -92,6 +105,13 @@ if(!empty($ftp_settings)){
 										<td>
 											<input type="checkbox" name="rev_use_ftps" id="rev_use_ftps" class="checkbox" <?php checked( $use_ftps, 1 ); ?> />
 										</td>
+									</tr>
+									<tr>
+										<th>
+											<input type="button" id="rev_test_ftp_connection" class="button button-primary" value="<?php _e( 'Test FTP', 'wf_csv_import_export' ); ?>" />
+											<span class ="spinner " ></span>
+										</th>
+										<td id="prod_rev_ftp_test_notice"></td>
 									</tr>
 								</table>
 							</td>

@@ -1,4 +1,40 @@
+
 jQuery( document ).ready( function( $ ){
+
+
+	$('#start_amp_pb_post').click(function(){
+        var ampPbLoader = document.getElementById('start_amp_pb_post');
+        if(ampPbLoader!=null){
+        	$(this).html('Loading...<span class="dashicons dashicons-update spinner"></span>');
+            var postId = ampPbLoader.getAttribute("data-postId");
+            var data = {
+                'action': 'call_page_builder',
+                'post_id': postId,
+            };
+            $.ajax({
+            	url:ajaxurl,
+            	type:'get',
+            	data:data,
+            	beforeSend: function(){
+            		$(this).html('Loading...<span class="dashicons dashicons-update"></span>');
+            	},
+            	success: function(response){
+            		//alert(response)
+            		$('#pagebilder_content').find('.inside').html(response);
+            		pageBuilderStarter();
+            	},
+            	error: function(){
+            		alert('Error occurred, not getting response');
+            		$(this).html("Start the AMP Page Builder");
+            	}
+            });
+           
+        }
+    });
+
+	//Page builder starter
+var pageBuilderStarter = function(){
+
     $( "#sorted_rows" ).sortable({
     	placeholder: "ui-state-highlight",
     	handle  : '.amppb-handle',
@@ -154,6 +190,9 @@ jQuery( document ).ready( function( $ ){
 					var htmlFields = $('.amppb-fields-templates').find("#"+fieldReplace.type).html();
 					var id = fieldReplace.name;
 					popupHtml += htmlFields.replace(/{name}/g,fieldReplace.name).replace(/{label}/g,fieldReplace.label).replace(/{id}/g,id).replace(/{default_value}/g, decodeURI(fieldReplace.default));
+					if(popupHtml.indexOf('{options}')!==-1){
+						popupHtml += popupHtml.replace(/{options}/g, decodeURI(fieldReplace.options));
+					}
 					//To load action of fields
 					switch(fieldReplace.type){
 						case 'upload':
@@ -178,7 +217,7 @@ jQuery( document ).ready( function( $ ){
 	//Save data of row settings
 	$( document.body ).on('click', "#amppb-rowsetting", function(e){
 		e.preventDefault();
-		console.log("Save button #amppb-rowsetting has clicked");
+		//console.log("Save button #amppb-rowsetting has clicked");
 		var containerId = $(this).attr('data-current-container');
 		
 		var popupContents = $(this).attr('data-template');
@@ -223,13 +262,19 @@ jQuery( document ).ready( function( $ ){
 		$.each(moduleJson.fields, function(fieldtype,modData){
 			var fieldIdentifier = modData.name+'-'+containerdetails[0]+'-'+containerdetails[1];
 			if(modData.type=='text-editor'){
-				modData.default = encodeURI(tinymce.get(fieldIdentifier).getContent().replace("'","\'"));
+				if(tinymce.get(fieldIdentifier)){
+					modData.default = encodeURI(tinymce.get(fieldIdentifier).getContent().replace("'","\'"));
+				}else{
+					modData.default = encodeURI($("#"+fieldIdentifier).val().replace("'","\'"));
+				}
+			}if(modData.type=='select'){
+				modData.default = encodeURI($('#'+fieldIdentifier).val());
 			}else{
 				modData.default = encodeURI($('#'+fieldIdentifier).val().replace("'","\'"));
-				
 			}
 			
 		});
+		//console.log(JSON.stringify(moduleJson));
 		$('#module-'+containerdetails[1]).find('#selectedModule').val(JSON.stringify(moduleJson))
 
 		/*var fieldValue = [];
@@ -249,7 +294,12 @@ jQuery( document ).ready( function( $ ){
 							$.each(moduledetails.fields, function(fieldtype,modData){
 								var fieldIdentifier = modData.name+'-'+containerdetails[0]+'-'+containerdetails[1];
 								if(modData.type=='text-editor'){
-									cells[modData.name] = encodeURI(tinymce.get(fieldIdentifier).getContent().replace("'","\'"));
+									if(tinymce.get(fieldIdentifier)){
+										cells[modData.name] = encodeURI(tinymce.get(fieldIdentifier).getContent().replace("'","\'"));
+									}else{
+										modData.default = encodeURI($("#"+fieldIdentifier).val().replace("'","\'"));
+									}
+
 								}else{
 									cells[modData.name] = encodeURI($('#'+fieldIdentifier).val().replace("'","\'"));
 								}
@@ -282,12 +332,32 @@ jQuery( document ).ready( function( $ ){
 		popupContents = JSON.parse(popupContents);
 		var popupHtml = '';
 		var upload = false; var editor = [];
-		
+		var updateSelectValues = [];
 		$.each(popupContents.fields, function(fieldsName,fieldReplace){
 			var id = fieldReplace.name+"-"+conatinerId+'-' +moduleId;
 			var htmlFields = $('.amppb-fields-templates').find("#"+fieldReplace.type).html();
+			if(fieldReplace.type=='upload'){
+				htmlFields = htmlFields.replace(/src="#"/g, 'src="{default_value}"');
+			}
+			fieldReplace.default_images = '';
+			switch(fieldReplace.type){
+				case 'select':
+					updateSelectValues.push({id: id, value: decodeURI(fieldReplace.default)});
+				break;
+				case 'multi_upload':
+					var imageHtml = '';
+					var imageSrc = fieldReplace.default.split(",");
+					$.each(imageSrc, function(id, src){
+						if(src!=''){
+							imageHtml += '<img src="'+src+'" width="40" height="40">';
+						}
+					})
+					fieldReplace.default_images = imageHtml;
+				break;
+			}
 			
-			popupHtml += htmlFields.replace(/{name}/g,fieldReplace.name).replace(/{label}/g,fieldReplace.label).replace(/{id}/g,id).replace(/{default_value}/g, decodeURI(fieldReplace.default));
+			popupHtml += htmlFields.replace(/{name}/g,fieldReplace.name).replace(/{label}/g,fieldReplace.label).replace(/{id}/g,id).replace(/{default_value}/g, decodeURI(fieldReplace.default)).replace(/{options}/g, decodeURI(fieldReplace.options)).replace(/{default_images}/g, decodeURI(fieldReplace.default_images));
+			
 			//To load action of fields
 			switch(fieldReplace.type){
 				case 'upload':
@@ -300,42 +370,163 @@ jQuery( document ).ready( function( $ ){
 					break; 
 			}
 		});
-		//if(upload){ selectionOfImage(); }
 		$(".amp-pb-module-content").html(popupHtml); 
+		if(updateSelectValues.length>0){
+			$.each(updateSelectValues, function(id, v){
+				$("#"+ v.id).val(v.value);
+			})
+		}
 		editorJs(editor);
 	});
 	
 	function editorJs(editor){
 		if(editor.length){  
 			$.each(editor, function(key, value){
-				if(tinymce.get(value)){
-					//tinymce.get(value).remove();
-					console.log(value);
-					tinymce.get(value).destroy();
+				var control = $("#"+value).parents('form-control'), restoreTextMode = false,triggerChangeIfDirty,changeDebounceDelay = 1000, needsTextareaChangeTrigger;
+				var component = {
+					dismissedPointers: []
+				};
+				var textarea = control.find('textarea');
+				var id = value;
+				if ( typeof window.tinymce === 'undefined' ) {
+					wp.editor.initialize( id, {
+						quicktags: true
+					});
+					return;
 				}
-				tinymce.init( {
-							mode : "exact",
-							elements : value,  //'pre-details',
-							theme: "modern",
-							skin: "lightgray",
-							menubar : false,
-							statusbar : false,
-							toolbar: [
-				"bold italic underline strikethrough superscript| alignleft aligncenter alignright | bullist numlist outdent indent | undo redo | headings | link image | removeformat media |wpgallery wpautoresize"
-							],
-							plugins: 'charmap colorpicker compat3x directionality fullscreen hr image lists media paste tabfocus textcolor wordpress wpautoresize wpdialogs wpeditimage wpemoji wpgallery wplink wptextpattern wpview',
-							/* content_css: [
-								'//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-								'//www.tinymce.com/css/codepen.min.css'
-							], */
-							/* plugins : "paste", */
-							branding: false,
-							paste_auto_cleanup_on_paste : true,
-							paste_postprocess : function( pl, o ) {
-								o.node.innerHTML = o.node.innerHTML.replace( /&nbsp;+/ig, " " );
-							}
-						} );
-				
+				// Destroy any existing editor so that it can be re-initialized after a widget-updated event.
+				if ( tinymce.get( id ) ) {
+					restoreTextMode = tinymce.get( id ).isHidden();
+					wp.editor.remove( id );
+				}
+				wp.editor.initialize( id, {
+					tinymce: {
+						wpautop: true
+					},
+					quicktags: true
+				});
+				triggerChangeIfDirty = function() {
+				var updateWidgetBuffer = 300; 
+				if ( control.editor.isDirty() ) {
+					if ( wp.customize && wp.customize.state ) {
+						wp.customize.state( 'processing' ).set( wp.customize.state( 'processing' ).get() + 1 );
+						_.delay( function() {
+							wp.customize.state( 'processing' ).set( wp.customize.state( 'processing' ).get() - 1 );
+						}, updateWidgetBuffer );
+					}
+
+					if ( ! control.editor.isHidden() ) {
+						control.editor.save();
+					}
+				}
+				// Trigger change on textarea when it is dirty for sake of widgets in the Customizer needing to sync form inputs to setting models.
+				if ( needsTextareaChangeTrigger ) {
+					textarea.trigger( 'change' );
+					needsTextareaChangeTrigger = false;
+				}
+			};
+				control.customHtmlWidgetPointer = control.find( '.wp-pointer.custom-html-widget-pointer' );
+				if ( control.customHtmlWidgetPointer.length ) {
+					control.customHtmlWidgetPointer.find( '.close' ).on( 'click', function( event ) {
+						event.preventDefault();
+						control.customHtmlWidgetPointer.hide();
+						$( '#' + control.fields.text.attr( 'id' ) + '-html' ).focus();
+						control.dismissPointers( [ 'text_widget_custom_html' ] );
+					});
+					control.customHtmlWidgetPointer.find( '.add-widget' ).on( 'click', function( event ) {
+						event.preventDefault();
+						control.customHtmlWidgetPointer.hide();
+						control.openAvailableWidgetsPanel();
+					});
+				}
+				control.pasteHtmlPointer = control.find( '.wp-pointer.paste-html-pointer' );
+				if ( control.pasteHtmlPointer.length ) {
+					control.pasteHtmlPointer.find( '.close' ).on( 'click', function( event ) {
+						event.preventDefault();
+						control.pasteHtmlPointer.hide();
+						control.editor.focus();
+						control.dismissPointers( [ 'text_widget_custom_html', 'text_widget_paste_html' ] );
+					});
+				}
+				/**
+				 * Show a pointer, focus on dismiss, and speak the contents for a11y.
+				 *
+				 * @param {jQuery} pointerElement Pointer element.
+				 * @returns {void}
+				 */
+				showPointerElement = function( pointerElement ) {
+					pointerElement.show();
+					pointerElement.find( '.close' ).focus();
+					wp.a11y.speak( pointerElement.find( 'h3, p' ).map( function() {
+						return $( this ).text();
+					} ).get().join( '\n\n' ) );
+				};
+
+				editor = window.tinymce.get( id );
+				if ( ! editor ) {
+					throw new Error( 'Failed to initialize editor' );
+				}
+				onInit = function() {
+
+					// If a prior mce instance was replaced, and it was in text mode, toggle to text mode.
+					if ( restoreTextMode ) {
+						switchEditors.go( id, 'html' );
+					}
+
+					// Show the pointer.
+					$( '#' + id + '-html' ).on( 'click', function() {
+						//control.pasteHtmlPointer.hide(); // Hide the HTML pasting pointer.
+
+						if ( -1 !== component.dismissedPointers.indexOf( 'text_widget_custom_html' ) ) {
+							return;
+						}
+						showPointerElement( control.customHtmlWidgetPointer );
+					});
+
+					// Hide the pointer when switching tabs.
+					$( '#' + id + '-tmce' ).on( 'click', function() {
+						control.customHtmlWidgetPointer.hide();
+					});
+
+					// Show pointer when pasting HTML.
+					editor.on( 'pastepreprocess', function( event ) {
+						var content = event.content;
+						if ( -1 !== component.dismissedPointers.indexOf( 'text_widget_paste_html' ) || ! content || ! /&lt;\w+.*?&gt;/.test( content ) ) {
+							return;
+						}
+
+						// Show the pointer after a slight delay so the user sees what they pasted.
+						_.delay( function() {
+							showPointerElement( control.pasteHtmlPointer );
+						}, 250 );
+					});
+				};
+
+				if ( editor.initialized ) {
+					onInit();
+				} else {
+					editor.on( 'init', onInit );
+				}
+
+				control.editorFocused = false;
+
+				editor.on( 'focus', function onEditorFocus() {
+					control.editorFocused = true;
+				});
+				editor.on( 'paste', function onEditorPaste() {
+					editor.setDirty( true ); // Because pasting doesn't currently set the dirty state.
+					triggerChangeIfDirty();
+				});
+				editor.on( 'NodeChange', function onNodeChange() {
+					needsTextareaChangeTrigger = true;
+				});
+				editor.on( 'NodeChange', _.debounce( triggerChangeIfDirty, changeDebounceDelay ) );
+				editor.on( 'blur hide', function onEditorBlur() {
+					control.editorFocused = false;
+					triggerChangeIfDirty();
+				});
+				control.editor = editor;
+				 
 			})
 			
 		}
@@ -429,7 +620,7 @@ jQuery( document ).ready( function( $ ){
 									return false;
 								}
 							});
-							console.log(previousValue);
+							//console.log(previousValue);
 						}
 					});
 					$.each(ploatedStructure.rows,function(k,rowVal){
@@ -454,7 +645,7 @@ jQuery( document ).ready( function( $ ){
 					var moduleJson = JSON.parse($(this).find('div.amppb-module:last').find("#selectedModule").val());
 					//Store module inside the array
 					$.each(ploatedStructure.rows,function(k,columnVal){
-						console.log(columnVal.id+' '+containerId);
+						//console.log(columnVal.id+' '+containerId);
 						if(columnVal.id==containerId){
 							
 							var moduleIndex = $(currentDropZone).find('div.amppb-module').length;
@@ -478,7 +669,7 @@ jQuery( document ).ready( function( $ ){
 					});
 					ploatedStructure['totalmodules'] = $moduleId+1;
 					storeJsonDataInput(ploatedStructure);
-					console.log(ploatedStructure);
+					//console.log(ploatedStructure);
 					
 				}
 				loadAfterModule();
@@ -526,7 +717,7 @@ jQuery( document ).ready( function( $ ){
 				var ploatedStructure = JSON.parse($('#amp-page-builder-data').val());
 				var indexOfRow = $(this).parents('.amppb-row').attr('id').replace("conatiner-","");
 				$(this).find('div.amppb-module').each(function(indexKey,val){
-					console.log(indexKey);
+					//console.log(indexKey);
 					var indexOfModule = $(this).attr('id').replace('module-','');
 					$.each(ploatedStructure.rows,function(k,columnVal){
 						if(columnVal.id==indexOfRow){
@@ -618,8 +809,13 @@ jQuery( document ).ready( function( $ ){
 	***************/
 		$(document.body).on('click', "input.selectImage", function(e){
 			e.preventDefault();
-			console.log("selectImage click event called");
+			//console.log("selectImage click event called");
 			var currentSelectfield = $(this);
+			var selectorType = currentSelectfield.attr("data-imageselactor");
+			var multiple = false;
+			if(selectorType=='multiple'){
+				multiple = true;
+			}
 			var image_frame;
 			if(image_frame){
 			 image_frame.open();
@@ -627,7 +823,7 @@ jQuery( document ).ready( function( $ ){
 			// Define image_frame as wp.media object
 			image_frame = wp.media({
 			           title: 'Select Media',
-			           multiple : false,
+			           multiple : multiple,
 			           library : {
 			                type : 'image',
 			            }
@@ -665,14 +861,14 @@ jQuery( document ).ready( function( $ ){
 
 	function loadEditor(id){
 		id = id;//.replace("-","_").replace("-","_");
-		console.log("loadEditor function called "+ id);
+		//console.log("loadEditor function called "+ id);
 		
 		
 
 	}
 
 	function callToRemoveHasModule(){
-		console.log("called Function");
+		//console.log("called Function");
 		$(".modules-drop").each(function(index, container){
 			if($(this).find('.amppb-module').length==0){
 				$(this).removeClass("has-module");
@@ -681,8 +877,11 @@ jQuery( document ).ready( function( $ ){
 	}
 
 
+}
+if($("#amp-page-builder").length>0){
+	pageBuilderStarter();
+}
 });
-
 /**
  *
  *
@@ -701,10 +900,22 @@ function Refresh_Image(the_id,currentSelectfield){
         jQuery.get(ajaxurl, data, function(response) {
 
             if(response.success === true) {
-            	console.log(response.data.image)
-                currentSelectfield.parents('.form-control').find('#ampforwp-preview-image').replaceWith( response.data.image ).attr('id','ampforwp-preview-image');
-				var src = currentSelectfield.parents('.form-control').find('#ampforwp-preview-image').attr('src');
-				currentSelectfield.parents('.form-control').find('input[type=hidden]').val(src);
+            	//console.log(response.data)
+				if(currentSelectfield.attr("data-imageselactor")=='multiple'){
+					currentSelectfield.parents('.form-control').find('.sample-gallery-template').html("");
+					var imageSrc = '';
+					jQuery.each(response.data, function(keys,imageValue){
+						//console.log(imageValue.image);
+						currentSelectfield.parents('.form-control').find('.sample-gallery-template').append(imageValue.image);
+						currentSelectfield.parents('.form-control').find('.sample-gallery-template').find('img:last').attr("width",100).attr("height",100);
+						imageSrc += imageValue.detail[0]+",";
+					});
+					currentSelectfield.parents('.form-control').find('input[type=hidden]').val(imageSrc)
+				}else{
+					currentSelectfield.parents('.form-control').find('#ampforwp-preview-image').replaceWith( response.data.image ).attr('id','ampforwp-preview-image');
+					var src = currentSelectfield.parents('.form-control').find('#ampforwp-preview-image').attr('src');
+					currentSelectfield.parents('.form-control').find('input[type=hidden]').val(src);
+				}
             }
         });
 }

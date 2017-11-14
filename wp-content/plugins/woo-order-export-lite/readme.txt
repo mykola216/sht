@@ -1,7 +1,8 @@
 === Advanced Orders Export For WooCommerce ===
 Contributors: algolplus
-Donate link: http://algolplus.com/plugins/
+Donate link: https://algolplus.com/plugins/
 Tags: woocommerce,export,order,xls,csv,xml,woo export lite,export orders,orders export,csv export,xml export,xls export,tsv
+Requires PHP: 5.3.0
 Requires at least: 4.2.4
 Tested up to: 4.8
 Stable tag: 1.0
@@ -45,7 +46,7 @@ Please create a topic in the "Support" section with any ideas or suggestions for
 
 > Pro Version
 
-> Are you looking to have your Woocommerce products drop shipped from a third party? Our plugin can help you export your orders to CSV/XML/etc and send them to your drop shipper. You can even automate this process with [Pro version](http://algolplus.com/plugins/downloads/woocommerce-order-export/) .
+> Are you looking to have your WooCommerce products drop shipped from a third party? Our plugin can help you export your orders to CSV/XML/etc and send them to your drop shipper. You can even automate this process with [Pro version](https://algolplus.com/plugins/downloads/woocommerce-order-export/) .
 
 
 
@@ -93,6 +94,18 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 
 == Changelog ==
 
+= 1.5.0 - 2017-10-27 =
+* Allow sort orders by "Created Date", "Modified Date"
+* Added combined fields "Billing Address 1&2", "Shipping Address 1&2"
+* Added checkboxes "Mark exported orders" and "Export unmarked orders only" to section "Filter By Order"
+* Added section "custom php" in "Misc Settings" ( requires capability "edit_themes"! )
+* Added option "Export refund notes as Customer Note" in "Misc Settings"
+* Added text field for custom date format
+* Added settings for JSON format
+* The plugin is PHP7 compatible 
+* Added headers "WC requires at least", "WC tested up to" for WooCommerce version check
+* Optimized for shops having huge number of products
+
 = 1.4.5 - 2017-09-06 =
 * Fixed activation error for PHP less than 7.0
 
@@ -132,7 +145,7 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 * Fixed bug for filter by product category
 * Tested for Wordpress 4.8
 * Added new product fields "Description" and "Short Description"
-* Added logger for backgound tasks (for Woocommerce 3.0+)
+* Added logger for backgound tasks (for WooCommerce 3.0+)
 * Added a lot of hooks 
 * New tab "Order Change" to export single order immediately (Pro)
 
@@ -147,10 +160,10 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 * Menu uses capability "view_woocommerce_reports"
 
 = 1.3.0 - 2017-04-11 =
-* The plugin is compatible with Woocommerce 3.0
+* The plugin is compatible with WooCommerce 3.0
 * Display warning message if user interface fails to load
 * Update Select2.js to fix some user interface problems
-* Fixed fields "Order Tax" and "Subtotal" (uses Woocommerce functions to format it)
+* Fixed fields "Order Tax" and "Subtotal" (uses WooCommerce functions to format it)
 
 = 1.2.7 - 2017-03-17 =
 * Portuguese and French translations were added. Thanks to contributors!
@@ -159,7 +172,7 @@ Yes, you can email a request to aprokaev@gmail.com. We intensively develop this 
 * Added tab "Help"
 * Added some UI hooks
 * Fixed bug in filter by Taxonomies
-* Fixed bug in filter by Shipping Methods (disabled for Woocommerce earlier than  2.6)
+* Fixed bug in filter by Shipping Methods (disabled for WooCommerce  earlier than  2.6)
 * Fixed field "State Full Name" (html entities removed)
 * Skip **deleted products** during export
 * Removed word "hack" from PHPExcel source
